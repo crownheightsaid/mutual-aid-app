@@ -1,0 +1,1 @@
+Experiment to see if a lot of the onboarding / volunteer flows can be done with a slack app (which can then be installed by other mutual aid slack workspaces)
