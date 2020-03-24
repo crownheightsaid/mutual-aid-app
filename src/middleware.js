@@ -1,12 +1,6 @@
 const path = require("path");
 const i18next = require("i18next");
 const Backend = require("i18next-node-fs-backend");
-const admin = require("firebase-admin");
-
-async function withFirestore({ context, next }) {
-  context.db = admin.firestore();
-  next();
-}
 
 function addUserInfo(app) {
   return async ({ payload, body, event, context, next }) => {
@@ -25,11 +19,6 @@ function addUserInfo(app) {
       user: userId,
       include_locale: true
     });
-    const volunteerDoc = await context.db
-      .collection("volunteers")
-      .doc(userId)
-      .get();
-    context.volunteerExists = volunteerDoc.exists;
     context.userId = userId;
     context.locale = user.user.locale;
     context.userEmail = user.user.profile.email;
@@ -84,4 +73,3 @@ function addIntlNamespace(intlNamespace) {
 exports.addIntlNamespace = addIntlNamespace;
 exports.initIntl = initIntl;
 exports.addUserInfo = addUserInfo;
-exports.withFirestore = withFirestore;

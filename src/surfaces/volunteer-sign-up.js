@@ -2,7 +2,7 @@ const i18next = require("i18next");
 const { addIntlNamespace } = require("../middleware.js");
 const { normalizeFormInput } = require("./utils.js");
 const { blockKitLanguages } = require("../i18n/languages.js");
-const config = require("../../config.js");
+const { APP_NAME } = require("../constants.js");
 
 const volunteerSignUpPath = "volunteer-sign-up";
 
@@ -21,7 +21,7 @@ const openVolunteerSignUp = app => {
             callback_id: volunteerSignUpPath,
             title: {
               type: "plain_text",
-              text: i18next.t("common:appName", config.APP_NAME)
+              text: i18next.t("common:appName", APP_NAME)
             },
             submit: {
               type: "plain_text",

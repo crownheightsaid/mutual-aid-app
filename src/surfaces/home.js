@@ -52,10 +52,7 @@ const listenVolunteerOpenHome = app => {
         return;
       }
 
-      const requestSnapshot = await context.db
-        .collection("requests")
-        .limit(5)
-        .get();
+      const requestSnapshot = [];
       const requestBlocks = [];
       requestSnapshot.forEach(doc => {
         const requestData = doc.data();

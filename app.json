@@ -1,0 +1,7 @@
+{
+  "name": "Crown Heights Mutual Aid Slack",
+  "description": "Slack App for Covid volunteer intake",
+  "repository": "https://github.com/crownheightsaid/slack-app",
+  "keywords": ["node", "express", "heroku"],
+  "image": "heroku/nodejs"
+}
