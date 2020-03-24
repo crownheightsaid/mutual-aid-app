@@ -7,11 +7,11 @@
   "image": "heroku/nodejs",
   "env": {
     "SLACK_BOT_TOKEN": {
-      "description": "Go to https://api.slack.com/apps/<your-app-id>/install-on-team. This is 'Bot User Oauth Access Token'",
+      "description": "Go to the 'Install App' tab for your app (https://api.slack.com/apps/<your-app-id>/install-on-team). This is 'Bot User Oauth Access Token'",
       "required": true
     },
     "SLACK_SIGNING_SECRET": {
-      "description": "Go to https://api.slack.com/apps/<your-app-id>/general. This is 'Signing Secret'",
+      "description": "Go to the 'Basic Information' tab for your app (https://api.slack.com/apps/<your-app-id>/general). This is 'Signing Secret'",
       "required": true
     }
   }
