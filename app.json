@@ -3,5 +3,16 @@
   "description": "Slack App for Covid volunteer intake",
   "repository": "https://github.com/crownheightsaid/slack-app",
   "keywords": ["node", "express", "heroku"],
-  "image": "heroku/nodejs"
+  "logo": "https://avatars.slack-edge.com/2020-03-19/1015865338678_c52bc4c5d11b93ff2b40_230.jpg",
+  "image": "heroku/nodejs",
+  "env": {
+    "SLACK_BOT_TOKEN": {
+      "description": "Go to https://api.slack.com/apps/<your-app-id>/install-on-team. This is 'Bot User Oauth Access Token'",
+      "required": true
+    },
+    "SLACK_SIGNING_SECRET": {
+      "description": "Go to https://api.slack.com/apps/<your-app-id>/general. This is 'Signing Secret'",
+      "required": true
+    }
+  }
 }
