@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    ["i18next-extract",
+      {
+        "locales": ["en", "es"],
+        "outputPath": "translations/{{locale}}/{{ns}}.json",
+        "useI18nextDefaultValue": true
+      }
+    ]
+  ]
+}
