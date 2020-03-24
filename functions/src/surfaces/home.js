@@ -7,7 +7,7 @@ const makeRequestSectionBlocks = (phone, callText) => {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*Phone Number:* ${phone}`
+        text: `\n*Phone Number:* ${phone}`
       },
       accessory: {
         type: "button",
@@ -22,7 +22,7 @@ const makeRequestSectionBlocks = (phone, callText) => {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*Voicemail message:* ${callText}`
+        text: `*Voicemail message:* ${callText}\n`
       }
     }
   ];
@@ -31,7 +31,7 @@ const makeRequestSectionBlocks = (phone, callText) => {
 const listenVolunteerOpenHome = app => {
   app.event("app_home_opened", async ({ event, context }) => {
     try {
-      if (context.volunteerExists) {
+      if (!context.volunteerExists) {
         await app.client.views.publish({
           token: context.botToken,
           user_id: context.userId,
@@ -76,7 +76,7 @@ const listenVolunteerOpenHome = app => {
               text: {
                 type: "mrkdwn",
                 text:
-                  "Thanks for helping!\n\nAfter you submit the followup, a message will post in the community_needs channel. Once delivery volunteers offer their help, choose them by clicking the '...' on their message and selecting 'Assign to Delivery'"
+                  "Thanks for helping!\n\nAfter you submit the followup, a message will post in the community_needs channel. Once delivery volunteers offer their help, choose them by clicking the '...' on their message and selecting 'Assign to Delivery'\n"
               }
             },
             ...requestBlocks
