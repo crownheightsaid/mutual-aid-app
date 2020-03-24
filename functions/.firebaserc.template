@@ -1,8 +1,0 @@
-{
-  "projects": {
-    // Create a project at url below and enable "Functions" 
-    // https://console.firebase.google.com/ 
-    // Add your project name below, rename this `.firebaserc` and remove these 3 comments
-    "default": "your-firebase-project-name"
-  }
-}
