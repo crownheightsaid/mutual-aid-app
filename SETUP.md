@@ -1,4 +1,4 @@
-Setup Slack workspace and create an app:
+Setup Slack workspace and create an app (if you're contributing, this serves as a development workspace):
 1. Create a [Slack workspace](https://slack.com/create#email)
 1. [Create your app](https://api.slack.com/apps)
 1. Click the deploy button below and follow the instructions (you can skip pipeline part)
