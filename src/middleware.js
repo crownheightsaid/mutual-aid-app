@@ -1,7 +1,7 @@
 const path = require("path");
 const i18next = require("i18next");
 const Backend = require("i18next-node-fs-backend");
-const { findVolunteerById } = require("./airtable");
+const { findVolunteerByEmail } = require("./airtable");
 
 function addUserInfo(app) {
   return async ({ payload, body, event, context, next }) => {
@@ -20,7 +20,7 @@ function addUserInfo(app) {
       user: userId,
       include_locale: true
     });
-    await findVolunteerById(user.user.profile.email);
+    await findVolunteerByEmail(user.user.profile.email);
     context.userId = userId;
     context.locale = user.user.locale;
     context.userEmail = user.user.profile.email;
