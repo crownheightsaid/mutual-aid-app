@@ -4,7 +4,7 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_KEY }).base(
   process.env.AIRTABLE_BASE
 );
 
-export const findVolunteerByEmail = async email => {
+exports.findVolunteerByEmail = async email => {
   const record = await base("Volunteers").select({
     filterByFormula: `{volunteer_email} = '${email}')`
   });
@@ -23,4 +23,4 @@ export const findVolunteerByEmail = async email => {
   // });
 };
 
-export default base;
+exports.airbase = base;
