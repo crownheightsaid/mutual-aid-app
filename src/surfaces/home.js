@@ -43,8 +43,22 @@ const listenVolunteerOpenHome = app => {
                 text: {
                   type: "mrkdwn",
                   text:
-                    "Please fill out volunteer form to call people who need help and match them with delivery volunteers!\n\n You can find it by clicking on the lightning bolt anywhere you type messages."
+                    "Welcome!\n\n Please fill out the volunteer form to phone neighbors in need and request reimbursement."
                 }
+              },
+              {
+                type: "actions",
+                elements: [
+                  {
+                    type: "button",
+                    text: {
+                      type: "plain_text",
+                      text: "Volunteering Form"
+                    },
+                    url: process.env.VOLUNTEER_FORM_URL,
+                    action_id: "volunteer-form"
+                  }
+                ]
               }
             ]
           }

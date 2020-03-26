@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@slack/bolt": "^1.8.0",
+    "airtable": "0.8.1",
     "i18next": "^19.3.3",
     "i18next-node-fs-backend": "^2.1.3"
   },
