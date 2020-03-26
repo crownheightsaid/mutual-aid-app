@@ -13,6 +13,14 @@
     "SLACK_SIGNING_SECRET": {
       "description": "Go to the 'Basic Information' tab for your app (https://api.slack.com/apps/<your-app-id>/general). This is 'Signing Secret'",
       "required": true
+    },
+    "AIRTABLE_KEY": {
+      "description": "Find this in (https://airtable.com/account) under 'API'",
+      "required": true
+    },
+    "AIRTABLE_BASE": {
+      "description": "Go to your airtable base. Click on 'Help -> API Documentation' in top right. Scroll to `Authenitcation`. The thing we need is in 'base('')` to the right.",
+      "required": true
     }
   }
 }
