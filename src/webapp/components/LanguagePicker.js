@@ -3,13 +3,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import LanguageIcon from "@material-ui/icons/Translate";
-import { useIntl } from "react-intl";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Divider from "@material-ui/core/Divider";
-import { FormattedMessage } from "react-intl.macro";
-import { SUPPORTED_LANGS } from "../i18n/locales";
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
@@ -26,7 +23,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function LanguagePicker({ location }) {
   const classes = useStyles();
-  const intl = useIntl();
   const [languageMenu, setLanguageMenu] = React.useState(null);
   const handleLanguageIconClick = event => {
     setLanguageMenu(event.currentTarget);
@@ -39,7 +35,7 @@ export default function LanguagePicker({ location }) {
     <>
       <Button color="inherit" onClick={handleLanguageIconClick}>
         <LanguageIcon />
-        <span className={classes.language}>{SUPPORTED_LANGS[intl.locale]}</span>
+        <span className={classes.language}>English</span>
         <ExpandMoreIcon fontSize="small" />
       </Button>
 
@@ -49,7 +45,7 @@ export default function LanguagePicker({ location }) {
         open={Boolean(languageMenu)}
         onClose={handleLanguageMenuClose}
       >
-        {Object.keys(SUPPORTED_LANGS).map(code => (
+        {/* {Object.keys(SUPPORTED_LANGS).map(code => (
           <MenuItem
             component="a"
             data-no-link="true"
@@ -62,7 +58,7 @@ export default function LanguagePicker({ location }) {
           >
             {SUPPORTED_LANGS[code]}
           </MenuItem>
-        ))}
+        ))} */}
         <Box my={1}>
           <Divider />
         </Box>
@@ -75,10 +71,7 @@ export default function LanguagePicker({ location }) {
           hrefLang="en"
           onClick={handleLanguageMenuClose}
         >
-          <FormattedMessage
-            id="app.nav.lang.help"
-            defaultMessage="Help to translate"
-          />
+          Help to Translate
         </MenuItem>
       </Menu>
     </>

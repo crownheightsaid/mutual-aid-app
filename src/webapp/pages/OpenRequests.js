@@ -11,7 +11,6 @@ import FormControl from "@material-ui/core/FormControl";
 import JustTextContent from "../components/JustTextContext";
 import RequestCard from "../components/RequestCard";
 import CardList from "../components/CardList";
-import { useNavigateIntl } from "../components/IntlRouter";
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -22,7 +21,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function OpenRequests() {
   const classes = useStyles();
-  const navigateIntl = useNavigateIntl();
 
   const [zipInput, setZipInput] = useState(null);
   const [loadedZip, setLoadedZip] = useState(null);
@@ -103,19 +101,19 @@ export default function OpenRequests() {
   //     });
   // };
 
-  const enterZip = (
-    <InputAdornment position="end">
-      <IconButton onClick={() => setLoadedZip(zipInput)} edge="end">
-        <SendRoundedIcon />
-      </IconButton>
-    </InputAdornment>
-  );
+  // const enterZip = (
+  //   <InputAdornment position="end">
+  //     <IconButton onClick={() => setLoadedZip(zipInput)} edge="end">
+  //       <SendRoundedIcon />
+  //     </IconButton>
+  //   </InputAdornment>
+  // );
 
-  const cantAssign = true;
+  // const cantAssign = true;
 
   return (
     <>
-      <FormControl className={classes.input} variant="outlined">
+      {/* <FormControl className={classes.input} variant="outlined">
         <InputLabel htmlFor="zip-input">
           {intl.formatMessage(messages["app.request.form.postal"])}
         </InputLabel>
@@ -152,7 +150,7 @@ export default function OpenRequests() {
             />
           ))}
         </CardList>
-      )}
+      )} */}
     </>
   );
 }

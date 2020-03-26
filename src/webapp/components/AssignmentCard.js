@@ -4,12 +4,10 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import Box from "@material-ui/core/Box";
 import CardContent from "@material-ui/core/CardContent";
-import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import PhoneIcon from "@material-ui/icons/Phone";
-import EmailIcon from "@material-ui/icons/Email";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -61,7 +59,6 @@ export default function AssignmentCard({ doc, app, requestId }) {
     completed: doc.uploadedPic,
     uploadError: null
   });
-  const bull = <span className={classes.bullet}>•</span>;
   const extraStyle = completed ? { backgroundColor: "#66bb6a" } : {};
 
   const upload = inputTarget => {
@@ -73,8 +70,8 @@ export default function AssignmentCard({ doc, app, requestId }) {
     // 4 Mb
     if (file.size > 4000000) {
       setUploadState({ completed: null, uploadError: "Upload file to large" });
-      return;
     }
+  };
 
   //   app
   //     .storage()
@@ -122,7 +119,7 @@ export default function AssignmentCard({ doc, app, requestId }) {
           </Box>
         </Typography>
         <Typography className={classes.grocery} variant="body2" component="p">
-          {doc["callText"]}
+          {doc.callText}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>

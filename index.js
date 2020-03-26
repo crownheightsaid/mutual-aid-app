@@ -1,17 +1,19 @@
 const path = require("path");
+const express = require("express");
 const { App, ExpressReceiver } = require("@slack/bolt");
 const startEvents = require("./src/endpoints/events.js");
 const startInteractivity = require("./src/endpoints/interactivity.js");
 const { initIntl, addUserInfo } = require("./src/middleware.js");
 
 const expressReceiver = new ExpressReceiver({
-  signingSecret: process.env.SLACK_SIGNING_SECRET
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  endpoints = { events: '/slack/events', app:  },
 });
 const boltApp = new App({
   token: process.env.SLACK_BOT_TOKEN,
   receiver: expressReceiver
 });
-const express = expressReceiver.app;
+const expressApp = expressReceiver.app;
 
 boltApp.use(addUserInfo(boltApp));
 boltApp.use(initIntl);
@@ -20,7 +22,19 @@ boltApp.error(console.error);
 startEvents(boltApp);
 startInteractivity(boltApp);
 
-express.get("/webapp", (req, res) => {
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+expressApp.use(express.static(path.join(__dirname, "build")));
+expressApp.all("/slacktest", (req, res) => {
+  console.log("Body: \n\n");
+  console.log(req.body);
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+expressApp.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+expressApp.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
