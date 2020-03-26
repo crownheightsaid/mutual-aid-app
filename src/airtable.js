@@ -9,12 +9,15 @@ exports.findVolunteerByEmail = async email => {
     .select({
       filterByFormula: `{volunteer_email} = '${email}')`
     })
-    .firstPage();
-  console.log("here");
-  console.log(record);
-  record.forEach(r => {
-    console.log("Retrieved", r.get("volunteer_email"));
-  });
+    .firstPage(function(err, records) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      records.forEach(function(record) {
+        console.log("Retrieved", record.get("volunteer_email"));
+      });
+    });
   // .firstPage((err, records) => {
   //   if (err) {
   //     console.error(err);
