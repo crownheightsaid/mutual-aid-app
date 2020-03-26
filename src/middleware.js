@@ -20,6 +20,7 @@ function addUserInfo(app) {
       user: userId,
       include_locale: true
     });
+    console.log(user.user.profile.email);
     const volunteer = await findVolunteerByEmail(user.user.profile.email);
     console.log(volunteer);
     context.volunteerExists = Boolean(volunteer);
