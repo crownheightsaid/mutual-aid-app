@@ -1,7 +1,3 @@
-This guide deploys code to heroku. Everytime you want to test a commit, you have to redeploy. See issue: https://github.com/crownheightsaid/slack-app/issues/2
-
-_____________
-
 Setup Slack workspace and create an app (if you're contributing, this serves as a development workspace):
 1. Create a [Slack workspace](https://slack.com/create#email)
 1. [Create your app](https://api.slack.com/apps)
