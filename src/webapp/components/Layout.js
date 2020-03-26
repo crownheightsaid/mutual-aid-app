@@ -3,10 +3,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
 import { Helmet } from "react-helmet";
 import { IntlLink } from "./IntlRouter";
 import LanguagePicker from "./LanguagePicker";
+import { isAuthed, removeToken } from "../auth/Auth";
 
 const useStyles = makeStyles(theme => ({
   toolbar: theme.mixins.toolbar,
@@ -53,26 +56,29 @@ export default function MenuAppBar({ children }) {
           </Typography>
           <span className={classes.gap} />
           <LanguagePicker />
-          {/* <Divider orientation="vertical" light variant="middle" flexItem />
+          <Divider orientation="vertical" light variant="middle" flexItem />
           <Button color="inherit">
-            {user ? (
+            {isAuthed() ? (
               <Box
                 className={classes.link}
                 onClick={() => {
-                  app.auth().signOut();
+                  removeToken();
                 }}
               >
-                <FormattedMessage
-                  id="app.nav.logout"
-                  defaultMessage="Log Out"
-                />
+                Logout
               </Box>
             ) : (
-              <IntlLink className={classes.link} to="/login">
-                <FormattedMessage id="app.nav.login" defaultMessage="Log In" />
+              <IntlLink
+                className={classes.link}
+                to="https://crownheightsma.herokuapp.com/auth/slack"
+              >
+                <img
+                  src="https://a.slack-edge.com/accd8/img/sign_in_with_slack.png"
+                  alt="sign-in"
+                />
               </IntlLink>
             )}
-          </Button> */}
+          </Button>
         </Toolbar>
       </AppBar>
       <div className={classes.toolbar} />
