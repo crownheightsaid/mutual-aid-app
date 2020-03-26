@@ -9,6 +9,7 @@ exports.findVolunteerByEmail = async email => {
     filterByFormula: `{volunteer_email} = '${email}')`
   });
   console.log("here");
+  console.log(record);
   record.forEach(r => {
     console.log("Retrieved", r.get("volunteer_email"));
   });
