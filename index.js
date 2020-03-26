@@ -1,4 +1,5 @@
 const { App } = require("@slack/bolt");
+const path = require("path");
 const startEvents = require("./src/endpoints/events.js");
 const startInteractivity = require("./src/endpoints/interactivity.js");
 const { initIntl, addUserInfo } = require("./src/middleware.js");
@@ -14,6 +15,10 @@ app.error(console.error);
 
 startEvents(app);
 startInteractivity(app);
+
+app.get("/webapp", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 (async () => {
   // Start the app
