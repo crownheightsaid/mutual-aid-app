@@ -19,12 +19,8 @@ app.error(console.error);
 startEvents(app);
 startInteractivity(app);
 
-express.all("/slacktest", (req, res) => {
-  console.log("Accessing the secret section ...\n");
-  console.log(req);
-  console.log("Response: \n");
-  console.log(res);
-  res.status(200).send(); // respond 200 OK to the default health check method
+express.get("/expressroute", (req, res) => {
+  res.status(200).send();
 });
 
 (async () => {
