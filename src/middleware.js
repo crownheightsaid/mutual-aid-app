@@ -22,7 +22,6 @@ function addUserInfo(app) {
     });
     console.log(user.user.profile.email);
     const volunteer = await findVolunteerByEmail(user.user.profile.email);
-    console.log(volunteer);
     context.volunteerExists = Boolean(volunteer);
     context.userId = userId;
     context.locale = user.user.locale;
