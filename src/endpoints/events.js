@@ -15,6 +15,6 @@ const listenVolunteerOpenHome = app => {
   });
 };
 
-export default app => {
+module.exports = app => {
   listenVolunteerOpenHome(app);
 };

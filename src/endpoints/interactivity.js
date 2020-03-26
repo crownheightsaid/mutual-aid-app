@@ -21,7 +21,7 @@ const listenStartFollowup = app => {
   );
 };
 
-export default app => {
+module.exports = app => {
   listenStartFollowup(app);
   listenFinishFollowup(app);
 };
