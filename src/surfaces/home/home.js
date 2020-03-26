@@ -12,7 +12,7 @@ const homePages = {
 
 exports.openHome = async (userId, homePage, app) => {
   assert(homePages[homePage], "App home page not registered");
-  const page = require(`../../translations/en/homepages/${path}.json`);
+  const page = require(`../../translations/en/homepages/${homePages[homePage][path]}.json`);
   await app.client.views.publish({
     token: process.env.SLACK_BOT_TOKEN,
     user_id: userId,
