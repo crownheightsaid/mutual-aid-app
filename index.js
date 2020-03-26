@@ -34,6 +34,9 @@ passport.use(
       clientSecret: process.env.SLACK_CLIENT_SECRET
     },
     (accessToken, refreshToken, profile, done) => {
+      console.log("YOO\n");
+      console.log(profile);
+      console.log(accessToken);
       done(null, accessToken);
     }
   )
