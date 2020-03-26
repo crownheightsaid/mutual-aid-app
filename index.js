@@ -15,6 +15,14 @@ app.error(console.error);
 startEvents(app);
 startInteractivity(app);
 
+app.all("/slacktest", (req, res, next) => {
+  console.log("Accessing the secret section ...\n");
+  console.log(req);
+  console.log("Response: \n");
+  console.log(res);
+  next(); // pass control to the next handler
+});
+
 (async () => {
   // Start the app
   await app.start(process.env.PORT || 3000);
