@@ -1,0 +1,12 @@
+{
+  "type": "home",
+  "blocks": [
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "Thanks for helping!\n\n"
+      }
+    }
+  ]
+}
