@@ -1,13 +1,13 @@
 const path = require("path");
 const express = require("express");
+const bodyParser = require("body-parser");
 const { App, ExpressReceiver } = require("@slack/bolt");
 const startEvents = require("./src/endpoints/events.js");
 const startInteractivity = require("./src/endpoints/interactivity.js");
 const { initIntl, addUserInfo } = require("./src/middleware.js");
 
 const expressReceiver = new ExpressReceiver({
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  endpoints = { events: '/slack/events', app:  },
+  signingSecret: process.env.SLACK_SIGNING_SECRET
 });
 const boltApp = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -22,8 +22,8 @@ boltApp.error(console.error);
 startEvents(boltApp);
 startInteractivity(boltApp);
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+expressApp.use(bodyParser.json());
+expressApp.use(bodyParser.urlencoded({ extended: true }));
 
 expressApp.use(express.static(path.join(__dirname, "build")));
 expressApp.all("/slacktest", (req, res) => {
