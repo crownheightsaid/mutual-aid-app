@@ -5,7 +5,8 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_KEY }).base(
 );
 
 exports.findVolunteerByEmail = async email => {
-  const record = await base("Volunteers")
+  console.log(email);
+  await base("Volunteers")
     .select({
       filterByFormula: `({volunteer_email} = '${email}')`
     })
@@ -14,6 +15,7 @@ exports.findVolunteerByEmail = async email => {
         console.error(err);
         return;
       }
+      console.log(records);
       records.forEach(function(record) {
         console.log("Retrieved", record.get("volunteer_email"));
       });
