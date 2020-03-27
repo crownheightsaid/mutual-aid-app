@@ -6,6 +6,8 @@ import { CircularProgress } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Button from "@material-ui/core/Button";
 import JustTextContent from "../components/JustTextContext";
 
 const useStyles = makeStyles(theme => ({
@@ -20,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   },
   field: {
     marginTop: theme.spacing(3),
-    width: "75%"
+    width: "85%"
   },
   text: {
     marginBottom: theme.spacing(1)
@@ -69,6 +71,15 @@ export default function NeighborhoodFinder() {
           required
           onChange={e => setAddress(e.target.value)}
           className={classes.field}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Button aria-label="address-submit" onClick={handleSubmit}>
+                  Submit
+                </Button>
+              </InputAdornment>
+            )
+          }}
         />
       </form>
 
@@ -94,7 +105,7 @@ export default function NeighborhoodFinder() {
             disabled
             id="zone"
             label="Crown Heights Volunteer Zone"
-            defaultValue={data.quadrant}
+            defaultValue={data.quadrant || "Unavailable"}
             variant="outlined"
             className={classes.field}
           />
@@ -102,7 +113,7 @@ export default function NeighborhoodFinder() {
             disabled
             id="neighborhood"
             label="Neighborhood"
-            defaultValue={data.neighborhoodName}
+            defaultValue={data.neighborhoodName || "Unavailable"}
             variant="outlined"
             className={classes.field}
           />

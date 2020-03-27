@@ -3,6 +3,8 @@ import Link from "@material-ui/core/Link";
 
 import { Router, Redirect, Link as RouterLink } from "@reach/router";
 
+const SUPPORTED_LANGS = ["en"];
+
 // const polyfillIntl = language => {
 //   const locale = language.split("-")[0];
 //   try {
@@ -23,6 +25,10 @@ import { Router, Redirect, Link as RouterLink } from "@reach/router";
 const LangRoute = ({ lang, children, location }) => {
   // const supportedLang = "en";
   React.useEffect(() => window.scrollTo(0, 0), [location.pathname]);
+
+  if (!SUPPORTED_LANGS.includes(lang)) {
+    return <Redirect to={`/en${location.pathname}`} />;
+  }
   // polyfillIntl(supportedLang);
   // return (
   //   <IntlProvider
@@ -40,6 +46,7 @@ export default function IntlRouter({ children }) {
   return (
     <Router>
       <Redirect from="/" to="/en" />
+
       <LangRoute path=":lang">{children}</LangRoute>
     </Router>
   );
