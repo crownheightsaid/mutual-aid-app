@@ -21,6 +21,18 @@
     "AIRTABLE_BASE": {
       "description": "Go to your airtable base. Click on 'Help -> API Documentation' in top right. Scroll to `Authenitcation`. The thing we need is in 'base('')` to the right.",
       "required": true
+    },
+    "GOOGLE_CLIENT_KEY": {
+      "description": "See docs/gmail-refresh-token.md",
+      "required": true
+    },
+    "GOOGLE_CLIENT_SECRET":{
+      "description": "See docs/gmail-refresh-token.md",
+      "required": true
+    },
+    "GOOGLE_REFRESH_TOKEN":{
+      "description": "See docs/gmail-refresh-token.md",
+      "required": true
     }
   }
 }
