@@ -6,6 +6,7 @@
     "fix": "eslint --fix .",
     "translate": "babel src",
     "start": "node index.js",
+    "gmail-sync": "node ./src/gmail-sync-worker.js",
     "test": "mocha \"src/**/*.test.js\""
   },
   "main": "index.js",
