@@ -5,7 +5,8 @@
     "lint": "eslint .",
     "fix": "eslint --fix .",
     "translate": "babel src",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "mocha \"src/**/*.test.js\""
   },
   "main": "index.js",
   "engines": {
