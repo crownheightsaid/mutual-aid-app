@@ -45,20 +45,20 @@ export default function LanguagePicker({ location }) {
         open={Boolean(languageMenu)}
         onClose={handleLanguageMenuClose}
       >
-        {/* {Object.keys(SUPPORTED_LANGS).map(code => (
+        {["en"].map(code => (
           <MenuItem
             component="a"
             data-no-link="true"
             href={`/${code}`}
             key={code}
-            selected={intl.locale === code}
+            selected={code === "en"}
             onClick={handleLanguageMenuClose}
             lang={code}
             hrefLang={code}
           >
-            {SUPPORTED_LANGS[code]}
+            English
           </MenuItem>
-        ))} */}
+        ))}
         <Box my={1}>
           <Divider />
         </Box>

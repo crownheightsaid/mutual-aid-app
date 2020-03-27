@@ -14,20 +14,18 @@ function addUserInfo(app) {
       userId = payload.user.id;
     }
     console.log(`Add userInfo start: ${userId}`);
-    console.log(event);
     const user = await app.client.users.info({
       token: context.botToken,
       user: userId,
       include_locale: true
     });
-    console.log(user.user.profile.email);
     const volunteer = await findVolunteerByEmail(user.user.profile.email);
     context.volunteerExists = Boolean(volunteer);
     context.userId = userId;
     context.locale = user.user.locale;
     context.userEmail = user.user.profile.email;
     context.userFullName = user.user.real_name;
-    console.log(`Add addUserInfo end`);
+    console.log(`Add addUserInfo end: ${userId}`);
     next();
   };
 }

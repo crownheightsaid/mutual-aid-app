@@ -3,13 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
 import { Helmet } from "react-helmet";
-import { IntlLink } from "./IntlRouter";
 import LanguagePicker from "./LanguagePicker";
-import { isAuthed, removeToken } from "../auth/Auth";
 
 const useStyles = makeStyles(theme => ({
   toolbar: theme.mixins.toolbar,
@@ -22,12 +18,7 @@ const useStyles = makeStyles(theme => ({
   language: {
     margin: theme.spacing(0, 0.5, 0, 1)
   },
-  title: {
-    display: "none",
-    [theme.breakpoints.up("md")]: {
-      display: "block"
-    }
-  },
+  title: {},
   gap: {
     flexGrow: 1
   }
@@ -50,35 +41,10 @@ export default function MenuAppBar({ children }) {
         </Helmet>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            <IntlLink className={classes.link} to="/">
-              Crown Heights Mutual Aid
-            </IntlLink>
+            Volunteer Helper
           </Typography>
           <span className={classes.gap} />
           <LanguagePicker />
-          <Divider orientation="vertical" light variant="middle" flexItem />
-          <Button color="inherit">
-            {isAuthed() ? (
-              <Box
-                className={classes.link}
-                onClick={() => {
-                  removeToken();
-                }}
-              >
-                Logout
-              </Box>
-            ) : (
-              <IntlLink
-                className={classes.link}
-                to="https://crownheightsma.herokuapp.com/auth/slack"
-              >
-                <img
-                  src="https://a.slack-edge.com/accd8/img/sign_in_with_slack.png"
-                  alt="sign-in"
-                />
-              </IntlLink>
-            )}
-          </Button>
         </Toolbar>
       </AppBar>
       <div className={classes.toolbar} />
