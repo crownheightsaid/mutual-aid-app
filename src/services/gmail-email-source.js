@@ -13,9 +13,9 @@ This is all sort of complicated by a few things
  [1] https://developers.google.com/gmail/api/guides/sync
 */
 class GmailEmailSource {
-  constructor(sourceLabel, scrollToken = null) {
+  constructor(sourceLabel, lastHistoryId = null) {
     this.client = this.makeClient();
-    this.scrollToken = scrollToken; // current position in the history
+    this.lastHistoryId = lastHistoryId; // current position in the history
 
     this.labels = {
       source: sourceLabel,
@@ -37,30 +37,36 @@ class GmailEmailSource {
   }
 
   // Returns all of the messages that have changed (been added/tagged) with sourceLabel since the last call
-  // If it hasn't been called before, return all messages tagged with the label
+  // If it hasn't been called before, return all messages tagged with the label.
   async poll() {
     let results = [];
-    if (!this.scrollToken) {
+    if (!this.lastHistoryId) {
+      //means we are not already in the middle of following an inbox's history
       results = await this.initialSync();
       for (const message of results) {
-        if (this.scrollToken < message.historyId) {
-          this.scrollToken = message.historyId;
+        if (this.lastHistoryId < message.historyId) {
+          this.lastHistoryId = message.historyId;
         }
       }
     } else {
+      //pick up where we left off
       results = await this.pollHistory();
     }
     return results;
   }
 
-  async initialSync(token = null) {
+  /**
+   * Gets the messages in an inbox by paging through the messages.list api.
+   * @param {string} pageToken the nextPage toeken from google
+   */
+  async initialSync(pageToken = null) {
     const listResult = await this.client.users.messages.list({
       userId: 'me',
-      nextPageToken: token,
+      nextPageToken: pageToken,
       q: `label:${this.labels.source} -label:${this.labels.dest}`
     });
     const { nextPageToken, messages } = listResult.data;
-    const messageIds = messages.map(m => m.id);
+    const messageIds = (messages || []).map(m => m.id);
     const inflatedMessages = await this.inflateMessages(messageIds);
     if (nextPageToken != null) {
       const nextPage = await this.initialSync(nextPageToken);
@@ -69,30 +75,50 @@ class GmailEmailSource {
     return inflatedMessages;
   }
 
+  /**
+   * Gets the history of changes since the last poll. This is paginated so there are two things going on:
+   * 1) poll for the changes since lastHistoryId
+   * 2) page through the results (lather/rinse/repeat)
+   * @param {string} pageToken the nextPage token
+   */
   async pollHistory(pageToken = null) {
     const sourceLabelId = await this.getLabelId(this.labels.source);
+    const destLabelId = await this.getLabelId(this.labels.dest);
     const response = await this.client.users.history.list({
       userId: 'me',
       historyTypes: ['messageAdded', 'labelAdded'],
       labelId: sourceLabelId,
-      startHistoryId: this.scrollToken,
+      startHistoryId: this.lastHistoryId,
       pageToken
     });
     const { history, historyId } = response.data;
     if (!history) {
       return [];
     }
-    if (this.scrollToken < historyId) {
-      this.scrollToken = historyId;
+    if (this.lastHistoryId < historyId) {
+      this.lastHistoryId = historyId;
     }
     const messageIds = {};
     for (const historyItem of history) {
-      for (const m of historyItem.messagesAdded || []) {
-        messageIds[m.id] = true;
-      }
-      for (const m of historyItem.labelsAdded || []) {
-        if (m.labelIds.includes(sourceLabelId)) {
+      if (historyItem.messagesAdded) {
+        console.info(
+          `Found ${historyItem.messagesAdded.length} new messages.`
+        );
+        for (const m of historyItem.messagesAdded) {
           messageIds[m.id] = true;
+        }
+      }
+      if (historyItem.labelsAdded) {
+        console.info(
+          `Found ${historyItem.labelsAdded.length} messages with changed labels.`
+        );
+        for (const labelChange of historyItem.labelsAdded) {
+          if (
+            labelChange.labelIds.includes(sourceLabelId) &&
+            !labelChange.message.labelIds.includes(destLabelId)
+          ) {
+            messageIds[labelChange.message.id] = true;
+          }
         }
       }
     }
@@ -105,10 +131,32 @@ class GmailEmailSource {
 
   // Turn a sequence of Gmail messageIds to Message objects
   async inflateMessages(messageIds) {
+    if (!messageIds) {
+      return null;
+    }
     return Promise.all(messageIds.map(m => this.inflateMessage(m)));
+  }
+  /**
+   * Adds a label to the given messages to mark them as confirmed. These messages won't be polled again.
+   */
+  async confirmMessages(messages) {
+    if (!messages || messages.length == 0) {
+      return null;
+    }
+    const destLabelId = await this.getLabelId(this.labels.dest);
+    const changes = {
+      userId: 'me',
+      requestBody: {
+        ids: messages.map(m => m.id),
+        addLabelIds: [destLabelId]
+      }
+    };
+    const response = await this.client.users.messages.batchModify(changes);
+    return response.data;
   }
 
   async inflateMessage(messageId) {
+    console.info(`Inflating message: ${messageId}`);
     const resp = await this.client.users.messages.get({
       userId: 'me',
       format: 'full',
@@ -125,7 +173,49 @@ class GmailEmailSource {
       const labelsByName = response.data.labels.map(l => [l.name, l]);
       this.labelCache = Object.fromEntries(labelsByName);
     }
-    return this.labelCache[labelName];
+    return this.labelCache[labelName].id;
   }
 }
-module.exports = GmailEmailSource;
+
+/**
+ * The GMail representation of an email is very... featureful.
+ * This pares it down to the things that we care about
+ */
+function getSimplifiedMessage(message) {
+  const { payload } = message;
+  const { headers } = payload;
+  let subject = 'No Subject';
+  let from = '';
+  for (const header of headers) {
+    if (header.name.toLowerCase() === 'subject') {
+      subject = header.value;
+    } else if (header.name.toLowerCase() === 'from') {
+      from = header.value;
+    }
+  }
+  return {
+    from,
+    subject,
+    body: getBody(payload)
+  };
+}
+
+function getBody(payload) {
+  const { body, parts, mimeType } = payload;
+  if (mimeType == 'multipart/alternative' || mimeType == 'multipart/related') {
+    for (const part of parts) {
+      //prefer plaintext
+      if (part.mimeType == 'text/plain') {
+        return getBody(part);
+      }
+    }
+    return getBody(parts[0]); //Use first if no plaintext
+  }
+  const buff = Buffer.from(body.data, 'base64');
+  return buff.toString('utf-8');
+}
+
+module.exports = {
+  GmailEmailSource,
+  getSimplifiedMessage
+};
