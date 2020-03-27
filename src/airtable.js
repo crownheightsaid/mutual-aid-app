@@ -5,7 +5,7 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_KEY }).base(
 );
 
 exports.findVolunteerByEmail = async email => {
-  const record = await base('Volunteers')
+  const record = await base("Volunteers")
     .select({
       filterByFormula: `({volunteer_email} = '${email}')`
     })
@@ -65,7 +65,7 @@ class Request {
  * @param {Request} request
  */
 exports.saveRequest = async request => {
-  const record = await base('Requests').create(
+  const record = await base("Requests").create(
     request.toAirtableRepresentation()
   );
   return record;
