@@ -1,4 +1,4 @@
-const { google } = require('googleapis');
+const { google } = require("googleapis");
 /*
 Service that follows the changes in a Gmail label
 
@@ -26,14 +26,14 @@ class GmailEmailSource {
 
   makeClient() {
     const auth = new google.auth.OAuth2(
-      process.env['GOOGLE_CLIENT_KEY'],
-      process.env['GOOGLE_CLIENT_SECRET']
+      process.env.GOOGLE_CLIENT_KEY,
+      process.env.GOOGLE_CLIENT_SECRET
     );
     auth.setCredentials({
-      //see: docs/gmailrefresh-token.md
-      refresh_token: process.env['GOOGLE_REFRESH_TOKEN']
+      // see: docs/gmailrefresh-token.md
+      refresh_token: process.env.GOOGLE_REFRESH_TOKEN
     });
-    return google.gmail({ version: 'v1', auth });
+    return google.gmail({ version: "v1", auth });
   }
 
   // Returns all of the messages that have changed (been added/tagged) with sourceLabel since the last call
@@ -41,7 +41,7 @@ class GmailEmailSource {
   async poll() {
     let results = [];
     if (!this.lastHistoryId) {
-      //means we are not already in the middle of following an inbox's history
+      // means we are not already in the middle of following an inbox's history
       results = await this.initialSync();
       for (const message of results) {
         if (this.lastHistoryId < message.historyId) {
@@ -49,7 +49,7 @@ class GmailEmailSource {
         }
       }
     } else {
-      //pick up where we left off
+      // pick up where we left off
       results = await this.pollHistory();
     }
     return results;
@@ -61,7 +61,7 @@ class GmailEmailSource {
    */
   async initialSync(pageToken = null) {
     const listResult = await this.client.users.messages.list({
-      userId: 'me',
+      userId: "me",
       nextPageToken: pageToken,
       q: `label:${this.labels.source} -label:${this.labels.dest}`
     });
@@ -85,8 +85,8 @@ class GmailEmailSource {
     const sourceLabelId = await this.getLabelId(this.labels.source);
     const destLabelId = await this.getLabelId(this.labels.dest);
     const response = await this.client.users.history.list({
-      userId: 'me',
-      historyTypes: ['messageAdded', 'labelAdded'],
+      userId: "me",
+      historyTypes: ["messageAdded", "labelAdded"],
       labelId: sourceLabelId,
       startHistoryId: this.lastHistoryId,
       pageToken
@@ -101,9 +101,7 @@ class GmailEmailSource {
     const messageIds = {};
     for (const historyItem of history) {
       if (historyItem.messagesAdded) {
-        console.info(
-          `Found ${historyItem.messagesAdded.length} new messages.`
-        );
+        console.info(`Found ${historyItem.messagesAdded.length} new messages.`);
         for (const m of historyItem.messagesAdded) {
           messageIds[m.id] = true;
         }
@@ -136,6 +134,7 @@ class GmailEmailSource {
     }
     return Promise.all(messageIds.map(m => this.inflateMessage(m)));
   }
+
   /**
    * Adds a label to the given messages to mark them as confirmed. These messages won't be polled again.
    */
@@ -145,7 +144,7 @@ class GmailEmailSource {
     }
     const destLabelId = await this.getLabelId(this.labels.dest);
     const changes = {
-      userId: 'me',
+      userId: "me",
       requestBody: {
         ids: messages.map(m => m.id),
         addLabelIds: [destLabelId]
@@ -158,8 +157,8 @@ class GmailEmailSource {
   async inflateMessage(messageId) {
     console.info(`Inflating message: ${messageId}`);
     const resp = await this.client.users.messages.get({
-      userId: 'me',
-      format: 'full',
+      userId: "me",
+      format: "full",
       id: messageId
     });
     return resp.data;
@@ -168,7 +167,7 @@ class GmailEmailSource {
   async getLabelId(labelName) {
     if (!this.labelCache) {
       const response = await this.client.users.labels.list({
-        userId: 'me'
+        userId: "me"
       });
       const labelsByName = response.data.labels.map(l => [l.name, l]);
       this.labelCache = Object.fromEntries(labelsByName);
@@ -184,12 +183,12 @@ class GmailEmailSource {
 function getSimplifiedMessage(message) {
   const { payload } = message;
   const { headers } = payload;
-  let subject = 'No Subject';
-  let from = '';
+  let subject = "No Subject";
+  let from = "";
   for (const header of headers) {
-    if (header.name.toLowerCase() === 'subject') {
+    if (header.name.toLowerCase() === "subject") {
       subject = header.value;
-    } else if (header.name.toLowerCase() === 'from') {
+    } else if (header.name.toLowerCase() === "from") {
       from = header.value;
     }
   }
@@ -202,17 +201,18 @@ function getSimplifiedMessage(message) {
 
 function getBody(payload) {
   const { body, parts, mimeType } = payload;
-  if (mimeType == 'multipart/alternative' || mimeType == 'multipart/related') {
+  if (mimeType.startsWith("multipart/")) {
+    // handles multipart/related multipart/alternative
     for (const part of parts) {
-      //prefer plaintext
-      if (part.mimeType == 'text/plain') {
+      // prefer plaintext
+      if (part.mimeType === "text/plain") {
         return getBody(part);
       }
     }
-    return getBody(parts[0]); //Use first if no plaintext
+    return getBody(parts[0]); // Use first if no plaintext
   }
-  const buff = Buffer.from(body.data, 'base64');
-  return buff.toString('utf-8');
+  const buff = Buffer.from(body.data, "base64");
+  return buff.toString("utf-8");
 }
 
 module.exports = {

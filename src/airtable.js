@@ -1,4 +1,4 @@
-const Airtable = require('airtable');
+const Airtable = require("airtable");
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_KEY }).base(
   process.env.AIRTABLE_BASE
@@ -14,7 +14,6 @@ exports.findVolunteerByEmail = async email => {
 };
 
 class Request {
-
   /**
    * The mapping between a model object an Airtable's fields.
    * We do this because airtable only supports setting by name,
@@ -22,15 +21,15 @@ class Request {
    * symbol: "Email Address" -> "emailAddress"
    */
   airtableBindings = {
-    //these are set by airtable
-    requestId: 'Request ID',
-    airtableRecord: 'Airtable Record',
-    time: 'Time',
-    //and these we set
-    phone: 'Phome',
-    emailAddress: 'Email Address',
-    textOrVoice: 'Text or Voice?',
-    message: 'Message'
+    // these are set by airtable
+    requestId: "Request ID",
+    airtableRecord: "Airtable Record",
+    time: "Time",
+    // and these we set
+    phone: "Phome",
+    emailAddress: "Email Address",
+    textOrVoice: "Text or Voice?",
+    message: "Message"
   };
 
   /**
@@ -48,7 +47,7 @@ class Request {
     this.phone = opts.phone;
     this.textOrVoice = opts.textOrVoice;
     this.message = opts.message;
-    this.emailAddress = opts.emailAddress
+    this.emailAddress = opts.emailAddress;
   }
 
   toAirtableRepresentation() {

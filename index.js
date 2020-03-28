@@ -20,7 +20,7 @@ app.error(console.error);
 startEvents(app);
 startInteractivity(app);
 
-if(process.env.SYNC_GMAIL){
+if (process.env.SYNC_GMAIL) {
   startGmailSync(app);
 }
 
