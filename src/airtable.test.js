@@ -1,17 +1,16 @@
 const assert = require("assert");
-const { saveRequest, Request } = require("./airtable.js");
+const { saveRequest } = require("./airtable.js");
 
-describe("Airtable Requests", function() {
-  describe("saveRequest()", function() {
-    it("should persist a request", async function() {
-      const r = new Request({
-        email: "test@examaple.com",
-        message: "test message body"
-      });
-      const record = await saveRequest(r);
+describe("Airtable Requests", () => {
+  describe("saveRequest()", () => {
+    it("should persist a request", async () => {
+      const testEmail = "test@example.com";
+      const testMessage = "test message body";
+      const record = await saveRequest(testEmail, testMessage);
       assert.ok(record);
       assert.ok(record.getId());
-      assert.ok(record["Email address"] === "test@example.com");
+      assert.ok(record.get("Email Address") === testEmail);
+      assert.ok(record.get("Message") === testMessage);
     });
   });
 });

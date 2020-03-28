@@ -2,7 +2,7 @@ const {
   GmailEmailSource,
   getSimplifiedMessage
 } = require("./services/gmail-email-source");
-const { saveRequest, Request } = require("./airtable");
+const { saveRequest } = require("./airtable");
 
 const source = new GmailEmailSource(process.env.GMAIL_LABEL || "incoming");
 
@@ -20,15 +20,12 @@ async function syncGmail() {
     console.info(`Found ${newMessages.length} to send to airtable`);
     for (const fullMessage of newMessages) {
       const message = getSimplifiedMessage(fullMessage);
-      const request = new Request({
-        emailAddress: message.from,
-        textOrVoice: "text",
-        message: `${message.subject} - ${message.body}`
-      });
+
+      const requestContent = `${message.subject} - ${message.body}`;
 
       // We are explicitly interested in processing these sequentially so...
       /* eslint-disable no-await-in-loop */
-      const record = await saveRequest(request);
+      const record = await saveRequest(message.from, requestContent);
       console.info(`Sent ${record.getId()} to airtable. Marking as processed.`);
       await source.confirmMessages([fullMessage]);
     }

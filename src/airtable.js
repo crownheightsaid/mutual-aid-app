@@ -13,62 +13,17 @@ exports.findVolunteerByEmail = async email => {
   return record ? record[0] : null;
 };
 
-class Request {
-  /**
-   * The mapping between a model object an Airtable's fields.
-   * We do this because airtable only supports setting by name,
-   * so we would like a single place to map the name to an internal
-   * symbol: "Email Address" -> "emailAddress"
-   */
-  airtableBindings = {
-    // these are set by airtable
-    requestId: "Request ID",
-    airtableRecord: "Airtable Record",
-    time: "Time",
-    // and these we set
-    phone: "Phome",
-    emailAddress: "Email Address",
-    textOrVoice: "Text or Voice?",
-    message: "Message"
-  };
-
-  /**
-   *
-   * @param {Object} opts
-   * @param {string} opts.phone
-   * @param {"text"|"voice"} opts.textOrVoice
-   * @param {string} opts.message
-   */
-  constructor(opts = {}) {
-    this.airtableRecord = opts.airtableRecord;
-    this.requestId = opts.requestId;
-    this.time = opts.time;
-
-    this.phone = opts.phone;
-    this.textOrVoice = opts.textOrVoice;
-    this.message = opts.message;
-    this.emailAddress = opts.emailAddress;
-  }
-
-  toAirtableRepresentation() {
-    const airtableRep = {};
-    for (const prop of Object.keys(this.airtableBindings)) {
-      const airtablePropertyName = this.airtableBindings[prop];
-      airtableRep[airtablePropertyName] = this[prop];
-    }
-    return airtableRep;
-  }
-}
 /**
- * Saves a request ao Airtable
- * @param {Request} request
+ * Saves a request ao Airtable. WARNING: only handles some fields at the moment
  */
-exports.saveRequest = async request => {
-  const record = await base("Requests").create(
-    request.toAirtableRepresentation()
-  );
+exports.saveRequest = async (emailAddress, message) => {
+  const request = {
+    "Email Address": emailAddress,
+    Message: message,
+    "Text or Voice?": "text"
+  };
+  const record = await base("Requests").create(request);
   return record;
 };
 
 exports.airbase = base;
-exports.Request = Request;
