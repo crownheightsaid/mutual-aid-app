@@ -16,11 +16,14 @@ exports.findVolunteerByEmail = async email => {
 
 exports.airbase = base;
 
+const metaField = "Meta";
+const lastModifiedField = "Last Modified";
+const lastProcessedField = "Last Processed";
 function getNormalizedMeta(record) {
-  if (!record.fields.Meta) {
+  if (!record.fields[metaField]) {
     return { lastValues: {} };
   }
-  const meta = JSON.parse(record.fields.Meta);
+  const meta = JSON.parse(record.fields[metaField]);
   if (!meta.lastValues) {
     meta.lastValues = {};
   }
@@ -43,7 +46,7 @@ class Changes {
   async getModifiedRecords() {
     const records = await this.base
       .select({
-        filterByFormula: `({Last Modified} > '${this.lastModified}')`
+        filterByFormula: `({${lastModifiedField}} > '${this.lastModified}')`
       })
       .all();
     return records.filter(this.isModified);
@@ -57,13 +60,13 @@ class Changes {
     for (const record of records) {
       const fields = _.clone(record.fields);
       const meta = getNormalizedMeta(record);
-      delete fields.Meta;
+      delete fields[metaField];
       meta.lastValues = fields;
       updates.push({
         id: record.id,
         fields: {
-          Meta: JSON.stringify(meta),
-          "Last Processed": new Date().toUTCString()
+          [metaField]: JSON.stringify(meta),
+          [lastProcessedField]: new Date().toUTCString()
         }
       });
     }
@@ -72,15 +75,14 @@ class Changes {
 
   isModified(record) {
     const fields = _.clone(record.fields);
-    const metaRep = fields.Meta || "{}";
+    const metaRep = fields[metaField] || "{}";
     const meta = JSON.parse(metaRep);
     const lastValues = meta.lastValues || {};
-    const ignoredFields = ["Last Modified", "Last Processed", "Meta"];
+    const ignoredFields = [lastModifiedField, metaField, lastProcessedField];
     for (const ignoredField of ignoredFields) {
       delete fields[ignoredField];
       delete lastValues[ignoredField];
     }
-
     if (!_.isEqual(fields, meta.lastValues)) {
       return true;
     }
