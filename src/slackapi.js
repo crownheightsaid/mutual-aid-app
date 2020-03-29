@@ -10,6 +10,6 @@ if (!process.env.SLACK_BOT_TOKEN) {
 // const slackApi = require("..../slackapi.js");
 // ...
 // slackApi.views.publish({token: ...., user_id: ...., view: ....})
-export default process.env.SLACK_BOT_TOKEN
+module.exports = process.env.SLACK_BOT_TOKEN
   ? new WebClient(process.env.SLACK_BOT_TOKEN)
   : null;

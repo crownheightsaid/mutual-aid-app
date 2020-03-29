@@ -49,8 +49,6 @@ exports.addressHandler = async (req, res, next) => {
       )
     );
     const quadrantName = userQuadrant ? userQuadrant.properties.name : null;
-    console.log(neighborhoodName);
-    console.log(quadrantName);
 
     return res.end(
       JSON.stringify({

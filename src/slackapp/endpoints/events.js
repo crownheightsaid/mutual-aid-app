@@ -26,4 +26,4 @@ slackEvents.on("app_home_opened", async event => {
   }
 });
 
-export default slackEvents.requestListener();
+module.exports = slackEvents.requestListener();
