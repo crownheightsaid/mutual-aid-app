@@ -17,7 +17,7 @@ exports.openHomeWithSections = async (userId, sectionNames) => {
   const loadedBlocks = [];
   sectionNames.forEach(sectionName => {
     assert(homeBlocks[sectionName], "Home page section not registered.");
-    loadedBlocks.push(...homeBlocks[sectionName].block);
+    loadedBlocks.push(...homeBlocks[sectionName].blocks);
   });
   await slackApi.views.publish({
     token: process.env.SLACK_BOT_TOKEN,
