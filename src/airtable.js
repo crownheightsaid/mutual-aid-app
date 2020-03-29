@@ -61,7 +61,10 @@ class Changes {
       meta.lastValues = fields;
       updates.push({
         id: record.id,
-        fields: { Meta: JSON.stringify(meta) }
+        fields: {
+          Meta: JSON.stringify(meta),
+          "Last Processed": new Date().toUTCString()
+        }
       });
     }
     return this.base.update(updates);
@@ -72,9 +75,11 @@ class Changes {
     const metaRep = fields.Meta || "{}";
     const meta = JSON.parse(metaRep);
     const lastValues = meta.lastValues || {};
-    delete fields.Meta;
-    delete fields["Last Modified"];
-    delete lastValues["Last Modified"];
+    const ignoredFields = ["Last Modified", "Last Processed", "Meta"];
+    for (const ignoredField of ignoredFields) {
+      delete fields[ignoredField];
+      delete lastValues[ignoredField];
+    }
 
     if (!_.isEqual(fields, meta.lastValues)) {
       return true;
