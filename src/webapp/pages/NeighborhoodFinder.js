@@ -34,7 +34,7 @@ export default function NeighborhoodFinder() {
   const [formAddress, setAddress] = useState("");
   const [{ data, loading, error }, submit] = useAxios(
     {
-      url: `/geo/address-metadata`,
+      url: `/api/geo/address-metadata`,
       method: "post"
     },
     { manual: true }

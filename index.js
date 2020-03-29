@@ -1,49 +1,51 @@
+require("dotenv").config();
+
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
-const { App, ExpressReceiver } = require("@slack/bolt");
-const startEvents = require("./src/endpoints/events.js");
-const startInteractivity = require("./src/endpoints/interactivity.js");
-const { initIntl, addUserInfo } = require("./src/middleware.js");
-const { addressHandler } = require("./src/endpoints/geo.js");
+const eventsHandler = require("./src/slackapp/endpoints/events.js");
+const interactivityHandler = require("./src/slackapp/endpoints/interactivity.js");
+const { addressHandler } = require("./src/api/geo.js");
 
-const expressReceiver = new ExpressReceiver({
-  signingSecret: process.env.SLACK_SIGNING_SECRET
-});
-const boltApp = new App({
-  token: process.env.SLACK_BOT_TOKEN,
-  receiver: expressReceiver
-});
-const expressApp = expressReceiver.app;
+const app = express();
+
+if (!process.env.AIRTABLE_BASE || !process.env.AIRTABLE_KEY) {
+  console.warn("An airtable key is missing. Something will probably break :/");
+}
 
 // ---------- SLACK ONLY -------------
 
-boltApp.use(addUserInfo(boltApp));
-boltApp.use(initIntl);
-boltApp.error(console.error);
+if (process.env.SLACK_BOT_TOKEN && process.env.SLACK_SIGNING_SECRET) {
+  app.post("/slack/events", eventsHandler);
+  app.post("/slack/interactivity", interactivityHandler);
+} else {
+  console.warn("Slack tokens are missing! Slack routes won't exist.");
+}
 
-startEvents(boltApp);
-startInteractivity(boltApp);
+// ---------- COMMON MIDDLEWARE -------------
 
-// ---------- CUSTOM ENDPOINTS -------------
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-expressApp.use(bodyParser.json());
-expressApp.use(bodyParser.urlencoded({ extended: true }));
+// ---------- API ROUTES -------------
 
-expressApp.post("/geo/address-metadata", addressHandler);
+if (process.env.GOOGLE_MAPS_API_KEY && process.env.GEONAME_CLIENT_ID) {
+  app.post("/api/geo/address-metadata", addressHandler);
+} else {
+  console.warn("Geo keys missing. Not starting geo routes.");
+}
 
-expressApp.use(express.static(path.join(__dirname, "build")));
-expressApp.get("/", (req, res) => {
+// ---------- REACT APP + STATIC SERVING -------------
+
+app.use(express.static(path.join(__dirname, "build")));
+app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
-expressApp.get("*", (req, res) => {
+app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-(async () => {
-  // Start the app
-  await boltApp.start(process.env.PORT || 3000);
-
-  console.log("Crown Heights app running!");
-  console.log(`Listening on ${process.env.PORT}`);
-})();
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Mutual Aid app listening on ${port}!`);
+});

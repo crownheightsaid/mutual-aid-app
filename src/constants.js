@@ -1,1 +1,1 @@
-exports.APP_NAME = "Mutual Aid Crown Heights";
+exports.APP_NAME = process.env.APP_NAME || "Crown Heights Mutual Aid";
