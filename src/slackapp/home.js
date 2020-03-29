@@ -13,7 +13,7 @@ const homeBlocks = {
   }
 };
 
-exports.openHomeWithBlocks = async (userId, sectionNames) => {
+exports.openHomeWithSections = async (userId, sectionNames) => {
   const loadedBlocks = [];
   sectionNames.forEach(sectionName => {
     assert(homeBlocks[sectionName], "Home page section not registered.");
