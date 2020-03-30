@@ -24,6 +24,7 @@ module.exports = {
     "react/static-property-placement": ["error", "static public field"],
     "react/forbid-prop-types": ["off"],
     "react/jsx-filename-extension": ["off"],
+    "jsx-a11y/anchor-has-content": ["off"],
     "react/destructuring-assignment": ["off"],
     "react-hooks/rules-of-hooks": ["error"],
     // I think Gatsby might add nested props (location) that

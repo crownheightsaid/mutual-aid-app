@@ -48,7 +48,7 @@ exports.addressHandler = async (req, res, next) => {
         quadrant.geometry
       )
     );
-    const quadrantName = userQuadrant ? userQuadrant.properties.name : null;
+    const quadrantName = userQuadrant ? userQuadrant.properties.id : null;
 
     return res.end(
       JSON.stringify({
