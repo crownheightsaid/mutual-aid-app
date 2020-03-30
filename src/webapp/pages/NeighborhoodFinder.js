@@ -89,10 +89,10 @@ export default function NeighborhoodFinder() {
         Enter an address and we will look up cross streets and the neighborhood.
       </Typography>
       <Typography className={classes.text} variant="body1">
-        If the address is in a Crown Heights quadrant, it will let you know.
+        If the address is in a Crown Heights quadrant, it will let you know!
       </Typography>
       <Typography className={classes.text} variant="body1">
-        The address will not be stored or logged.
+        The address will not be stored or logged :)
       </Typography>
       <form onSubmit={handleSubmit} autoComplete="off">
         <TextField
@@ -161,7 +161,9 @@ export default function NeighborhoodFinder() {
         <>
           <Typography className={classes.text} variant="body1">
             Error loading. Please try again. If it fails again, let us know in
-            #tech.
+            <a href="https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD">
+              #tech.
+            </a>
           </Typography>
           <Divider className={classes.divider} />
           <EmailButton />
