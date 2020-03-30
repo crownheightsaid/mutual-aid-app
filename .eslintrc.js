@@ -17,19 +17,13 @@ module.exports = {
     sourceType: "module"
   },
   rules: {
-    "class-methods-use-this": ["off"],
     "no-unused-vars": ["error"],
     "react/prop-types": ["off"],
-    "no-use-before-define": ["error", { variables: false, functions: false }],
     "react/static-property-placement": ["error", "static public field"],
     "react/forbid-prop-types": ["off"],
     "react/jsx-filename-extension": ["off"],
-    "jsx-a11y/anchor-has-content": ["off"],
     "react/destructuring-assignment": ["off"],
-    "react-hooks/rules-of-hooks": ["error"],
-    // I think Gatsby might add nested props (location) that
-    // shouldComponentUpdate might fail to catch.
-    "react/prefer-stateless-function": ["off"]
+    "react-hooks/rules-of-hooks": ["error"]
   },
   settings: {
     "import/resolver": {

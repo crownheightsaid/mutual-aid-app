@@ -63,6 +63,16 @@ export default function NeighborhoodFinder() {
   };
 
   const EmailButton = () => {
+    const resourceLinks = [
+      "https://docs.google.com/document/d/18WYGoVlJuXYc3QFN1RABnARZlwDG3aLQsnNokl1KhZQ/edit"
+    ];
+    let bodyString =
+      "Sorry we couldn't help out :/\nHere's a regularly updated list of resources:\n\n";
+
+    resourceLinks.forEach(resourceLink => {
+      bodyString += `${resourceLink}\n\n`;
+    });
+
     return (
       <>
         <Typography className={classes.text} variant="body1">
@@ -73,7 +83,9 @@ export default function NeighborhoodFinder() {
           target="_blank"
           className={classes.link}
           rel="noopener noreferrer"
-          href="mailto:?subject=Coronavirus%20Resources%20NYC&body=Sorry%20we%20couldn't%20help%20out%20%3A%2F%0D%0AHere's%20some%20resources%20others%20have%20found%20helpful%3A%0D%0Ahttps%3A%2F%2Fcitylimits.org%2Fnyc-coronavirus-crisis-resources-for-you%2F%0D%0Ahttp%3A%2F%2Fmutualaid.nyc%2Fneighborhood-groups%2F"
+          href={`mailto:?subject=Coronavirus%20Resources%20NYC&body=${encodeURIComponent(
+            bodyString
+          )}`}
         >
           <Button variant="contained" endIcon={<MailOutlineIcon />}>
             Email Aid Resource Links
