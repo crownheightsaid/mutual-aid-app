@@ -10,7 +10,6 @@ import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
-import JustTextContent from "../components/JustTextContext";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -50,7 +49,7 @@ export default function NeighborhoodFinder() {
       url: `/api/geo/address-metadata`,
       method: "post"
     },
-    { manual: true }
+    { manual: true } // Don't send on render
   );
 
   const handleSubmit = event => {
@@ -78,7 +77,6 @@ export default function NeighborhoodFinder() {
         <Typography className={classes.text} variant="body1">
           You can use the link below to send more resources if needed!
         </Typography>
-        <JustTextContent body="" />
         <a
           target="_blank"
           className={classes.link}
@@ -101,7 +99,7 @@ export default function NeighborhoodFinder() {
         Enter an address and we will look up cross streets and the neighborhood.
       </Typography>
       <Typography className={classes.text} variant="body1">
-        If the address is in a Crown Heights quadrant, it will let you know!
+        For best results, enter street and town (Ex: 1550 dean st brooklyn)
       </Typography>
       <Typography className={classes.text} variant="body1">
         The address will not be stored or logged :)
@@ -135,7 +133,7 @@ export default function NeighborhoodFinder() {
             disabled
             id="cross-1"
             label="Cross Street #1"
-            defaultValue={data.intersection.street_1}
+            value={data.intersection.street_1}
             variant="outlined"
             className={classes.field}
           />
@@ -143,7 +141,7 @@ export default function NeighborhoodFinder() {
             disabled
             id="cross-2"
             label="Cross Street #2"
-            defaultValue={data.intersection.street_2}
+            value={data.intersection.street_2}
             variant="outlined"
             className={classes.field}
           />
@@ -151,7 +149,7 @@ export default function NeighborhoodFinder() {
             disabled
             id="neighborhood"
             label="Neighborhood"
-            defaultValue={data.neighborhoodName || "Unavailable"}
+            value={data.neighborhoodName || "Unavailable"}
             helperText="If both this and zone are unavailable, double check the map: https://bit.ly/2UrZPkA"
             variant="outlined"
             className={classes.field}
@@ -160,7 +158,7 @@ export default function NeighborhoodFinder() {
             disabled
             id="zone"
             label="Crown Heights Volunteer Zone"
-            defaultValue={data.quadrant || "Unavailable"}
+            value={data.quadrant || "Unavailable"}
             variant="outlined"
             className={classes.field}
           />
@@ -173,6 +171,7 @@ export default function NeighborhoodFinder() {
         <>
           <Typography className={classes.text} variant="body1">
             Error loading. Please try again. If it fails again, let us know in
+            &nbsp;
             <a href="https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD">
               #tech.
             </a>
