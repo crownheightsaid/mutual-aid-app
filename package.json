@@ -1,10 +1,9 @@
 {
-  "name": "mutual-aid-slack",
+  "name": "mutual-aid-app",
   "description": "",
   "scripts": {
     "lint": "eslint src",
     "fix": "eslint --fix src",
-    "translate": "babel src",
     "local": "npm run local:react & npm run local:express",
     "local:express": "NODE_ENV=dev node index.js",
     "local:react": "NODE_ENV=dev react-scripts start",

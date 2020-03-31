@@ -5,7 +5,7 @@ const boundsJson = require("../assets/crownheights.json");
 
 const googleGeoClient = new Client({});
 const geonamesClient = new Geonames({
-  username: process.env.GEONAME_CLIENT_ID,
+  username: process.env.GEONAME_CLIENT_ID || "demo",
   lan: "en",
   encoding: "JSON"
 });
