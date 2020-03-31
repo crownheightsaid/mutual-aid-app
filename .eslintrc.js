@@ -18,6 +18,7 @@ module.exports = {
   },
   rules: {
     "no-unused-vars": ["error"],
+    "no-console": ["off"],
     "react/prop-types": ["off"],
     "react/static-property-placement": ["error", "static public field"],
     "react/forbid-prop-types": ["off"],
