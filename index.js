@@ -48,9 +48,9 @@ app.get("*", (req, res) => {
 
 // ---------- IN-PROCESS WORKERS -------------
 
-const airtableInterval = parseInt(process.env.AIRTABLE_SYNC || 0, 10);
-if (airtableInterval > 0) {
-  airtableWorker(airtableInterval);
+const airtableIntervalMs = parseInt(process.env.AIRTABLE_SYNC || 0);
+if (airtableIntervalMs > 0) {
+  airtableWorker(airtableIntervalMs);
 }
 
 // ---------- START MAIN APP -------------

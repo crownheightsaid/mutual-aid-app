@@ -24,7 +24,8 @@ module.exports = {
     "react/forbid-prop-types": ["off"],
     "react/jsx-filename-extension": ["off"],
     "react/destructuring-assignment": ["off"],
-    "react-hooks/rules-of-hooks": ["error"]
+    "react-hooks/rules-of-hooks": ["error"],
+    "radix": ["off"] //fixed in ES5
   },
   settings: {
     "import/resolver": {
