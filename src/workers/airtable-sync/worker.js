@@ -10,7 +10,7 @@ const defaultInterval = 5000;
 function schedule(taskName, interval, f) {
   let running = true;
   (async () => {
-    console.log(`Starting ${taskName}`);
+    console.log(`Starting ${taskName} and polling every ${interval}ms`);
     while (running) {
       /* eslint-disable */
       try {
