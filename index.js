@@ -42,7 +42,7 @@ if (process.env.BASIC_AUTH_USERS) {
   const allUsers = {};
   const userPass = process.env.BASIC_AUTH_USERS.split(";");
   userPass.forEach(pair => {
-    const [user, pass] = userPass.split(":");
+    const [user, pass] = pair.split(":");
     allUsers[user] = pass;
   });
 
