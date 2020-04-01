@@ -16,10 +16,10 @@ const overlap = 5 * 1000; // N second overlap for lastModified
  * 3) `lastProcessedField': a datetime field that holds the last time this record was processed through the system
  *
  * The basic flow is to:
- * 1) Find all records where lastModified > lastProcessed
+ * 1) Find all records where lastModified > the last observed lastModified - an overlapp
  * 2) Check to make sure that non-meta columns have actually changed
- * 3) Emit the records that have changed for further processing.
- * 4) Update the record's lastProcessed and meta.lastValues to reflect what the state is currently
+ * 3) Update the record's lastProcessed and meta.lastValues to reflect what the state is currently
+ * 3) Emit the records that have changed to the caller.
  *
  * Use like:
  *   const detector = new ChangeDetector("Table")
