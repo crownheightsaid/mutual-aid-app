@@ -92,6 +92,8 @@ class ChangeDetector {
     return this.base.update(updates);
   }
 
+  /* eslint-disable class-methods-use-this  */
+  // it's nice to have it in this scope for organizational purposes
   /**
    * Determines if any of are records fields have changed.
    * This ignores the bookkeeking fields such as metaField and lastProcessedField

@@ -7,6 +7,7 @@
     "local": "npm run local:react & npm run local:express",
     "local:express": "NODE_ENV=dev node index.js",
     "local:react": "NODE_ENV=dev react-scripts start",
+    "local:airtable-sync": "NODE_ENV=dev node ./src/workers/airtable-sync/worker.js",
     "prod:express": "node index.js",
     "prod:react": "react-scripts build",
     "build": "npm run prod:react",

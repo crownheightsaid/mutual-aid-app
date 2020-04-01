@@ -2,7 +2,8 @@ const slackapi = require("../../slackapi");
 const { findVolunteerById, airbase } = require("../../airtable");
 
 /**
- * Posts the new delivery message to slack.
+ * Handles what happens when a request is newly marked as Delivery Needed.
+ * Currently, this means send a slack message to a specific channel
  */
 async function newDeliveryRequest(request) {
   // We need to look up the user from slack because we need the raw slack id to mention
