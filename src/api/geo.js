@@ -5,7 +5,7 @@ const boundsJson = require("../assets/crownheights.json");
 
 const googleGeoClient = new Client({});
 const geonamesClient = new Geonames({
-  username: process.env.GEONAME_CLIENT_ID,
+  username: process.env.GEONAME_CLIENT_ID || "demo",
   lan: "en",
   encoding: "JSON"
 });
@@ -48,7 +48,7 @@ exports.addressHandler = async (req, res, next) => {
         quadrant.geometry
       )
     );
-    const quadrantName = userQuadrant ? userQuadrant.properties.name : null;
+    const quadrantName = userQuadrant ? userQuadrant.properties.id : null;
 
     return res.end(
       JSON.stringify({
