@@ -52,7 +52,7 @@ function startWorker(interval) {
           `${record.get("Request ID")} moved from ${newStatus} -> ${status}`
         );
         if (status == "Delivery Needed") {
-          await newDeliveryRequest(record);
+          //await newDeliveryRequest(record);
           //TODO: write-back the slack message TS so that we can edit it later
         }
       }
