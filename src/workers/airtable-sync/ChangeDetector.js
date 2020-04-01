@@ -27,7 +27,7 @@ const overlap = 5 * 1000; // N second overlap for lastModified
  *   for(const changedRecord of changes){
  *    //do something with the record
  *   }
- *   //maybe poll again?
+ *   //wait some time and poll again
  */
 class ChangeDetector {
   constructor(tableName) {
@@ -153,7 +153,4 @@ function getNormalizedMeta(record) {
   return meta;
 }
 
-module.exports = {
-  ChangeDetector,
-  airbase
-};
+module.exports = ChangeDetector;

@@ -1,5 +1,6 @@
 const assert = require("assert");
-const { ChangeDetector, airbase } = require("./change-detector");
+const airbase = require("../../airtable");
+const ChangeDetector = require("./ChangeDetector");
 
 describe("Airtable Changes", () => {
   describe("#poll()", () => {
