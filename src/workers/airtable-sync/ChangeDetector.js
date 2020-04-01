@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const { airbase } = require("../../airtable");
+const { airbase, UPDATE_BATCH_SIZE } = require("../../airtable");
 
 // Maps airtable column names
 const metaField = "Meta";
@@ -89,7 +89,13 @@ class ChangeDetector {
         }
       });
     }
-    return this.base.update(updates);
+    let results = [];
+    // unfortunately Airtable only allows 10 records at a time to be updated so batck up the changes
+    for (const batch of _.chunk(updates, UPDATE_BATCH_SIZE)) {
+      /* eslint-disable no-await-in-loop */
+      results += await this.base.update(batch);
+    }
+    return results;
   }
 
   /* eslint-disable class-methods-use-this  */

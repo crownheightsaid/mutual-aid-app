@@ -18,3 +18,4 @@ exports.findVolunteerById = async id => {
 };
 
 exports.airbase = base;
+exports.UPDATE_BATCH_SIZE = 10;
