@@ -6,7 +6,9 @@ const metaField = "Meta";
 const lastModifiedField = "Last Modified";
 const lastProcessedField = "Last Processed";
 
-const overlap = 5 * 1000; // N second overlap for lastModified
+// N second overlap for lastModified
+// We are worried that there's clock skew on Airtable's part so we end up overlapping our requests by 5s to try to work around this possibility
+const overlapMs = 5 * 1000;
 
 /**
  * Implementation of a simple change detector for Airtable Tables
@@ -22,7 +24,7 @@ const overlap = 5 * 1000; // N second overlap for lastModified
  * 3) Emit the records that have changed to the caller.
  *
  * Use like:
- *   const detector = new ChangeDetector("Table")
+ *   const detector = new ChangeDetector("YourTableName")
  *   const changes = detector.poll()
  *   for(const changedRecord of changes){
  *    //do something with the record
@@ -37,12 +39,17 @@ class ChangeDetector {
   }
 
   /**
-   * Returns all the records that have been changed or added since last `poll()`
+   * Returns all the records that have been changed or added since last `poll()`.
+   *
+   * The Airtable record objects are just a map from field to value:
+   *   record.get("field name") // returns current value for "field name"
+   * (https://github.com/Airtable/airtable.js/blob/master/lib/record.js)
+   *
    * The records are enriched with a few helper functions:
    *   record.getTableName() //returns the table name of the record
-   *   record.getPrior(field)  //returns the prior value for `field` or undefined
+   *   record.getPrior("field name")  //returns the prior value for `field` or undefined
    *   record.getMeta() // returns the parsed meta for the record: {"lastValues":{...}}
-   *   record.didChange(field) // returns true if the field changed (or is new) between the last observation and now
+   *   record.didChange("field name ") // returns true if the field changed (or is new) between the last observation and now
    */
   async poll() {
     const toExamine = await this.getModifiedRecords();
@@ -58,11 +65,18 @@ class ChangeDetector {
 
   /**
    * Gets all the records that have changed since lastModified (- a overlap)
+   *
+   * The overlap means we will observe some records more than once, but
+   * since they won't have any actual field changes they will get filtered out.
+   *
+   * Similarly, since the lastModified is not persisted across instances, an instance will examine
+   * (but not report changes or update metadata) for all rows when it is started.
    */
   async getModifiedRecords() {
+    const cutoff = new Date(this.lastModified.getTime() - overlapMs);
     const records = await this.base
       .select({
-        filterByFormula: `({${lastModifiedField}} > '${this.lastModified.toISOString()}')`
+        filterByFormula: `({${lastModifiedField}} > '${cutoff.toISOString()}')`
       })
       .all();
     return records.map(this.enrichRecord);
@@ -146,7 +160,7 @@ class ChangeDetector {
    */
   updateLastModified(records) {
     const maxLastModified = _.max(records.map(r => r.get(lastModifiedField)));
-    this.lastModified = new Date(new Date(maxLastModified).getTime() - overlap);
+    this.lastModified = new Date(new Date(maxLastModified).getTime());
   }
 }
 

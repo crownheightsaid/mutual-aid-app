@@ -22,6 +22,9 @@
       "description": "Go to your airtable base. Click on 'Help -> API Documentation' in top right. Scroll to `Authenitcation`. The thing we need is in 'base('')` to the right.",
       "required": true
     },
+    "AIRTABLE_SYNC":{
+      "description": "If set, run the Airtable sync worker in the main process with this frequency in milliseconds."
+    },
     "GEONAME_CLIENT_ID": {
       "description": "Use if you need /geo API routes (used in the website). It's free to get and use!"
     },
@@ -30,10 +33,6 @@
     },
     "APP_NAME": {
       "description": "Name of your organization (Crown Heights Mutual Aid)"
-    },
-    "AIRTABLE_SYNC":{
-      "description": "If set, run the Airtable sync worker in the main process with this frequency in milliseconds."
     }
-
   }
 }

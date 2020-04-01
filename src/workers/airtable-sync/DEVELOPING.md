@@ -7,3 +7,6 @@ Another thing that can be useful is directly running the handler that gets calle
 This will resend the notification for the Request with Record ID 1
 
 `node ./src/workers/airtable-sync/newDeliveryRequest.js 1`
+
+### Getting started
+To understand how to use ChangeDetector and schedule tasks, start in ./worker.js.
