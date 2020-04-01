@@ -2,7 +2,7 @@ const ChangeDetector = require("./ChangeDetector");
 const newDeliveryRequest = require("./newDeliveryRequest");
 
 const wait = interval => new Promise(r => setTimeout(r, interval));
-
+const defaultInterval = 5000;
 /**
  * Reusable scheduler for repeating in-process tasks
  * `interval` is between one invocation's end and the next one's start, unlike `setInterval`
@@ -32,6 +32,12 @@ function schedule(taskName, interval, f) {
 }
 
 function startWorker(interval) {
+  if (interval < defaultInterval) {
+    console.log(
+      `Interval ${interval} is too low. Clamping to ${defaultInterval}`
+    );
+    interval = defaultInterval;
+  }
   let requestChanges = new ChangeDetector("Requests");
   schedule("airtable-sync.requests", interval, async () => {
     const recordsChanged = await requestChanges.poll();
@@ -52,9 +58,9 @@ function startWorker(interval) {
       }
     }
   });
-};
+}
 
-module.exports = startWorker
+module.exports = startWorker;
 if (require.main === module) {
-  startWorker(15000);
+  startWorker(defaultInterval);
 }
