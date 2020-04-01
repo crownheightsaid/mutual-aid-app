@@ -1,5 +1,5 @@
 const ChangeDetector = require("./ChangeDetector");
-const newDeliveryRequest = require("./newDeliveryRequest");
+// const newDeliveryRequest = require("./newDeliveryRequest");
 
 const wait = interval => new Promise(r => setTimeout(r, interval));
 const defaultInterval = 5000;
