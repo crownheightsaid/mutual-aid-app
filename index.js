@@ -5,6 +5,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const eventsHandler = require("./src/slackapp/endpoints/events.js");
 const interactivityHandler = require("./src/slackapp/endpoints/interactivity.js");
+const airtableWorker = require("./src/workers/airtable-sync/worker");
 const { addressHandler } = require("./src/api/geo.js");
 
 const app = express();
@@ -44,6 +45,15 @@ app.get("/", (req, res) => {
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
+
+// ---------- IN-PROCESS WORKERS -------------
+
+const airtableInterval = parseInt(process.env.AIRTABLE_SYNC || 0, 10);
+if (airtableInterval > 0) {
+  airtableWorker(airtableInterval);
+}
+
+// ---------- START MAIN APP -------------
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

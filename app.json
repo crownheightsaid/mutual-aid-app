@@ -30,6 +30,10 @@
     },
     "APP_NAME": {
       "description": "Name of your organization (Crown Heights Mutual Aid)"
+    },
+    "AIRTABLE_SYNC":{
+      "description": "If set, run the Airtable sync worker in the main process with this frequency in milliseconds."
     }
+
   }
 }
