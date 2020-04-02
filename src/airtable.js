@@ -13,4 +13,9 @@ exports.findVolunteerByEmail = async email => {
   return record ? record[0] : null;
 };
 
+exports.findVolunteerById = async id => {
+  return base("Volunteers").find(id);
+};
+
 exports.airbase = base;
+exports.UPDATE_BATCH_SIZE = 10;
