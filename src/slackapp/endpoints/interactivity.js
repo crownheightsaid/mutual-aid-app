@@ -9,6 +9,7 @@ slackInteractions.action(
   (payload, respond) => {
     console.log("Payload");
     console.log(payload);
+    console.log(payload.blocks);
   }
 );
 
