@@ -3,6 +3,9 @@ const slackApi = require("../slackapi.js");
 
 const baseBlocks = require("../../translations/en/homeblocks/base.json");
 const volunteerSignUpBlocks = require("../../translations/en/homeblocks/volunteerSignUp.json");
+const trainedVolunteerInfo = require("../../translations/en/homeblocks/trainedVolunteerInfo.json");
+const newVolunteerInfo = require("../../translations/en/homeblocks/newVolunteerInfo.json");
+const divider = require("../../translations/en/homeblocks/divider.json");
 
 const homeBlocks = {
   base: {
@@ -10,6 +13,15 @@ const homeBlocks = {
   },
   volunteerSignUp: {
     blocks: volunteerSignUpBlocks
+  },
+  newVolunteerInfo: {
+    blocks: newVolunteerInfo
+  },
+  trainedVolunteerInfo: {
+    blocks: trainedVolunteerInfo
+  },
+  divider: {
+    blocks: divider
   }
 };
 
