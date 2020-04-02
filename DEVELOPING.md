@@ -9,6 +9,8 @@ This project is a monorepo. The different components are:
   - HTTP api that this app provides
 - `src/webapp`
   - Frontend for the app, built with React 
+- `scripts/`
+  - One-off scripts for things like backfill
 
 Each component has it's own DEVELOPING.md for developing locally. You can learn most of it from reading the scripts in `package.json`.
 
