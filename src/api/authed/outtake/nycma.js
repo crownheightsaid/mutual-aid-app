@@ -10,14 +10,14 @@ exports.nycmaOuttakeHandler = async (req, res, next) => {
     );
   }
   const { nycma } = req.body;
-  const [requestRecord, findErr] = findRequestByExternalId(nycma.id);
+  const [requestRecord, findErr] = await findRequestByExternalId(nycma.id);
   if (findErr) {
     const err = new Error("Couldn't find externalId in Airtable");
     err.statusCode = 500;
     return next(err);
   }
 
-  const [record, deleteErr] = deleteRequest(requestRecord.getId());
+  const [record, deleteErr] = await deleteRequest(requestRecord.getId());
   if (deleteErr) {
     const err = new Error("Couldn't delete request in Airtable");
     err.statusCode = 500;
@@ -25,5 +25,6 @@ exports.nycmaOuttakeHandler = async (req, res, next) => {
   }
 
   console.log(`Deleted request: ${record}`);
-  return next();
+  res.send(record.getId());
+  return record.getId();
 };
