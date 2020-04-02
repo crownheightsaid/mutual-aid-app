@@ -1,0 +1,23 @@
+[
+  {
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
+      "text": "If you want to call neighbors in need, please see if there are any upcoming intake training shifts:"
+    }
+  },
+  {
+    "type": "actions",
+    "elements": [
+      {
+        "type": "button",
+        "text": {
+          "type": "plain_text",
+          "text": "Upcoming Intake Training"
+        },
+        "url": "https://docs.google.com/spreadsheets/d/1T7FRsDVbV4Og8wyFN2Afopl9lZ4ojNuXMB5J6ELo_lw/edit#gid=2033187665",
+        "action_id": "volunteer-training"
+      }
+    ]
+  }
+]

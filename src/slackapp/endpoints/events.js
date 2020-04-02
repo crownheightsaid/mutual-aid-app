@@ -15,8 +15,13 @@ slackEvents.on("app_home_opened", async event => {
       include_locale: true
     });
     const volunteer = await findVolunteerByEmail(user.user.profile.email);
+    homeSections.push("divider");
     if (!volunteer) {
       homeSections.push("volunteerSignUp");
+    } else if (volunteer.get("volunteer_trained")) {
+      homeSections.push("trainedVolunteerInfo");
+    } else {
+      homeSections.push("newVolunteerInfo");
     }
 
     openHomeWithSections(event.user, homeSections);
