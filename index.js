@@ -6,6 +6,7 @@ const basicAuth = require("express-basic-auth");
 const bodyParser = require("body-parser");
 const eventsHandler = require("./src/slackapp/endpoints/events.js");
 const interactivityHandler = require("./src/slackapp/endpoints/interactivity.js");
+const airtableWorker = require("./src/workers/airtable-sync/worker");
 const { addressHandler } = require("./src/api/geo.js");
 const { nycmaIntakeHandler } = require("./src/api/authed/intake/nycma.js");
 const { nycmaOuttakeHandler } = require("./src/api/authed/outtake/nycma.js");
@@ -75,6 +76,15 @@ app.get("/", (req, res) => {
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
+
+// ---------- IN-PROCESS WORKERS -------------
+
+const airtableIntervalMs = parseInt(process.env.AIRTABLE_SYNC || 0);
+if (airtableIntervalMs > 0) {
+  airtableWorker(airtableIntervalMs);
+}
+
+// ---------- START MAIN APP -------------
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
