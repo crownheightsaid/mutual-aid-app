@@ -14,13 +14,14 @@ slackInteractions.viewSubmission(
   async (payload, respond) => {
     try {
       console.log("Submission payload");
-      console.log(payload.view.state.values);
-      // const user = await slackapi.users.info({
-      //   token: process.env.SLACK_BOT_TOKEN,
-      //   user: event.user,
-      //   include_locale: true
-      // });
-      // const volunteer = await findVolunteerByEmail(user.user.profile.email);
+      console.log(payload.user);
+      const requestCode =
+        payload.view.state.values.request_block.request_code.value;
+      const user = await slackapi.users.info({
+        token: process.env.SLACK_BOT_TOKEN,
+        user: payload.user
+      });
+      const request = await findRequestByCode(user.user.profile.email);
     } catch (error) {
       console.error(error);
     }
