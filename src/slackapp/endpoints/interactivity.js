@@ -1,5 +1,10 @@
 const { createMessageAdapter } = require("@slack/interactive-messages");
-const { openViewWithBlocks, viewConfig, errorModal } = require("../views.js");
+const {
+  openViewWithBlocks,
+  viewConfig,
+  errorResponse,
+  successResponse
+} = require("../views.js");
 const slackapi = require("../../slackapi.js");
 const {
   findVolunteerById,
@@ -29,19 +34,21 @@ slackInteractions.viewSubmission(
       const [request, err] = await findRequestByCode(requestCode);
       if (err) {
         return {
-          response_action: "update",
-          view: errorModal(
-            "We couldn't find a request with that code. Please make sure it exists in the Requests table."
-          )
+          response_action: "errors",
+          errors: {
+            "request-block":
+              "We couldn't find a request with that code. Please make sure it exists in the Requests table."
+          }
         };
       }
       const volId = request.get("Intake volunteer");
       if (!volId) {
         return {
-          response_action: "update",
-          view: errorModal(
-            "No one was assigned to the request ID you entered :/"
-          )
+          response_action: "errors",
+          errors: {
+            "request-block":
+              "No one was assigned to the request ID you entered :/"
+          }
         };
       }
       const volunteer = await findVolunteerById(volId);
@@ -62,29 +69,47 @@ slackInteractions.viewSubmission(
         "Delivery volunteer": delivererSlackId
       });
       if (uerr) {
-        return {
-          response_action: "update",
-          view: errorModal(
-            "Error updating the Request in Airtable. Please try again.\n\n You can update Airtable and message the delivery volunteer manually if it still doesn't work :/"
-          )
-        };
+        return errorResponse(
+          "Error updating the Request in Airtable. Please try again.\n\n You can update Airtable and message the delivery volunteer manually if it still doesn't work :/"
+        );
       }
-      return {
-        response_action: "update",
-        view: {
-          type: "modal",
-          title: {
-            type: "plain_text",
-            text: "Delivery Assigned!"
+      const dmResponse = await slackapi.conversations.open({
+        token: process.env.SLACK_BOT_TOKEN,
+        users: `${delivererSlackId},${volunteer.get("volunteer_slack_id")}`
+      });
+      const messageId = dmResponse.channel.id;
+      await slackapi.chat.postMessage({
+        token: process.env.SLACK_BOT_TOKEN,
+        channel: messageId,
+        username: "Crown Heights Delivery Bot",
+        text: "If you see this, the bot did a bad job :(",
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text:
+                "Thanks to you both for volunteering. Here's some details on the request. Let's help some neighbors!"
+            }
           },
-          blocks: []
-        }
-      };
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `*Phone:*\n>${request.get(
+                "Phone"
+              )}\n*Cross Streets:*\n>${request.get(
+                "Cross Street #1"
+              )} & ${request.get(
+                "Cross Street #2"
+              )}\n*Request Notes:*\n>${request.get("Intake General Notes")}`
+            }
+          }
+        ]
+      });
+      return successResponse("Delivery assigned!");
     } catch (error) {
-      return {
-        response_action: "update",
-        view: errorModal(`An error occured. Let us know in #tech: ${error}`)
-      };
+      return errorResponse(`An error occured. Let us know in #tech: ${error}`);
     }
   }
 );
@@ -95,7 +120,6 @@ slackInteractions.action(
     callback_id: viewConfig[assignToDelivery].modal_entry_id
   },
   async payload => {
-    console.log(payload);
     try {
       openViewWithBlocks(payload.trigger_id, assignToDelivery, [
         {
