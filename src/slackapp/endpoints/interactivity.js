@@ -21,8 +21,6 @@ const assignToDelivery = "assignToDelivery";
 slackInteractions.viewSubmission(
   { callback_id: viewConfig[assignToDelivery].modalConfig.callback_id },
   async payload => {
-    console.log("submission payload");
-    console.log(payload);
     try {
       const slackUserResponse = await slackapi.users.info({
         token: process.env.SLACK_BOT_TOKEN,
@@ -41,6 +39,8 @@ slackInteractions.viewSubmission(
           }
         };
       }
+      console.log("Request");
+      console.log(request);
       const volId = request.get("Intake volunteer");
       if (!volId) {
         return {
@@ -52,6 +52,8 @@ slackInteractions.viewSubmission(
         };
       }
       const volunteer = await findVolunteerById(volId);
+      console.log("Volunteer");
+      console.log(volunteer);
       const assignedVolunteerEmail = volunteer.get("volunteer_email");
       if (slackUserEmail !== assignedVolunteerEmail) {
         return {
@@ -82,7 +84,7 @@ slackInteractions.viewSubmission(
         token: process.env.SLACK_BOT_TOKEN,
         channel: messageId,
         username: "Crown Heights Delivery Bot",
-        text: "If you see this, the bot did a bad job :(",
+        text: "Delivery has been assigned!",
         blocks: [
           {
             type: "section",
