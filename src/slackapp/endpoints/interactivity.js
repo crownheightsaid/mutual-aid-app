@@ -1,4 +1,5 @@
 const { createMessageAdapter } = require("@slack/interactive-messages");
+const assert = require("assert").strict;
 const {
   openViewWithBlocks,
   viewConfig,
@@ -22,6 +23,8 @@ slackInteractions.viewSubmission(
   { callback_id: viewConfig[assignToDelivery].modalConfig.callback_id },
   async payload => {
     try {
+      console.log("Payload");
+      console.log(payload);
       const slackUserResponse = await slackapi.users.info({
         token: process.env.SLACK_BOT_TOKEN,
         user: payload.user.id
@@ -39,7 +42,7 @@ slackInteractions.viewSubmission(
           }
         };
       }
-      console.log("Request");
+      console.log("\n\n\nRequest");
       console.log(request);
       const volId = request.get("Intake volunteer");
       if (!volId) {
@@ -52,7 +55,7 @@ slackInteractions.viewSubmission(
         };
       }
       const volunteer = await findVolunteerById(volId);
-      console.log("Volunteer");
+      console.log("\n\n\nVolunteer");
       console.log(volunteer);
       const assignedVolunteerEmail = volunteer.get("volunteer_email");
       if (slackUserEmail !== assignedVolunteerEmail) {
@@ -122,17 +125,59 @@ slackInteractions.action(
     callback_id: viewConfig[assignToDelivery].modal_entry_id
   },
   async payload => {
-    console.log("Payload");
-    console.log(payload);
+    let codeGuess = "nothing :(";
+    // This means it's a reply and we can try to look for a request Code.
+    if (payload.message.thread_ts !== payload.message.ts) {
+      try {
+        const requestMessage = await slackapi.conversations.history({
+          token: process.env.SLACK_BOT_TOKEN,
+          channel: payload.channel.id,
+          latest: payload.message.thread_ts,
+          limit: 1,
+          inclusive: true
+        });
+        assert(requestMessage.messages.length !== 0, "No messages found.");
+        const capturingRegex = /Code(?<code>.*)\n/;
+        const found = requestMessage.messages[0].text.match(capturingRegex);
+        if (found.groups.code && found.groups.code.length >= 4) {
+          const codeString = found.groups.code;
+          codeGuess = codeString.substr(codeString.length - 4);
+        }
+      } catch (e) {
+        console.log(`Couldn't fetch thread for code guess: ${e}`);
+      }
+    }
     try {
       openViewWithBlocks(payload.trigger_id, assignToDelivery, [
+        {
+          type: "input",
+          block_id: "request_block",
+          element: {
+            type: "plain_text_input",
+            action_id: "request_code",
+            min_length: 4,
+            max_length: 4,
+            placeholder: {
+              type: "plain_text",
+              text: "Ex: AKBS"
+            }
+          },
+          label: {
+            type: "plain_text",
+            text: "Request Code"
+          },
+          hint: {
+            type: "plain_text",
+            text: `The bot's best guess is: ${codeGuess}`
+          }
+        },
         {
           type: "input",
           block_id: "deliver_block",
           element: {
             type: "plain_text_input",
             action_id: "deliverer_id",
-            initial_value: payload.user.id
+            initial_value: payload.message.user
           },
           label: {
             type: "plain_text",
