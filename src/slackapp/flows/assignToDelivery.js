@@ -242,6 +242,7 @@ exports.atdViewOpen = async payload => {
       }
     });
   } catch (error) {
-    console.error(JSON.stringify(error.message));
+    console.error(JSON.stringify(error));
+    console.error(JSON.stringify(error.data));
   }
 };
