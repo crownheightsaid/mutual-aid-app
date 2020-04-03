@@ -1,5 +1,5 @@
 const { createMessageAdapter } = require("@slack/interactive-messages");
-const { openViewWithSections, viewConfig } = require("../views.js");
+const { openViewWithSections, viewConfig, errorModal } = require("../views.js");
 const slackapi = require("../../slackapi.js");
 const { findVolunteerById, findRequestByCode } = require("../../airtable.js");
 
@@ -19,12 +19,19 @@ slackInteractions.viewSubmission(
       });
       const slackUserEmail = slackUserResponse.user.profile.email;
       console.log("here we are");
-      console.log(slackUserResponse.user);
       console.log(slackUserEmail);
 
       const requestCode =
         payload.view.state.values.request_block.request_code.value;
-      const request = await findRequestByCode(requestCode);
+      const [request, err] = await findRequestByCode(requestCode);
+      if (err) {
+        respond({
+          response_action: "update",
+          view: errorModal(
+            "We couldn't find a request with that code. Please make sure it exists in the Requests table."
+          )
+        });
+      }
       const volId = request.get("Intake volunteer");
       console.log(volId);
       const volunteer = await findVolunteerById(volId);

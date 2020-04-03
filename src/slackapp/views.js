@@ -32,3 +32,22 @@ exports.openViewWithSections = async (triggerId, viewName) => {
     view: { type: "modal", blocks: view.blocks, ...view.modalConfig }
   });
 };
+
+exports.errorModal = msg => {
+  return {
+    type: "modal",
+    title: {
+      type: "plain_text",
+      text: "Error :("
+    },
+    blocks: [
+      {
+        type: "section",
+        text: {
+          type: "plain_text",
+          text: msg 
+        }
+      }
+    ]
+  };
+};
