@@ -17,7 +17,7 @@ module.exports = {
     sourceType: "module"
   },
   rules: {
-    "no-unused-vars": ["error"],
+    "no-unused-vars": ["error", { "varsIgnorePattern": "_.+" }],
     "no-console": ["off"],
     "react/prop-types": ["off"],
     "react/static-property-placement": ["error", "static public field"],
