@@ -168,6 +168,7 @@ class ChangeDetector {
     enriched.didChange = field =>
       lastSetValues.length === 0 ||
       enriched.getPrior(field) !== enriched.get(field);
+    enriched.isNewRecord = () => record.lastProcessedField == null;
     return enriched;
   }
 

@@ -1,5 +1,6 @@
 const ChangeDetector = require("./ChangeDetector");
 const updateMessageContent = require("./actions/updateMessageContent");
+const P2pMoney = require("./../../p2p-money/p2p-money");
 
 const wait = interval => new Promise(r => setTimeout(r, interval));
 const defaultInterval = 5000;
@@ -61,6 +62,25 @@ function startWorker(interval) {
       if(record.didChange(triggerBackfillFieldName)){
         await updateMessageContent(record)
       }
+    }
+  });
+
+
+  let paymentRequestChanges = new ChangeDetector("PaymentRequests");
+  schedule("airtable-sync.payment-requests", interval, async () => {
+    const recordsChanged = await paymentRequestChanges.poll();
+    console.info(`Found ${recordsChanged.length} changes in PaymentRequests`);
+    for (const record of recordsChanged) {
+      P2pMoney.processChangedRecord(record)
+    }
+  });
+
+  let donorSignups = new ChangeDetector("Donors");
+  schedule("airtable-sync.donors", interval, async () => {
+    const recordsChanged = await donorSignups.poll();
+    console.info(`Found ${recordsChanged.length} changes in Donors`);
+    for (const record of recordsChanged) {
+      P2pMoney.processChangedRecord(record)
     }
   });
 }

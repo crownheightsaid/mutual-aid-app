@@ -11,6 +11,7 @@ const { nycmaOuttakeHandler } = require("./src/api/authed/outtake/nycma.js");
 const {
   neighborhoodFinderUpdateRequestHandler
 } = require("./src/api/neighborhood-finder/update-request.js");
+const { paymentCodeHandler } = require("./src/api/authed/payments/codes.js");
 
 /* eslint-disable global-require  */
 const app = express();
@@ -75,12 +76,14 @@ if (process.env.BASIC_AUTH_USERS) {
   );
   app.post("/api/authed/intake/nycma", nycmaIntakeHandler);
   app.post("/api/authed/outtake/nycma", nycmaOuttakeHandler);
+  app.post("/api/authed/payments/payment_code", paymentCodeHandler);
 } else if (process.env.NODE_ENV !== "production") {
   console.warn("Not production environment and no authed users set.");
   console.warn("Authed API routes are accessible without authentication.");
 
   app.post("/api/authed/intake/nycma", nycmaIntakeHandler);
   app.post("/api/authed/outtake/nycma", nycmaOuttakeHandler);
+  app.post("/api/authed/payments/payment_code", paymentCodeHandler);
 } else {
   console.warn(
     "No basic auth users registered. Not starting authed API routes."

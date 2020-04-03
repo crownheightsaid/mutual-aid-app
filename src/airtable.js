@@ -157,6 +157,31 @@ exports.findVolunteerById = async id => {
   }
 };
 
+exports.findPaymentByCode = async (code) => {
+  try {
+    const record = await base("Requests")
+      .select({
+        // hate these hard-codes, consider getting from a static reference elsewhere or something
+        filterByFormula: `And({Code} = '${code}', {Status}!="Completed", {Status}!="FailedNoAnswer", {Status}!="FailedDonorBackedOut")`
+      })
+      .firstPage();
+    return record
+      ? [record[0], null]
+      : [null, "Valid payment with that code not found"];
+  } catch (e) {
+    console.error(`Error while fetching request by code: ${code}`); // TODO cargo culted from above, what is this rescuing? hopefully not just a network error...
+    return [null, e.message];
+  }
+};
+// exports.findDonorById = async id => {
+//   return base("Donors").find(id);
+// };
+// exports.findPaymentRequestById = async id => {
+//   return base("Volunteers").find(id);
+// };
+
+
+
 exports.airbase = base;
 exports.UPDATE_BATCH_SIZE = 10;
 exports.SENSITIVE_FIELDS = [
