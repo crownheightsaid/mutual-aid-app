@@ -51,6 +51,23 @@ exports.findRequestByExternalId = async externalId => {
   }
 };
 
+exports.findRequestByCode = async code => {
+  try {
+    const records = await base("Requests")
+      .select({
+        filterByFormula: `({Code} = '${code}')`
+      })
+      .firstPage();
+    if (records.length === 0) {
+      return [null, "No requests found with that code."];
+    }
+    const record = records[0];
+    return [record, null];
+  } catch (e) {
+    return [null, `Error while finding request: ${e}`];
+  }
+};
+
 // `update` should look like:
 // {
 //   "Some Requests Field": "New Value",

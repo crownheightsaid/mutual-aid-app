@@ -1,7 +1,7 @@
 const { createMessageAdapter } = require("@slack/interactive-messages");
 const { openViewWithSections, viewConfig } = require("../views.js");
 const slackapi = require("../../slackapi.js");
-const { updateRequestByCode } = require("../../airtable.js");
+const { findVolunteerById, findRequestByCode } = require("../../airtable.js");
 
 const slackInteractions = createMessageAdapter(
   process.env.SLACK_SIGNING_SECRET
@@ -21,7 +21,13 @@ slackInteractions.viewSubmission(
         token: process.env.SLACK_BOT_TOKEN,
         user: payload.user
       });
-      const request = await findRequestByCode(user.user.profile.email);
+      console.log(user);
+      const request = await findRequestByCode(requestCode);
+      const volId = request.get("Intake volunteer");
+      const volunteer = await findVolunteerById(volId);
+      const assignedVolunteerEmail = volunteer.get("volunteer_email");
+      console.log(`assigned: ${assignedVolunteerEmail}`);
+      const slackUserEmail = user.email;
     } catch (error) {
       console.error(error);
     }
@@ -46,7 +52,7 @@ slackInteractions.action(
       console.error(error);
     }
     console.log("Payload");
-    console.log(payload.message.blocks);
+    console.log(JSON.stringify(payload.message.blocks));
   }
 );
 
