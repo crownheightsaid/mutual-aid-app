@@ -22,7 +22,7 @@ exports.nycmaIntakeHandler = async (req, res, next) => {
   const requestMessage = [
     "This is a request from a different system.",
     "The type of support requested is:",
-    nycma.supportType,
+    nycma.supportType || "n/a",
     "In a free-form request they said:",
     nycma.otherSupport || "nothing",
     "They are in this hard-hit community:",

@@ -39,6 +39,8 @@ if (process.env.GOOGLE_MAPS_API_KEY && process.env.GEONAME_CLIENT_ID) {
   console.warn("Geo keys missing. Not starting geo routes.");
 }
 
+// ---------- API ROUTES w/ BASIC AUTH -------------
+
 if (process.env.BASIC_AUTH_USERS) {
   const allUsers = {};
   const userPass = process.env.BASIC_AUTH_USERS.split(";");
