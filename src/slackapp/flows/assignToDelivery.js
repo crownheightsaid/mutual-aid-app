@@ -215,12 +215,14 @@ exports.atdViewOpen = async payload => {
                 {
                   text: {
                     type: "plain_text",
-                    text: "Start a DM with you and deliverer incl. request info"
+                    text:
+                      "Start a DM with request info between you and the assignee"
                   },
                   value: "should_start_dm"
                 }
               ],
               options: [
+                // IF CHANGING, make sure to reflect right above
                 {
                   text: {
                     type: "plain_text",
@@ -232,7 +234,7 @@ exports.atdViewOpen = async payload => {
                   text: {
                     type: "plain_text",
                     text:
-                      "Start a DM with request info between you and deliverer"
+                      "Start a DM with request info between you and the assignee"
                   },
                   value: "should_start_dm"
                 }
