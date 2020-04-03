@@ -10,21 +10,19 @@ const {
 exports.atdViewSubmission = async payload => {
   try {
     const flowMetadata = JSON.parse(payload.view.private_metadata);
-    console.log("Payload");
-    console.log(payload);
     const slackUserResponse = await slackapi.users.info({
       token: process.env.SLACK_BOT_TOKEN,
       user: payload.user.id
     });
     const slackUserEmail = slackUserResponse.user.profile.email;
 
-    const requestCode = payload.view.state.values.request_block.request_code.value.toUpperCase();
+    const requestCode = payload.view.state.values.requestblock.request_code.value.toUpperCase();
     const [request, err] = await findRequestByCode(requestCode);
     if (err) {
       return {
         response_action: "errors",
         errors: {
-          "request-block":
+          requestblock:
             "We couldn't find a request with that code. Please make sure it exists in the Requests table."
         }
       };
@@ -35,21 +33,20 @@ exports.atdViewSubmission = async payload => {
       return {
         response_action: "errors",
         errors: {
-          "request-block":
-            "No one was assigned to the request ID you entered :/"
+          requestblock:
+            "No intake volunteer was assigned to the request ID you entered :/"
         }
       };
     }
     console.log("Pre status check");
     if (request.get("Status") === "Delivery Assigned") {
-      return errorResponse("Looks like delivery was already assigned");
-      //   return {
-      //     response_action: "errors",
-      //     errors: {
-      //       "request-block":
-      //         "This request looks like it already has a delivery volunteer"
-      //     }
-      //   };
+      return {
+        response_action: "errors",
+        errors: {
+          requestblock:
+            "This request looks like it already has a delivery volunteer!"
+        }
+      };
     }
     console.log("Pre volunteer");
     const volunteer = await findVolunteerById(volId);
@@ -58,7 +55,7 @@ exports.atdViewSubmission = async payload => {
       return {
         response_action: "errors",
         errors: {
-          "request-block":
+          requestblock:
             "It doesn't look like you are assigned to this request :/\nLet #tech know if we messed up."
         }
       };
@@ -141,7 +138,7 @@ exports.atdViewOpen = async payload => {
   }
   const metadata = {
     delivererId: payload.message.user,
-    channelId: payload.channel,
+    channelId: payload.channel.id,
     threadId: payload.message.thread_ts // undefined if thread should not be replied to
   };
   try {
@@ -178,7 +175,7 @@ exports.atdViewOpen = async payload => {
           },
           {
             type: "input",
-            block_id: "request_block",
+            block_id: "requestblock",
             element: {
               type: "plain_text_input",
               action_id: "request_code",
