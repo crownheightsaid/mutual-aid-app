@@ -56,7 +56,7 @@ slackInteractions.viewSubmission(
         };
       }
       const delivererSlackId =
-        payload.view.state.values.request_block.deliverer_id.value;
+        payload.view.state.values.deliver_block.deliverer_id.value;
       const [_updated, uerr] = await updateRequestByCode(requestCode, {
         Status: "Delivery Assigned",
         "Delivery volunteer": delivererSlackId
@@ -100,7 +100,7 @@ slackInteractions.action(
       openViewWithBlocks(payload.trigger_id, assignToDelivery, [
         {
           type: "input",
-          block_id: "request_block",
+          block_id: "deliver_block",
           element: {
             type: "plain_text_input",
             action_id: "deliverer_id",
