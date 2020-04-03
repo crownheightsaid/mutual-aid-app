@@ -9,6 +9,7 @@ const {
 
 exports.atdViewSubmission = async payload => {
   try {
+    console.log(JSON.stringify(payload.view.state));
     const flowMetadata = JSON.parse(payload.view.private_metadata);
     const slackUserResponse = await slackapi.users.info({
       token: process.env.SLACK_BOT_TOKEN,
