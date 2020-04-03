@@ -11,7 +11,7 @@ const slackInteractions = createMessageAdapter(
 const assignToDelivery = "assignToDelivery";
 slackInteractions.viewSubmission(
   { callback_id: viewConfig[assignToDelivery].modalConfig.callback_id },
-  async (payload, respond) => {
+  async payload => {
     try {
       const slackUserResponse = await slackapi.users.info({
         token: process.env.SLACK_BOT_TOKEN,
@@ -25,12 +25,12 @@ slackInteractions.viewSubmission(
         payload.view.state.values.request_block.request_code.value;
       const [request, err] = await findRequestByCode(requestCode);
       if (err) {
-        respond({
+        return {
           response_action: "update",
           view: errorModal(
             "We couldn't find a request with that code. Please make sure it exists in the Requests table."
           )
-        });
+        };
       }
       const volId = request.get("Intake volunteer");
       console.log(volId);
@@ -38,29 +38,29 @@ slackInteractions.viewSubmission(
       const assignedVolunteerEmail = volunteer.get("volunteer_email");
       console.log(assignedVolunteerEmail);
       if (slackUserEmail !== assignedVolunteerEmail) {
-        respond({
+        return {
           response_action: "errors",
           errors: {
             "request-block":
               "It doesn't look like you are assigned to this request :/\nLet #tech know if we messed up."
           }
-        });
-      } else {
-        respond({
-          response_action: "update",
-          view: {
-            type: "modal",
-            title: {
-              type: "plain_text",
-              text: "Delivery Assigned!"
-            }
-          }
-        });
+        };
       }
-
-      console.log(`assigned: ${assignedVolunteerEmail}`);
+      return {
+        response_action: "update",
+        view: {
+          type: "modal",
+          title: {
+            type: "plain_text",
+            text: "Delivery Assigned!"
+          }
+        }
+      };
     } catch (error) {
-      console.error(error);
+      return {
+        response_action: "update",
+        view: errorModal(`An error occured. Let us know in #tech: ${error}`)
+      };
     }
   }
 );
