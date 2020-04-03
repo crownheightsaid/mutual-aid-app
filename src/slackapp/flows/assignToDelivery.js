@@ -65,7 +65,7 @@ exports.atdViewSubmission = async payload => {
       token: process.env.SLACK_BOT_TOKEN,
       user: delivererSlackId
     });
-    const deliveryName = userResponse.user.name;
+    const deliveryName = userResponse.user.real_name;
     const [_updated, uerr] = await updateRequestByCode(requestCode, {
       Status: "Delivery Assigned",
       "Delivery volunteer": deliveryName,
