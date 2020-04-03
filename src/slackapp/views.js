@@ -45,7 +45,7 @@ exports.errorModal = msg => {
         type: "section",
         text: {
           type: "plain_text",
-          text: msg 
+          text: msg
         }
       }
     ]

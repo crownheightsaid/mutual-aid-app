@@ -21,8 +21,7 @@ slackInteractions.viewSubmission(
       console.log("here we are");
       console.log(slackUserEmail);
 
-      const requestCode =
-        payload.view.state.values.request_block.request_code.value;
+      const requestCode = payload.view.state.values.request_block.request_code.value.toUpperCase();
       const [request, err] = await findRequestByCode(requestCode);
       if (err) {
         return {
@@ -33,6 +32,14 @@ slackInteractions.viewSubmission(
         };
       }
       const volId = request.get("Intake volunteer");
+      if (!volId) {
+        return {
+          response_action: "update",
+          view: errorModal(
+            "No one was assigned to the request ID you entered :/"
+          )
+        };
+      }
       console.log(volId);
       const volunteer = await findVolunteerById(volId);
       const assignedVolunteerEmail = volunteer.get("volunteer_email");
@@ -53,7 +60,8 @@ slackInteractions.viewSubmission(
           title: {
             type: "plain_text",
             text: "Delivery Assigned!"
-          }
+          },
+          blocks: []
         }
       };
     } catch (error) {
