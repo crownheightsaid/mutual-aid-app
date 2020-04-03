@@ -45,7 +45,10 @@ exports.atdViewSubmission = async payload => {
       );
     }
     console.log("Pre status check");
-    if (request.get("Status") === "Delivery Assigned") {
+    if (
+      request.get("Status") === "Delivery Assigned" ||
+      request.get("Delivery slackId")
+    ) {
       return messageErrorResponse(
         "requestblock",
         "This request looks like it already has a delivery volunteer!"
