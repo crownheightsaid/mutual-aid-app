@@ -12,5 +12,46 @@
       "type": "mrkdwn",
       "text": "If you give us the request code, we'll update all the airtable info and start a DM between you both."
     }
+  },
+  {
+    "type": "input",
+    "element": {
+      "type": "checkboxes",
+      "action_id": "options_block",
+      "initial_options": [
+        {
+          "text": {
+            "type": "plain_text",
+            "text": "Reply to the thread with confirmation"
+          }
+        },
+        {
+          "text": {
+            "type": "plain_text",
+            "text": "Start a DM with you and deliverer incl. request info"
+          }
+        }
+      ],
+      "options": [
+        {
+          "text": {
+            "type": "plain_text",
+            "text": "Reply to the thread with confirmation"
+          },
+          "value": "should_reply"
+        },
+        {
+          "text": {
+            "type": "plain_text",
+            "text": "Start a DM with you and deliverer incl. request info"
+          },
+          "value": "should_start_dm"
+        }
+      ]
+    },
+    "label": {
+      "type": "plain_text",
+      "text": "Bot Options"
+    }
   }
 ]
