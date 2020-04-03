@@ -1,0 +1,34 @@
+[
+  {
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
+      "text": "You found a delivery volunteer! 🎉🎉"
+    }
+  },
+  {
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
+      "text": "If you give us the request code, we'll update all the airtable info and start a DM between you both."
+    }
+  },
+  {
+    "type": "input",
+    "block_id": "request_block",
+    "element": {
+      "type": "plain_text_input",
+      "action_id": "request_code",
+      "min_length": 4,
+      "max_length": 4,
+      "placeholder": {
+        "type": "plain_text",
+        "text": "Ex: AKBS"
+      }
+    },
+    "label": {
+      "type": "plain_text",
+      "text": "Request Code"
+    }
+  }
+]

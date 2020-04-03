@@ -3,32 +3,21 @@
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": "You found a delivery volunteer! 🎉🎉"
+      "text": "Thanks for signing up to volunteer!\n If you want to call neighbors in need, please see if there are any upcoming intake training shifts:"
     }
   },
   {
-    "type": "section",
-    "text": {
-      "type": "mrkdwn",
-      "text": "If you give us the request code, we'll update all the airtable info and start a DM between you both."
-    }
-  },
-  {
-    "type": "input",
-    "block_id": "request_block",
-    "element": {
-      "type": "plain_text_input",
-      "action_id": "request_code",
-      "min_length": 4,
-      "max_length": 4,
-      "placeholder": {
-        "type": "plain_text",
-        "text": "Ex: AKBS"
+    "type": "actions",
+    "elements": [
+      {
+        "type": "button",
+        "text": {
+          "type": "plain_text",
+          "text": "Upcoming Intake Training"
+        },
+        "url": "https://docs.google.com/spreadsheets/d/1T7FRsDVbV4Og8wyFN2Afopl9lZ4ojNuXMB5J6ELo_lw/edit#gid=2033187665",
+        "action_id": "volunteer-training"
       }
-    },
-    "label": {
-      "type": "plain_text",
-      "text": "Request Code"
-    }
+    ]
   }
 ]
