@@ -123,20 +123,34 @@ export default function NeighborhoodFinder() {
         }}
         zoom={[12]}
       >
-        <Source id="quadrants_src" geoJsonSource={{
-          type: "geojson",
-          data: quadrantsGeoJSON
-        }} />
+        <Source
+          id="quadrants_src"
+          geoJsonSource={{
+            type: "geojson",
+            data: quadrantsGeoJSON
+          }}
+        />
 
         <Layer
           sourceId="quadrants_src"
           type="fill"
           paint={{
-            'fill-color': {
-              type: 'identity',
-              property: 'fill'
+            "fill-color": {
+              type: "identity",
+              property: "fill"
             },
-            'fill-opacity': 0.3
+            "fill-opacity": 0.4
+          }}
+        />
+        <Layer
+          sourceId="quadrants_src"
+          type="symbol"
+          layout={{
+            "text-field": {
+              type: "identity",
+              property: "id"
+            },
+            "text-size": 20
           }}
         />
       </Map>
