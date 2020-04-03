@@ -1,3 +1,12 @@
+exports.messageErrorResponse = (blockId, msg) => {
+  const response = {
+    response_action: "errors",
+    errors: {}
+  };
+  response.errors[blockId] = msg;
+  return response;
+};
+
 exports.errorResponse = msg => {
   return {
     response_action: "update",
