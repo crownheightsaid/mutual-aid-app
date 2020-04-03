@@ -122,6 +122,8 @@ slackInteractions.action(
     callback_id: viewConfig[assignToDelivery].modal_entry_id
   },
   async payload => {
+    console.log("Payload");
+    console.log(payload);
     try {
       openViewWithBlocks(payload.trigger_id, assignToDelivery, [
         {
