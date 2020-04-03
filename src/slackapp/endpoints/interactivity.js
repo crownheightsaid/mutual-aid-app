@@ -13,21 +13,45 @@ slackInteractions.viewSubmission(
   { callback_id: viewConfig[assignToDelivery].modalConfig.callback_id },
   async (payload, respond) => {
     try {
-      console.log("Submission payload");
-      console.log(payload.user);
+      const slackUserResponse = await slackapi.users.info({
+        token: process.env.SLACK_BOT_TOKEN,
+        user: payload.user.id
+      });
+      const slackUserEmail = slackUserResponse.user.profile.email;
+      console.log("here we are");
+      console.log(slackUserResponse.user);
+      console.log(slackUserEmail);
+
       const requestCode =
         payload.view.state.values.request_block.request_code.value;
-      const user = await slackapi.users.info({
-        token: process.env.SLACK_BOT_TOKEN,
-        user: payload.user
-      });
-      console.log(user);
       const request = await findRequestByCode(requestCode);
       const volId = request.get("Intake volunteer");
+      console.log(volId);
       const volunteer = await findVolunteerById(volId);
       const assignedVolunteerEmail = volunteer.get("volunteer_email");
+      console.log(assignedVolunteerEmail);
+      if (slackUserEmail !== assignedVolunteerEmail) {
+        respond({
+          response_action: "errors",
+          errors: {
+            "request-block":
+              "It doesn't look like you are assigned to this request :/\nLet #tech know if we messed up."
+          }
+        });
+      } else {
+        respond({
+          response_action: "update",
+          view: {
+            type: "modal",
+            title: {
+              type: "plain_text",
+              text: "Delivery Assigned!"
+            }
+          }
+        });
+      }
+
       console.log(`assigned: ${assignedVolunteerEmail}`);
-      const slackUserEmail = user.email;
     } catch (error) {
       console.error(error);
     }
