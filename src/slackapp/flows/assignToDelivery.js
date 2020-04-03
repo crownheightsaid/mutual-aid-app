@@ -199,21 +199,24 @@ exports.atdViewOpen = async payload => {
           },
           {
             type: "input",
+            block_id: "options_block",
             element: {
               type: "checkboxes",
-              action_id: "options_block",
+              action_id: "options",
               initial_options: [
                 {
                   text: {
                     type: "plain_text",
                     text: "Reply to the thread with confirmation"
-                  }
+                  },
+                  value: "should_reply"
                 },
                 {
                   text: {
                     type: "plain_text",
                     text: "Start a DM with you and deliverer incl. request info"
-                  }
+                  },
+                  value: "should_start_dm"
                 }
               ],
               options: [
@@ -243,6 +246,5 @@ exports.atdViewOpen = async payload => {
     });
   } catch (error) {
     console.error(JSON.stringify(error));
-    console.error(JSON.stringify(error.data));
   }
 };
