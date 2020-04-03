@@ -9,8 +9,7 @@ const {
 
 exports.atdViewSubmission = async payload => {
   try {
-    const metadata = JSON.parse(payload.view.private_metadata);
-    console.log(metadata);
+    const flowMetadata = JSON.parse(payload.view.private_metadata);
     console.log("Payload");
     console.log(payload);
     const slackUserResponse = await slackapi.users.info({
@@ -43,13 +42,14 @@ exports.atdViewSubmission = async payload => {
     }
     console.log("Pre status check");
     if (request.get("Status") === "Delivery Assigned") {
-      return {
-        response_action: "errors",
-        errors: {
-          "request-block":
-            "This request looks like it already has a delivery volunteer"
-        }
-      };
+      return errorResponse("Looks like delivery was already assigned");
+      //   return {
+      //     response_action: "errors",
+      //     errors: {
+      //       "request-block":
+      //         "This request looks like it already has a delivery volunteer"
+      //     }
+      //   };
     }
     console.log("Pre volunteer");
     const volunteer = await findVolunteerById(volId);
@@ -63,7 +63,7 @@ exports.atdViewSubmission = async payload => {
         }
       };
     }
-    const delivererSlackId = metadata.delivererId;
+    const delivererSlackId = flowMetadata.delivererId;
     const [_updated, uerr] = await updateRequestByCode(requestCode, {
       Status: "Delivery Assigned",
       "Delivery volunteer": delivererSlackId
@@ -141,6 +141,7 @@ exports.atdViewOpen = async payload => {
   }
   const metadata = {
     delivererId: payload.message.user,
+    channelId: payload.channel,
     threadId: payload.message.thread_ts // undefined if thread should not be replied to
   };
   try {
@@ -230,7 +231,8 @@ exports.atdViewOpen = async payload => {
                 {
                   text: {
                     type: "plain_text",
-                    text: "Start a DM with you and deliverer incl. request info"
+                    text:
+                      "Start a DM with request info between you and deliverer"
                   },
                   value: "should_start_dm"
                 }
