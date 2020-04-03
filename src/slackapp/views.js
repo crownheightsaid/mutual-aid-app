@@ -1,4 +1,3 @@
-
 exports.errorResponse = msg => {
   return {
     response_action: "update",
