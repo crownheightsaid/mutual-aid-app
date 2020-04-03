@@ -215,6 +215,7 @@ exports.atdViewOpen = async payload => {
           },
           {
             type: "input",
+            optional: true,
             block_id: "options_block",
             element: {
               type: "checkboxes",
