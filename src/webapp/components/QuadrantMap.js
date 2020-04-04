@@ -36,8 +36,8 @@ const QuadrantMap = ({ location }) => {
       style="mapbox://styles/mapbox/bright-v9"
       center={CROWN_HEIGHTS_CENTER_COORD}
       containerStyle={{
-        height: "300px",
-        width: "500px"
+        height: "350px",
+        width: "100%"
       }}
       fitBounds={bounds}
       fitBoundsOptions={{
