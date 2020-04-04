@@ -44,7 +44,7 @@ const QuadrantMap = ({ location }) => {
             type: "identity",
             property: "fill"
           },
-          "fill-opacity": 0.4
+          "fill-opacity": 0.25
         }}
       />
 
