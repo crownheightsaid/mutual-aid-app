@@ -5,8 +5,7 @@ import quadrantsGeoJSON from "../../assets/crownheights.json";
 const CROWN_HEIGHTS_CENTER_COORD = [-73.943018, 40.671254];
 
 const MapboxMap = ReactMapboxGl({
-  accessToken:
-    "pk.eyJ1IjoicGlyYXRlZnNoIiwiYSI6ImNrOGppNWJpcTBoM2wzbnIwb3kxcmNlcWYifQ.B8cTgg45CTfcEwSdOfHXrQ"
+  accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
 });
 
 const QuadrantMap = ({ location }) => {
