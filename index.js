@@ -17,7 +17,9 @@ if (!process.env.AIRTABLE_BASE || !process.env.AIRTABLE_KEY) {
   console.warn("An airtable key is missing. Something will probably break :/");
 }
 
-// ---------- SLACK ONLY -------------
+// ==================================================================
+// Slack (must come before body parser)
+// ==================================================================
 
 if (process.env.SLACK_BOT_TOKEN && process.env.SLACK_SIGNING_SECRET) {
   app.post("/slack/events", eventsHandler);
@@ -26,12 +28,16 @@ if (process.env.SLACK_BOT_TOKEN && process.env.SLACK_SIGNING_SECRET) {
   console.warn("Slack tokens are missing! Slack routes won't exist.");
 }
 
-// ---------- COMMON MIDDLEWARE -------------
+// ==================================================================
+// Common Middleware
+// ==================================================================
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// ---------- API ROUTES -------------
+// ==================================================================
+// API Routes
+// ==================================================================
 
 if (process.env.GOOGLE_MAPS_API_KEY && process.env.GEONAME_CLIENT_ID) {
   app.post("/api/geo/address-metadata", addressHandler);
@@ -39,7 +45,9 @@ if (process.env.GOOGLE_MAPS_API_KEY && process.env.GEONAME_CLIENT_ID) {
   console.warn("Geo keys missing. Not starting geo routes.");
 }
 
-// ---------- API ROUTES w/ BASIC AUTH -------------
+// ==================================================================
+// API Routes (w/ Basic Auth)
+// ==================================================================
 
 if (process.env.BASIC_AUTH_USERS) {
   const allUsers = {};
@@ -69,7 +77,9 @@ if (process.env.BASIC_AUTH_USERS) {
   );
 }
 
-// ---------- REACT APP + STATIC SERVING -------------
+// ==================================================================
+// React App + Static Serving
+// ==================================================================
 
 app.use(express.static(path.join(__dirname, "build")));
 app.get("/", (req, res) => {
@@ -79,14 +89,18 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-// ---------- IN-PROCESS WORKERS -------------
+// ==================================================================
+// In-process Workers
+// ==================================================================
 
 const airtableIntervalMs = parseInt(process.env.AIRTABLE_SYNC || 0);
 if (airtableIntervalMs > 0) {
   airtableWorker(airtableIntervalMs);
 }
 
-// ---------- START MAIN APP -------------
+// ==================================================================
+// Start Express Server
+// ==================================================================
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

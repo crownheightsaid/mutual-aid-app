@@ -9,11 +9,15 @@ const slackInteractions = createMessageAdapter(
   process.env.SLACK_SIGNING_SECRET
 );
 
-// ----- Callbacks / entry points registered in Slack ----
+// ==================================================================
+// Callbacks / entry points registered in Slack
+// ==================================================================
 
 const atdViewOpenEntryId = "assign-to-delivery";
 
-// ----- Assign To Delivery flow ------
+// ==================================================================
+// Assign To Delivery flow
+// ==================================================================
 
 slackInteractions.action(
   {
@@ -26,5 +30,9 @@ slackInteractions.viewSubmission(
   { callback_id: atdViewSubmissionCallbackId },
   atdViewSubmission
 );
+
+// ==================================================================
+// [WIP] Delivery Request Post flow
+// ==================================================================
 
 module.exports = slackInteractions.requestListener();
