@@ -23,12 +23,12 @@ exports.atdViewSubmission = async payload => {
     const requestCode = payload.view.state.values.requestblock.request_code.value.toUpperCase();
     const checkedOptions =
       payload.view.state.values.options_block.options.selected_options;
-    const shouldReplyOnThread = checkedOptions.find(
-      option => option.value === "should_reply"
-    );
-    const shouldDirectMessage = checkedOptions.find(
-      option => option.value === "should_start_dm"
-    );
+    const shouldReplyOnThread =
+      checkedOptions &&
+      checkedOptions.find(option => option.value === "should_reply");
+    const shouldDirectMessage =
+      checkedOptions &&
+      checkedOptions.find(option => option.value === "should_start_dm");
     const [request, err] = await findRequestByCode(requestCode);
     if (err) {
       return messageErrorResponse(
