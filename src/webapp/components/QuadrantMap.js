@@ -1,5 +1,10 @@
 import React from "react";
-import ReactMapboxGl, { Feature, Layer, Source, ZoomControl } from "react-mapbox-gl";
+import ReactMapboxGl, {
+  Feature,
+  Layer,
+  Source,
+  ZoomControl
+} from "react-mapbox-gl";
 import quadrantsGeoJSON from "../../assets/crownheights.json";
 
 const CROWN_HEIGHTS_CENTER_COORD = [-73.943018, 40.671254];
@@ -19,8 +24,9 @@ const QuadrantMap = ({ location }) => {
       }}
       zoom={[12]}
     >
-      <ZoomControl/>
+      <ZoomControl />
 
+      {/* load geojson source */}
       <Source
         id="quadrants_src"
         geoJsonSource={{
@@ -29,6 +35,7 @@ const QuadrantMap = ({ location }) => {
         }}
       />
 
+      {/* fill quadrants */}
       <Layer
         sourceId="quadrants_src"
         type="fill"
@@ -40,6 +47,8 @@ const QuadrantMap = ({ location }) => {
           "fill-opacity": 0.4
         }}
       />
+
+      {/* label quadrants */}
       <Layer
         sourceId="quadrants_src"
         type="symbol"
@@ -52,6 +61,7 @@ const QuadrantMap = ({ location }) => {
         }}
       />
 
+      {/* display marker for current address if exists */}
       {location && (
         <Layer
           type="symbol"
