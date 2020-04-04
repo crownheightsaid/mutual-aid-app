@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import useAxios from "axios-hooks";
 import { makeStyles } from "@material-ui/core/styles";
 import { CircularProgress } from "@material-ui/core";
@@ -10,15 +9,7 @@ import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
-import ReactMapboxGl, { GeoJSONLayer, Layer, Source } from "react-mapbox-gl";
-import quadrantsGeoJSON from "../../assets/crownheights.json";
-
-const Map = ReactMapboxGl({
-  accessToken:
-    "pk.eyJ1IjoicGlyYXRlZnNoIiwiYSI6ImNrOGppNWJpcTBoM2wzbnIwb3kxcmNlcWYifQ.B8cTgg45CTfcEwSdOfHXrQ"
-});
-
-const CROWN_HEIGHTS_CENTER_COORD = [-73.943018, 40.671254];
+import QuadrantMap from "../components/QuadrantMap";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -114,46 +105,7 @@ export default function NeighborhoodFinder() {
         The address will not be stored or logged :)
       </Typography>
 
-      <Map
-        style="mapbox://styles/mapbox/streets-v9"
-        center={CROWN_HEIGHTS_CENTER_COORD}
-        containerStyle={{
-          height: "300px",
-          width: "500px"
-        }}
-        zoom={[12]}
-      >
-        <Source
-          id="quadrants_src"
-          geoJsonSource={{
-            type: "geojson",
-            data: quadrantsGeoJSON
-          }}
-        />
-
-        <Layer
-          sourceId="quadrants_src"
-          type="fill"
-          paint={{
-            "fill-color": {
-              type: "identity",
-              property: "fill"
-            },
-            "fill-opacity": 0.4
-          }}
-        />
-        <Layer
-          sourceId="quadrants_src"
-          type="symbol"
-          layout={{
-            "text-field": {
-              type: "identity",
-              property: "id"
-            },
-            "text-size": 20
-          }}
-        />
-      </Map>
+      <QuadrantMap location={data && data.location} />
 
       <form onSubmit={handleSubmit} autoComplete="off">
         <TextField
