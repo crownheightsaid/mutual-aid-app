@@ -20,10 +20,21 @@ const CROWN_HEIGHTS_BOUNDS = findBounds(
 );
 
 const CROWN_HEIGHTS_CENTER_COORD = new LngLat(-73.943018, 40.671254);
+const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
-const MapboxMap = ReactMapboxGl({
-  accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
-});
+const MapboxMap = MAPBOX_TOKEN
+  ? ReactMapboxGl({
+      accessToken: MAPBOX_TOKEN
+    })
+  : () => (
+    <div>
+      Mapbox token is missing. This means that the map cannot be displayed,
+      but should not affect the functionality of the page. Please inform
+      <a href="https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD">
+        #tech.
+      </a>
+    </div>
+    );
 
 const QuadrantMap = ({ location }) => {
   const lnglat = location && new LngLat(location.lng, location.lat);
