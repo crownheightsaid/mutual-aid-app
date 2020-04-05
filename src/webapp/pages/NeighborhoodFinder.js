@@ -103,7 +103,7 @@ export default function NeighborhoodFinder() {
     <Box className={classes.root}>
       <Box className={classes.formRoot}>
         <Box>
-          <Typography className={classes.text} variant="h3">
+          <Typography className={classes.text} variant="h4">
             Crown Heights Neighbourhood Finder
           </Typography>
           <Typography className={classes.text} variant="body1">
