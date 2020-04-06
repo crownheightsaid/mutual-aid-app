@@ -13,6 +13,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const forceInputUppercase = e =>
+  (e.target.value = (e.target.value || "").toUpperCase());
+
 const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
   const classes = useStyles();
   const [requestCode, setRequestCode] = useState("");
@@ -26,6 +29,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
 
   const handleAddToAirtable = event => {
     event.preventDefault();
+
     submit({
       data: {
         requestCode: requestCode.toUpperCase(),
@@ -44,8 +48,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
           type="text"
           margin="normal"
           variant="outlined"
-          {/* force input to be capitalized */}
-          onKeyUp={e => (e.target.value = (e.target.value || "").toUpperCase())}
+          onKeyUp={forceInputUppercase}
           onChange={e => setRequestCode(e.target.value)}
           className={`${className}`}
           error={Boolean(error)}
@@ -54,12 +57,13 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
             endAdornment: (
               <InputAdornment position="end">
                 <Button
+                  disabled={!Boolean(requestCode)}
                   variant="contained"
                   color="primary"
                   aria-label="request_code"
                   onClick={handleAddToAirtable}
                 >
-                  Add info to Airtable
+                  Add address data to Airtable
                 </Button>
               </InputAdornment>
             )
