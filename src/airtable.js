@@ -84,14 +84,16 @@ exports.updateRequestByCode = async (code, update) => {
       })
       .firstPage();
     if (records.length === 0) {
-      return [null, "No requests found with that code."];
+      return [null, `No requests found with code: ${code}`];
     }
     const record = records[0];
     const airUpdate = {
       id: record.id,
       fields: update
     };
+    console.log('got here')
     const updatedRecords = await base("Requests").update([airUpdate]);
+    console.log('got here2')
     return [updatedRecords[0], null];
   } catch (e) {
     return [null, `Error while processing update: ${e}`];

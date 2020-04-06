@@ -10,6 +10,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import QuadrantMap from "../components/QuadrantMap";
+import SaveNeighborhoodData from "../components/SaveNeighborhoodData";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -67,10 +68,6 @@ export default function NeighborhoodFinder() {
     });
   };
 
-  const handleAddToAirtable = event => {
-    window.alert('handleAddToAirtable')
-  }
-
   const EmailButton = () => {
     const resourceLinks = [
       "https://docs.google.com/document/d/18WYGoVlJuXYc3QFN1RABnARZlwDG3aLQsnNokl1KhZQ/edit"
@@ -111,7 +108,8 @@ export default function NeighborhoodFinder() {
             Crown Heights Neighbourhood Finder
           </Typography>
           <Typography className={classes.text} variant="body1">
-            Enter an address and we will look up cross streets and the neighborhood.
+            Enter an address and we will look up cross streets and the
+            neighborhood.
           </Typography>
           <Typography className={classes.text} variant="body1">
             For best results, enter street and town (Ex: 1550 dean st brooklyn)
@@ -141,9 +139,7 @@ export default function NeighborhoodFinder() {
               )
             }}
           />
-
         </form>
-
         {data && (
           <>
             <TextField
@@ -180,24 +176,9 @@ export default function NeighborhoodFinder() {
               className={classes.field}
             />
 
-            <TextField
-              id="request_code"
-              name="request_code"
-              label="Request code, e.g. KSDF"
-              type="text"
-              margin="normal"
-              variant="outlined"
+            <SaveNeighborhoodData
+              neighborhoodData={data}
               className={classes.field}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Button variant="contained" color="primary" aria-label="request_code"
-                      onClick={handleAddToAirtable}>
-                      Add info to request
-                    </Button>
-                  </InputAdornment>
-                )
-              }}
             />
 
             <Divider className={classes.divider} />

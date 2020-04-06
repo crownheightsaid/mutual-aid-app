@@ -10,6 +10,7 @@ const airtableWorker = require("./src/workers/airtable-sync/worker");
 const { addressHandler } = require("./src/api/geo.js");
 const { nycmaIntakeHandler } = require("./src/api/authed/intake/nycma.js");
 const { nycmaOuttakeHandler } = require("./src/api/authed/outtake/nycma.js");
+const { neighborhoodFinderHandler } = require("./src/api/authed/intake/neighborhood-finder.js");
 
 const app = express();
 
@@ -69,6 +70,7 @@ if (process.env.BASIC_AUTH_USERS) {
   console.warn("Not production environment and no authed users set.");
   console.warn("Authed API routes are accessible without authentication.");
 
+  app.post("/api/authed/intake/neighborhood-finder", neighborhoodFinderHandler);
   app.post("/api/authed/intake/nycma", nycmaIntakeHandler);
   app.post("/api/authed/outtake/nycma", nycmaOuttakeHandler);
 } else {
