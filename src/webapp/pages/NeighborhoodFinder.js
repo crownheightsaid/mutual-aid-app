@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   field: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(2),
     width: "85%"
   },
   link: {
@@ -66,6 +66,10 @@ export default function NeighborhoodFinder() {
       }
     });
   };
+
+  const handleAddToAirtable = event => {
+    window.alert('handleAddToAirtable')
+  }
 
   const EmailButton = () => {
     const resourceLinks = [
@@ -137,6 +141,7 @@ export default function NeighborhoodFinder() {
               )
             }}
           />
+
         </form>
 
         {data && (
@@ -174,6 +179,27 @@ export default function NeighborhoodFinder() {
               variant="outlined"
               className={classes.field}
             />
+
+            <TextField
+              id="request_code"
+              name="request_code"
+              label="Request code, e.g. KSDF"
+              type="text"
+              margin="normal"
+              variant="outlined"
+              className={classes.field}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Button variant="contained" color="primary" aria-label="request_code"
+                      onClick={handleAddToAirtable}>
+                      Add info to request
+                    </Button>
+                  </InputAdornment>
+                )
+              }}
+            />
+
             <Divider className={classes.divider} />
             <EmailButton />
           </>
