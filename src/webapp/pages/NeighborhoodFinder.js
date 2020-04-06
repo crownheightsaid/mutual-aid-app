@@ -45,6 +45,9 @@ const useStyles = makeStyles(theme => ({
   },
   formRoot: {
     flex: 1
+  },
+  saveNeibData: {
+    marginTop: theme.spacing(4)
   }
 }));
 
@@ -178,7 +181,7 @@ export default function NeighborhoodFinder() {
 
             <SaveNeighborhoodData
               neighborhoodData={data}
-              className={classes.field}
+              className={`${classes.field} ${classes.saveNeibData}`}
             />
 
             <Divider className={classes.divider} />

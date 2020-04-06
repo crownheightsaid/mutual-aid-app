@@ -9,7 +9,7 @@ import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(theme => ({
   successMessage: {
-    color: theme.palette.success.main
+    color: theme.palette.success.dark
   }
 }));
 
