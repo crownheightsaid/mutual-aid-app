@@ -91,9 +91,7 @@ exports.updateRequestByCode = async (code, update) => {
       id: record.id,
       fields: update
     };
-    console.log('got here')
     const updatedRecords = await base("Requests").update([airUpdate]);
-    console.log('got here2')
     return [updatedRecords[0], null];
   } catch (e) {
     return [null, `Error while processing update: ${e}`];

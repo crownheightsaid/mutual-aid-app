@@ -28,14 +28,17 @@ exports.neighborhoodFinderHandler = async (req, res, next) => {
   } = neighborhoodData;
 
   const [_, updateErr] = await updateRequestByCode(requestCode, {
-    // "Cross Street #1": street_1,
-    // "Cross Street #2": street_2,
-    // "Neighborhood Area": quadrant
+    "Cross Street #1": street_1,
+    "Cross Street #2": street_2,
+    "Neighborhood Area (See Map)": quadrant.toUpperCase()
   });
 
   if (updateErr) {
-    return { success: false, error: "Failed to update record" };
+    return res.send({
+      success: false,
+      error: `Failed to update record: ${updateErr}`
+    });
   }
 
-  res.send({success: true})
+  res.send({ success: true });
 };
