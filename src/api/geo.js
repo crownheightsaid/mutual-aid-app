@@ -62,7 +62,10 @@ exports.addressHandler = async (req, res, next) => {
           street_1: intersection.intersection.street1,
           street_2: intersection.intersection.street2
         },
-        quadrant: quadrantName
+        quadrant:
+          typeof quadrantName === "string"
+            ? quadrantName.toUpperCase()
+            : quadrantName
       })
     );
   } catch (err) {
