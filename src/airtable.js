@@ -126,12 +126,18 @@ exports.updateRequestByCode = async (code, update) => {
 // ------ VOLUNTEER TABLE ---------
 
 exports.findVolunteerByEmail = async email => {
-  const record = await base("Volunteers")
-    .select({
-      filterByFormula: `({volunteer_email} = '${email}')`
-    })
-    .firstPage();
-  return record ? record[0] : null;
+  try {
+    const record = await base("Volunteers")
+      .select({
+        filterByFormula: `({volunteer_email} = '${email}')`
+      })
+      .firstPage();
+    return record
+      ? [record[0], null]
+      : [null, "Volunteer with that email not found"];
+  } catch (e) {
+    return [null, `Error while finding request: ${e}`];
+  }
 };
 
 exports.findVolunteerById = async id => {
