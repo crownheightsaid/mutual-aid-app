@@ -69,8 +69,7 @@ async function selectRequestForSending(payload) {
   let [requests, err] = await findOpenRequests(); // eslint-disable-line
   requests = requests.filter(r => {
     const vol = r.get("Intake volunteer");
-    const volId = vol.length > 0 ? vol[0] : null;
-    console.log(volId);
+    const volId = vol && vol.length > 0 ? vol[0] : null;
     return volId === volRecord.getId();
   });
   requests = sortBy(requests, r => r.get("Last Modified")).reverse();
