@@ -58,6 +58,9 @@ exports.atdViewSubmission = async payload => {
     const volunteer = await findVolunteerById(volId);
     const assignedVolunteerEmail = volunteer.get("volunteer_email");
     if (slackUserEmail !== assignedVolunteerEmail) {
+      console.log(
+        `Request Code Error Assignment: ${requestCode}\n${slackUserEmail}`
+      );
       return messageErrorResponse(
         "requestblock",
         "It doesn't look like you are assigned to this request :/\nLet #tech know if we messed up."
