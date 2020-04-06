@@ -109,10 +109,13 @@ async function draftConfirm(payload) {
 async function sendMessage(payload) {
   const context = JSON.parse(payload.view.private_metadata);
 
+  // Send the message
   const deliveryMessage = await slackapi.chat.postMessage({
     channel: context.channelId,
     text: context.content
   });
+
+  // Update the metadata on the Request
   await updateRequestByCode(context.code, {
     Status: "Delivery Needed",
     Meta: {
@@ -120,6 +123,8 @@ async function sendMessage(payload) {
       slack_channel: deliveryMessage.channel
     }
   });
+
+  // DM the user with a permalink
   const permalink = await slackapi.chat.getPermalink({
     channel: deliveryMessage.channel,
     message_ts: deliveryMessage.ts
@@ -129,6 +134,8 @@ async function sendMessage(payload) {
     text: `*${context.code}*: Submitted a new request for delivery to <#${deliveryMessage.channel}>\n${permalink.permalink}`,
     user: payload.user.id
   });
+
+  // Close the modal
   return {
     response_action: "clear"
   };
