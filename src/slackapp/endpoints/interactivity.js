@@ -22,17 +22,19 @@ const atdViewOpenEntryId = "assign-to-delivery";
 slackInteractions.action(
   {
     type: "message_action",
-    callback_id: atdViewOpenEntryId
+    callbackId: atdViewOpenEntryId
   },
   atdViewOpen
 );
+
 slackInteractions.viewSubmission(
-  { callback_id: atdViewSubmissionCallbackId },
+  { callbackId: atdViewSubmissionCallbackId },
   atdViewSubmission
 );
 
 // ==================================================================
-// [WIP] Delivery Request Post flow
+// Delivery Request Post flow
 // ==================================================================
+createDeliveryRequest.register(slackInteractions);
 
 module.exports = slackInteractions.requestListener();
