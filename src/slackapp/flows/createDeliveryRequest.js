@@ -67,16 +67,18 @@ async function selectRequestForSending(payload) {
     return;
   }
   let [requests, err] = await findOpenRequests(); // eslint-disable-line
-  requests = requests.filter(
-    r => r.get("Intake volunteer") === volRecord.getId()
-  );
+  requests = requests.filter(r => {
+    console.log(r.get("Intake volunteer"));
+    console.log(volRecord.getId());
+    return r.get("Intake volunteer") === volRecord.getId();
+  });
   requests = sortBy(requests, r => r.get("Last Modified")).reverse();
 
   if (err) {
     view = errorView(`Error looking up pending requests: ${err}`);
   } else if (requests.length === 0) {
     view = errorView(
-      `Couldn't find any pending requests. Do you have requests assign to you in the 'Delivery Needed' state?`
+      `Couldn't find any pending requests. Do you have requests assigned to you in the 'Delivery Needed' state?`
     );
   } else {
     view = await makeRequestSelectionView(requests);

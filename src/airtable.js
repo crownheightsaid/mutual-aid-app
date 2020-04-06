@@ -132,7 +132,7 @@ exports.findVolunteerByEmail = async email => {
         filterByFormula: `({volunteer_email} = '${email}')`
       })
       .firstPage();
-    return record
+    return record.length !== 0
       ? [record[0], null]
       : [null, "Volunteer with that email not found"];
   } catch (e) {
