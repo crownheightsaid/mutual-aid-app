@@ -10,7 +10,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import QuadrantMap from "../components/QuadrantMap";
-import SaveNeighborhoodData from "../components/SaveNeighborhoodData";
+import SaveNeighborhoodDataInput from "../components/SaveNeighborhoodDataInput";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
   formRoot: {
     flex: 1
   },
-  saveNeibData: {
+  saveNeibDataInput: {
     marginTop: theme.spacing(4)
   }
 }));
@@ -179,9 +179,9 @@ export default function NeighborhoodFinder() {
               className={classes.field}
             />
 
-            <SaveNeighborhoodData
+            <SaveNeighborhoodDataInput
               neighborhoodData={data}
-              className={`${classes.field} ${classes.saveNeibData}`}
+              className={`${classes.field} ${classes.saveNeibDataInput}`}
             />
 
             <Divider className={classes.divider} />
