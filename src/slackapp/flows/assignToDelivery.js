@@ -75,6 +75,7 @@ exports.atdViewSubmission = async payload => {
       "Delivery slackId": delivererSlackId
     });
     if (uerr) {
+      console.log(`Request Code Error: ${requestCode}\n${uerr}`);
       return errorResponse(
         "Error updating the Request in Airtable. Please try again.\n\n You can update Airtable and message the delivery volunteer manually if it still doesn't work :/"
       );
