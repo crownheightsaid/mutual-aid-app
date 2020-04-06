@@ -52,6 +52,27 @@ exports.findRequestByExternalId = async externalId => {
   }
 };
 
+exports.findOpenRequests = async () => {
+  const requestOpenStates = ["Dispatch Started", "Delivery Needed"];
+  const statusConstraints = requestOpenStates.map(s => `{Status} = '${s}'`);
+  const formula = `OR(${statusConstraints.join(", ")})`;
+  console.log(`Finding: ${formula}`);
+  try {
+    const requests = await base("Requests")
+      .select({
+        filterByFormula: formula
+      })
+      .all();
+    const notInSlack = r => {
+      const meta = JSON.parse(r.get("Meta"));
+      return meta.slack_ts === undefined;
+    };
+    return [requests.filter(notInSlack), null];
+  } catch (e) {
+    return [[], `Error while looking up open requests: ${e}`];
+  }
+};
+
 exports.findRequestByCode = async code => {
   try {
     const records = await base("Requests")
