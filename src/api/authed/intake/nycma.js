@@ -20,18 +20,21 @@ exports.nycmaIntakeHandler = async (req, res, next) => {
   }
 
   const requestMessage = [
-    "This is a request from a different system.",
-    "The type of support requested is:",
+    "This is a request from a different system.\n",
+    "The type of support requested is:\n",
     nycma.supportType || "n/a",
-    "In a free-form request they said:",
+    "\nIn a free-form request they said:\n",
     nycma.otherSupport || "nothing",
-    "They are in this hard-hit community:",
+    "\nThey are in this hard-hit community:\n",
     nycma.community || "n/a"
   ];
   const nycmaRequest = {
     message: requestMessage.join(" "),
-    phone: "",
+    phone: nycma.phone || "If there's no email too, please tell #tech!",
     externalId: nycma.id,
+    email: nycma.email || "",
+    urgency: nycma.urgency || "",
+    crossStreets: nycma.crossStreet,
     source: "nycma"
   };
   const [record, e] = await createRequest(nycmaRequest);

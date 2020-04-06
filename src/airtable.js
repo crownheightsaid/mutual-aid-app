@@ -26,6 +26,9 @@ exports.createRequest = async request => {
       Phone: request.phone || "",
       "Text or Voice?": request.source,
       "External Id": request.externalId || "",
+      "Cross Street #1": request.crossStreets || "",
+      "Email Address": request.email || "",
+      "Time Sensitivity": request.urgency || "",
       Status: "Dispatch Needed"
     });
     return [record, null];
