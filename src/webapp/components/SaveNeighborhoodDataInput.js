@@ -44,6 +44,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
           type="text"
           margin="normal"
           variant="outlined"
+          {/* force input to be capitalized */}
           onKeyUp={e => (e.target.value = (e.target.value || "").toUpperCase())}
           onChange={e => setRequestCode(e.target.value)}
           className={`${className}`}
