@@ -65,11 +65,7 @@ exports.findOpenRequests = async () => {
         filterByFormula: formula
       })
       .all();
-    const notInSlack = r => {
-      const meta = JSON.parse(r.get("Meta"));
-      return meta.slack_ts === undefined;
-    };
-    return [requests.filter(notInSlack), null];
+    return [requests, null];
   } catch (e) {
     return [[], `Error while looking up open requests: ${e}`];
   }
