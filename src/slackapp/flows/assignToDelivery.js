@@ -58,6 +58,9 @@ exports.atdViewSubmission = async payload => {
     const volunteer = await findVolunteerById(volId);
     const assignedVolunteerEmail = volunteer.get("volunteer_email");
     if (slackUserEmail !== assignedVolunteerEmail) {
+      console.log(
+        `Request Code Error Assignment: ${requestCode}\n${slackUserEmail}`
+      );
       return messageErrorResponse(
         "requestblock",
         "It doesn't look like you are assigned to this request :/\nLet #tech know if we messed up."
@@ -75,6 +78,7 @@ exports.atdViewSubmission = async payload => {
       "Delivery slackId": delivererSlackId
     });
     if (uerr) {
+      console.log(`Request Code Error: ${requestCode}\n${uerr}`);
       return errorResponse(
         "Error updating the Request in Airtable. Please try again.\n\n You can update Airtable and message the delivery volunteer manually if it still doesn't work :/"
       );
