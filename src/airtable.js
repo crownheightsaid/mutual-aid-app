@@ -56,7 +56,6 @@ exports.findOpenRequests = async () => {
   const requestOpenStates = ["Dispatch Started", "Delivery Needed"];
   const statusConstraints = requestOpenStates.map(s => `{Status} = '${s}'`);
   const formula = `OR(${statusConstraints.join(", ")})`;
-  console.log(`Finding: ${formula}`);
   try {
     const requests = await base("Requests")
       .select({
