@@ -7,25 +7,31 @@ exports.messageErrorResponse = (blockId, msg) => {
   return response;
 };
 
+const errorView = msg => {
+  return {
+    type: "modal",
+    title: {
+      type: "plain_text",
+      text: "Error :("
+    },
+    blocks: [
+      {
+        type: "section",
+        text: {
+          type: "plain_text",
+          text: msg
+        }
+      }
+    ]
+  };
+};
+
+exports.errorView = errorView;
+
 exports.errorResponse = msg => {
   return {
     response_action: "update",
-    view: {
-      type: "modal",
-      title: {
-        type: "plain_text",
-        text: "Error :("
-      },
-      blocks: [
-        {
-          type: "section",
-          text: {
-            type: "plain_text",
-            text: msg
-          }
-        }
-      ]
-    }
+    view: errorView(msg)
   };
 };
 
