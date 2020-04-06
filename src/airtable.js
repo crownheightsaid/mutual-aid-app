@@ -1,4 +1,5 @@
 const Airtable = require("airtable");
+const { merge } = require("lodash");
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_KEY }).base(
   process.env.AIRTABLE_BASE
@@ -72,6 +73,7 @@ exports.findRequestByCode = async code => {
 // {
 //   "Some Requests Field": "New Value",
 //   "Another field": "Another New Value"
+//   "Meta": {key: "value"}
 // }
 exports.updateRequestByCode = async (code, update) => {
   try {
@@ -82,6 +84,13 @@ exports.updateRequestByCode = async (code, update) => {
       .firstPage();
     if (records.length === 0) {
       return [null, "No requests found with that code."];
+    }
+    if (update.Meta) {
+      // Support for updating Meta as an object (rather than string)
+      /* eslint no-param-reassign: ["error", { "props": false }] */
+      const parsed = JSON.parse(records[0].get("Meta"));
+      merge(parsed, update.Meta);
+      update.Meta = JSON.stringify(parsed);
     }
     const record = records[0];
     const airUpdate = {
