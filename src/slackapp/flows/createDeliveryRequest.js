@@ -124,17 +124,6 @@ async function sendMessage(payload) {
     }
   });
 
-  // DM the user with a permalink
-  const permalink = await slackapi.chat.getPermalink({
-    channel: deliveryMessage.channel,
-    message_ts: deliveryMessage.ts
-  });
-  slackapi.chat.postMessage({
-    channel: payload.user.id,
-    text: `*${context.code}*: Submitted a new request for delivery to <#${deliveryMessage.channel}>\n${permalink.permalink}`,
-    user: payload.user.id
-  });
-
   // Close the modal
   return {
     response_action: "clear"
