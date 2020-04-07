@@ -6,6 +6,7 @@
     "fix": "eslint --fix src",
     "local": "npm run local:react & npm run local:express",
     "local:express": "NODE_ENV=dev node index.js",
+    "local:slack": "NODE_ENV=dev ngrok http 5000",
     "local:react": "NODE_ENV=dev react-scripts start",
     "local:airtable-sync": "NODE_ENV=dev node ./src/workers/airtable-sync/worker.js",
     "local:script": "DOTENV_CONFIG_PATH=./.env node -r dotenv/config",
@@ -50,11 +51,16 @@
     "react-scripts": "3.4.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "babel-plugin-i18next-extract": "^0.6.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.5.0",
     "eslint-config-react-app": "^5.0.2",
     "eslint-import-resolver-custom-alias": "^1.2.0",
+    "eslint-plugin-flowtype": "^4.6.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-no-unsanitized": "^3.0.2",
@@ -62,12 +68,8 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^2.3.0",
-    "prettier": "^1.18.2",
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.0",
-    "babel-plugin-i18next-extract": "^0.6.1",
-    "eslint-plugin-flowtype": "^4.6.0"
+    "ngrok": "3.2.7",
+    "prettier": "^1.18.2"
   },
   "private": true,
   "browserslist": {

@@ -18,10 +18,7 @@ slackEvents.on("app_home_opened", async event => {
       user.user.profile.email
     );
     if (err) {
-      console.error("Error finding volunteer for home page:");
-      console.error(err);
-      openHomeWithSections(event.user, homeSections);
-      return;
+      throw new Error(err);
     }
     homeSections.push("divider");
     if (!volunteer) {
@@ -34,7 +31,8 @@ slackEvents.on("app_home_opened", async event => {
 
     openHomeWithSections(event.user, homeSections);
   } catch (error) {
-    console.error(error);
+    console.error(`Error opening home page: ${error}`);
+    openHomeWithSections(event.user, ["base"]);
   }
 });
 

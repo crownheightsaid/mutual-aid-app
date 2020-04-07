@@ -55,7 +55,10 @@ exports.atdViewSubmission = async payload => {
       );
     }
     console.log("Pre volunteer");
-    const volunteer = await findVolunteerById(volId);
+    const [volunteer, verr] = await findVolunteerById(volId);
+    if (verr) {
+      throw new Error(verr);
+    }
     const assignedVolunteerEmail = volunteer.get("volunteer_email");
     if (slackUserEmail !== assignedVolunteerEmail) {
       console.log(
