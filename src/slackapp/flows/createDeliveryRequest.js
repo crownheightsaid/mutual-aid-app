@@ -68,9 +68,8 @@ async function selectRequestForSending(payload) {
   }
   let [requests, err] = await findOpenRequests(); // eslint-disable-line
   requests = requests.filter(r => {
-    const vol = r.get("Intake volunteer");
-    const volId = vol && vol.length > 0 ? vol[0] : null;
-    return volId === volRecord.getId();
+    const vols = r.get("Intake volunteer") || [];
+    return vols.includes(volRecord.getId());
   });
   requests = sortBy(requests, r => r.get("Last Modified")).reverse();
 
@@ -137,6 +136,11 @@ async function sendMessage(payload) {
     channel: context.channelId,
     text: context.content
   });
+  if (!deliveryMessage.ok) {
+    return errorResponse(
+      `Unable to send message to channel <#${context.channelId}>`
+    );
+  }
 
   // Update the metadata on the Request
   await updateRequestByCode(context.code, {
@@ -332,15 +336,21 @@ function suggestedTemplate(payload, request) {
   const streets = [
     request.get("Cross Street #1"),
     request.get("Cross Street #2")
-  ].join(" & ");
-
-  const name = `our neighbor at ${streets}`;
-  let quadrant = request.get("Neighborhood Area (See Map)");
+  ]
+    .filter(s => s !== undefined)
+    .join(" & ");
+  let name = "our neighbor";
+  if (streets) {
+    name += `at ${streets}`;
+  }
+  let quadrant =
+    request.get("Neighborhood Area (See Map)") || "Other - Unknown";
   if (quadrant.match(/^NE|SE|SW|NE$/)) {
     quadrant += " Crown Heights";
   }
 
-  const services = request.get("What type(s) of support are you seeking?");
+  const services =
+    request.get("What type(s) of support are you seeking?") || [];
   let aidType = "for aid from";
   let needs = services.join(", ");
   if (isEqual(services, ["Deliver groceries or supplies to me"])) {
@@ -355,7 +365,7 @@ function suggestedTemplate(payload, request) {
     ["Need", needs],
     ["Cross Streets", streets],
     ["Language", (request.get("Languages") || []).join("/")],
-    ["Description", request.get("Intake General Notes")],
+    ["Description", request.get("Intake General Notes") || "No notes"],
     ["Code", request.get("Code")]
   ];
   const status = ":red_circle:";
