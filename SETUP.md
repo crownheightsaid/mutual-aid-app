@@ -19,7 +19,7 @@ Finish setting up your slack app
      - Add the following under Shortcuts:
              (Name) Volunteer Sign Up (Callback ID) volunteer-sign-up
 1. Go to "Oauth and Permissions"
-     - Add bot scopes: "`commands`", "`users:read`", "`users:read.email`"
+     - Add bot scopes: "`commands`", "`users:read`", "`users:read.email`" "`channels:history`" "`channels:write`" "`chat:write`" "`chat:write_public`"
 1. Go to "Event Subscriptions"
      - Turn on.
      - Add your full `/slack/events` heroku URL to "Request URL"
