@@ -1,15 +1,15 @@
-Coming soon!
+Running `npm run local:slack`
+will start ngrok which will give you a public URL that
+will forward traffic to your localhost.
 
-Running the slack app locally is more difficult because it needs to
-expose a routable IP address.
-
-For now, you can follow [SETUP.md](../SETUP.md) to create your own app,
-or ask for access to Crown Heights' staging app and follow the root level
-[DEVELOPING.md](../DEVELOPING.md) instructions.
+You can then start the express server locally
+`npm run local:express` and use the ngrok URL
+instead of the heroku URL during the [setup process](../SETUP.md).
+Unfortunately, you'll have to change the URLs in slack when you restart ngrok.
 
 ______________________________________
 
-`/endpoints/interactivity.js` is a good place to start
+`/endpoints/interactivity.js` is a good place to start for understanding this package
 
 ### Structure
 
