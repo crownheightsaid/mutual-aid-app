@@ -5,6 +5,7 @@ const { errorResponse, errorView } = require("../views");
 const {
   findOpenRequests,
   findRequestByCode,
+  findVolunteerByEmail,
   updateRequestByCode
 } = require("../../airtable");
 
@@ -47,15 +48,37 @@ module.exports.register = function register(slackInteractions) {
  * Presents a new modal with a selector for all open requests (that aren't on slack already)
  */
 async function selectRequestForSending(payload) {
+  const slackUserResponse = await slackapi.users.info({
+    token: process.env.SLACK_BOT_TOKEN,
+    user: payload.user.id
+  });
+
+  const slackUserEmail = slackUserResponse.user.profile.email;
+  const [volRecord, verr] = await findVolunteerByEmail(slackUserEmail);
+  let view = null;
+  if (verr) {
+    view = errorView(
+      `No volunteer with email: ${slackUserEmail}. Did you use your slack email to sign up?`
+    );
+    await slackapi.views.open({
+      trigger_id: payload.trigger_id,
+      view
+    });
+    return;
+  }
   let [requests, err] = await findOpenRequests(); // eslint-disable-line
+  requests = requests.filter(r => {
+    const vol = r.get("Intake volunteer");
+    const volId = vol && vol.length > 0 ? vol[0] : null;
+    return volId === volRecord.getId();
+  });
   requests = sortBy(requests, r => r.get("Last Modified")).reverse();
 
-  let view = null;
   if (err) {
     view = errorView(`Error looking up pending requests: ${err}`);
   } else if (requests.length === 0) {
     view = errorView(
-      `Couldn't find any pending requests. Is your request in the Delivery Needed state?`
+      `Couldn't find any pending requests. Do you have requests assigned to you in the 'Delivery Needed' state?`
     );
   } else {
     view = await makeRequestSelectionView(requests);
@@ -117,11 +140,7 @@ async function sendMessage(payload) {
 
   // Update the metadata on the Request
   await updateRequestByCode(context.code, {
-    Status: "Delivery Needed",
-    Meta: {
-      slack_ts: deliveryMessage.ts,
-      slack_channel: deliveryMessage.channel
-    }
+    Status: "Delivery Needed"
   });
 
   // Close the modal
