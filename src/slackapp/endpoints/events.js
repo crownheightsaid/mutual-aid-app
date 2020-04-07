@@ -14,7 +14,12 @@ slackEvents.on("app_home_opened", async event => {
       user: event.user,
       include_locale: true
     });
-    const volunteer = await findVolunteerByEmail(user.user.profile.email);
+    const [volunteer, err] = await findVolunteerByEmail(
+      user.user.profile.email
+    );
+    if (err) {
+      throw new Error(err);
+    }
     homeSections.push("divider");
     if (!volunteer) {
       homeSections.push("volunteerSignUp");
@@ -26,7 +31,8 @@ slackEvents.on("app_home_opened", async event => {
 
     openHomeWithSections(event.user, homeSections);
   } catch (error) {
-    console.error(error);
+    console.error(`Error opening home page: ${error}`);
+    openHomeWithSections(event.user, ["base"]);
   }
 });
 

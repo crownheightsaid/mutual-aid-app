@@ -29,7 +29,10 @@ async function newDeliveryRequest(request) {
 async function getVolunteerSlackUser(volunteerId) {
   let volunteerSlackName = volunteerId;
   try {
-    const intakeVolunteer = await findVolunteerById(volunteerId);
+    const [intakeVolunteer, err] = await findVolunteerById(volunteerId);
+    if (err) {
+      throw new Error(err);
+    }
     volunteerSlackName = intakeVolunteer.get("volunteer_slack_id");
     const result = await slackapi.users.lookupByEmail({
       email: intakeVolunteer.get("volunteer_email")

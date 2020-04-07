@@ -4,7 +4,9 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_KEY }).base(
   process.env.AIRTABLE_BASE
 );
 
-// ------- REQUEST TABLE ---------
+// ==================================================================
+// Request Table
+// ==================================================================
 
 exports.deleteRequest = async recordId => {
   console.log("Deleting record");
@@ -98,19 +100,32 @@ exports.updateRequestByCode = async (code, update) => {
   }
 };
 
-// ------ VOLUNTEER TABLE ---------
+// ==================================================================
+// Volunteer Table
+// ==================================================================
 
 exports.findVolunteerByEmail = async email => {
-  const record = await base("Volunteers")
-    .select({
-      filterByFormula: `({volunteer_email} = '${email}')`
-    })
-    .firstPage();
-  return record ? record[0] : null;
+  try {
+    const records = await base("Volunteers")
+      .select({
+        filterByFormula: `({volunteer_email} = '${email}')`
+      })
+      .firstPage();
+    if (!records || records.length === 0) {
+      return [null, `No volunteer signed up with email ${email}`];
+    }
+    return [records[0], null];
+  } catch (e) {
+    return [null, `Errors looking up volunteer by email ${email}: ${e}`];
+  }
 };
 
 exports.findVolunteerById = async id => {
-  return base("Volunteers").find(id);
+  try {
+    return [base("Volunteers").find(id), null];
+  } catch (e) {
+    return [null, `Errors looking up volunteer by recordId ${id}: ${e}`];
+  }
 };
 
 exports.airbase = base;
