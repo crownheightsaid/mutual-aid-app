@@ -341,7 +341,7 @@ function suggestedTemplate(payload, request) {
     .join(" & ");
   let name = "our neighbor";
   if (streets) {
-    name += `at ${streets}`;
+    name += ` at ${streets}`;
   }
   let quadrant =
     request.get("Neighborhood Area (See Map)") || "Other - Unknown";

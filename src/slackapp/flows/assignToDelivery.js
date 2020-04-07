@@ -139,7 +139,7 @@ const atdSubmitCallback = "assign-to-delivery-submit";
 
 exports.atdViewSubmissionCallbackId = atdSubmitCallback;
 exports.atdViewOpen = async payload => {
-  let codeGuess = "nothing :(";
+  let codeGuess = "Please enter code manually :/";
   // This means it's a reply and we can try to look for a request Code.
   if (payload.message.thread_ts !== payload.message.ts) {
     try {
@@ -151,11 +151,10 @@ exports.atdViewOpen = async payload => {
         inclusive: true
       });
       assert(requestMessage.messages.length !== 0, "No messages found.");
-      const capturingRegex = /Code(?<code>.*)\n/;
+      const capturingRegex = /Code[^\w\d]+(?<code>[\w\d]{4})[^\w\d]*\n/;
       const found = requestMessage.messages[0].text.match(capturingRegex);
-      if (found.groups.code && found.groups.code.length >= 4) {
-        const codeString = found.groups.code;
-        codeGuess = codeString.substr(codeString.length - 4);
+      if (found.groups.code) {
+        codeGuess = found.groups.code;
       }
     } catch (e) {
       console.log(`Couldn't fetch thread for code guess: ${e}`);
@@ -206,18 +205,11 @@ exports.atdViewOpen = async payload => {
               action_id: "request_code",
               min_length: 4,
               max_length: 4,
-              placeholder: {
-                type: "plain_text",
-                text: "Ex: AKBS"
-              }
+              initial_value: codeGuess
             },
             label: {
               type: "plain_text",
               text: "Request Code"
-            },
-            hint: {
-              type: "plain_text",
-              text: `The bot's best guess is: ${codeGuess}`
             }
           },
           {
