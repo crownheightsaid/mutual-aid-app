@@ -1,5 +1,5 @@
 const ChangeDetector = require("./ChangeDetector");
-// const newDeliveryRequest = require("./newDeliveryRequest");
+const updateMessageContent = require("./actions/updateMessageContent");
 
 const wait = interval => new Promise(r => setTimeout(r, interval));
 const defaultInterval = 5000;
@@ -42,6 +42,8 @@ function startWorker(interval) {
   schedule("airtable-sync.requests", interval, async () => {
     const recordsChanged = await requestChanges.poll();
     const statusFieldName = "Status";
+    const codeFieldName = "Code";
+    const slackIdFieldName = "Delivery slackid";
     console.info(`Found ${recordsChanged.length} changes in Requests`);
     for (const record of recordsChanged) {
       //TODO: use this a few more times from different contexts and think about refactoring the api
@@ -49,13 +51,13 @@ function startWorker(interval) {
         const status = record.get(statusFieldName);
         const newStatus = record.getPrior(statusFieldName);
         console.log(
-          `${record.get("Request ID")} moved from ${newStatus} -> ${status}`
+          `${record.get(codeFieldName)} moved from ${newStatus} -> ${status}`
         );
-        if (status == "Delivery Needed") {
-          //await newDeliveryRequest(record);
-          //TODO: write-back the slack message TS so that we can edit it later
-        }
       }
+      if(record.didChange(statusFieldName) || record.didChange(slackIdFieldName)){
+        // await updateMessageContent(record)
+      }
+
     }
   });
 }

@@ -1,4 +1,5 @@
 const Airtable = require("airtable");
+const { merge } = require("lodash");
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_KEY }).base(
   process.env.AIRTABLE_BASE
@@ -56,6 +57,22 @@ exports.findRequestByExternalId = async externalId => {
   }
 };
 
+exports.findOpenRequests = async () => {
+  const requestOpenStates = ["Dispatch Started", "Delivery Needed"];
+  const statusConstraints = requestOpenStates.map(s => `{Status} = '${s}'`);
+  const formula = `OR(${statusConstraints.join(", ")})`;
+  try {
+    const requests = await base("Requests")
+      .select({
+        filterByFormula: formula
+      })
+      .all();
+    return [requests, null];
+  } catch (e) {
+    return [[], `Error while looking up open requests: ${e}`];
+  }
+};
+
 exports.findRequestByCode = async code => {
   try {
     const records = await base("Requests")
@@ -77,6 +94,7 @@ exports.findRequestByCode = async code => {
 // {
 //   "Some Requests Field": "New Value",
 //   "Another field": "Another New Value"
+//   "Meta": {key: "value"}
 // }
 exports.updateRequestByCode = async (code, update) => {
   try {
@@ -87,6 +105,13 @@ exports.updateRequestByCode = async (code, update) => {
       .firstPage();
     if (records.length === 0) {
       return [null, "No requests found with that code."];
+    }
+    if (update.Meta) {
+      // Support for updating Meta as an object (rather than string)
+      /* eslint no-param-reassign: ["error", { "props": false }] */
+      const parsed = JSON.parse(records[0].get("Meta"));
+      merge(parsed, update.Meta);
+      update.Meta = JSON.stringify(parsed);
     }
     const record = records[0];
     const airUpdate = {
@@ -122,7 +147,7 @@ exports.findVolunteerByEmail = async email => {
 
 exports.findVolunteerById = async id => {
   try {
-    return [base("Volunteers").find(id), null];
+    return [await base("Volunteers").find(id), null];
   } catch (e) {
     return [null, `Errors looking up volunteer by recordId ${id}: ${e}`];
   }
