@@ -159,3 +159,9 @@ exports.findVolunteerById = async id => {
 
 exports.airbase = base;
 exports.UPDATE_BATCH_SIZE = 10;
+exports.SENSITIVE_FIELDS = [
+  "Phone",
+  "Email Address",
+  "Message",
+  "Intake General Notes"
+];

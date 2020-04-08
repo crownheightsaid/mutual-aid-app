@@ -1,5 +1,9 @@
 const _ = require("lodash");
-const { airbase, UPDATE_BATCH_SIZE } = require("../../airtable");
+const {
+  airbase,
+  UPDATE_BATCH_SIZE,
+  SENSITIVE_FIELDS
+} = require("../../airtable");
 
 // Maps airtable column names
 const metaField = "Meta";
@@ -94,6 +98,9 @@ class ChangeDetector {
       const fields = _.clone(record.fields);
       const meta = getNormalizedMeta(record);
       delete fields[metaField];
+      for (const sensitiveField of SENSITIVE_FIELDS) {
+        delete fields[sensitiveField];
+      }
       meta.lastValues = fields;
       updates.push({
         id: record.id,
