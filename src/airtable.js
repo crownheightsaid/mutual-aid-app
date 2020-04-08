@@ -104,7 +104,7 @@ exports.updateRequestByCode = async (code, update) => {
       })
       .firstPage();
     if (records.length === 0) {
-      return [null, "No requests found with that code."];
+      return [null, `No requests found with code: ${code}`];
     }
     if (update.Meta) {
       // Support for updating Meta as an object (rather than string)

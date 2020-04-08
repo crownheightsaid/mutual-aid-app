@@ -10,6 +10,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import QuadrantMap from "../components/QuadrantMap";
+import SaveNeighborhoodDataInput from "../components/SaveNeighborhoodDataInput";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   field: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(2),
     width: "85%"
   },
   link: {
@@ -44,6 +45,9 @@ const useStyles = makeStyles(theme => ({
   },
   formRoot: {
     flex: 1
+  },
+  saveNeibDataInput: {
+    marginTop: theme.spacing(4)
   }
 }));
 
@@ -104,10 +108,11 @@ export default function NeighborhoodFinder() {
       <Box className={classes.formRoot}>
         <Box>
           <Typography className={classes.text} variant="h4">
-            Crown Heights Neighbourhood Finder
+            Crown Heights Neighborhood Finder
           </Typography>
           <Typography className={classes.text} variant="body1">
-            Enter an address and we will look up cross streets and the neighborhood.
+            Enter an address and we will look up cross streets and the
+            neighborhood.
           </Typography>
           <Typography className={classes.text} variant="body1">
             For best results, enter street and town (Ex: 1550 dean st brooklyn)
@@ -138,7 +143,6 @@ export default function NeighborhoodFinder() {
             }}
           />
         </form>
-
         {data && (
           <>
             <TextField
@@ -174,6 +178,12 @@ export default function NeighborhoodFinder() {
               variant="outlined"
               className={classes.field}
             />
+
+            <SaveNeighborhoodDataInput
+              neighborhoodData={data}
+              className={`${classes.saveNeibDataInput}`}
+            />
+
             <Divider className={classes.divider} />
             <EmailButton />
           </>
