@@ -21,7 +21,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
   const [requestCode, setRequestCode] = useState("");
   const [{ data, loading, error }, submit] = useAxios(
     {
-      url: `/api/authed/intake/neighborhood-finder`,
+      url: `/api/neighborhood-finder/update-request`,
       method: "post"
     },
     { manual: true } // Don't send on render
@@ -57,7 +57,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
             endAdornment: (
               <InputAdornment position="end">
                 <Button
-                  disabled={!Boolean(requestCode)}
+                  disabled={!requestCode}
                   variant="contained"
                   color="primary"
                   aria-label="request_code"
