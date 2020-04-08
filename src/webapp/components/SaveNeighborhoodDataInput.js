@@ -6,15 +6,21 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles(theme => ({
   successMessage: {
     color: theme.palette.success.dark
+  },
+  field: {
+    marginTop: theme.spacing(1),
+    width: "85%"
   }
 }));
 
-const forceInputUppercase = e =>
-  (e.target.value = (e.target.value || "").toUpperCase());
+const forceInputUppercase = e => {
+  e.target.value = (e.target.value || "").toUpperCase();
+};
 
 const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
   const classes = useStyles();
@@ -39,8 +45,9 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
   };
 
   return (
-    <>
+    <Box className={className}>
       <form onSubmit={handleAddToAirtable} autoComplete="off">
+        <Typography variant="h6">Update a request with the above address</Typography>
         <TextField
           id="request_code"
           name="request_code"
@@ -50,7 +57,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
           variant="outlined"
           onKeyUp={forceInputUppercase}
           onChange={e => setRequestCode(e.target.value)}
-          className={`${className}`}
+          className={`${classes.field}`}
           error={Boolean(error)}
           helperText={error && error.response.data.message}
           InputProps={{
@@ -63,7 +70,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
                   aria-label="request_code"
                   onClick={handleAddToAirtable}
                 >
-                  Add address data to Airtable
+                  Update address
                 </Button>
               </InputAdornment>
             )
@@ -77,7 +84,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
           Successfully updated request
         </Typography>
       )}
-    </>
+    </Box>
   );
 };
 

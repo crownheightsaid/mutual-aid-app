@@ -108,7 +108,7 @@ export default function NeighborhoodFinder() {
       <Box className={classes.formRoot}>
         <Box>
           <Typography className={classes.text} variant="h4">
-            Crown Heights Neighbourhood Finder
+            Crown Heights Neighborhood Finder
           </Typography>
           <Typography className={classes.text} variant="body1">
             Enter an address and we will look up cross streets and the
@@ -181,7 +181,7 @@ export default function NeighborhoodFinder() {
 
             <SaveNeighborhoodDataInput
               neighborhoodData={data}
-              className={`${classes.field} ${classes.saveNeibDataInput}`}
+              className={`${classes.saveNeibDataInput}`}
             />
 
             <Divider className={classes.divider} />
