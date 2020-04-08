@@ -55,7 +55,7 @@ function startWorker(interval) {
         );
       }
       if(record.didChange(statusFieldName) || record.didChange(slackIdFieldName)){
-        // await updateMessageContent(record)
+        await updateMessageContent(record)
       }
 
     }

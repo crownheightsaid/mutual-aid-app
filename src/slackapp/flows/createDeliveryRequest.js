@@ -144,7 +144,11 @@ async function sendMessage(payload) {
 
   // Update the metadata on the Request
   await updateRequestByCode(context.code, {
-    Status: "Delivery Needed"
+    Status: "Delivery Needed",
+    Meta: {
+      slack_ts: deliveryMessage.ts,
+      slack_channel: deliveryMessage.channel
+    }
   });
 
   // Close the modal
