@@ -38,7 +38,7 @@ function startWorker(interval) {
     );
     interval = defaultInterval;
   }
-  let requestChanges = new ChangeDetector("Requests");
+  let requestChanges = new ChangeDetector("Requests", 100);
   schedule("airtable-sync.requests", interval, async () => {
     const recordsChanged = await requestChanges.poll();
     const statusFieldName = "Status";

@@ -36,10 +36,11 @@ const overlapMs = 5 * 1000;
  *   //wait some time and poll again
  */
 class ChangeDetector {
-  constructor(tableName) {
+  constructor(tableName, writeDelayMs) {
     this.tableName = tableName;
     this.base = airbase(tableName);
     this.lastModified = new Date(0); // Unix epoch 0
+    this.writeDelayMs = writeDelayMs || 0; // Unix epoch 0
   }
 
   /**
@@ -114,6 +115,7 @@ class ChangeDetector {
     // unfortunately Airtable only allows 10 records at a time to be updated so batck up the changes
     for (const batch of _.chunk(updates, UPDATE_BATCH_SIZE)) {
       /* eslint-disable no-await-in-loop */
+      await new Promise(r => setTimeout(r, this.writeDelayMs));
       results += await this.base.update(batch);
     }
     return results;
