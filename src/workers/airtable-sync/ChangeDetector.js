@@ -132,7 +132,12 @@ class ChangeDetector {
     const meta = record.getMeta();
     const { lastValues } = meta;
 
-    const ignoredFields = [lastModifiedField, metaField, lastProcessedField];
+    const ignoredFields = [
+      lastModifiedField,
+      metaField,
+      lastProcessedField,
+      ...SENSITIVE_FIELDS
+    ];
     for (const ignoredField of ignoredFields) {
       delete fields[ignoredField];
       delete lastValues[ignoredField];
