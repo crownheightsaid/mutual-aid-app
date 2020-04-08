@@ -1,8 +1,8 @@
 const slackapi = require("../../../slackapi");
 
 const mappings = {
-  "Delivery Assigned": ":ballot_box_with_check: REQUEST ASSIGNED",
-  "Request Complete": ":white_check_mark:  REQUEST COMPLETED"
+  "Delivery Assigned": ":white_check_mark: REQUEST ASSIGNED",
+  "Request Complete": ":heavy_check_mark:  REQUEST COMPLETED"
 };
 
 /**
