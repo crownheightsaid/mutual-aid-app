@@ -175,13 +175,16 @@ class ChangeDetector {
    * Push this instance's lastModified forward based on the latest modification date of the given fields
    */
   updateLastModified(records) {
+    if (records.length === 0) {
+      return;
+    }
     const maxLastModified = _.max(
       records.map(r => {
         const rModified = r.get(lastModifiedField);
         return rModified ? new Date(rModified).getTime() : 0;
       })
     );
-    this.lastModified = new Date(maxLastModified);
+    this.lastModified = new Date(maxLastModified || 0);
   }
 }
 
