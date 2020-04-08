@@ -78,7 +78,9 @@ class ChangeDetector {
    * (but not report changes or update metadata) for all rows when it is started.
    */
   async getModifiedRecords() {
-    const cutoff = new Date(this.lastModified.getTime() - overlapMs);
+    const cutoff = new Date(
+      Math.max(this.lastModified.getTime() - overlapMs, 0)
+    );
     const records = await this.base
       .select({
         filterByFormula: `({${lastModifiedField}} > '${cutoff.toISOString()}')`
@@ -173,8 +175,13 @@ class ChangeDetector {
    * Push this instance's lastModified forward based on the latest modification date of the given fields
    */
   updateLastModified(records) {
-    const maxLastModified = _.max(records.map(r => r.get(lastModifiedField)));
-    this.lastModified = new Date(new Date(maxLastModified).getTime());
+    const maxLastModified = _.max(
+      records.map(r => {
+        const rModified = r.get(lastModifiedField);
+        return rModified ? new Date(rModified).getTime() : 0;
+      })
+    );
+    this.lastModified = new Date(maxLastModified);
   }
 }
 
