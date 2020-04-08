@@ -4,7 +4,7 @@
       "type": "Feature",
       "properties": {
         "fill": "#1a4357",
-        "id": "ne"
+        "id": "NE"
       },
       "geometry": {
         "coordinates": [
@@ -43,7 +43,7 @@
       "type": "Feature",
       "properties": {
         "fill": "#5d044c",
-        "id": "sw"
+        "id": "SW"
       },
       "geometry": {
         "coordinates": [
@@ -86,7 +86,7 @@
       "type": "Feature",
       "properties": {
         "fill": "#5e0000",
-        "id": "se"
+        "id": "SE"
       },
       "geometry": {
         "coordinates": [
@@ -137,7 +137,7 @@
       "type": "Feature",
       "properties": {
         "fill": "#574c00",
-        "id": "nw"
+        "id": "NW"
       },
       "geometry": {
         "coordinates": [
