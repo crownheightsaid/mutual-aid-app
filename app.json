@@ -16,16 +16,16 @@
       "description": "Find this in (https://airtable.com/account) under 'API'"
     },
     "AIRTABLE_BASE": {
-      "description": "Go to your airtable base. Click on 'Help -> API Documentation' in top right. Scroll to `Authenitcation`. The thing we need is in 'base('')` to the right."
+      "description": "Go to your airtable base. Click on 'Help -> API Documentation' in top right. Scroll to `Authentication`. The thing we need is in 'base('')` to the right."
     },
     "AIRTABLE_SYNC": {
       "description": "If set, run the Airtable sync worker in the main process with this frequency in milliseconds."
     },
     "GEONAME_CLIENT_ID": {
-      "description": "Use if you need /geo API routes (used in the website). It's free to get and use!"
+      "description": "Your geoname username. Use if you need /geo API routes (used in the website). It's free to get and use! https://www.geonames.org/login"
     },
     "GOOGLE_MAPS_API_KEY": {
-      "description": "Specifically the key for the geocoding service. Free for quite a bit of usage."
+      "description": "Specifically the key for the geocoding service. Free for quite a bit of usage. https://developers.google.com/maps/documentation/geocoding/get-api-key"
     },
     "APP_NAME": {
       "description": "Name of your organization (Crown Heights Mutual Aid)"
@@ -34,7 +34,7 @@
       "description": "Mapbox token for client side map. Can be found on https://account.mapbox.com/"
     },
     "BASIC_AUTH_USERS": {
-      "description": "String of username:password separated by semicolons"
+      "description": "String of username:password separated by semicolons. Used for authed routes (nycma)"
     }
   }
 }
