@@ -28,12 +28,12 @@ const MapboxMap = MAPBOX_TOKEN
     })
   : () => (
     <div>
-      Mapbox token is missing. This means that the map cannot be displayed,
-      but should not affect the functionality of the page. Please inform
-      <a href="https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD">
-        #tech.
+        Mapbox token is missing. This means that the map cannot be displayed,
+        but should not affect the functionality of the page. Please inform
+        <a href="https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD">
+          #tech.
       </a>
-    </div>
+      </div>
     );
 
 const QuadrantMap = ({ location }) => {

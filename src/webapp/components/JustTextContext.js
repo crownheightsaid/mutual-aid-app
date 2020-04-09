@@ -4,7 +4,7 @@ import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
-import { IntlLink } from "./IntlRouter";
+import { Link } from "@reach/router";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -49,9 +49,9 @@ export default function JustTextContent({
       )}
       {followupRoute && (
         <Button variant="contained" className={classes.text}>
-          <IntlLink className={classes.link} to={followupRoute}>
+          <Link className={classes.link} to={followupRoute}>
             {followupText || "Click Here"}
-          </IntlLink>
+          </Link>
         </Button>
       )}
     </Box>

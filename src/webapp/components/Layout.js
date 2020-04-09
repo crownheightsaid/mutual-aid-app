@@ -2,7 +2,7 @@ import React from "react";
 import Box from "@material-ui/core/Box";
 import { Helmet } from "react-helmet";
 
-export default function MenuAppBar({ children }) {
+export default function Layout({ children }) {
   return (
     <>
       <Helmet
