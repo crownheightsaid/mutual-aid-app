@@ -137,7 +137,7 @@ exports.findVolunteerByEmail = async email => {
   try {
     const records = await base("Volunteers")
       .select({
-        filterByFormula: `({volunteer_email} = '${email}')`
+        filterByFormula: `(LOWER({volunteer_email}) = '${email.toLowerCase()}')`
       })
       .firstPage();
     if (!records || records.length === 0) {
