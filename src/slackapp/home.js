@@ -1,11 +1,11 @@
 const assert = require("assert");
 const slackApi = require("../slackapi.js");
 
-const baseBlocks = require("../../translations/en/homeblocks/base.json");
-const volunteerSignUpBlocks = require("../../translations/en/homeblocks/volunteerSignUp.json");
-const trainedVolunteerInfo = require("../../translations/en/homeblocks/trainedVolunteerInfo.json");
-const newVolunteerInfo = require("../../translations/en/homeblocks/newVolunteerInfo.json");
-const divider = require("../../translations/en/homeblocks/divider.json");
+const baseBlocks = require("./homeblocks/base.json");
+const volunteerSignUpBlocks = require("./homeblocks/volunteerSignUp.json");
+const trainedVolunteerInfo = require("./homeblocks/trainedVolunteerInfo.json");
+const newVolunteerInfo = require("./homeblocks/newVolunteerInfo.json");
+const divider = require("./homeblocks/divider.json");
 
 const homeBlocks = {
   base: {

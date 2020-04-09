@@ -1,0 +1,1 @@
+Sections for the app's homepage. Can be composed using `home.js`
