@@ -1,14 +1,14 @@
 This project is a monorepo. The different components are:
 - `src/`
   - Common functionality that is very low level (constants, minimal Slack API, minimal airtable API, etc)
-- `src/lib`
-  - Common functionality that is higher level (sending a slack message, translating an address to lat long, etc) 
 - `src/slackapp`
   - Contains HTTP webhooks that Slack will call in response to user action 
 - `src/api`
   - HTTP api that this app provides
 - `src/webapp`
   - Frontend for the app, built with React 
+- `src/workers`
+  - Logic that runs on a schedule (polling airtable etc) 
 - `scripts/`
   - One-off scripts for things like backfill
 
