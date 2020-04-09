@@ -14,24 +14,28 @@ from slack.web.client import WebClient
 # modify these maps for testing
 
 AIRTABLE_HELP_TO_SLACK_CHANNELS_MAP = {
-    'Bike delivery': ['delivery_volunteers'],
-    'Car delivery': ['delivery_volunteers'],
-    'On foot delivery': ['delivery_volunteers'],
+    'Bike delivery': [],
+    'Car delivery': [],
+    'On foot delivery': [],
     'Financial support': [],
     'Child care': [],
     'Phoning Neighbors in need': [],
-    'Tech/admin support': ['tech']
+    'Tech/admin support': [],
+    'Automation': [],
 }
+ALL_CHANNELS = ['cars_and_bikes']
 
 AIRTABLE_HELP_TO_SLACK_USERGROUP_MAP = {
-    'Bike delivery': ['bikes'],
+    'Bike delivery': [],
     'Car delivery': ['cars'],
-    'On foot delivery': ['foot'],
+    'On foot delivery': [],
     'Financial support': [],
     'Child care': [],
     'Phoning Neighbors in need': [],
-    'Tech/admin support': ['tech_support']
+    'Tech/admin support': [],
+    'Automation': [],
 }
+ALL_GROUPS = ['cars']
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s : %(levelname)s : %(message)s')
 
@@ -39,6 +43,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s : %(levelname)s : %(
 def build_transfer_map(airtable_volunteers, email2slackid, help_map, transfer_map):
     for volunteer in airtable_volunteers:
         airtable_email = volunteer['fields'].get('volunteer_email')
+        if airtable_email is not None:
+            airtable_email = airtable_email.lower()
         ways_to_help = volunteer['fields'].get('volunteer_ways_to_help')
         if airtable_email in email2slackid and ways_to_help is not None:
             for help_way in ways_to_help:
@@ -89,6 +95,8 @@ def initialize_channels_transfer_map(slack_client):
     slack_channels = conversations_list['channels']
     transfer_map = {}
     for channel in slack_channels:
+        if channel['name'] not in ALL_CHANNELS:
+            continue
         transfer_map[channel['name']] = {
             'id': channel['id'],
             'current_member_ids': slack_client.conversations_members(channel=channel['id']).data['members'],
@@ -102,7 +110,9 @@ def initialize_usergroups_transfer_map(slack_client):
     usergroup_list = slack_client.usergroups_list()['usergroups']
     transfer_map = {}
     for usergroup in usergroup_list:
-        transfer_map[usergroup['name']] = {
+        if usergroup['handle'] not in ALL_GROUPS:
+            continue
+        transfer_map[usergroup['handle']] = {
             'id': usergroup['id'],
             'current_member_ids': slack_client.usergroups_users_list(usergroup=usergroup['id'])['users'],
             'new_member_ids': []
@@ -127,20 +137,19 @@ def do_channels(slack_client, airtable_volunteers, email2slackid):
 
     for channel_name, channel_info in channels_transfer_map.items():
         if len(channel_info['new_member_ids']) > 0:
-            slack_client.conversations_join(channel=channel_info['id'])
             new_user_emails = [email2slackid.inverse[slack_id] for slack_id in channel_info['new_member_ids']]
             logging.info('Slack Channel {0}: adding users {1}'.format(channel_name, ', '.join(new_user_emails)))
             slack_client.conversations_invite(channel=channel_info['id'], users=channel_info['new_member_ids'])
 
 
 def do_usergroups(slack_client, airtable_volunteers, email2slackid):
-    create_missing_usergroups(slack_client)
     usergroups_transfer_map = initialize_usergroups_transfer_map(slack_client)
     usergroups_transfer_map = build_transfer_map(airtable_volunteers, email2slackid,
-                                                 AIRTABLE_HELP_TO_SLACK_CHANNELS_MAP,
+                                                 AIRTABLE_HELP_TO_SLACK_USERGROUP_MAP,
                                                  usergroups_transfer_map)
 
     for group_name, group_info in usergroups_transfer_map.items():
+        logging.info('Group name {0}'.format(group_name))
         if len(group_info['new_member_ids']) > 0:
             new_user_emails = [email2slackid.inverse[slack_id] for slack_id in group_info['new_member_ids']]
             logging.info('Slack Group {0}: adding users {1}'.format(group_name, ', '.join(new_user_emails)))
@@ -148,7 +157,7 @@ def do_usergroups(slack_client, airtable_volunteers, email2slackid):
             # we combine these lists because the update function overwrites the group membership. we need to include current
             # members or they will get erased
             new_user_list = group_info['new_member_ids'] + group_info['current_member_ids']
-            slack_client.usergroups_users_update(usergroup=group_info['id'], users=group_info['new_member_ids'])
+            slack_client.usergroups_users_update(usergroup=group_info['id'], users=new_user_list)
 
 
 def main():
@@ -162,8 +171,8 @@ def main():
 
 
 
-    do_channels(slack_client, airtable_volunteers, email2slackid)
-    #do_usergroups(slack_client, airtable_volunteers, email2slackid)
+    # do_channels(slack_client, airtable_volunteers, email2slackid)
+    do_usergroups(slack_client, airtable_volunteers, email2slackid)
 
 
 if __name__ == '__main__':

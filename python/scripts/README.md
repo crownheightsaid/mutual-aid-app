@@ -1,0 +1,1 @@
+Must enable usergroup permissions for everyone here: https://crownheightsmutualaid.slack.com/admin/settings#user_group_restrictions
