@@ -77,7 +77,8 @@ async function selectRequestForSending(payload) {
     view = errorView(`Error looking up pending requests: ${err}`);
   } else if (requests.length === 0) {
     view = errorView(
-      `Couldn't find any pending requests. Do you have requests assigned to you in the 'Delivery Needed' state?`
+      "Couldn't find any pending requests. Do you have requests assigned to you in the 'Delivery Needed' state?\n" +
+        "It's also possible you already posted this in Slack using the bot."
     );
   } else {
     view = await makeRequestSelectionView(requests);

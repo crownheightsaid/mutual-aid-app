@@ -60,7 +60,7 @@ exports.atdViewSubmission = async payload => {
       throw new Error(verr);
     }
     const assignedVolunteerEmail = volunteer.get("volunteer_email");
-    if (slackUserEmail !== assignedVolunteerEmail) {
+    if (slackUserEmail.toLowerCase() !== assignedVolunteerEmail.toLowerCase()) {
       console.log(
         `Request Code Error Assignment: ${requestCode}\n${slackUserEmail}`
       );
