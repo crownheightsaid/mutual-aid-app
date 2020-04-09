@@ -7,18 +7,18 @@
   "image": "heroku/nodejs",
   "env": {
     "SLACK_BOT_TOKEN": {
-      "description": "Go to the 'Install App' tab for your app (https://api.slack.com/apps/<your-app-id>/install-on-team). This is 'Bot User Oauth Access Token'",
+      "description": "Go to the 'Install App' tab for your app (https://api.slack.com/apps/<your-app-id>/install-on-team). This is 'Bot User Oauth Access Token'"
     },
     "SLACK_SIGNING_SECRET": {
-      "description": "Go to the 'Basic Information' tab for your app (https://api.slack.com/apps/<your-app-id>/general). This is 'Signing Secret'",
+      "description": "Go to the 'Basic Information' tab for your app (https://api.slack.com/apps/<your-app-id>/general). This is 'Signing Secret'"
     },
     "AIRTABLE_KEY": {
-      "description": "Find this in (https://airtable.com/account) under 'API'",
+      "description": "Find this in (https://airtable.com/account) under 'API'"
     },
     "AIRTABLE_BASE": {
-      "description": "Go to your airtable base. Click on 'Help -> API Documentation' in top right. Scroll to `Authenitcation`. The thing we need is in 'base('')` to the right.",
+      "description": "Go to your airtable base. Click on 'Help -> API Documentation' in top right. Scroll to `Authenitcation`. The thing we need is in 'base('')` to the right."
     },
-    "AIRTABLE_SYNC":{
+    "AIRTABLE_SYNC": {
       "description": "If set, run the Airtable sync worker in the main process with this frequency in milliseconds."
     },
     "GEONAME_CLIENT_ID": {
