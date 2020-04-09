@@ -32,6 +32,9 @@
     },
     "REACT_APP_MAPBOX_TOKEN": {
       "description": "Mapbox token for client side map. Can be found on https://account.mapbox.com/"
+    },
+    "BASIC_AUTH_USERS": {
+      "description": "String of username:password separated by semicolons"
     }
   }
 }
