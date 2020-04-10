@@ -1,4 +1,5 @@
 // Triggers a airtable backfill by modifying a watched field for every record
+// https://github.com/crownheightsaid/mutual-aid-app/pull/35
 const _ = require("lodash");
 const { wait } = require("./utils");
 const { airbase, UPDATE_BATCH_SIZE } = require("../src/airtable");
