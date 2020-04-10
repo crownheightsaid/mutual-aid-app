@@ -1,6 +1,6 @@
 const { sortBy, isEqual } = require("lodash");
 const slackapi = require("../../slackapi");
-const { findChannelByName } = require("../lib/channels");
+const { findChannelByName, addBotToChannel } = require("../lib/channels");
 const { errorResponse, errorView } = require("../views");
 const {
   findOpenRequests,
@@ -131,6 +131,7 @@ async function draftConfirm(payload) {
  */
 async function sendMessage(payload) {
   const context = JSON.parse(payload.view.private_metadata);
+  await addBotToChannel(context.channelId);
 
   // Send the message
   const deliveryMessage = await slackapi.chat.postMessage({

@@ -5,6 +5,7 @@ const {
   messageErrorResponse
 } = require("../views.js");
 const slackapi = require("../../slackapi.js");
+const { addBotToChannel } = require("../lib/channels.js");
 const {
   findVolunteerById,
   updateRequestByCode,
@@ -141,6 +142,7 @@ const atdSubmitCallback = "assign-to-delivery-submit";
 
 exports.atdViewSubmissionCallbackId = atdSubmitCallback;
 exports.atdViewOpen = async payload => {
+  await addBotToChannel(payload.channel.id);
   let codeGuess = "Please enter code manually :/";
   // This means it's a reply and we can try to look for a request Code.
   if (payload.message.thread_ts !== payload.message.ts) {
