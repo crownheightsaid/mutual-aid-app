@@ -44,6 +44,7 @@ function startWorker(interval) {
     const statusFieldName = "Status";
     const codeFieldName = "Code";
     const slackIdFieldName = "Delivery slackid";
+    const triggerBackfillFieldName = "Trigger Backfill";
     console.info(`Found ${recordsChanged.length} changes in Requests`);
     for (const record of recordsChanged) {
       //TODO: use this a few more times from different contexts and think about refactoring the api
@@ -57,7 +58,9 @@ function startWorker(interval) {
       if(record.didChange(statusFieldName) || record.didChange(slackIdFieldName)){
         await updateMessageContent(record)
       }
-
+      if(record.didChange(triggerBackfillFieldName)){
+        await updateMessageContent(record)
+      }
     }
   });
 }
