@@ -353,6 +353,8 @@ function suggestedTemplate(payload, request) {
   if (quadrant.match(/^NE|SE|SW|NE$/)) {
     quadrant += " Crown Heights";
   }
+  let firstName = request.get("First Name");
+  firstName = firstName ? ` ${firstName}` : "";
 
   const services =
     request.get("What type(s) of support are you seeking?") || [];
@@ -381,7 +383,7 @@ function suggestedTemplate(payload, request) {
   // HACK: use non-breaking space as a delimiter between the status and the rest of the message: \u00A0
   return `${status}\u00A0Hey <!channel> we have a new request ${aidType} ${name} in *${quadrant}*:
 ${fieldRepresentation}
-*Want to volunteer to help our neighbor?* Comment on this thread and <@${slackId}> will follow up with more details.
+*Want to volunteer to help our neighbor${firstName}?* Comment on this thread and <@${slackId}> will follow up with more details.
 _Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive._`;
 }
 
