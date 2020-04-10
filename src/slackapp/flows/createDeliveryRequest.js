@@ -1,6 +1,6 @@
 const { sortBy, isEqual } = require("lodash");
 const slackapi = require("../../slackapi");
-const { findChannelByName } = require("../lib/channels");
+const { findChannelByName, addBotToChannel } = require("../lib/channels");
 const { errorResponse, errorView } = require("../views");
 const {
   findOpenRequests,
@@ -48,6 +48,7 @@ module.exports.register = function register(slackInteractions) {
  * Presents a new modal with a selector for all open requests (that aren't on slack already)
  */
 async function selectRequestForSending(payload) {
+  await addBotToChannel(payload.channel.id);
   const slackUserResponse = await slackapi.users.info({
     token: process.env.SLACK_BOT_TOKEN,
     user: payload.user.id
@@ -131,6 +132,7 @@ async function draftConfirm(payload) {
  */
 async function sendMessage(payload) {
   const context = JSON.parse(payload.view.private_metadata);
+  await addBotToChannel(context.channelId);
 
   // Send the message
   const deliveryMessage = await slackapi.chat.postMessage({
