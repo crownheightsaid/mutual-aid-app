@@ -59,6 +59,7 @@ function startWorker(interval) {
         await updateMessageContent(record)
       }
       if(record.didChange(triggerBackfillFieldName)){
+        console.log("Backfill: " + record.get("Code"));
         await updateMessageContent(record)
       }
     }

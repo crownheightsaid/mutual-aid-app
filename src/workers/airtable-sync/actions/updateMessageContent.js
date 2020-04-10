@@ -24,6 +24,7 @@ module.exports = async function updateMessageContent(record) {
   );
 
   if (existingMessage == null) {
+    console.log(`No existing message for code: ${record.get("Code")}`);
     return;
   }
   const content = existingMessage.text;

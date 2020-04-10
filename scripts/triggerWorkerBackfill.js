@@ -12,7 +12,6 @@ const { airbase, UPDATE_BATCH_SIZE } = require("../src/airtable");
     .all();
   const updates = [];
   allResults.forEach(r => {
-    console.log(r.get("Code"));
     const triggerCounter = r.get("Trigger Backfill") || 0;
     updates.push({
       id: r.id,
