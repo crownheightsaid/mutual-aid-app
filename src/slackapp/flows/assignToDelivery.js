@@ -14,9 +14,10 @@ const {
 exports.atdViewSubmission = async payload => {
   try {
     const flowMetadata = JSON.parse(payload.view.private_metadata);
+    const volunteerSlackId = payload.user.id;
     const slackUserResponse = await slackapi.users.info({
       token: process.env.SLACK_BOT_TOKEN,
-      user: payload.user.id
+      user: volunteerSlackId
     });
     const slackUserEmail = slackUserResponse.user.profile.email;
 
@@ -89,7 +90,7 @@ exports.atdViewSubmission = async payload => {
     if (shouldDirectMessage) {
       const dmResponse = await slackapi.conversations.open({
         token: process.env.SLACK_BOT_TOKEN,
-        users: `${delivererSlackId},${volunteer.get("volunteer_slack_id")}`
+        users: `${delivererSlackId},${volunteerSlackId}`
       });
       const messageId = dmResponse.channel.id;
       await slackapi.chat.postMessage({
@@ -109,7 +110,8 @@ exports.atdViewSubmission = async payload => {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: `*Phone:*\n>${request.get(
+              text: `*First Name:*\n>${request.get("First Name") ||
+                "N/A"}\n*Phone:*\n>${request.get(
                 "Phone"
               )}\n*Cross Streets:*\n>${request.get(
                 "Cross Street #1"
