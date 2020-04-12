@@ -94,6 +94,15 @@ exports.atdViewSubmission = async payload => {
         users: `${delivererSlackId},${volunteerSlackId}`
       });
       const messageId = dmResponse.channel.id;
+      const dmLines = [
+        `*Request Code:*\n>${request.get("Code") || "N/A"}`,
+        `*First Name:*\n>${request.get("First Name") || "N/A"}`,
+        `*Phone:*\n>${request.get("Phone")}`,
+        `*Cross Streets:*\n>${request.get("Cross Street #1")} & ${request.get(
+          "Cross Street #2"
+        )}`,
+        `*Request Notes:*\n>${request.get("Intake General Notes")}`
+      ];
       await slackapi.chat.postMessage({
         token: process.env.SLACK_BOT_TOKEN,
         channel: messageId,
@@ -111,14 +120,7 @@ exports.atdViewSubmission = async payload => {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: `*First Name:*\n>${request.get("First Name") ||
-                "N/A"}\n*Phone:*\n>${request.get(
-                "Phone"
-              )}\n*Cross Streets:*\n>${request.get(
-                "Cross Street #1"
-              )} & ${request.get(
-                "Cross Street #2"
-              )}\n*Request Notes:*\n>${request.get("Intake General Notes")}`
+              text: dmLines.join("\n")
             }
           }
         ]
