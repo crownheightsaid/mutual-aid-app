@@ -137,7 +137,7 @@ def do_usergroups(slack_client, airtable_volunteers, email2slackid):
     create_missing_usergroups(slack_client)
     usergroups_transfer_map = initialize_usergroups_transfer_map(slack_client)
     usergroups_transfer_map = build_transfer_map(airtable_volunteers, email2slackid,
-                                                 AIRTABLE_HELP_TO_SLACK_CHANNELS_MAP,
+                                                 AIRTABLE_HELP_TO_SLACK_USERGROUP_MAP,
                                                  usergroups_transfer_map)
 
     for group_name, group_info in usergroups_transfer_map.items():
