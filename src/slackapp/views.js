@@ -14,6 +14,35 @@ const errorView = msg => {
       type: "plain_text",
       text: "Error :("
     },
+    close: {
+      type: "plain_text",
+      text: "Close",
+      emoji: true
+    },
+    blocks: [
+      {
+        type: "section",
+        text: {
+          type: "plain_text",
+          text: msg
+        }
+      }
+    ]
+  };
+};
+
+const successView = msg => {
+  return {
+    type: "modal",
+    title: {
+      type: "plain_text",
+      text: "Done!"
+    },
+    close: {
+      type: "plain_text",
+      text: "Close",
+      emoji: true
+    },
     blocks: [
       {
         type: "section",
@@ -27,6 +56,7 @@ const errorView = msg => {
 };
 
 exports.errorView = errorView;
+exports.successView = successView;
 
 exports.errorResponse = msg => {
   return {
@@ -38,21 +68,6 @@ exports.errorResponse = msg => {
 exports.successResponse = msg => {
   return {
     response_action: "update",
-    view: {
-      type: "modal",
-      title: {
-        type: "plain_text",
-        text: "Done!"
-      },
-      blocks: [
-        {
-          type: "section",
-          text: {
-            type: "plain_text",
-            text: msg
-          }
-        }
-      ]
-    }
+    view: successView(msg)
   };
 };
