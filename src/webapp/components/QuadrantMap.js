@@ -5,7 +5,7 @@ import ReactMapboxGl, {
   Source,
   ZoomControl
 } from "react-mapbox-gl";
-import { LngLat } from "mapbox-gl";
+import { LngLat, LngLatBounds } from "mapbox-gl";
 import quadrantsGeoJSON from "../../assets/crownheights.json";
 import { findBounds } from "../helpers/mapbox-coordinates";
 
@@ -19,22 +19,27 @@ const CROWN_HEIGHTS_BOUNDS = findBounds(
   }, [])
 );
 
-const CROWN_HEIGHTS_CENTER_COORD = new LngLat(-73.943018, 40.671254);
+const CROWN_HEIGHTS_CENTER_COORD = new LngLatBounds(
+  CROWN_HEIGHTS_BOUNDS[0],
+  CROWN_HEIGHTS_BOUNDS[1]
+).getCenter();
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+
+const MissingMap = () => (
+  <div>
+    Mapbox token is missing. This means that the map cannot be displayed, but
+    should not affect the functionality of the page. Please inform&nbsp;
+    <a href="https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD">
+      #tech.
+    </a>
+  </div>
+);
 
 const MapboxMap = MAPBOX_TOKEN
   ? ReactMapboxGl({
       accessToken: MAPBOX_TOKEN
     })
-  : () => (
-    <div>
-        Mapbox token is missing. This means that the map cannot be displayed,
-        but should not affect the functionality of the page. Please inform
-        <a href="https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD">
-          #tech.
-      </a>
-      </div>
-    );
+  : MissingMap;
 
 const QuadrantMap = ({ location }) => {
   const lnglat = location && new LngLat(location.lng, location.lat);
@@ -43,7 +48,7 @@ const QuadrantMap = ({ location }) => {
     : CROWN_HEIGHTS_BOUNDS;
 
   return (
-    <MapboxMap
+    <MapboxMap // eslint-disable-next-line react/style-prop-object
       style="mapbox://styles/mapbox/bright-v9"
       center={CROWN_HEIGHTS_CENTER_COORD}
       containerStyle={{
