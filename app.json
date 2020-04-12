@@ -38,7 +38,7 @@
       "description": "Name of your organization (Crown Heights Mutual Aid)",
       "required": false
     },
-    "REACT_APP_MAPBOX_TOKEN": {
+    "REACT_APP_MAPBOX_ACCESS_TOKEN": {
       "description": "Mapbox token for client side map. Can be found on https://account.mapbox.com/",
       "required": false
     },
