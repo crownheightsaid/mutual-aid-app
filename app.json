@@ -7,34 +7,44 @@
   "image": "heroku/nodejs",
   "env": {
     "SLACK_BOT_TOKEN": {
-      "description": "Go to the 'Install App' tab for your app (https://api.slack.com/apps/<your-app-id>/install-on-team). This is 'Bot User Oauth Access Token'"
+      "description": "Go to the 'Install App' tab for your app (https://api.slack.com/apps/<your-app-id>/install-on-team). This is 'Bot User Oauth Access Token'",
+      "required": false
     },
     "SLACK_SIGNING_SECRET": {
-      "description": "Go to the 'Basic Information' tab for your app (https://api.slack.com/apps/<your-app-id>/general). This is 'Signing Secret'"
+      "description": "Go to the 'Basic Information' tab for your app (https://api.slack.com/apps/<your-app-id>/general). This is 'Signing Secret'",
+      "required": false
     },
     "AIRTABLE_KEY": {
-      "description": "Find this in (https://airtable.com/account) under 'API'"
+      "description": "Find this in (https://airtable.com/account) under 'API'",
+      "required": false
     },
     "AIRTABLE_BASE": {
-      "description": "Go to your airtable base. Click on 'Help -> API Documentation' in top right. Scroll to `Authentication`. The thing we need is in 'base('')` to the right."
+      "description": "Go to your airtable base. Click on 'Help -> API Documentation' in top right. Scroll to `Authentication`. The thing we need is in 'base('')` to the right.",
+      "required": false
     },
     "AIRTABLE_SYNC": {
-      "description": "If set, run the Airtable sync worker in the main process with this frequency in milliseconds."
+      "description": "If set, run the Airtable sync worker in the main process with this frequency in milliseconds.",
+      "required": false
     },
     "GEONAME_CLIENT_ID": {
-      "description": "Your geoname username. Use if you need /geo API routes (used in the website). It's free to get and use! https://www.geonames.org/login. After creating an account, make sure to enable the API: https://www.geonames.org/enablefreewebservice"
+      "description": "Your geoname username. Use if you need /geo API routes (used in the website). It's free to get and use! https://www.geonames.org/login. After creating an account, make sure to enable the API: https://www.geonames.org/enablefreewebservice",
+      "required": false
     },
     "GOOGLE_MAPS_API_KEY": {
-      "description": "Specifically the key for the geocoding service. Free for quite a bit of usage. https://developers.google.com/maps/documentation/geocoding/get-api-key"
+      "description": "Specifically the key for the geocoding service. Free for quite a bit of usage. https://developers.google.com/maps/documentation/geocoding/get-api-key",
+      "required": false
     },
     "APP_NAME": {
-      "description": "Name of your organization (Crown Heights Mutual Aid)"
+      "description": "Name of your organization (Crown Heights Mutual Aid)",
+      "required": false
     },
     "REACT_APP_MAPBOX_TOKEN": {
-      "description": "Mapbox token for client side map. Can be found on https://account.mapbox.com/"
+      "description": "Mapbox token for client side map. Can be found on https://account.mapbox.com/",
+      "required": false
     },
     "BASIC_AUTH_USERS": {
-      "description": "String of username:password separated by semicolons. Used for authed routes (nycma)"
+      "description": "String of username:password separated by semicolons. Used for authed routes (nycma)",
+      "required": false
     }
   }
 }
