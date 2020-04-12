@@ -4,8 +4,6 @@ const path = require("path");
 const express = require("express");
 const basicAuth = require("express-basic-auth");
 const bodyParser = require("body-parser");
-const eventsHandler = require("./src/slackapp/endpoints/events.js");
-const interactivityHandler = require("./src/slackapp/endpoints/interactivity.js");
 const airtableWorker = require("./src/workers/airtable-sync/worker");
 const { addressHandler } = require("./src/api/geo.js");
 const { nycmaIntakeHandler } = require("./src/api/authed/intake/nycma.js");
@@ -14,6 +12,7 @@ const {
   neighborhoodFinderUpdateRequestHandler
 } = require("./src/api/neighborhood-finder/update-request.js");
 
+/* eslint-disable global-require  */
 const app = express();
 
 if (!process.env.AIRTABLE_BASE || !process.env.AIRTABLE_KEY) {
@@ -25,8 +24,11 @@ if (!process.env.AIRTABLE_BASE || !process.env.AIRTABLE_KEY) {
 // ==================================================================
 
 if (process.env.SLACK_BOT_TOKEN && process.env.SLACK_SIGNING_SECRET) {
-  app.post("/slack/events", eventsHandler);
-  app.post("/slack/interactivity", interactivityHandler);
+  app.post("/slack/events", require("./src/slackapp/endpoints/events.js"));
+  app.post(
+    "/slack/interactivity",
+    require("./src/slackapp/endpoints/interactivity.js")
+  );
 } else {
   console.warn("Slack tokens are missing! Slack routes won't exist.");
 }
