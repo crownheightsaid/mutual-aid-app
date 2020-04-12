@@ -22,7 +22,7 @@
       "description": "If set, run the Airtable sync worker in the main process with this frequency in milliseconds."
     },
     "GEONAME_CLIENT_ID": {
-      "description": "Your geoname username. Use if you need /geo API routes (used in the website). It's free to get and use! https://www.geonames.org/login"
+      "description": "Your geoname username. Use if you need /geo API routes (used in the website). It's free to get and use! https://www.geonames.org/login. After creating an account, make sure to enable the API: https://www.geonames.org/enablefreewebservice"
     },
     "GOOGLE_MAPS_API_KEY": {
       "description": "Specifically the key for the geocoding service. Free for quite a bit of usage. https://developers.google.com/maps/documentation/geocoding/get-api-key"
