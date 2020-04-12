@@ -6,10 +6,14 @@ const {
 } = require("../views");
 const slackapi = require("../../slackapi");
 const guard = require("../lib/guard");
+const { findChannelByName, listMembers } = require("../lib/channels");
 
 editPost.id = "edit_post";
 saveEdits.id = "save_post_edit";
 deletePost.id = "delete_post";
+
+// Members of these channels can edit messages
+const editorsAllowedChannels = ["#admin", "#intake_volunteers"];
 
 /**
  * Adds a message shortcut to allow users to edit bot messages.
@@ -37,7 +41,7 @@ module.exports.register = function register(slackInteractions) {
 };
 
 async function editPost(payload) {
-  const { message, channel } = payload;
+  const { message, channel, user } = payload;
   if (!message) {
     return openError(
       payload.trigger_id,
@@ -50,6 +54,13 @@ async function editPost(payload) {
     return openError(
       payload.trigger_id,
       "You can only edit messages posted by the bot."
+    );
+  }
+  const canEdit = await userCanEditMessage(user, message);
+  if (!canEdit) {
+    return openError(
+      payload.trigger_id,
+      "You aren't permitted to edit this message."
     );
   }
   const view = await makeEditPostView(payload, message, channel);
@@ -94,6 +105,23 @@ async function deletePost(payload) {
     view_id: payload.view.id,
     view: successView("Message successfully deleted")
   });
+}
+
+async function userCanEditMessage(user, message) {
+  if (message.text.includes(`<@${user.id}>`)) {
+    return true;
+  }
+  for (const channelName of editorsAllowedChannels) {
+    /* eslint no-await-in-loop: off */
+    const channel = await findChannelByName(channelName);
+    if (channel) {
+      const [members, _error] = await listMembers(channel.id);
+      if (members.includes(user.id)) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 async function makeEditPostView(payload, message, channel) {
@@ -179,7 +207,7 @@ async function makeEditPostView(payload, message, channel) {
 }
 
 function openError(triggerId, message) {
-  console.log(message);
+  console.log(`Got error: ${message}`);
   return slackapi.views.open({
     trigger_id: triggerId,
     view: errorView(message)

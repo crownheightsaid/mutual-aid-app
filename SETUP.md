@@ -21,7 +21,7 @@ Finish setting up your slack app
           -   (Name) Edit Post (Callback ID) edit_post
           -   (Name) Post Open Request (Location) Global (Callback ID) select_delivery_needed_request
 1. Go to "Oauth and Permissions"
-     - Add bot scopes: "`commands`", "`users:read`", "`users:read.email`" "`channels:history`" "`channels:write`" "`chat:write`" "`chat:write_public`"
+     - Add bot scopes: "`commands`", "`users:read`", "`users:read.email`" "`channels:history`" "`channels:write`" "`chat:write`" "`chat:write_public`" "`groups:read`"
 1. Go to "Event Subscriptions"
      - Turn on.
      - Add your full `/slack/events` heroku URL to "Request URL"
