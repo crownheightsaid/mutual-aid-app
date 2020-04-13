@@ -45,7 +45,7 @@ function isSMSPaymentCode(str) {
   return typeof str === 'string' || str instanceof String  // sorry stackoverflow told me this is the best way to do string checks I have no idea
          && (
           (string.length == 4 && string[0] != "!" && string[0] != "$")
-          || (string.length == 5 && (string[0] == "!" || string[0] == "$")
+          || (string.length == 5 && (string[0] == "!" || string[0] == "$"))
          );
 };
 
