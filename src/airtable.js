@@ -158,9 +158,11 @@ exports.findVolunteerById = async id => {
 };
 
 
-// ------ PAYMENT REQUESTS TABLE ---------
+// ==================================================================
+// Payment Requests Table
+// ==================================================================
 
-exports.findReimbursablePaymentRequests = async => {
+exports.findReimbursablePaymentRequests = async () => {
   try {
     const records = await base("PaymentRequests")
       .select({
@@ -178,15 +180,17 @@ exports.findReimbursablePaymentRequests = async => {
 };
 
 
-// ------ BALANCER TABLE ---------
+// ==================================================================
+// Balancer Table
+// ==================================================================
 
-exports.findBalancer = async (paymentMethod) => {
+exports.findBalancer = async paymentMethod => {
   try {
     const record = await base("Balancers")
       .select({
         // hate these hard-codes, consider getting from a static reference elsewhere or something
-        filterByFormula: `And({${paymentMethod} ID} != null, {Deactivated}!=TRUE())`,
-        sort: [{field: "Total Outstanding", direction: "asc"}]
+        filterByFormula: `And({${paymentMethod}ID} != null, {Deactivated}!=TRUE())`,
+        sort: [{field: "TotalOutstanding", direction: "asc"}]
       })
       .firstPage();
     return record
@@ -199,21 +203,14 @@ exports.findBalancer = async (paymentMethod) => {
 };
 
 
-// ------ DONORPAYMENTS TABLE ---------
+// ==================================================================
+// Donor Payments Table
+// ==================================================================
 
-exports.createDonorPayment = async request => {
+exports.createDonorPayment = async donorPayment => {
   console.log("creating donor payments record");
   try {
-    const record = await base("DonorPayments").create({
-      "Donor": ,
-      Phone: request.phone || "",
-      "Text or Voice?": request.source,
-      "External Id": request.externalId || "",
-      "Cross Street #1": request.crossStreets || "",
-      "Email Address": request.email || "",
-      "Time Sensitivity": request.urgency || "",
-      Status: "Dispatch Needed"
-    });
+    const record = await base("DonorPayments").create(donorPayment);
     return [record, null];
   } catch (e) {
     console.error(`Couldn't create request: ${e}`);
@@ -221,7 +218,7 @@ exports.createDonorPayment = async request => {
   }
 };
 
-exports.findDonorPaymentByCode = async (code) => {
+exports.findDonorPaymentByCode = async code => {
   try {
     const record = await base("DonorPayments")
       .select({

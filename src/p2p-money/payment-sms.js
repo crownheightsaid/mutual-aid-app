@@ -19,13 +19,13 @@ module.exports = {
   // Unfortunately, there is nobody who can accept your donation right now.
   // {NEED DISCUSSION OF WHAT TO DO, LOW PRIORIRTY, HOPEFULLY WILL NEVER HAPPEN}
   cannotAcceptDonation: function(phone) {
-  }
+  },
 
   // You should have received a payment for $20 with code `XYZB` as a reimbursement for job #1234.
   // If you have, please respond `XYZB` to this message.
   // If you have not, please respond `!XYZB` so we can follow up with the donor. Thank you!
   recipientConfirmation: function(phone, payment) {
-  }
+  },
 
   // @SteveHarrington said they have not received your Venmo donation of $20 with code XYZB.
   // If you sent this but may have forgotten to include the code XYZB for reference, please respond with `XYZB`
@@ -33,5 +33,5 @@ module.exports = {
   // If you did not send this and will not send it, please respond with `!XYZB` so we can have another donor reimburse them for the expenses.
   // Thank you!
   donorConfirmation: function(phone, payment) {
-  }
+  },
 };

@@ -68,7 +68,7 @@ function isNewDonor(record) {
 //
 
 function newPaymentRequest(record) {
-  console.debug(`New Payment Request: ${record.get("ID")}  |  ${record.get("First Name")}  |  ${record.get("Amount")}  |  ${record.get("Created")}`);
+  console.debug(`New Payment Request: ${record.get("ID")}  |  ${record.get("FirstName")}  |  ${record.get("Amount")}  |  ${record.get("Created")}`);
 
   // TODO
   // Send slack notification to kanban board for approving payment requests
@@ -76,7 +76,7 @@ function newPaymentRequest(record) {
 
 
 function newModApproval(record) {
-  console.debug(`New Mod Payment Request Approval: ${record.get("ID")}  |  ${record.get("First Name")}  |  ${record.get("Amount")}  |  ${record.get("Created")}`);
+  console.debug(`New Mod Payment Request Approval: ${record.get("ID")}  |  ${record.get("FirstName")}  |  ${record.get("Amount")}  |  ${record.get("Created")}`);
 
   // TODO
   // Send slack message (and others?) announcing the need for reimbursement
@@ -84,7 +84,7 @@ function newModApproval(record) {
 
 
 function newDonor(record) {
-  console.debug(`New Donor: ${record.get("ID")}  |  ${record.get("First Name")}  |  ${record.get("Amount")}  |  ${record.get("Created")}`);
+  console.debug(`New Donor: ${record.get("ID")}  |  ${record.get("FirstName")}  |  ${record.get("Amount")}  |  ${record.get("Created")}`);
 
   const { paymentRequests, message } = Airbase.findReimbursablePaymentRequests();
   console.debug(paymentRequests);

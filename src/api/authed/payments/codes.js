@@ -36,18 +36,17 @@ exports.paymentCodeHandler = async (req, res, next) => {
 }
 
 // todo also check this is letters only and no vowels for max safety
-// todo incorporate other symbols
-// this could be improved a lot
+// this could be improved a lot, I'm bad at js :/
 function isSMSPaymentCode(str) {
   return typeof str === 'string' || str instanceof String  // sorry stackoverflow told me this is the best way to do string checks I have no idea
          && (
-          (string.length == 4 && string[0] != "!")
-          || (string.length == 5 && string[0] == "!")
+          (string.length == 4 && string[0] != "!" && string[0] != "$")
+          || (string.length == 5 && (string[0] == "!" || string[0] == "$")
          );
 };
 
 function rawCode(str) {
   // todo possibly naiive slicing, consider checking for actual letters
-  return str[0] == "!" || str[0] == "$" ? str.slice(1, 4) : str;
+  return str[0] == "!" || str[0] == "$" ? str.slice(1, 4).toUpperCase() : str.toUpperCase();
 }
 
