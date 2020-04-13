@@ -157,9 +157,73 @@ exports.findVolunteerById = async id => {
   }
 };
 
-exports.findPaymentByCode = async (code) => {
+
+// ------ PAYMENT REQUESTS TABLE ---------
+
+exports.findReimbursablePaymentRequests = async => {
   try {
-    const record = await base("Requests")
+    const records = await base("PaymentRequests")
+      .select({
+        filterByFormula: `And({Approval} = 'Approved', {Paid}=0`,
+        sort: [{field: "Created", direction: "asc"}]
+      })
+      .firstPage();
+    return records
+      ? [records, null]
+      : [null, "No pending payment requests"];
+  } catch (e) {
+    console.error(`Error while fetching reimbursable payment requests ${e}`); // TODO cargo culted from above, what is this rescuing?
+    return [null, e.message];
+  }
+};
+
+
+// ------ BALANCER TABLE ---------
+
+exports.findBalancer = async (paymentMethod) => {
+  try {
+    const record = await base("Balancers")
+      .select({
+        // hate these hard-codes, consider getting from a static reference elsewhere or something
+        filterByFormula: `And({${paymentMethod} ID} != null, {Deactivated}!=TRUE())`,
+        sort: [{field: "Total Outstanding", direction: "asc"}]
+      })
+      .firstPage();
+    return record
+      ? [record[0], null]
+      : [null, "No balancers available for this payment method."];
+  } catch (e) {
+    console.error(`Error while fetching balancers: ${e}`); // TODO cargo culted from above, what is this rescuing?
+    return [null, e.message];
+  }
+};
+
+
+// ------ DONORPAYMENTS TABLE ---------
+
+exports.createDonorPayment = async request => {
+  console.log("creating donor payments record");
+  try {
+    const record = await base("DonorPayments").create({
+      "Donor": ,
+      Phone: request.phone || "",
+      "Text or Voice?": request.source,
+      "External Id": request.externalId || "",
+      "Cross Street #1": request.crossStreets || "",
+      "Email Address": request.email || "",
+      "Time Sensitivity": request.urgency || "",
+      Status: "Dispatch Needed"
+    });
+    return [record, null];
+  } catch (e) {
+    console.error(`Couldn't create request: ${e}`);
+    return [null, e];
+  }
+};
+
+exports.findDonorPaymentByCode = async (code) => {
+  try {
+    const record = await base("DonorPayments")
       .select({
         // hate these hard-codes, consider getting from a static reference elsewhere or something
         filterByFormula: `And({Code} = '${code}', {Status}!="Completed", {Status}!="FailedNoAnswer", {Status}!="FailedDonorBackedOut")`
@@ -169,16 +233,11 @@ exports.findPaymentByCode = async (code) => {
       ? [record[0], null]
       : [null, "Valid payment with that code not found"];
   } catch (e) {
-    console.error(`Error while fetching request by code: ${code}`); // TODO cargo culted from above, what is this rescuing? hopefully not just a network error...
+    console.error(`Error while fetching request by code ${code}: ${e}`); // TODO cargo culted from above, what is this intended to rescue?
     return [null, e.message];
   }
 };
-// exports.findDonorById = async id => {
-//   return base("Donors").find(id);
-// };
-// exports.findPaymentRequestById = async id => {
-//   return base("Volunteers").find(id);
-// };
+
 
 
 

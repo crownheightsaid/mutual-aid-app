@@ -3,6 +3,8 @@
 
 
 const Airbase = require("../airtable");
+const PaymentSMS = require("./payment-sms");
+const PendingPayments = require("./pending-payments");
 
 module.exports = {
 
@@ -26,10 +28,14 @@ module.exports = {
 
   // Incoming from twilio (via API payment code handler)
   // handles incoming payment codes, treats as claims that payment was sent/not sent/received/not received
-  processSMSPaymentCode: function(record, code, senderTel) {
-
-    // todo receive payment code business logic, as per spec
+  processSMSPaymentCode: function(donorPayment, code, senderTel) {
+    PendingPayments.processReceivedCode(donorPayment, code, senderTel);
   },
+
+  // Every unfinished payment can be run through this on a schedule to trigger actions as needed
+  processPendingPayment: function(donorPayment) {
+    PendingPayments.processWithSchedule(donorPayment);
+  }
 };
 
 //
@@ -80,11 +86,59 @@ function newModApproval(record) {
 function newDonor(record) {
   console.debug(`New Donor: ${record.get("ID")}  |  ${record.get("First Name")}  |  ${record.get("Amount")}  |  ${record.get("Created")}`);
 
-  // TODO
-  // Divide up the payment
-  // Create DonorPayment records
-  // Text the donor the payments to send
+  const { paymentRequests, message } = Airbase.findReimbursablePaymentRequests();
+  console.debug(paymentRequests);
+
+  if (paymentRequests == null) {
+    const { balancer, balancerMessage } = Airbase.findBalancer(record.PaymentMethod);
+    if (balancer != null) {
+      PaymentSMS.balancerForDonor(record.mobile, balancer)
+    } else {
+      PaymentSMS.cannotAcceptDonation(record.mobile);
+    }
+  } else {
+    const payments = createPayments(record, paymentRequests);
+    PaymentSMS.paymentsForDonor(payments);
+  }
+
 };
+
+function createPayments(donor, paymentRequests) {
+
+  let remaining = donor.amount;
+  let donorPayments = [];
+  for (let request in paymentRequests) {
+
+    // bail early if we're done, else set the amount and reduce the remaining
+    if (remaining <= 0) { break; }
+    let amount = Math.Min(donor.amount, request.amount);
+    remaining -= amount;
+
+    // create the payment record in airtable
+    let payment = {
+      "Donor":                  donor.ID,
+      "Payment Request":        request.ID,
+      "Amount":                 amount,
+      "Code":                   generateCode(),
+      "Donor Confirmation":     "Pending",
+      "Recipient Confirmation": "Pending",
+      "Status":                 "Pending",
+    };
+    Airbase.createDonorPayment(payment);
+    payments << payment;
+  }
+
+  return payments;
+}
+
+function generateCode() {
+  const length = 4;
+  const chars = 'BCDFGHJKLMNPQRSTVWXYZ'
+
+  let result = '';
+  for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+  return result;
+}
 
 
 
