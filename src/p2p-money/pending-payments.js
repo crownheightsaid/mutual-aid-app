@@ -1,17 +1,22 @@
 // Scheduled checks on payment statuses
 
 module.exports = {
-
-  processReceivedCode: function(payment, code, senderTel) {
-    if (senderTel != payment.get("PayerMobile") && senderTel != payment.get("PayeeMobile")) {
-      throw new Error("Sender phone # is not associated with the payment specified.");
+  processReceivedCode(payment, code, senderTel) {
+    if (
+      senderTel != payment.get("PayerMobile") &&
+      senderTel != payment.get("PayeeMobile")
+    ) {
+      throw new Error(
+        "Sender phone # is not associated with the payment specified."
+      );
     }
 
     const isPayee = senderTel != payment.payerMobile;
     // map these for legibility
-    let response = mapCodeToResponse(code);
+    const response = mapCodeToResponse(code);
 
-    if (isPayee) { // is runner or receiving balancer
+    if (isPayee) {
+      // is runner or receiving balancer
       switch (response) {
         case "yes":
           // Consider finalized - Update status to Completed
@@ -24,7 +29,8 @@ module.exports = {
           // shouldn't happen, consider sending back a "that didn't make any sense" and the full instructions again
           break;
       }
-    } else { // is paying donor or sending balancer
+    } else {
+      // is paying donor or sending balancer
       switch (response) {
         case "yes":
           // Donor says they sent
@@ -41,10 +47,9 @@ module.exports = {
           break;
       }
     }
-
   },
 
-  processPendingPayment: function(pmt) {
+  processPendingPayment(pmt) {
     const minutesOld = Date.now() - new Date(pmt.get("Created")) / (1000 * 60);
     const status = pmt.get("Status");
 
@@ -58,16 +63,15 @@ module.exports = {
       // (i.e. no response from donor after runner said they weren’t paid)
       // OPEN: assume not paid? Or follow up with runner one last time?
     }
-  },
-
+  }
 };
 
 function mapCodeToResponse(code) {
   if (code[0] == "!") {
     return "no";
-  } else if (code[0] == "$") {
-    return "wait";
-  } else {
-    return "yes";
   }
-};
+  if (code[0] == "$") {
+    return "wait";
+  }
+  return "yes";
+}
