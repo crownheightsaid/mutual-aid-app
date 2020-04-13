@@ -24,7 +24,7 @@ exports.createRequest = async request => {
       [fields.crossStreetFirst]: request.crossStreets || "",
       [fields.email]: request.email || "",
       [fields.timeSensitivity]: request.urgency || "",
-      [fields.status]: fields.status_options.dispatchNeeded
+      [fields.status]: request.status || fields.status_options.dispatchNeeded
     });
     return [record, null];
   } catch (e) {
@@ -92,6 +92,24 @@ exports.findRequestByCode = async code => {
     }
     const record = records[0];
     return [record, null];
+  } catch (e) {
+    return [null, `Error while finding request: ${e}`];
+  }
+};
+
+exports.findRequestByPhone = async phone => {
+  try {
+    const records = await requestsTable
+      .select({
+        maxRecords: 1,
+        fields: [fields.phone],
+        filterByFormula: `({${fields.phone}} = '${phone}')`
+      })
+      .firstPage();
+    if (records && records.length === 0) {
+      return [null, "No existing request with that phone"];
+    }
+    return [records[0], null];
   } catch (e) {
     return [null, `Error while finding request: ${e}`];
   }
