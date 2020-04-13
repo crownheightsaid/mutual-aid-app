@@ -12,20 +12,24 @@ const P2pMoney = require("./../../../p2p-money/p2p-money");
 
 exports.paymentCodeHandler = async (req, res, next) => {
 
-  if (!isSMSPaymentCode(req.body.code)) {
+  // trim whitespace and upcase
+  const code = req.body.code.trim().toUpperCase();
 
+  if (!isSMSPaymentCode(code)) {
     const err = new Error("Payment could not be found; code does not match expected format"); // TODO once formats are final, consider instructions "please ensure code is 4 letters, optionally beginning with..."
     err.statusCode = 404;
     return next(err);
   }
 
-  const { record, message } = Airbase.findDonorPaymentByCode(rawCode(req.body.code));
+  // find by raw code, no prefixes
+  const { record, message } = Airbase.findDonorPaymentByCode(rawCode(code));
 
   if (record == null) {
     const err = new Error(message);
     err.statusCode = 404;
     return next(err);
-  } else if (req.tel != record.PayerMobile && req.tel != record.PayeeMobile) {
+    // TODO need to compare phone numbers properly
+  } else if (req.tel != record.get("PayerMobile") && req.tel != record.get("PayeeMobile")) {
     const err = new Error("A payment could not be found that matches both the code and sender's phone #."); // TODO consider improvements as above, also consider checking for phone # and resending any instructions
     err.statusCode = 404;
     return next(err);
@@ -45,8 +49,9 @@ function isSMSPaymentCode(str) {
          );
 };
 
+// less any prefixes, so we can find in airtable
 function rawCode(str) {
   // todo possibly naiive slicing, consider checking for actual letters
-  return str[0] == "!" || str[0] == "$" ? str.slice(1, 4).toUpperCase() : str.toUpperCase();
+  return str[0] == "!" || str[0] == "$" ? str.slice(1, 4) : str;
 }
 

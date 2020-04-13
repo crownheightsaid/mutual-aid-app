@@ -90,11 +90,11 @@ function newDonor(record) {
   console.debug(paymentRequests);
 
   if (paymentRequests == null) {
-    const { balancer, balancerMessage } = Airbase.findBalancer(record.PaymentMethod);
+    const { balancer, balancerMessage } = Airbase.findBalancer(record.get("PaymentMethod"));
     if (balancer != null) {
-      PaymentSMS.balancerForDonor(record.mobile, balancer)
+      PaymentSMS.balancerForDonor(record.get("Mobile"), balancer)
     } else {
-      PaymentSMS.cannotAcceptDonation(record.mobile);
+      PaymentSMS.cannotAcceptDonation(record.get("Mobile"));
     }
   } else {
     const payments = createPayments(record, paymentRequests);
@@ -105,19 +105,19 @@ function newDonor(record) {
 
 function createPayments(donor, paymentRequests) {
 
-  let remaining = donor.amount;
+  let remaining = donor.get("Amount");
   let donorPayments = [];
   for (let request in paymentRequests) {
 
     // bail early if we're done, else set the amount and reduce the remaining
     if (remaining <= 0) { break; }
-    let amount = Math.Min(donor.amount, request.amount);
+    let amount = Math.Min(donor.get("Amount"), request.get("ReimbursementAmount"));
     remaining -= amount;
 
     // create the payment record in airtable
     let payment = {
-      "Donor":                  donor.ID,
-      "Payment Request":        request.ID,
+      "Donor":                  donor.get("ID"),
+      "Payment Request":        request.get("ID"),
       "Amount":                 amount,
       "Code":                   generateCode(),
       "Donor Confirmation":     "Pending",
