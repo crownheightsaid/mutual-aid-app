@@ -73,7 +73,7 @@ exports.findOpenRequests = async () => {
       try {
         parsed = JSON.parse(meta);
       } catch {
-        console.log("Invalid meta %s: $O", r.get("Code"), meta);
+        console.log("Invalid meta %s: %O", r.get("Code"), meta);
       }
       return parsed.slack_ts === undefined;
     };

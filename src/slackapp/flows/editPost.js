@@ -56,6 +56,7 @@ async function editPost(payload) {
       "You can only edit messages posted by the bot."
     );
   }
+
   const canEdit = await userCanEditMessage(user, message);
   if (!canEdit) {
     return openError(
@@ -63,6 +64,7 @@ async function editPost(payload) {
       "You aren't permitted to edit this message."
     );
   }
+
   const view = await makeEditPostView(payload, message, channel);
   return slackapi.views.open({
     trigger_id: payload.trigger_id,

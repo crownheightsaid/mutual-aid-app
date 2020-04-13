@@ -50,6 +50,9 @@ module.exports.addBotToChannel = async channelId => {
   }
 };
 
+/**
+ * Returns the user ids of the members of the given channel
+ */
 module.exports.listMembers = async channelId => {
   let cursor = null;
   const members = [];
