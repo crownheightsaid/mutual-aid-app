@@ -122,6 +122,16 @@ exports.atdViewSubmission = async payload => {
               type: "mrkdwn",
               text: dmLines.join("\n")
             }
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text:
+                "_*Reminder:* When you make a delivery, drop the groceries at the door," +
+                " step 6 feet away, and make sure that the recipient knows " +
+                "to wipe all the groceries down or wash with soap and water_"
+            }
           }
         ]
       });
