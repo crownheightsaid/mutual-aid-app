@@ -4,13 +4,13 @@ const {
 } = require("../../../airtable.js");
 
 exports.nycmaOuttakeHandler = async (req, res, next) => {
-  if (!req.body.nycma) {
+  if (!req.body.manyc) {
     return next(
-      "Expected nycma data to be set on request body. This middlware should be used after body-parser."
+      "Expected manyc data to be set on request body. This middlware should be used after body-parser."
     );
   }
-  const { nycma } = req.body;
-  const [requestRecord, findErr] = await findRequestByExternalId(nycma.id);
+  const { manyc } = req.body;
+  const [requestRecord, findErr] = await findRequestByExternalId(manyc.id);
   if (findErr) {
     const err = new Error("Couldn't find externalId in Airtable");
     err.statusCode = 500;
