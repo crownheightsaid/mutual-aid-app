@@ -239,13 +239,6 @@ exports.atdViewOpen = async payload => {
                 {
                   text: {
                     type: "plain_text",
-                    text: "Reply to the thread with confirmation"
-                  },
-                  value: "should_reply"
-                },
-                {
-                  text: {
-                    type: "plain_text",
                     text:
                       "Start a DM with request info between you and the assignee"
                   },
