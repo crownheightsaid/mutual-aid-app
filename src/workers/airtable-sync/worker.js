@@ -4,6 +4,7 @@ const {
   SENSITIVE_FIELDS: sensitiveRequestFields
 } = require("~airtable/tables/requests");
 const updateMessageContent = require("./actions/updateMessageContent");
+const notifyManyc = require("./actions/notifyManyc");
 
 const defaultInterval = 10000;
 
@@ -29,6 +30,7 @@ function startWorker(interval) {
     interval,
     async recordsChanged => {
       const statusFieldName = "Status";
+      const originFieldName = "Text or Voice?";
       const codeFieldName = "Code";
       const slackIdFieldName = "Delivery slackid";
       const triggerBackfillFieldName = "Trigger Backfill";
@@ -51,6 +53,12 @@ function startWorker(interval) {
         }
         if (record.didChange(triggerBackfillFieldName)) {
           promises.push(updateMessageContent(record));
+        }
+        if (
+          record.get(originFieldName) === "manyc" &&
+          record.didChange(statusFieldName)
+        ) {
+          promises.push(notifyManyc(record));
         }
       });
       return Promise.all(promises);
