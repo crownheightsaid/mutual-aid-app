@@ -36,6 +36,7 @@ function startWorker(interval) {
             `${record.get(codeFieldName)} moved from ${newStatus} -> ${status}`
           );
         }
+        // TODO: Think about how to rate limit this to Airtable's 5 rps
         if (
           record.didChange(statusFieldName) ||
           record.didChange(slackIdFieldName)
