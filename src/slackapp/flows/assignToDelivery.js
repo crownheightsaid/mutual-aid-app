@@ -130,7 +130,7 @@ exports.atdViewSubmission = async payload => {
               text:
                 "_*Reminder:* When you make a delivery, drop the groceries at the door," +
                 " step 6 feet away, and make sure that the recipient knows " +
-                "to wipe all the groceries down or wash with soap and water_"
+                "to wipe down all the groceries (or wash with soap and water)_"
             }
           }
         ]
