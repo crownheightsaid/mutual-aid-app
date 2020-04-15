@@ -1,3 +1,5 @@
+const axios = require("axios");
+
 module.exports = async function notifyManyc(record) {
   const statusFieldName = "Status";
 
@@ -16,4 +18,10 @@ module.exports = async function notifyManyc(record) {
   return "No Update";
 };
 
-async function sendManycStatus(status) {}
+async function sendManycStatus(status) {
+  try {
+    await axios.get("/user?ID=12345");
+  } catch (error) {
+    console.error(error);
+  }
+}
