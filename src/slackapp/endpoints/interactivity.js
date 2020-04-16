@@ -6,6 +6,7 @@ const {
 } = require("../flows/assignToDelivery.js");
 
 const createDeliveryRequest = require("../flows/createDeliveryRequest");
+const editPost = require("../flows/editPost");
 
 const slackInteractions = createMessageAdapter(
   process.env.SLACK_SIGNING_SECRET
@@ -38,5 +39,8 @@ slackInteractions.viewSubmission(
 // Delivery Request Post flow
 // ==================================================================
 createDeliveryRequest.register(slackInteractions);
+
+// ==== Edit Post flow ====
+editPost.register(slackInteractions);
 
 module.exports = slackInteractions.requestListener();

@@ -2,6 +2,7 @@ const { sortBy, isEqual } = require("lodash");
 const slackapi = require("../../slackapi");
 const { findChannelByName, addBotToChannel } = require("../lib/channels");
 const { errorResponse, errorView } = require("../views");
+const guard = require("../lib/guard");
 const {
   findOpenRequests,
   findRequestByCode,
@@ -386,20 +387,4 @@ function suggestedTemplate(payload, request) {
 ${fieldRepresentation}
 *Want to volunteer to help our neighbor${firstName}?* Comment on this thread and <@${slackId}> will follow up with more details.
 _Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive._`;
-}
-
-/**
- * Guards a slack callback handler presenting an error response if there is an error.
- */
-function guard(f) {
-  return (payload, ...args) => {
-    return f(payload, ...args).catch(e => {
-      console.error("Got error when processing: %0", e);
-      return slackapi.views.open({
-        token: process.env.SLACK_BOT_TOKEN,
-        trigger_id: payload.trigger_id,
-        view: errorResponse(`Oops got an error: ${e}`)
-      });
-    });
-  };
 }
