@@ -1,9 +1,9 @@
 const Airtable = require("airtable");
 const { merge } = require("lodash");
 
-const base = new Airtable({ apiKey: process.env.AIRTABLE_KEY }).base(
-  process.env.AIRTABLE_BASE
-);
+const airtable = new Airtable({ apiKey: process.env.AIRTABLE_KEY });
+const base = airtable.base(process.env.AIRTABLE_BASE);
+const paymentsBase = airtable.base(process.env.AIRTABLE_PAYMENTS_BASE);
 
 // ==================================================================
 // Request Table
@@ -163,7 +163,6 @@ exports.findVolunteerById = async id => {
   }
 };
 
-
 // ==================================================================
 // Payment Requests Table
 // ==================================================================
@@ -173,18 +172,15 @@ exports.findReimbursablePaymentRequests = async () => {
     const records = await base("PaymentRequests")
       .select({
         filterByFormula: `And({Approval} = 'Approved', {Paid}=0`,
-        sort: [{field: "Created", direction: "asc"}]
+        sort: [{ field: "Created", direction: "asc" }]
       })
       .firstPage();
-    return records
-      ? [records, null]
-      : [null, "No pending payment requests"];
+    return records ? [records, null] : [null, "No pending payment requests"];
   } catch (e) {
     console.error(`Error while fetching reimbursable payment requests ${e}`); // TODO cargo culted from above, what is this rescuing?
     return [null, e.message];
   }
 };
-
 
 // ==================================================================
 // Balancer Table
@@ -192,11 +188,11 @@ exports.findReimbursablePaymentRequests = async () => {
 
 exports.findBalancer = async paymentMethod => {
   try {
-    const record = await base("Balancers")
+    const record = await paymentsBase("Balancers")
       .select({
         // hate these hard-codes, consider getting from a static reference elsewhere or something
         filterByFormula: `And({${paymentMethod}ID} != null, {Deactivated}!=TRUE())`,
-        sort: [{field: "TotalOutstanding", direction: "asc"}]
+        sort: [{ field: "TotalOutstanding", direction: "asc" }]
       })
       .firstPage();
     return record
@@ -208,7 +204,6 @@ exports.findBalancer = async paymentMethod => {
   }
 };
 
-
 // ==================================================================
 // Donor Payments Table
 // ==================================================================
@@ -216,7 +211,7 @@ exports.findBalancer = async paymentMethod => {
 exports.createDonorPayment = async donorPayment => {
   console.log("creating donor payments record");
   try {
-    const record = await base("DonorPayments").create(donorPayment);
+    const record = await paymentsBase("DonorPayments").create(donorPayment);
     return [record, null];
   } catch (e) {
     console.error(`Couldn't create request: ${e}`);
@@ -226,7 +221,7 @@ exports.createDonorPayment = async donorPayment => {
 
 exports.findDonorPaymentByCode = async code => {
   try {
-    const record = await base("DonorPayments")
+    const record = await paymentsBase("DonorPayments")
       .select({
         // hate these hard-codes, consider getting from a static reference elsewhere or something
         filterByFormula: `And({Code} = '${code}', {Status}!="Completed", {Status}!="FailedNoAnswer", {Status}!="FailedDonorBackedOut")`
@@ -241,14 +236,19 @@ exports.findDonorPaymentByCode = async code => {
   }
 };
 
-
-
-
 exports.airbase = base;
+exports.paymentsAirbase = paymentsBase;
 exports.UPDATE_BATCH_SIZE = 10;
-exports.SENSITIVE_FIELDS = [
+exports.REQUESTS_SENSITIVE_FIELDS = [
   "Phone",
   "Email Address",
   "Message",
   "Intake General Notes"
 ];
+exports.PAYMENT_REQUESTS_SENSITIVE_FIELDS = [
+  "Phone",
+  "VenmoID",
+  "PaypalID",
+  "CashAppID"
+];
+exports.DONORS_SENSITIVE_FIELDS = ["Phone"];

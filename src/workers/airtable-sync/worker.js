@@ -1,7 +1,13 @@
 const ChangeDetector = require("airtable-change-detector");
 const updateMessageContent = require("./actions/updateMessageContent");
 const P2pMoney = require("../../p2p-money/p2p-money");
-const { SENSITIVE_FIELDS, airbase } = require("../../airtable");
+const {
+  REQUESTS_SENSITIVE_FIELDS,
+  PAYMENT_REQUESTS_SENSITIVE_FIELDS,
+  DONORS_SENSITIVE_FIELDS,
+  paymentsAirbase,
+  airbase
+} = require("../../airtable");
 
 const defaultInterval = 10000;
 
@@ -15,14 +21,16 @@ function startWorker(interval) {
   }
   const sharedDetectorOptions = {
     writeDelayMs: 100,
-    lastProcessedFieldName: "Last Processed",
-    sensitiveFields: SENSITIVE_FIELDS
+    lastProcessedFieldName: "Last Processed"
   };
 
-  const paymentRequestChanges = new ChangeDetector(airbase("PaymentRequests"), {
-    // senstiveFields: PAYMENT_REQUESTS_SENSITIVE_FIELDS,
-    ...sharedDetectorOptions
-  });
+  const paymentRequestChanges = new ChangeDetector(
+    paymentsAirbase("PaymentRequests"),
+    {
+      senstiveFields: PAYMENT_REQUESTS_SENSITIVE_FIELDS,
+      ...sharedDetectorOptions
+    }
+  );
   paymentRequestChanges.pollWithInterval(
     "airtable-sync.payment-requests",
     interval,
@@ -34,8 +42,8 @@ function startWorker(interval) {
     }
   );
 
-  const donorSignupChanges = new ChangeDetector(airbase("Donors"), {
-    // senstiveFields: DONOR_SENSITIVE_FIELDS,
+  const donorSignupChanges = new ChangeDetector(paymentsAirbase("Donors"), {
+    senstiveFields: DONORS_SENSITIVE_FIELDS,
     ...sharedDetectorOptions
   });
   donorSignupChanges.pollWithInterval(
@@ -50,7 +58,7 @@ function startWorker(interval) {
   );
 
   const requestChanges = new ChangeDetector(airbase("Requests"), {
-    senstiveFields: SENSITIVE_FIELDS,
+    senstiveFields: REQUESTS_SENSITIVE_FIELDS,
     ...sharedDetectorOptions
   });
   requestChanges.pollWithInterval(
