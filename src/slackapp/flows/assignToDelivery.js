@@ -122,6 +122,16 @@ exports.atdViewSubmission = async payload => {
               type: "mrkdwn",
               text: dmLines.join("\n")
             }
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text:
+                "_*Reminder:* When you make a delivery, drop the groceries at the door," +
+                " step 6 feet away, and make sure that the recipient knows " +
+                "to wipe down all the groceries (or wash with soap and water)_"
+            }
           }
         ]
       });
@@ -226,13 +236,6 @@ exports.atdViewOpen = async payload => {
               type: "checkboxes",
               action_id: "options",
               initial_options: [
-                {
-                  text: {
-                    type: "plain_text",
-                    text: "Reply to the thread with confirmation"
-                  },
-                  value: "should_reply"
-                },
                 {
                   text: {
                     type: "plain_text",

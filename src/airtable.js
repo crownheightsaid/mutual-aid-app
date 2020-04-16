@@ -68,8 +68,14 @@ exports.findOpenRequests = async () => {
       })
       .all();
     const notInSlack = r => {
-      const meta = JSON.parse(r.get("Meta"));
-      return meta.slack_ts === undefined;
+      const meta = r.get("Meta");
+      let parsed = {};
+      try {
+        parsed = JSON.parse(meta);
+      } catch {
+        console.log("Invalid meta %s: %O", r.get("Code"), meta);
+      }
+      return parsed.slack_ts === undefined;
     };
     return [requests.filter(notInSlack), null];
   } catch (e) {

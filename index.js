@@ -6,8 +6,8 @@ const basicAuth = require("express-basic-auth");
 const bodyParser = require("body-parser");
 const airtableWorker = require("./src/workers/airtable-sync/worker");
 const { addressHandler } = require("./src/api/geo.js");
-const { nycmaIntakeHandler } = require("./src/api/authed/intake/nycma.js");
-const { nycmaOuttakeHandler } = require("./src/api/authed/outtake/nycma.js");
+const { nycmaIntakeHandler } = require("./src/api/authed/intake/manyc.js");
+const { nycmaOuttakeHandler } = require("./src/api/authed/outtake/manyc.js");
 const {
   neighborhoodFinderUpdateRequestHandler
 } = require("./src/api/neighborhood-finder/update-request.js");

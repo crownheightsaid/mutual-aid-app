@@ -4,15 +4,15 @@ const {
 } = require("../../../airtable.js");
 
 exports.nycmaIntakeHandler = async (req, res, next) => {
-  if (!req.body.nycma) {
+  if (!req.body.manyc) {
     return next(
-      "Expected nycma data to be set on request body. This middlware should be used after body-parser."
+      "Expected manyc data to be set on request body. This middlware should be used after body-parser."
     );
   }
   // TODO: need immediacy, cross streets and others are in the nycma form
-  const { nycma } = req.body;
+  const { manyc } = req.body;
 
-  const [existingRequest] = await findRequestByExternalId(nycma.id);
+  const [existingRequest] = await findRequestByExternalId(manyc.id);
   if (existingRequest) {
     const err = new Error("Request with that external ID already exists");
     err.statusCode = 409;
@@ -22,20 +22,22 @@ exports.nycmaIntakeHandler = async (req, res, next) => {
   const requestMessage = [
     "This is a request from a different system.\n",
     "The type of support requested is:\n",
-    nycma.supportType || "n/a",
+    manyc.supportType || "n/a",
     "\nIn a free-form request they said:\n",
-    nycma.otherSupport || "nothing",
+    manyc.otherSupport || "nothing",
     "\nThey are in this hard-hit community:\n",
-    nycma.community || "n/a"
+    manyc.community || "n/a",
+    "\nNeighborhoods (please fill out manually for now):\n",
+    manyc.neighborhood || "n/a"
   ];
   const nycmaRequest = {
     message: requestMessage.join(" "),
-    phone: nycma.phone || "If there's no email too, please tell #tech!",
-    externalId: nycma.id,
-    email: nycma.email || "",
-    urgency: nycma.urgency || "",
-    crossStreets: nycma.crossStreet,
-    source: "nycma"
+    phone: manyc.phone || "If there's no email too, please tell #tech!",
+    externalId: manyc.id,
+    email: manyc.email || "",
+    urgency: manyc.urgency || "",
+    crossStreets: manyc.crossStreet,
+    source: "manyc"
   };
   const [record, e] = await createRequest(nycmaRequest);
   if (e) {
