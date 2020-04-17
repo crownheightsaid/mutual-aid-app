@@ -6,7 +6,7 @@ import ReactMapboxGl, {
   ZoomControl
 } from "react-mapbox-gl";
 import { LngLat, LngLatBounds } from "mapbox-gl";
-import quadrantsGeoJSON from "~assets/crownheights.json";
+import quadrantsGeoJSON from "../../lib/assets/crownheights.json";
 import { findBounds } from "../helpers/mapbox-coordinates";
 
 // get all coords in quadrantsGeoJSON to find bounds
