@@ -1,6 +1,5 @@
 const ChangeDetector = require("airtable-change-detector");
 const { airbase, SENSITIVE_FIELDS } = require("~airtable/bases");
-const { UPDATE_BATCH_SIZE } = require("~airtable/constants");
 const updateMessageContent = require("./actions/updateMessageContent");
 
 const defaultInterval = 5000;
