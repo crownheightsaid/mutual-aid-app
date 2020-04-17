@@ -1,8 +1,8 @@
 const { sortBy, isEqual } = require("lodash");
 const slackapi = require("~slack/webApi");
-const { findChannelByName, addBotToChannel } = require("../lib/channels");
-const { errorResponse, errorView } = require("../views");
-const guard = require("../lib/guard");
+const { findChannelByName, addBotToChannel } = require("~slack/channels");
+const { errorResponse, errorView } = require("~slack/views");
+const guard = require("~slack/guard");
 const { findVolunteerByEmail } = require("~airtable/tables/volunteers");
 const {
   findOpenRequests,
