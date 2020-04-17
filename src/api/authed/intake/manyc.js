@@ -1,4 +1,7 @@
-const { createRequest, findRequestByExternalId } = require("~airtable/bases");
+const {
+  createRequest,
+  findRequestByExternalId
+} = require("~airtable/tables/requests");
 
 exports.nycmaIntakeHandler = async (req, res, next) => {
   if (!req.body.manyc) {

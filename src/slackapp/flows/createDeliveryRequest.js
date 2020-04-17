@@ -3,12 +3,12 @@ const slackapi = require("~slack/webApi");
 const { findChannelByName, addBotToChannel } = require("../lib/channels");
 const { errorResponse, errorView } = require("../views");
 const guard = require("../lib/guard");
+const { findVolunteerByEmail } = require("~airtable/tables/volunteers");
 const {
   findOpenRequests,
   findRequestByCode,
-  findVolunteerByEmail,
   updateRequestByCode
-} = require("~airtable/bases");
+} = require("~airtable/tables/requests");
 
 const primaryChannelName = "community_needs";
 const modalTitle = "Create Delivery Request";
