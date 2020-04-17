@@ -1,5 +1,5 @@
 const { merge } = require("lodash");
-const { base } = require("~airtable/bases");
+const { airbase } = require("~airtable/bases");
 
 exports.deleteRequest = async recordId => {
   console.log("Deleting record");
@@ -137,7 +137,7 @@ exports.updateRequestByCode = async (code, update) => {
 // ==================================================================
 
 const requestsTableName = (exports.tableName = "Requests");
-const requestsTable = (exports.table = base(requestsTableName));
+const requestsTable = (exports.table = airbase(requestsTableName));
 const fields = (exports.fields = {
   phone: "Phone",
   time: "Time",

@@ -1,4 +1,4 @@
-const { base } = require("~airtable/bases");
+const { airbase } = require("~airtable/bases");
 
 exports.findVolunteerByEmail = async email => {
   try {
@@ -29,7 +29,7 @@ exports.findVolunteerById = async id => {
 // ==================================================================
 
 const volunteersTableName = (exports.tableName = "Volunteers");
-const volunteersTable = (exports.table = base(volunteersTableName));
+const volunteersTable = (exports.table = airbase(volunteersTableName));
 const fields = (exports.fields = {
   email: "volunteer_email",
   phone: "volunteer_phone",
