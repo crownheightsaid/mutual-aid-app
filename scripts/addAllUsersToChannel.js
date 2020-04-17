@@ -1,5 +1,4 @@
-const _ = require("lodash");
-const slackapi = require("../src/slackapi");
+const slackapi = require("~slack/webApi");
 const { wait } = require("./utils");
 
 /* eslint-disable no-await-in-loop, no-loop-func */

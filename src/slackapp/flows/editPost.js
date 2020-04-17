@@ -4,7 +4,7 @@ const {
   successResponse,
   errorResponse
 } = require("../views");
-const slackapi = require("../../slackapi");
+const slackapi = require("~slack/webApi");
 const guard = require("../lib/guard");
 const { findChannelByName, listMembers } = require("../lib/channels");
 

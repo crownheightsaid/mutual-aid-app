@@ -1,4 +1,4 @@
-const slackapi = require("../../../slackapi");
+const slackapi = require("~slack/webApi");
 
 const mappings = {
   "Delivery Assigned": ":white_check_mark: REQUEST ASSIGNED",

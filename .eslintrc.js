@@ -29,6 +29,15 @@ module.exports = {
   },
   settings: {
     "import/resolver": {
+      alias: {
+        map: [
+          ["~airtable", "./src/lib/airtable"],
+          ["~slack", "./src/lib/slack"],
+          ["~assets", "./src/lib/assets"],
+          ["~constants", "./src/lib/constants.js"]
+        ],
+        extensions: ['.ts', '.js', '.jsx', '.json']
+      },
       node: {
         moduleDirectory: ["node_modules", "src"]
       }
