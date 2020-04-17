@@ -1,5 +1,5 @@
 const assert = require("assert");
-const slackApi = require("../slackapi.js");
+const slackApi = require("~slack/webApi");
 
 const baseBlocks = require("./homeblocks/base.json");
 const volunteerSignUpBlocks = require("./homeblocks/volunteerSignUp.json");

@@ -1,5 +1,5 @@
 const { find } = require("lodash");
-const slackapi = require("../../slackapi");
+const slackapi = require("~slack/webApi");
 
 let channelCache = [];
 

@@ -1,7 +1,4 @@
-const {
-  deleteRequest,
-  findRequestByExternalId
-} = require("../../../airtable.js");
+const { deleteRequest, findRequestByExternalId } = require("~airtable/bases");
 
 exports.nycmaOuttakeHandler = async (req, res, next) => {
   if (!req.body.manyc) {

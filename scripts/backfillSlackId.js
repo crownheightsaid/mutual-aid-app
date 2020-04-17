@@ -1,6 +1,7 @@
 const _ = require("lodash");
-const { airbase, UPDATE_BATCH_SIZE } = require("../src/airtable");
-const slackapi = require("../src/slackapi");
+const slackapi = require("~slack/webApi");
+const { airbase } = require("~airtable/bases");
+const { UPDATE_BATCH_SIZE } = require("~airtable/constants");
 const { wait } = require("./utils");
 
 /* eslint-disable no-await-in-loop, no-loop-func */

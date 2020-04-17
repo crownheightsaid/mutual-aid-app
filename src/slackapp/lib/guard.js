@@ -1,4 +1,4 @@
-const slackapi = require("../../slackapi");
+const slackapi = require("~slack/webApi");
 const { errorView } = require("../views");
 /**
  * Guards a slack callback handler presenting an error response if there is an error.

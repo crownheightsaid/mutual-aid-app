@@ -1,6 +1,6 @@
 const ChangeDetector = require("airtable-change-detector");
+const { airbase, SENSITIVE_FIELDS } = require("~airtable/bases");
 const updateMessageContent = require("./actions/updateMessageContent");
-const { SENSITIVE_FIELDS, airbase } = require("../../airtable");
 
 const defaultInterval = 5000;
 
