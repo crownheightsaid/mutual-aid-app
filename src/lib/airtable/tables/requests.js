@@ -24,7 +24,7 @@ exports.createRequest = async request => {
       [fields.crossStreetFirst]: request.crossStreets || "",
       [fields.email]: request.email || "",
       [fields.timeSensitivity]: request.urgency || "",
-      [fields.status]: fields.status.dispatchNeeded
+      [fields.status]: fields.status_options.dispatchNeeded
     });
     return [record, null];
   } catch (e) {
@@ -51,8 +51,8 @@ exports.findRequestByExternalId = async externalId => {
 
 exports.findOpenRequests = async () => {
   const requestOpenStates = [
-    fields.status.dispatchStarted,
-    fields.status.deliveryNeeded
+    fields.status_options.dispatchStarted,
+    fields.status_options.deliveryNeeded
   ];
   const statusConstraints = requestOpenStates.map(
     s => `{${fields.status}} = '${s}'`
