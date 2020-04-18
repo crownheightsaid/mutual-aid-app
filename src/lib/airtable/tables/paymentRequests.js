@@ -1,4 +1,40 @@
+const { merge } = require("lodash");
 const { paymentsAirbase } = require("~airtable/bases");
+
+// `update` should look like:
+// {
+//   "Some Requests Field": "New Value",
+//   "Another field": "Another New Value"
+//   "Meta": {key: "value"}
+// }
+exports.updatePaymentRequestByCode = async (code, update) => {
+  try {
+    const records = await paymentRequestsTable
+      .select({
+        filterByFormula: `({${fields.requestCode}} = '${code}')`
+      })
+      .firstPage();
+    if (records.length === 0) {
+      return [null, `No requests found with code: ${code}`];
+    }
+    if (update[fields.meta]) {
+      // Support for updating Meta as an object (rather than string)
+      /* eslint no-param-reassign: ["error", { "props": false }] */
+      const parsed = JSON.parse(records[0].get(fields.meta));
+      merge(parsed, update[fields.meta]);
+      update[fields.meta] = JSON.stringify(parsed);
+    }
+    const record = records[0];
+    const airUpdate = {
+      id: record.id,
+      fields: update
+    };
+    const updatedRecords = await paymentRequestsTable.update([airUpdate]);
+    return [updatedRecords[0], null];
+  } catch (e) {
+    return [null, `Error while processing update: ${e}`];
+  }
+};
 
 exports.findReimbursablePaymentRequests = async () => {
   const andConditions = [
