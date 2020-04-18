@@ -22,6 +22,10 @@
       "description": "Go to your airtable base. Click on 'Help -> API Documentation' in top right. Scroll to `Authentication`. The thing we need is in 'base('')` to the right.",
       "required": false
     },
+    "AIRTABLE_PAYMENTS_BASE": {
+      "description": "If set, should point to the base ID for p2p payments.",
+      "required": false
+    },
     "AIRTABLE_SYNC": {
       "description": "If set, run the Airtable sync worker in the main process with this frequency in milliseconds.",
       "required": false

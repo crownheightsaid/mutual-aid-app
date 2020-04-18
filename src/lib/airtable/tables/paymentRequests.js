@@ -1,0 +1,105 @@
+const { merge } = require("lodash");
+const { paymentsAirbase } = require("~airtable/bases");
+
+// `update` should look like:
+// {
+//   "Some Requests Field": "New Value",
+//   "Another field": "Another New Value"
+//   "Meta": {key: "value"}
+// }
+exports.updatePaymentRequestByCode = async (code, update) => {
+  try {
+    const records = await paymentRequestsTable
+      .select({
+        filterByFormula: `({${fields.requestCode}} = '${code}')`
+      })
+      .firstPage();
+    if (records.length === 0) {
+      return [null, `No requests found with code: ${code}`];
+    }
+    if (update[fields.meta]) {
+      // Support for updating Meta as an object (rather than string)
+      /* eslint no-param-reassign: ["error", { "props": false }] */
+      const parsed = JSON.parse(records[0].get(fields.meta));
+      merge(parsed, update[fields.meta]);
+      update[fields.meta] = JSON.stringify(parsed);
+    }
+    const record = records[0];
+    const airUpdate = {
+      id: record.id,
+      fields: update
+    };
+    const updatedRecords = await paymentRequestsTable.update([airUpdate]);
+    return [updatedRecords[0], null];
+  } catch (e) {
+    return [null, `Error while processing update: ${e}`];
+  }
+};
+
+exports.findReimbursablePaymentRequests = async () => {
+  const andConditions = [
+    `{${fields.approval}} = "${fields.approval_options.approved}"`,
+    `{${fields.paid}} = 0`
+  ];
+  try {
+    const records = await paymentRequestsTable
+      .select({
+        filterByFormula: `And(${andConditions.join(",")})`,
+        sort: [{ field: fields.created, direction: "asc" }]
+      })
+      .firstPage();
+    return records ? [records, null] : [null, "No pending payment requests"];
+  } catch (e) {
+    console.error(`Error while fetching reimbursable payment requests ${e}`); // TODO cargo culted from above, what is this rescuing?
+    return [null, e.message];
+  }
+};
+
+// ==================================================================
+// Schema
+// ==================================================================
+
+const paymentRequestsTableName = (exports.tableName = "PaymentRequests");
+const paymentRequestsTable = (exports.table = paymentsAirbase(
+  paymentRequestsTableName
+));
+const fields = (exports.fields = {
+  id: "ID",
+  amount: "Amount",
+  receipts: "Receipts",
+  donation: "Donation",
+  reimbursementAmount: "ReimbursementAmount",
+  requestCode: "RequestCode",
+  donorPayments: "DonorPayments",
+  paid: "Paid",
+  created: "Created",
+  lastModified: "Last Modified",
+  venmoId: "VenmoID",
+  firstName: "FirstName",
+  adminNotificationSent: "AdminNotificationSent",
+  adminDenialMessage: "AdminDenialMessage",
+  phone: "Phone",
+  approval: "Approval",
+  approval_options: {
+    approved: "Approved",
+    denied: "Denied"
+  },
+  paypalId: "PaypalID",
+  cashAppId: "CashAppID",
+  publicReimbursementMessageSent: "PublicReimbursementMessageSent",
+  paidAmount: "PaidAmount",
+  meta: "Meta",
+  lastProcessed: "Last Processed",
+  type: "Type",
+  type_options: {
+    preimbursement: "Preimbursement",
+    reimbursement: "Reimbursement",
+    directAid: "Direct Aid"
+  }
+});
+exports.sensitiveFields = [
+  fields.phone,
+  fields.venmoId,
+  fields.paypalId,
+  fields.cashAppId
+];

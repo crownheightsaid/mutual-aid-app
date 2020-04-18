@@ -6,6 +6,7 @@ const express = require("express");
 const basicAuth = require("express-basic-auth");
 const bodyParser = require("body-parser");
 const airtableWorker = require("./src/workers/airtable-sync/worker");
+const airtablePaymentsWorker = require("./src/workers/airtable-sync/paymentWorker");
 const { addressHandler } = require("./src/api/geo.js");
 const { nycmaIntakeHandler } = require("./src/api/authed/intake/manyc.js");
 const { nycmaOuttakeHandler } = require("./src/api/authed/outtake/manyc.js");
@@ -107,6 +108,9 @@ app.get("*", (req, res) => {
 const airtableIntervalMs = parseInt(process.env.AIRTABLE_SYNC || 0);
 if (airtableIntervalMs > 0) {
   airtableWorker(airtableIntervalMs);
+  if (process.env.AIRTABLE_PAYMENTS_BASE) {
+    airtablePaymentsWorker(airtableIntervalMs);
+  }
 }
 
 // ==================================================================
