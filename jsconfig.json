@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~airtable/*": ["./src/lib/airtable/*"],
+      "~slack/*": ["./src/lib/slack/*"],
+      "~assets/*": ["./src/lib/assets/*"],
+      "~constants": ["./src/lib/constants.js"]
+    }
+  },
+  "exclude": ["node_modules", "**/node_modules/*"]
+}

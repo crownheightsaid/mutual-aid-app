@@ -1,5 +1,8 @@
 const ChangeDetector = require("airtable-change-detector");
-const { airbase, SENSITIVE_FIELDS } = require("~airtable/bases");
+const {
+  table: requestsTable,
+  SENSITIVE_FIELDS: sensitiveRequestFields
+} = require("~airtable/tables/requests");
 const updateMessageContent = require("./actions/updateMessageContent");
 
 const defaultInterval = 5000;
@@ -12,10 +15,10 @@ function startWorker(interval) {
     );
     pollInterval = defaultInterval;
   }
-  const requestChanges = new ChangeDetector(airbase("Requests"), {
+  const requestChanges = new ChangeDetector(requestsTable, {
     writeDelayMs: 100,
     lastProcessedFieldName: "Last Processed",
-    sensitiveFields: SENSITIVE_FIELDS
+    sensitiveFields: sensitiveRequestFields
   });
   requestChanges.pollWithInterval(
     "airtable-sync.requests",

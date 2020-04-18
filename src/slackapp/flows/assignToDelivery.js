@@ -7,10 +7,10 @@ const {
 const slackapi = require("~slack/webApi");
 const { addBotToChannel } = require("../lib/channels.js");
 const {
-  findVolunteerById,
   updateRequestByCode,
   findRequestByCode
-} = require("~airtable/bases");
+} = require("~airtable/tables/requests");
+const { findVolunteerById } = require("~airtable/tables/volunteers");
 
 exports.atdViewSubmission = async payload => {
   try {

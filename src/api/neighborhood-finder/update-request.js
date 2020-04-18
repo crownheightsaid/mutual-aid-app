@@ -1,4 +1,7 @@
-const { updateRequestByCode, findRequestByCode } = require("~airtable/bases");
+const {
+  updateRequestByCode,
+  findRequestByCode
+} = require("~airtable/tables/requests");
 
 const NEIGHBORHOOD_AREA_UNAVAILABLE_OPTION = "Other - not Crown Heights";
 
