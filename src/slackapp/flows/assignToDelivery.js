@@ -3,9 +3,9 @@ const {
   errorResponse,
   successResponse,
   messageErrorResponse
-} = require("../views.js");
+} = require("~slack/views");
 const slackapi = require("~slack/webApi");
-const { addBotToChannel } = require("../lib/channels.js");
+const { addBotToChannel } = require("~slack/channels");
 const {
   updateRequestByCode,
   findRequestByCode

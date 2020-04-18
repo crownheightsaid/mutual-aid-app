@@ -3,10 +3,10 @@ const {
   successView,
   successResponse,
   errorResponse
-} = require("../views");
+} = require("~slack/views");
 const slackapi = require("~slack/webApi");
-const guard = require("../lib/guard");
-const { findChannelByName, listMembers } = require("../lib/channels");
+const guard = require("~slack/guard");
+const { findChannelByName, listMembers } = require("~slack/channels");
 
 editPost.id = "edit_post";
 saveEdits.id = "save_post_edit";

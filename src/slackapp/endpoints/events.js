@@ -1,5 +1,5 @@
 const { createEventAdapter } = require("@slack/events-api");
-const { openHomeWithSections } = require("../home.js");
+const { openHomeWithSections } = require("~slack/home");
 const slackapi = require("~slack/webApi");
 const { findVolunteerByEmail } = require("~airtable/tables/volunteers");
 

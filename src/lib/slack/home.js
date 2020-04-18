@@ -1,3 +1,6 @@
+// Helper for composing home tab sections.
+// See https://api.slack.com/surfaces/tabs/using
+
 const assert = require("assert");
 const slackApi = require("~slack/webApi");
 

@@ -1,3 +1,7 @@
+// Helpers for modifying views (aka modals) in the app
+// See https://api.slack.com/surfaces/modals/using#modifying
+
+// Create an error for an individual submission field (specified by blockId)
 exports.messageErrorResponse = (blockId, msg) => {
   const response = {
     response_action: "errors",
@@ -55,9 +59,6 @@ const successView = msg => {
   };
 };
 
-exports.errorView = errorView;
-exports.successView = successView;
-
 exports.errorResponse = msg => {
   return {
     response_action: "update",
@@ -71,3 +72,5 @@ exports.successResponse = msg => {
     view: successView(msg)
   };
 };
+exports.errorView = errorView;
+exports.successView = successView;
