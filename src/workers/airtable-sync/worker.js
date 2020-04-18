@@ -3,13 +3,16 @@ const {
   table: requestsTable,
   SENSITIVE_FIELDS: sensitiveRequestFields
 } = require("~airtable/tables/requests");
+const {
+  table: donorsTable,
+  SENSITIVE_FIELDS: sensitiveDonorFields
+} = require("~airtable/tables/donors");
+const {
+  table: paymentRequestsTable,
+  SENSITIVE_FIELDS: sensitivePaymentRequestFields
+} = require("~airtable/tables/donors");
 const updateMessageContent = require("./actions/updateMessageContent");
 const P2pMoney = require("../../p2p-money/p2p-money");
-const {
-  PAYMENT_REQUESTS_SENSITIVE_FIELDS,
-  DONORS_SENSITIVE_FIELDS,
-  paymentsAirbase
-} = require("../../airtable");
 
 const defaultInterval = 10000;
 
@@ -26,13 +29,10 @@ function startWorker(interval) {
     lastProcessedFieldName: "Last Processed"
   };
 
-  const paymentRequestChanges = new ChangeDetector(
-    paymentsAirbase("PaymentRequests"),
-    {
-      senstiveFields: PAYMENT_REQUESTS_SENSITIVE_FIELDS,
-      ...sharedDetectorOptions
-    }
-  );
+  const paymentRequestChanges = new ChangeDetector(paymentRequestsTable, {
+    senstiveFields: sensitivePaymentRequestFields,
+    ...sharedDetectorOptions
+  });
   paymentRequestChanges.pollWithInterval(
     "airtable-sync.payment-requests",
     interval,
@@ -44,8 +44,8 @@ function startWorker(interval) {
     }
   );
 
-  const donorSignupChanges = new ChangeDetector(paymentsAirbase("Donors"), {
-    senstiveFields: DONORS_SENSITIVE_FIELDS,
+  const donorSignupChanges = new ChangeDetector(donorsTable, {
+    senstiveFields: sensitiveDonorFields,
     ...sharedDetectorOptions
   });
   donorSignupChanges.pollWithInterval(
