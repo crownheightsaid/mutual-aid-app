@@ -3,14 +3,14 @@ const {
   errorResponse,
   successResponse,
   messageErrorResponse
-} = require("../views.js");
-const slackapi = require("../../slackapi.js");
-const { addBotToChannel } = require("../lib/channels.js");
+} = require("~slack/views");
+const slackapi = require("~slack/webApi");
+const { addBotToChannel } = require("~slack/channels");
 const {
-  findVolunteerById,
   updateRequestByCode,
   findRequestByCode
-} = require("../../airtable.js");
+} = require("~airtable/tables/requests");
+const { findVolunteerById } = require("~airtable/tables/volunteers");
 
 exports.atdViewSubmission = async payload => {
   try {

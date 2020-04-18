@@ -1,12 +1,14 @@
 const ChangeDetector = require("airtable-change-detector");
+const {
+  table: requestsTable,
+  SENSITIVE_FIELDS: sensitiveRequestFields
+} = require("~airtable/tables/requests");
 const updateMessageContent = require("./actions/updateMessageContent");
 const P2pMoney = require("../../p2p-money/p2p-money");
 const {
-  REQUESTS_SENSITIVE_FIELDS,
   PAYMENT_REQUESTS_SENSITIVE_FIELDS,
   DONORS_SENSITIVE_FIELDS,
-  paymentsAirbase,
-  airbase
+  paymentsAirbase
 } = require("../../airtable");
 
 const defaultInterval = 10000;
@@ -57,8 +59,8 @@ function startWorker(interval) {
     }
   );
 
-  const requestChanges = new ChangeDetector(airbase("Requests"), {
-    senstiveFields: REQUESTS_SENSITIVE_FIELDS,
+  const requestChanges = new ChangeDetector(requestsTable, {
+    senstiveFields: sensitiveRequestFields,
     ...sharedDetectorOptions
   });
   requestChanges.pollWithInterval(

@@ -1,5 +1,7 @@
+// Helpers related to Slack channels
+
 const { find } = require("lodash");
-const slackapi = require("../../slackapi");
+const slackapi = require("~slack/webApi");
 
 let channelCache = [];
 
@@ -13,10 +15,11 @@ module.exports.allChannels = async () => {
   let cursor = null;
   const channels = [];
   do {
+    /* eslint-disable-next-line no-await-in-loop */
     const response = await slackapi.conversations.list({
       types: "public_channel,private_channel",
       cursor
-    }); // eslint-disable-line
+    });
     cursor = response.response_metadata.next_cursor;
     channels.push(...response.channels);
   } while (cursor);
@@ -58,7 +61,7 @@ module.exports.listMembers = async channelId => {
   const members = [];
   try {
     do {
-      /* eslint no-await-in-loop: off */
+      /* eslint-disable-next-line no-await-in-loop */
       const response = await slackapi.conversations.members({
         channel: channelId,
         cursor

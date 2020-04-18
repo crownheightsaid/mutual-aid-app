@@ -18,6 +18,7 @@ module.exports = {
   },
   rules: {
     "no-unused-vars": ["error", { "varsIgnorePattern": "_.+" }],
+    "no-multi-assign": ["off"],
     "no-console": ["off"],
     "react/prop-types": ["off"],
     "react/static-property-placement": ["error", "static public field"],
@@ -29,6 +30,15 @@ module.exports = {
   },
   settings: {
     "import/resolver": {
+      alias: {
+        map: [
+          ["~airtable", "./src/lib/airtable"],
+          ["~slack", "./src/lib/slack"],
+          ["~assets", "./src/lib/assets"],
+          ["~constants", "./src/lib/constants.js"]
+        ],
+        extensions: ['.ts', '.js', '.jsx', '.json']
+      },
       node: {
         moduleDirectory: ["node_modules", "src"]
       }

@@ -1,7 +1,7 @@
 const { Client } = require("@googlemaps/google-maps-services-js");
 const gju = require("geojson-utils");
 const Geonames = require("geonames.js");
-const boundsJson = require("../assets/crownheights.json");
+const boundsJson = require("~assets/crownheights.json");
 
 const googleGeoClient = new Client({});
 const geonamesClient = new Geonames({
