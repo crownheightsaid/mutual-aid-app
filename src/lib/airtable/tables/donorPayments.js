@@ -45,6 +45,7 @@ const fields = (exports.fields = {
   id: "ID",
   amount: "Amount",
   donor: "Donor",
+  donorSlackId: "DonorSlackId",
   paymentRequest: "PaymentRequest",
   donorConfirmation: "DonorConfirmation",
   donorConfirmation_options: {
