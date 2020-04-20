@@ -3,6 +3,7 @@ require("dotenv").config();
 
 const path = require("path");
 const express = require("express");
+const twilio = require("twilio");
 const basicAuth = require("express-basic-auth");
 const bodyParser = require("body-parser");
 const airtableWorker = require("./src/workers/airtable-sync/worker");
@@ -41,6 +42,25 @@ if (process.env.SLACK_BOT_TOKEN && process.env.SLACK_SIGNING_SECRET) {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// ==================================================================
+// Twilio Webhooks
+// ==================================================================
+
+if (process.env.TWILIO_AUTH_TOKEN) {
+  app.post(
+    "/twilio/call-handler",
+    twilio.webhook({ protocol: "https" }),
+    require("./src/twilio/callHandler.js")
+  );
+  app.post(
+    "/twilio/call-handler-callback",
+    twilio.webhook({ protocol: "https" }),
+    require("./src/twilio/callHandlerCallback.js")
+  );
+} else {
+  console.log("TWILIO_AUTH_TOKEN not set. Twilio callbacks not enabled.");
+}
 
 // ==================================================================
 // API Routes
