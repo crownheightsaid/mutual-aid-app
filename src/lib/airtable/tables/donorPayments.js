@@ -1,9 +1,12 @@
 const { paymentsAirbase } = require("~airtable/bases");
 
-exports.createDonorPayment = async donorPayment => {
+// Expects mapping of fields
+exports.createDonorPayment = async donorPaymentFields => {
   console.debug("creating donor payments record");
   try {
-    const record = await donorPaymentsTable.create(donorPayment);
+    const record = await donorPaymentsTable.create([
+      { fields: donorPaymentFields }
+    ]);
     return [record, null];
   } catch (e) {
     console.error(`Couldn't create request: ${e}`);

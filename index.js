@@ -109,7 +109,7 @@ const airtableIntervalMs = parseInt(process.env.AIRTABLE_SYNC || 0);
 if (airtableIntervalMs > 0) {
   airtableWorker(airtableIntervalMs);
   if (process.env.AIRTABLE_PAYMENTS_BASE) {
-    airtablePaymentsWorker(airtableIntervalMs);
+    airtablePaymentsWorker(airtableIntervalMs + 2000); // Stagger polling to avoid rate limit
   }
 }
 

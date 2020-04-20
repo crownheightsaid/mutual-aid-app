@@ -32,26 +32,7 @@ module.exports = async record => {
   const deliveryMessage = await slackapi.chat.postMessage({
     channel: reimbursementChannel.id,
     unfurl_media: false,
-    text: messageText,
-    blocks: [
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: messageText
-        }
-      },
-      {
-        type: "divider"
-      },
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: makeReplyInstructions()
-        }
-      }
-    ]
+    text: messageText
   });
   if (!deliveryMessage.ok) {
     console.debug(`Couldn't post payment request: ${code}`);
@@ -129,7 +110,8 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
     ],
     [
       "Message",
-      reimbursement.get(paymentRequestFields.slackMessage) || "None provided"
+      `\n${reimbursement.get(paymentRequestFields.slackMessage)}` ||
+        "None provided"
     ],
     ...donationField,
     [
@@ -146,10 +128,9 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
     .map(kv => `*${kv[0]}*: ${kv[1].trim()}`)
     .join("\n");
   // HACK: use non-breaking space as a delimiter between the status and the rest of the message: \u00A0
-  return `${status}\u00A0Hey neighbors! ${intro}:\n${fieldRepresentation}\n\n`;
-}
-
-function makeReplyInstructions() {
-  return `\n*Want to send money?* Please send any amount to a payment method above and then reply to this post with the amount sent.
-The bot isn't smart and will register the first number it finds, so please try and only include one dollar amount!\nThis example works fine:\n> Sent 20!`;
+  return `${status}\u00A0Hey neighbors! ${intro}:\n${fieldRepresentation}
+  
+*Want to send money?* Please send any amount to a payment method above and then reply to this post with the amount sent.
+The bot isn't smart and will register the first number it finds, so please try and only include one dollar amount!
+This example works fine:\n> Sent 20!`;
 }

@@ -36,6 +36,22 @@ exports.updatePaymentRequestByCode = async (code, update) => {
   }
 };
 
+exports.findPaymentRequestBySlackThreadId = async threadId => {
+  try {
+    const record = await paymentRequestsTable
+      .select({
+        filterByFormula: `({${fields.slackThreadId}} = '${threadId}')`
+      })
+      .firstPage();
+    return record
+      ? [record[0], null]
+      : [null, "Request with that thread ID not found"];
+  } catch (e) {
+    console.error(`Error while fetching request by thread ID: ${e}`);
+    return [null, e];
+  }
+};
+
 exports.findReimbursablePaymentRequests = async () => {
   const andConditions = [
     `{${fields.approval}} = "${fields.approval_options.approved}"`,
@@ -73,6 +89,7 @@ const fields = (exports.fields = {
   donorPayments: "DonorPayments",
   isPaid: "IsPaid",
   created: "Created",
+  balance: "Balance",
   lastModified: "Last Modified",
   venmoId: "VenmoID",
   paypalId: "PaypalID",

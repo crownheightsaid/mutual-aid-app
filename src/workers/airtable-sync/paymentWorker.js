@@ -11,6 +11,7 @@ const {
 } = require("~airtable/tables/paymentRequests");
 const newDonor = require("./actions/payments/newDonor");
 const newPaymentRequest = require("./actions/payments/newPaymentRequest");
+const updateReimbursementMessage = require("./actions/payments/updateReimbursementStatus");
 
 const defaultInterval = 10000;
 
@@ -33,7 +34,7 @@ function startWorker(interval) {
   });
   paymentRequestChanges.pollWithInterval(
     "airtable-sync.payment-requests",
-    interval,
+    interval + 3000, // Stagger polling to avoid rate limit
     async recordsChanged => {
       console.info(`Found ${recordsChanged.length} changes in PaymentRequests`);
       const promises = [];
@@ -43,6 +44,9 @@ function startWorker(interval) {
           !record.getPrior(paymentRequestFields.id)
         ) {
           promises.push(newPaymentRequest(record));
+        }
+        if (record.didChange(paymentRequestFields.isPaid)) {
+          promises.push(updateReimbursementMessage(record));
         }
       });
       return Promise.all(promises);
