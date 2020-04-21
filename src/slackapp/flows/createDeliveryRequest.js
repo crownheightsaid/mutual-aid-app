@@ -5,7 +5,7 @@ const { errorResponse, errorView } = require("~slack/views");
 const guard = require("~slack/guard");
 const { findVolunteerByEmail } = require("~airtable/tables/volunteers");
 const {
-  findOpenRequests,
+  findOpenRequestsForSlack,
   findRequestByCode,
   updateRequestByCode
 } = require("~airtable/tables/requests");
@@ -67,7 +67,7 @@ async function selectRequestForSending(payload) {
     });
     return;
   }
-  let [requests, err] = await findOpenRequests(); // eslint-disable-line
+  let [requests, err] = await findOpenRequestsForSlack(); // eslint-disable-line
   requests = requests.filter(r => {
     const vols = r.get("Intake volunteer") || [];
     return vols.includes(volRecord.getId());
