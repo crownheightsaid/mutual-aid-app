@@ -49,7 +49,8 @@ exports.findRequestByExternalId = async externalId => {
   }
 };
 
-exports.findOpenRequests = async () => {
+// Returns requests that are to be posted in a public requests channel
+exports.findOpenRequestsForSlack = async () => {
   const requestOpenStates = [
     fields.status_options.dispatchStarted,
     fields.status_options.deliveryNeeded
@@ -74,7 +75,13 @@ exports.findOpenRequests = async () => {
       }
       return parsed.slack_ts === undefined;
     };
-    return [requests.filter(notInSlack), null];
+    // Delivery cluster requests are handled separately
+    const notForDrivingCluster = r => {
+      const forDrivingCluster = r.get(fields.forDrivingClusters);
+      return !forDrivingCluster;
+    };
+
+    return [requests.filter(notInSlack).filter(notForDrivingCluster), null];
   } catch (e) {
     return [[], `Error while looking up open requests: ${e}`];
   }
