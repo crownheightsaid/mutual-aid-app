@@ -52,6 +52,14 @@ exports.findPaymentRequestBySlackThreadId = async threadId => {
   }
 };
 
+exports.findPaymentRequestById = async id => {
+  try {
+    return [await paymentRequestsTable.find(id), null];
+  } catch (e) {
+    return [null, `Errors looking up payment request by recordId ${id}: ${e}`];
+  }
+};
+
 exports.findReimbursablePaymentRequests = async () => {
   const andConditions = [
     `{${fields.approval}} = "${fields.approval_options.approved}"`,

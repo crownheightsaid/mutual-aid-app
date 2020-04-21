@@ -14,7 +14,7 @@ const {
   findRequestByCode
 } = require("~airtable/tables/requests");
 
-module.exports = async record => {
+module.exports = async function newPaymentRequest(record) {
   const reimbursementChannel = await findChannelByName(REIMBURSEMENT_CHANNEL);
   await addBotToChannel(reimbursementChannel.id);
 

@@ -40,11 +40,12 @@ exports.findDonorPaymentByCode = async code => {
 // Schema
 // ==================================================================
 
-const donorPaymentsTableName = (exports.tableName = "DonorPayments");
-const donorPaymentsTable = (exports.table = paymentsAirbase(
+const donorPaymentsTableName = (exports.donorPaymentsTableName =
+  "DonorPayments");
+const donorPaymentsTable = (exports.donorPaymentsTable = paymentsAirbase(
   donorPaymentsTableName
 ));
-const fields = (exports.fields = {
+const fields = (exports.donorPaymentFields = {
   id: "ID",
   amount: "Amount",
   donor: "Donor",
@@ -80,14 +81,8 @@ const fields = (exports.fields = {
   code: "Code",
   lastModified: "Last Modified",
   disputes: "Disputes",
-  toBalancer: "ToBalancer",
-  fromBalancer: "FromBalancer",
   meta: "Meta",
   lastProcessed: "Last Processed",
-  donorMobile: "DonorMobile",
-  recipientMobile: "RecipientMobile",
-  toBalancerMobile: "ToBalancerMobile",
-  payerMobile: "PayerMobile",
-  fromBalancerMobile: "FromBalancerMobile",
-  payeeMobile: "PayeeMobile"
+  donorMobile: "DonorMobile"
 });
+exports.sensitiveDonorPaymentFields = [fields.donorMobile];

@@ -7,7 +7,7 @@ const {
 } = require("~airtable/tables/paymentRequests");
 const {
   createDonorPayment,
-  fields: donorFields
+  donorPaymentFields
 } = require("~airtable/tables/donorPayments");
 
 module.exports.register = function register(slackEvents) {
@@ -40,14 +40,14 @@ const filterAndReply = async event => {
   const newBalance = oldBalance - newDonationAmount;
 
   const [record] = await createDonorPayment({
-    [donorFields.amount]: newDonationAmount,
-    [donorFields.paymentRequest]: [paymentRequest.getId()],
-    [donorFields.status]: donorFields.status_options.pending,
-    [donorFields.donorSlackId]: event.user,
-    [donorFields.recipientConfirmation]:
-      donorFields.recipientConfirmation_options.pending,
-    [donorFields.donorConfirmation]:
-      donorFields.donorConfirmation_options.confirmed
+    [donorPaymentFields.amount]: newDonationAmount,
+    [donorPaymentFields.paymentRequest]: [paymentRequest.getId()],
+    [donorPaymentFields.status]: donorPaymentFields.status_options.pending,
+    [donorPaymentFields.donorSlackId]: event.user,
+    [donorPaymentFields.recipientConfirmation]:
+      donorPaymentFields.recipientConfirmation_options.pending,
+    [donorPaymentFields.donorConfirmation]:
+      donorPaymentFields.donorConfirmation_options.confirmed
   });
   if (!record) {
     console.log("Couldn't add donor's payment");
