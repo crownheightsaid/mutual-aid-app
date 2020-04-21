@@ -64,11 +64,21 @@ function startWorker(interval) {
       console.info(`Found ${recordsChanged.length} changes in Donor Payments`);
       const promises = [];
       recordsChanged.forEach(record => {
-        const isNewRecord =
-          record.didChange(donorPaymentFields.id) &&
-          !record.getPrior(donorPaymentFields.id);
-        if (isNewRecord && !record.get(donorPaymentFields.donorSlackId)) {
-          promises.push(newExternalDonorPayment(record));
+        const isExternal = !record.get(donorPaymentFields.donorSlackId);
+        if (isExternal) {
+          // this logic is needed because the donorPayment isn't created at once
+          const hasAmountAndRequest =
+            record.get(donorPaymentFields.amount) &&
+            record.get(donorPaymentFields.paymentRequest);
+          const isNewAmount =
+            record.didChange(donorPaymentFields.amount) &&
+            !record.getPrior(donorPaymentFields.amount);
+          const isNewPaymentRequest =
+            record.didChange(donorPaymentFields.paymentRequest) &&
+            !record.getPrior(donorPaymentFields.paymentRequest);
+          if (hasAmountAndRequest && (isNewAmount || isNewPaymentRequest)) {
+            promises.push(newExternalDonorPayment(record));
+          }
         }
       });
       return Promise.all(promises);

@@ -20,6 +20,7 @@ module.exports = async function newPaymentRequest(record) {
 
   const code = record.get(paymentRequestFields.requestCode).toUpperCase();
   const [request, _rErr] = await findRequestByCode(code);
+  // lookup if reimbursement request already exists for that code
   console.debug(
     `New Payment Request: ${record.get(
       paymentRequestFields.id
@@ -103,16 +104,13 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
     ]);
   });
 
+  const slackMessage = reimbursement.get(paymentRequestFields.slackMessage);
   const extraFields = [
     [
       "Code",
       reimbursementCode || "@chma-admins this request is missing a code!"
     ],
-    [
-      "Message",
-      `\n${reimbursement.get(paymentRequestFields.slackMessage)}` ||
-        "None provided"
-    ],
+    ["Message", slackMessage ? `-\n${slackMessage}` : "None provided"],
     ...donationField,
     [
       "Amount Needed",

@@ -39,6 +39,6 @@ module.exports = async function newExternalDonorPayment(record) {
     token: process.env.SLACK_BOT_TOKEN,
     channel: reimbursementChannel.id,
     thread_ts: slackThreadId,
-    text: `New donation by an external donor! They sent ${newDonationAmount}, ${message}`
+    text: `New donation by an external donor. They sent ${newDonationAmount}, ${message}`
   });
 };
