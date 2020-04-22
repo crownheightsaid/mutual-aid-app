@@ -57,6 +57,10 @@
     "BASIC_AUTH_USERS": {
       "description": "String of username:password separated by semicolons. Used for authed routes (nycma)",
       "required": false
+    },
+    "MANYC_WEBHOOK_URL": {
+      "description": "URL for sending updates to Manyc. Provided by Mutual Aid NYC.",
+      "required": false
     }
   }
 }
