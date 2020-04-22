@@ -11,7 +11,9 @@ module.exports = async function newExternalDonorPayment(record) {
   const reimbursementChannel = await findChannelByName(REIMBURSEMENT_CHANNEL);
   const dpId = record.get(donorPaymentFields.id);
   console.debug(
-    `New External Donor: ${dpId} |  $${record.get(donorPaymentFields.amount)}`
+    `New External Donor Payment: ${dpId} |  $${record.get(
+      donorPaymentFields.amount
+    )}`
   );
 
   const prId = record.get(donorPaymentFields.paymentRequest);
