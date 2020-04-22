@@ -1,6 +1,7 @@
 const ChangeDetector = require("airtable-change-detector");
 const {
   table: requestsTable,
+  fields: requestFields,
   SENSITIVE_FIELDS: sensitiveRequestFields
 } = require("~airtable/tables/requests");
 const updateMessageContent = require("./actions/updateMessageContent");
@@ -29,34 +30,28 @@ function startWorker(interval) {
     "airtable-sync.requests",
     interval,
     async recordsChanged => {
-      const statusFieldName = "Status";
-      const originFieldName = "Text or Voice?";
-      const codeFieldName = "Code";
-      const slackIdFieldName = "Delivery slackid";
-      const triggerBackfillFieldName = "Trigger Backfill";
       console.info(`Found ${recordsChanged.length} changes in Requests`);
       const promises = [];
       recordsChanged.forEach(record => {
-        if (record.didChange(statusFieldName)) {
-          const status = record.get(statusFieldName);
-          const newStatus = record.getPrior(statusFieldName);
+        if (record.didChange(requestFields.status)) {
+          const status = record.get(requestFields.status);
+          const newStatus = record.getPrior(requestFields.status);
           console.log(
-            `${record.get(codeFieldName)} moved from ${newStatus} -> ${status}`
+            `${record.get(
+              requestFields.code
+            )} moved from ${newStatus} -> ${status}`
           );
         }
         // TODO: Think about how to rate limit this to Airtable's 5 rps
         if (
-          record.didChange(statusFieldName) ||
-          record.didChange(slackIdFieldName)
+          record.didChange(requestFields.status) ||
+          record.didChange(requestFields.deliverySlackId) ||
+          record.didChange(requestFields.triggerBackfill)
         ) {
           promises.push(updateMessageContent(record));
         }
-        if (record.didChange(triggerBackfillFieldName)) {
-          promises.push(updateMessageContent(record));
-        }
         if (
-          record.get(originFieldName) === "manyc" &&
-          record.didChange(statusFieldName)
+          record.get(requestFields.type) === requestFields.type_options.manyc
         ) {
           promises.push(notifyManyc(record));
         }

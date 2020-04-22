@@ -1,27 +1,44 @@
 const axios = require("axios");
+const { fields: requestsFields } = require("~airtable/tables/requests");
 
 module.exports = async function notifyManyc(record) {
-  const statusFieldName = "Status";
+  const manycId = record.get(requestsFields.externalId);
+  if (!manycId) {
+    console.log("No manyc ID for manyc request.");
+    return;
+  }
+  if (!process.env.MANYC_WEBHOOK_URL) {
+    console.log("No manyc webhook URL.");
+    return;
+  }
 
-  const assignedStatus =
-    record.get(statusFieldName) === "Dispatch Started" ||
-    record.get(statusFieldName) === "Delivery Needed";
-  if (
-    record.getPrior(statusFieldName) === "Dispatch Needed" &&
-    assignedStatus
-  ) {
-    return sendManycStatus("assigned");
+  const isComplete =
+    record.didChange(requestsFields.status) &&
+    record.get(requestsFields.status) ===
+      requestsFields.status_options.requestComplete;
+  const hasNewIntakeVolunteer =
+    record.didChange(requestsFields.intakeVolunteer) &&
+    !record.getPrior(requestsFields.intakeVolunteer);
+
+  if (isComplete) {
+    await sendManycStatus("completed", manycId);
+  } else if (hasNewIntakeVolunteer) {
+    await sendManycStatus("assigned", manycId);
   }
-  if (record.get(statusFieldName) === "Request Complete") {
-    return sendManycStatus("completed");
-  }
-  return "No Update";
 };
 
-async function sendManycStatus(status) {
+async function sendManycStatus(status, manycId) {
   try {
-    await axios.get("/user?ID=12345");
+    const res = await axios.post(process.env.MANYC_WEBHOOK_URL, {
+      manyc: {
+        id: manycId,
+        status
+      }
+    });
+    if (res.status !== 200) {
+      console.log(`Manyc webhook failed: ${res.statusText}`);
+    }
   } catch (error) {
-    console.error(error);
+    console.error(`Manyc webhook failed: ${error}`);
   }
 }
