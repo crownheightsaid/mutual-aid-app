@@ -88,6 +88,9 @@ exports.findOpenRequestsForSlack = async () => {
 };
 
 exports.findRequestByCode = async code => {
+  if (code && code.length < 4) {
+    return [null, `Request code must be at least 4 characters.`];
+  }
   try {
     const records = await requestsTable
       .select({
@@ -129,6 +132,9 @@ exports.findRequestByPhone = async phone => {
 //   "Meta": {key: "value"}
 // }
 exports.updateRequestByCode = async (code, update) => {
+  if (code && code.length < 4) {
+    return [null, `Request code must be at least 4 characters.`];
+  }
   try {
     const records = await requestsTable
       .select({
