@@ -167,7 +167,7 @@ exports.atdViewOpen = async payload => {
         inclusive: true
       });
       assert(requestMessage.messages.length !== 0, "No messages found.");
-      const capturingRegex = /Code[^\w\d]+(?<code>[\w\d]{4})[^\w\d]*\n/;
+      const capturingRegex = /Code[^\w\d]+(?<code>[\w\d]{4,6})[^\w\d]*\n/;
       const found = requestMessage.messages[0].text.match(capturingRegex);
       if (found.groups.code) {
         codeGuess = found.groups.code;
@@ -220,7 +220,7 @@ exports.atdViewOpen = async payload => {
               type: "plain_text_input",
               action_id: "request_code",
               min_length: 4,
-              max_length: 4,
+              max_length: 6,
               initial_value: codeGuess
             },
             label: {

@@ -51,7 +51,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
         <TextField
           id="request_code"
           name="request_code"
-          label="Request code, e.g. V8DL"
+          label="Request code, e.g. V8DLSD"
           type="text"
           margin="normal"
           variant="outlined"

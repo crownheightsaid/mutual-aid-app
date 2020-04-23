@@ -89,9 +89,13 @@ exports.findOpenRequestsForSlack = async () => {
 
 exports.findRequestByCode = async code => {
   try {
+    let issue57Code = code || "------";
+    if (issue57Code.length !== 6) {
+      issue57Code = `--${issue57Code}`;
+    }
     const records = await requestsTable
       .select({
-        filterByFormula: `({${fields.code}} = '${code}')`
+        filterByFormula: `(FIND({${fields.code}}, '${issue57Code}') > 0)`
       })
       .firstPage();
     if (records.length === 0) {
@@ -130,9 +134,13 @@ exports.findRequestByPhone = async phone => {
 // }
 exports.updateRequestByCode = async (code, update) => {
   try {
+    let issue57Code = code || "------";
+    if (issue57Code.length !== 6) {
+      issue57Code = `--${issue57Code}`;
+    }
     const records = await requestsTable
       .select({
-        filterByFormula: `({${fields.code}} = '${code}')`
+        filterByFormula: `(FIND({${fields.code}}, '${issue57Code}') > 0)`
       })
       .firstPage();
     if (records.length === 0) {
