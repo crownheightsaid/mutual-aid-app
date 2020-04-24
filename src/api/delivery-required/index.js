@@ -60,15 +60,24 @@ exports.deliveryRequiredRequestHandler = async (req, res) => {
       console.log("could not parse", r.fields.meta);
     }
     return {
-      [code]: r.fields[code],
-      [crossStreetFirst]: r.fields[crossStreetFirst],
-      [crossStreetSecond]: r.fields[crossStreetSecond],
-      [neighborhoodAreaSeeMap]: r.fields[neighborhoodAreaSeeMap],
-      slackChannelId,
-      location
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [location.lng, location.lat]
+      },
+      properties: {
+        title: r.fields[code],
+        meta: {
+          [code]: r.fields[code],
+          [crossStreetFirst]: r.fields[crossStreetFirst],
+          [crossStreetSecond]: r.fields[crossStreetSecond],
+          [neighborhoodAreaSeeMap]: r.fields[neighborhoodAreaSeeMap],
+          slackChannelId
+        }
+      }
     };
   });
 
   const requestsClean = await Promise.all(requestsWithCoordsPromises);
-  return res.send(requestsClean);
+  return res.send({type: "FeatureCollection", features: requestsClean});
 };
