@@ -180,7 +180,7 @@ export default function NeighborhoodFinder() {
       </Box>
 
       <Box className={classes.mapRoot}>
-        <QuadrantMap location={data && data.location} />
+        <QuadrantMap locations={data && [data.location]} />
       </Box>
     </Box>
   );

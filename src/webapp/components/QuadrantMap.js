@@ -35,17 +35,30 @@ const MissingMap = () => (
   </div>
 );
 
+const Marker = ({ lnglat }) => (
+  <Layer
+    type="symbol"
+    id="marker"
+    layout={{ "icon-image": "star-15", "icon-size": 1.5 }}
+  >
+    <Feature coordinates={[lnglat.lng, lnglat.lat]} />
+  </Layer>
+);
+
 const MapboxMap = MAPBOX_TOKEN
   ? ReactMapboxGl({
       accessToken: MAPBOX_TOKEN
     })
   : MissingMap;
 
-const QuadrantMap = ({ location }) => {
-  const lnglat = location && new LngLat(location.lng, location.lat);
-  const bounds = lnglat
-    ? findBounds([...CROWN_HEIGHTS_BOUNDS, lnglat])
-    : CROWN_HEIGHTS_BOUNDS;
+const QuadrantMap = ({ locations = [] }) => {
+  const lnglats = locations.map(
+    location => new LngLat(location.lng, location.lat)
+  );
+  const bounds =
+    lnglats.length > 0
+      ? findBounds([...CROWN_HEIGHTS_BOUNDS, ...lnglats])
+      : CROWN_HEIGHTS_BOUNDS;
 
   return (
     <MapboxMap // eslint-disable-next-line react/style-prop-object
@@ -103,15 +116,9 @@ const QuadrantMap = ({ location }) => {
       />
 
       {/* display marker for current address if exists */}
-      {lnglat && (
-        <Layer
-          type="symbol"
-          id="marker"
-          layout={{ "icon-image": "star-15", "icon-size": 1.5 }}
-        >
-          <Feature coordinates={[lnglat.lng, lnglat.lat]} />
-        </Layer>
-      )}
+      {lnglats.map(ll => {
+        return <Marker lnglat={ll} />;
+      })}
     </MapboxMap>
   );
 };
