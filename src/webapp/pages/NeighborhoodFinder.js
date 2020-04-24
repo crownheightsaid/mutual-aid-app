@@ -11,7 +11,7 @@ import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import QuadrantMap from "../components/QuadrantMap";
 import SaveNeighborhoodDataInput from "../components/SaveNeighborhoodDataInput";
-import { sharedStylesFn } from '../style/sharedStyles';
+import { sharedStylesFn } from "../style/sharedStyles";
 
 const useStyles = makeStyles(theme => ({
   ...sharedStylesFn(theme),
