@@ -41,36 +41,9 @@ const MapboxMap = MAPBOX_TOKEN
     })
   : MissingMap;
 
-const QuadrantMap = ({ locations = [], containerStyle = {} }) => {
-  const lnglats = locations.map(
-    location => new LngLat(location.lng, location.lat)
-  );
-  const bounds =
-    lnglats.length > 0
-      ? findBounds([...CROWN_HEIGHTS_BOUNDS, ...lnglats])
-      : CROWN_HEIGHTS_BOUNDS;
-
+const QuadrantsLayers = () => {
   return (
-    <MapboxMap // eslint-disable-next-line react/style-prop-object
-      style="mapbox://styles/mapbox/bright-v9"
-      center={CROWN_HEIGHTS_CENTER_COORD}
-      containerStyle={{
-        height: "350px",
-        width: "100%",
-        ...containerStyle
-      }}
-      fitBounds={bounds}
-      fitBoundsOptions={{
-        padding: {
-          top: 24,
-          right: 24,
-          bottom: 24,
-          left: 24
-        }
-      }}
-    >
-      <ZoomControl />
-
+    <>
       {/* load geojson source */}
       <Source
         id="quadrants_src"
@@ -105,7 +78,40 @@ const QuadrantMap = ({ locations = [], containerStyle = {} }) => {
           "text-size": 20
         }}
       />
+    </>
+  );
+};
+const QuadrantMap = ({ locations = [], containerStyle = {} }) => {
+  const lnglats = locations.map(
+    location => new LngLat(location.lng, location.lat)
+  );
+  const bounds =
+    lnglats.length > 0
+      ? findBounds([...CROWN_HEIGHTS_BOUNDS, ...lnglats])
+      : CROWN_HEIGHTS_BOUNDS;
 
+  return (
+    <MapboxMap // eslint-disable-next-line react/style-prop-object
+      style="mapbox://styles/mapbox/bright-v9"
+      center={CROWN_HEIGHTS_CENTER_COORD}
+      containerStyle={{
+        height: "350px",
+        width: "100%",
+        ...containerStyle
+      }}
+      fitBounds={bounds}
+      fitBoundsOptions={{
+        padding: {
+          top: 24,
+          right: 24,
+          bottom: 24,
+          left: 24
+        }
+      }}
+    >
+      <ZoomControl />
+
+      <QuadrantsLayers />
       {/* display marker for current address if exists */}
       {lnglats.map(({ lng, lat, code }, i) => {
         return (
@@ -113,7 +119,7 @@ const QuadrantMap = ({ locations = [], containerStyle = {} }) => {
             key={code}
             type="symbol"
             id={`marker-${i}`}
-            layout={{ "icon-image": "circle-15", "icon-size": 0.5 }}
+            layout={{ "icon-image": "star-15", "icon-size": 1.5 }}
           >
             <Feature coordinates={[lng, lat]} />
           </Layer>
@@ -124,3 +130,4 @@ const QuadrantMap = ({ locations = [], containerStyle = {} }) => {
 };
 
 export default QuadrantMap;
+export { QuadrantsLayers };

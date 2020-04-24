@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
 import useAxios from "axios-hooks";
+import { CircularProgress } from "@material-ui/core";
 import { sharedStylesFn } from "../style/sharedStyles";
-import QuadrantMap from "../components/QuadrantMap";
-import { LngLat } from "mapbox-gl";
+import ClusterMap from "../components/ClusterMap";
 
 const useStyles = makeStyles(theme => ({
   ...sharedStylesFn(theme),
@@ -14,20 +14,25 @@ const useStyles = makeStyles(theme => ({
 
 export default function DeliveryNeeded() {
   const classes = useStyles();
-  const [{ data, loading, error }, submit] = useAxios({
+  const [{ data, loading, error }] = useAxios({
     url: `/api/delivery-required/requests.json`,
     method: "get"
   });
+
+  if (loading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    return <Box>{""+error}</Box>;
+  }
   return (
     <Box className={classes.root}>
       <Typography variant="h4">CHMA Delivery Needed</Typography>
       <Box className={classes.mapRoot}>
-        <QuadrantMap
-          containerStyle={{height: '500px', width: '800px'}}
-          locations={
-            data &&
-            data.map(({ location }) => new LngLat(location.lng, location.lat))
-          }
+        <ClusterMap
+          containerStyle={{ height: "500px", width: "800px" }}
+          geoJsonData={data}
         />
       </Box>
     </Box>
