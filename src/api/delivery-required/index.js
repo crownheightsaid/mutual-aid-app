@@ -1,6 +1,28 @@
+const { Client } = require("@googlemaps/google-maps-services-js");
 const { findDeliveryNeededRequests } = require("~airtable/tables/requests");
 const { fields } = require("~airtable/tables/requests");
 
+const fetchCoord = async (googleGeoClient, address) => {
+  const geoResult = await googleGeoClient.geocode({
+    params: {
+      address,
+      region: "us",
+      components: {
+        locality: "New York City"
+      },
+      key: process.env.GOOGLE_MAPS_API_KEY
+    },
+    timeout: 1000 // milliseconds
+  });
+
+  const [locResult, ..._rest] = geoResult.data.results;
+  const {
+    geometry: { location }
+  } = locResult;
+  console.log(address, location);
+
+  return location;
+};
 exports.deliveryRequiredRequestHandler = async (req, res) => {
   const [requestObj, requestErr] = await findDeliveryNeededRequests();
 
@@ -18,9 +40,19 @@ exports.deliveryRequiredRequestHandler = async (req, res) => {
     neighborhoodAreaSeeMap
   } = fields;
 
-  const requestsClean = requestObj.map(r => {
+  const googleGeoClient = new Client({});
+
+  const requestsWithCoordsPromises = requestObj.map(async r => {
     let metaJSON = {};
     let slackChannelId;
+    const location = await fetchCoord(
+      googleGeoClient,
+      `
+      ${r.fields[crossStreetFirst]},
+      ${r.fields[crossStreetSecond]},
+      Brooklyn
+      `
+    );
 
     try {
       metaJSON = JSON.parse(r.fields[meta]);
@@ -33,8 +65,11 @@ exports.deliveryRequiredRequestHandler = async (req, res) => {
       [crossStreetFirst]: r.fields[crossStreetFirst],
       [crossStreetSecond]: r.fields[crossStreetSecond],
       [neighborhoodAreaSeeMap]: r.fields[neighborhoodAreaSeeMap],
-      slackChannelId
+      slackChannelId,
+      location
     };
   });
+
+  const requestsClean = await Promise.all(requestsWithCoordsPromises);
   return res.send(requestsClean);
 };
