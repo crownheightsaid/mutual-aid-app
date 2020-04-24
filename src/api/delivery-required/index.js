@@ -19,7 +19,6 @@ const fetchCoord = async (googleGeoClient, address) => {
   const {
     geometry: { location }
   } = locResult;
-  console.log(address, location);
 
   return location;
 };

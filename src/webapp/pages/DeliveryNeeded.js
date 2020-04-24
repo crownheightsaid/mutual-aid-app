@@ -23,7 +23,7 @@ export default function DeliveryNeeded() {
       <Typography variant="h4">CHMA Delivery Needed</Typography>
       <Box className={classes.mapRoot}>
         <QuadrantMap
-          containerStyle={{height: '500px'}}
+          containerStyle={{height: '500px', width: '800px'}}
           locations={
             data &&
             data.map(({ location }) => new LngLat(location.lng, location.lat))

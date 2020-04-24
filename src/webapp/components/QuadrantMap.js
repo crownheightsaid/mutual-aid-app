@@ -41,7 +41,7 @@ const MapboxMap = MAPBOX_TOKEN
     })
   : MissingMap;
 
-const QuadrantMap = ({ locations = [], containerStyle={} }) => {
+const QuadrantMap = ({ locations = [], containerStyle = {} }) => {
   const lnglats = locations.map(
     location => new LngLat(location.lng, location.lat)
   );
@@ -107,15 +107,18 @@ const QuadrantMap = ({ locations = [], containerStyle={} }) => {
       />
 
       {/* display marker for current address if exists */}
-      <Layer
-        type="symbol"
-        id="marker"
-        layout={{ "icon-image": "star-15", "icon-size": 1.5 }}
-      >
-        {lnglats.map(({lng, lat}) => {
-          return (<Feature coordinates={[lng, lat]} />);
-        })}
-      </Layer>
+      {lnglats.map(({ lng, lat, code }, i) => {
+        return (
+          <Layer
+            key={code}
+            type="symbol"
+            id={`marker-${i}`}
+            layout={{ "icon-image": "circle-15", "icon-size": 0.5 }}
+          >
+            <Feature coordinates={[lng, lat]} />
+          </Layer>
+        );
+      })}
     </MapboxMap>
   );
 };
