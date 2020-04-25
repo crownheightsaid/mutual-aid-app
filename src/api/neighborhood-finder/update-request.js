@@ -29,9 +29,9 @@ exports.neighborhoodFinderUpdateRequestHandler = async (req, res) => {
   const [_updated, updateErr] = await updateRequestByCode(requestCode, {
     [requestFields.crossStreetFirst]: street_1,
     [requestFields.crossStreetSecond]: street_2,
-    [requestFields.neighborhoodArea]: requestFields.neighborhoodAreaSeeMap_options.includes(
-      quadrant
-    )
+    [requestFields.neighborhoodArea]: Object.values(
+      requestFields.neighborhoodAreaSeeMap_options
+    ).includes(quadrant)
       ? quadrant
       : requestFields.neighborhoodArea_options.notCrownHeights
   });
