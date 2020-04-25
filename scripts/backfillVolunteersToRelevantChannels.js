@@ -3,7 +3,7 @@ const _ = require("lodash");
 const slackapi = require("~slack/webApi");
 const { listMembers, findChannelByName } = require("~slack/channels");
 const { getSlackIdForEmail } = require("~slack/users");
-const { VOLUNTEER_INTERESTS_TO_SLACK_CHANNELS } = require("~constants");
+const { VOLUNTEER_INTERESTS_TO_SLACK_CHANNELS } = require("~slack/constants");
 const {
   volunteersFields,
   volunteersTable

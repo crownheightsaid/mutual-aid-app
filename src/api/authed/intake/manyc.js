@@ -2,6 +2,7 @@ const {
   createRequest,
   findRequestByExternalId
 } = require("~airtable/tables/requests");
+const { str } = require("~strings/i18nextWrappers");
 
 exports.nycmaIntakeHandler = async (req, res, next) => {
   if (!req.body.manyc) {
@@ -20,19 +21,39 @@ exports.nycmaIntakeHandler = async (req, res, next) => {
   }
 
   const requestMessage = [
-    "This is a request from a different system.\n",
-    "The type of support requested is:\n",
-    manyc.supportType || "n/a",
-    "\nIn a free-form request they said:\n",
-    manyc.otherSupport || "nothing",
-    "\nThey are in this hard-hit community:\n",
-    manyc.community || "n/a",
-    "\nNeighborhoods (please fill out manually for now):\n",
-    manyc.neighborhood || "n/a"
+    `${str(
+      "airtable:manyc.request.message.intro",
+      "This is a request from a different system."
+    )}\n`,
+    `${str(
+      "airtable:manyc.request.message.supportType",
+      "The type of support requested is:"
+    )}\n`,
+    manyc.supportType || str("common:notAvailable", "n/a"),
+    `\n${str(
+      "airtable:manyc.request.message.otherSupport",
+      "In a free-form request they said:"
+    )}\n`,
+    manyc.otherSupport || str("common:notAvailable", "n/a"),
+    `\n${str(
+      "airtable:manyc.request.message.community",
+      "They are in this hard-hit community:"
+    )}\n`,
+    manyc.community || str("common:notAvailable", "n/a"),
+    `\n${str(
+      "airtable:manyc.request.message.neighborhoods",
+      "Neighborhoods (please fill out manually for now):"
+    )}\n`,
+    manyc.neighborhood || str("common:notAvailable", "n/a")
   ];
   const nycmaRequest = {
     message: requestMessage.join(" "),
-    phone: manyc.phone || "If there's no email too, please tell #tech!",
+    phone:
+      manyc.phone ||
+      str(
+        "airtable:manyc.request.contactError",
+        "If there's no email too, please tell #tech!"
+      ),
     externalId: manyc.id,
     email: manyc.email || "",
     urgency: manyc.urgency || "",

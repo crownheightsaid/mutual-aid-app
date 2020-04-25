@@ -1,17 +1,34 @@
 const { volunteersFields } = require("~airtable/tables/volunteers");
+const { str } = require("~strings/i18nextWrappers");
 
-exports.APP_NAME = process.env.APP_NAME || "Crown Heights Mutual Aid";
+exports.APP_NAME =
+  process.env.APP_NAME || str("common:appName", "Crown Heights Mutual Aid");
 
 // Slack channels
-exports.ARTS_CHANNEL = "art_and_design";
-exports.CARS_AND_BIKES_CHANNEL = "cars_and_bikes";
-exports.DELIVERY_CHANNEL = "delivery_volunteers";
-exports.FLYERS_CHANNEL = "flyer_squad";
-exports.TECH_CHANNEL = "tech";
+exports.ADMIN_CHANNEL = str("slackapp:channels.admin", "admin");
+exports.ARTS_CHANNEL = str("slackapp:channels.artAndDesign", "art_and_design");
+exports.CARS_AND_BIKES_CHANNEL = str(
+  "slackapp:channels.carsAndBikes",
+  "cars_and_bikes"
+);
+exports.REQUESTS_CHANNEL = str(
+  "slackapp:channels.communityRequests",
+  "community_needs"
+);
+exports.INTAKE_CHANNEL = str(
+  "slackapp:channels.intakeVolunteers",
+  "intake_volunteers"
+);
+exports.DELIVERY_CHANNEL = str(
+  "slackapp:channels.deliveryVolunteers",
+  "delivery_volunteers"
+);
+exports.FLYERS_CHANNEL = str("slackapp:channels.flyering", "flyer_squad");
+exports.TECH_CHANNEL = str("slackapp:channels.tech", "tech");
 
 // Slack usergroups
-exports.CARS_USERGROUP = "cars";
-exports.BIKES_USERGROUP = "bikes";
+exports.CARS_USERGROUP = str("slackapp:usergroups.cars", "cars");
+exports.BIKES_USERGROUP = str("slackapp:usergroups.bikes", "bikes");
 
 const waysToHelp = volunteersFields.waysToHelp_options;
 exports.VOLUNTEER_INTERESTS_TO_SLACK_CHANNELS = {

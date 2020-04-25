@@ -1,5 +1,6 @@
 // Helpers for modifying views (aka modals) in the app
 // See https://api.slack.com/surfaces/modals/using#modifying
+const { str } = require("~strings/i18nextWrappers");
 
 // Create an error for an individual submission field (specified by blockId)
 exports.messageErrorResponse = (blockId, msg) => {
@@ -16,11 +17,11 @@ const errorView = msg => {
     type: "modal",
     title: {
       type: "plain_text",
-      text: "Error :("
+      text: str("slackapp:modal.error.title", "Error :(")
     },
     close: {
       type: "plain_text",
-      text: "Close",
+      text: str("common:close", "Close"),
       emoji: true
     },
     blocks: [
@@ -40,11 +41,11 @@ const successView = msg => {
     type: "modal",
     title: {
       type: "plain_text",
-      text: "Done!"
+      text: str("slackapp:modal.success.title", "Done!")
     },
     close: {
       type: "plain_text",
-      text: "Close",
+      text: str("common:close"),
       emoji: true
     },
     blocks: [

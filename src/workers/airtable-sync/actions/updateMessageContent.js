@@ -1,8 +1,16 @@
 const slackapi = require("~slack/webApi");
+const { fields: requestFields } = require("~airtable/tables/requests");
+const { str } = require("~strings/i18nextWrappers");
 
 const mappings = {
-  "Delivery Assigned": ":white_check_mark: REQUEST ASSIGNED",
-  "Request Complete": ":heavy_check_mark:  REQUEST COMPLETED"
+  [requestFields.status_options.deliveryAssigned]: str(
+    "slackapp:requestBotPost.post.statusPrefix.assigned",
+    ":white_check_mark: REQUEST ASSIGNED\n"
+  ),
+  [requestFields.status_options.requestComplete]: str(
+    "slackapp:requestBotPost.post.statusPrefix.completed",
+    ":heavy_check_mark:  REQUEST COMPLETED\n"
+  )
 };
 
 /**
@@ -24,7 +32,9 @@ module.exports = async function updateMessageContent(record) {
   );
 
   if (existingMessage == null) {
-    console.log(`No existing message for code: ${record.get("Code")}`);
+    console.log(
+      `No existing message for code: ${record.get(requestFields.code)}`
+    );
     return;
   }
   const content = existingMessage.text;
@@ -33,17 +43,25 @@ module.exports = async function updateMessageContent(record) {
   // HACK: use non-breaking space as a delimiter between the status and the rest of the message: \u00A0
   const statusBadge = getStatusBadge(record);
   const contentWithoutStatus = content.replace(/.*\u00A0/, "");
-  let newContent = `${statusBadge}\u00A0${contentWithoutStatus}`;
+  let newContent = `${statusBadge}\u00A0`;
 
   // Shout-out the delivery volunteer if applicable
-  const deliveryVolunteer = record.get("Delivery slackid");
-  const shoutOutPattern = /Shout out to <@.*?>/;
-  if (!newContent.match(shoutOutPattern) && deliveryVolunteer) {
-    newContent += `\n:tada:Shout out to <@${deliveryVolunteer}> for volunteering to help!`;
+  const deliveryVolunteer = record.get(requestFields.deliverySlackId);
+  if (
+    deliveryVolunteer &&
+    !contentWithoutStatus.includes(`${deliveryVolunteer}`)
+  ) {
+    newContent += str("slackapp:requestBotPost.post.deliveryCongrats", {
+      defaultValue: `:tada:Shout out to {{- deliveryVolunteer}} for volunteering to help!\n`,
+      deliveryVolunteer: `<@${deliveryVolunteer}>`
+    });
   }
+  newContent += contentWithoutStatus;
 
   console.log(
-    `${record.get("Code")} now ${record.get("Status")} => ${statusBadge}`
+    `${record.get(requestFields.code)} now ${record.get(
+      requestFields.status
+    )} => ${statusBadge}`
   );
   await slackapi.chat.update({
     channel: meta["slack_channel"],
@@ -53,11 +71,14 @@ module.exports = async function updateMessageContent(record) {
 };
 
 function getStatusBadge(record) {
-  const status = record.get("Status");
+  const status = record.get(requestFields.status);
   if (mappings[status]) {
     return mappings[status];
   }
-  return ":red_circle:";
+  return str(
+    "slackapp:requestBotPost.post.statusPrefix.default",
+    ":red_circle:"
+  );
 }
 
 async function getExistingMessage(ts, channel) {

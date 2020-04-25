@@ -1,9 +1,8 @@
 const {
   updateRequestByCode,
-  findRequestByCode
+  findRequestByCode,
+  fields: requestFields
 } = require("~airtable/tables/requests");
-
-const NEIGHBORHOOD_AREA_UNAVAILABLE_OPTION = "Other - not Crown Heights";
 
 exports.neighborhoodFinderUpdateRequestHandler = async (req, res) => {
   const { requestCode, neighborhoodData } = req.body;
@@ -28,10 +27,13 @@ exports.neighborhoodFinderUpdateRequestHandler = async (req, res) => {
   } = neighborhoodData;
 
   const [_updated, updateErr] = await updateRequestByCode(requestCode, {
-    "Cross Street #1": street_1,
-    "Cross Street #2": street_2,
-    "Neighborhood Area (See Map)":
-      quadrant || NEIGHBORHOOD_AREA_UNAVAILABLE_OPTION
+    [requestFields.crossStreetFirst]: street_1,
+    [requestFields.crossStreetSecond]: street_2,
+    [requestFields.neighborhoodArea]: requestFields.neighborhoodAreaSeeMap_options.includes(
+      quadrant
+    )
+      ? quadrant
+      : requestFields.neighborhoodArea_options.notCrownHeights
   });
 
   if (updateErr) {

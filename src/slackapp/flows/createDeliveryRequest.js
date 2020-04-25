@@ -2,16 +2,21 @@ const { sortBy, isEqual } = require("lodash");
 const slackapi = require("~slack/webApi");
 const { findChannelByName, addBotToChannel } = require("~slack/channels");
 const { errorResponse, errorView } = require("~slack/views");
+const { REQUESTS_CHANNEL } = require("~slack/constants");
 const guard = require("~slack/guard");
 const { findVolunteerByEmail } = require("~airtable/tables/volunteers");
 const {
   findOpenRequestsForSlack,
   findRequestByCode,
-  updateRequestByCode
+  updateRequestByCode,
+  fields: requestsFields
 } = require("~airtable/tables/requests");
+const { str } = require("~strings/i18nextWrappers");
 
-const primaryChannelName = "community_needs";
-const modalTitle = "Create Delivery Request";
+const modalTitle = str(
+  "slackapp:requestBotPost.modal.title",
+  "Create Delivery Request"
+);
 
 // Slack callback_ids -these functions are hoisted from below for readability
 selectRequestForSending.id = "select_delivery_needed_request";
@@ -59,7 +64,10 @@ async function selectRequestForSending(payload) {
   let view = null;
   if (verr) {
     view = errorView(
-      `No volunteer with email: ${slackUserEmail}. Did you use your slack email to sign up?`
+      str("slackapp:requestBotPost.modal.error.noVolunteer", {
+        defaultValue: `No volunteer with email: {{- userEmail}}. Did you use your slack email to sign up?`,
+        userEmail: slackUserEmail
+      })
     );
     await slackapi.views.open({
       trigger_id: payload.trigger_id,
@@ -69,17 +77,26 @@ async function selectRequestForSending(payload) {
   }
   let [requests, err] = await findOpenRequestsForSlack(); // eslint-disable-line
   requests = requests.filter(r => {
-    const vols = r.get("Intake volunteer") || [];
+    const vols = r.get(requestsFields.intakeVolunteer) || [];
     return vols.includes(volRecord.getId());
   });
-  requests = sortBy(requests, r => r.get("Last Modified")).reverse();
+  requests = sortBy(requests, r =>
+    r.get(requestsFields.lastModified)
+  ).reverse();
 
   if (err) {
-    view = errorView(`Error looking up pending requests: ${err}`);
+    view = errorView(
+      `${str(
+        "slackapp:requestBotPost.modal.error.pendingRequests",
+        `Error looking up pending requests:`
+      )} ${err}`
+    );
   } else if (requests.length === 0) {
     view = errorView(
-      "Couldn't find any pending requests. Do you have requests assigned to you in the 'Delivery Needed' state?\n" +
-        "It's also possible you already posted this in Slack using the bot."
+      str(
+        "slackapp:requestBotPost.modal.error.noPendingRequests",
+        "Couldn't find any pending requests. Do you have requests assigned to you in the 'Delivery Needed' state?\n It's also possible you already posted this in Slack using the bot."
+      )
     );
   } else {
     view = await makeRequestSelectionView(requests);
@@ -99,7 +116,12 @@ async function draftRequest(payload) {
       .value;
   const [request, err] = await findRequestByCode(code);
   if (err) {
-    return errorResponse(`Request ${code} wasn't found. ${err}`);
+    return errorResponse(
+      `${str(
+        "slackapp:requestBotPost.modal.error.requestNotFound",
+        `Request wasn't found`
+      )}: ${code} ${err}`
+    );
   }
   const form = await makeRequestDraftView(payload, request);
   return {
@@ -118,7 +140,12 @@ async function draftConfirm(payload) {
   const channel = values.selected_channel.selected_channel.selected_channel;
   const [request, err] = await findRequestByCode(code);
   if (err) {
-    return errorResponse(`Request ${code} wasn't found. ${err}`);
+    return errorResponse(
+      `${str(
+        "slackapp:requestBotPost.modal.error.requestNotFound",
+        `Request wasn't found`
+      )}: ${code} ${err}`
+    );
   }
   return {
     response_action: "push",
@@ -147,8 +174,8 @@ async function sendMessage(payload) {
 
   // Update the metadata on the Request
   await updateRequestByCode(context.code, {
-    Status: "Delivery Needed",
-    Meta: {
+    [requestsFields.status]: requestsFields.status_options.deliveryNeeded,
+    [requestsFields.meta]: {
       slack_ts: deliveryMessage.ts,
       slack_channel: deliveryMessage.channel
     }
@@ -168,10 +195,11 @@ async function makeRequestSelectionView(requests) {
     return {
       text: {
         type: "mrkdwn",
-        text: `*${r.get("Code")}* ${r.get("Phone") ||
-          r.get("Email Address")} _${r.get("Status")}_`
+        text: `*${r.get(requestsFields.code)}* - ${r.get(
+          requestsFields.phone
+        ) || r.get(requestsFields.email)} _${r.get(requestsFields.status)}_`
       },
-      value: r.get("Code")
+      value: r.get(requestsFields.code)
     };
   });
   const requestSelectionBlocks = {
@@ -185,12 +213,15 @@ async function makeRequestSelectionView(requests) {
     },
     submit: {
       type: "plain_text",
-      text: "Create Message",
+      text: str(
+        "slackapp:requestBotPost.modal.picker.submit",
+        "Create Message"
+      ),
       emoji: true
     },
     close: {
       type: "plain_text",
-      text: "Cancel",
+      text: str("common:cancel", "Cancel"),
       emoji: true
     },
     blocks: [
@@ -205,7 +236,10 @@ async function makeRequestSelectionView(requests) {
         },
         label: {
           type: "plain_text",
-          text: "Pick a request",
+          text: str(
+            "slackapp:requestBotPost.modal.picker.message",
+            "Pick a request"
+          ),
           emoji: true
         }
       }
@@ -218,11 +252,11 @@ async function makeRequestSelectionView(requests) {
  * Modal view for drafting a new request. Suggests a template automatically.
  */
 async function makeRequestDraftView(payload, request) {
-  const primaryChannel = await findChannelByName(primaryChannelName);
+  const requestsChannel = await findChannelByName(REQUESTS_CHANNEL);
   const requestDraftBlocks = {
     type: "modal",
     callback_id: draftConfirm.id,
-    private_metadata: request.get("Code"),
+    private_metadata: request.get(requestsFields.code),
     title: {
       type: "plain_text",
       text: modalTitle,
@@ -230,12 +264,12 @@ async function makeRequestDraftView(payload, request) {
     },
     submit: {
       type: "plain_text",
-      text: "Preview",
+      text: str("slackapp:requestBotPost.modal.draft.submit", "Preview"),
       emoji: true
     },
     close: {
       type: "plain_text",
-      text: "Cancel",
+      text: str("common:cancel", "Cancel"),
       emoji: true
     },
     blocks: [
@@ -245,10 +279,13 @@ async function makeRequestDraftView(payload, request) {
         element: {
           type: "channels_select",
           action_id: "selected_channel",
-          initial_channel: primaryChannel.id,
+          initial_channel: requestsChannel.id,
           placeholder: {
             type: "plain_text",
-            text: "Select a channel",
+            text: str(
+              "slackapp:requestBotPost.modal.draft.channelSelect",
+              "Select a channel"
+            ),
             emoji: true
           }
         },
@@ -269,7 +306,10 @@ async function makeRequestDraftView(payload, request) {
         },
         label: {
           type: "plain_text",
-          text: "Draft Message",
+          text: str(
+            "slackapp:requestBotPost.modal.draft.label",
+            "Draft Message"
+          ),
           emoji: true
         }
       }
@@ -282,7 +322,7 @@ async function makeRequestDraftView(payload, request) {
  * Modal view for confirming a delivery request
  */
 function makeConfirmationView(request, channelId, content) {
-  const code = request.get("Code");
+  const code = request.get(requestsFields.code);
   const context = {
     code,
     channelId,
@@ -299,12 +339,12 @@ function makeConfirmationView(request, channelId, content) {
     },
     submit: {
       type: "plain_text",
-      text: "Send",
+      text: str("slackapp:requestBotPost.modal.confirm.submit", "Send"),
       emoji: true
     },
     close: {
       type: "plain_text",
-      text: "Edit",
+      text: str("slackapp:requestBotPost.modal.confirm.edit", "Edit"),
       emoji: true
     },
     blocks: [
@@ -314,7 +354,7 @@ function makeConfirmationView(request, channelId, content) {
           {
             type: "mrkdwn",
             text: `*Request*: ${request.get(
-              "Code"
+              requestsFields.code
             )}\n*Channel*: <#${channelId}>`
           }
         ]
@@ -341,50 +381,84 @@ function makeConfirmationView(request, channelId, content) {
 function suggestedTemplate(payload, request) {
   const slackId = payload.user.id;
   const streets = [
-    request.get("Cross Street #1"),
-    request.get("Cross Street #2")
+    request.get(requestsFields.crossStreetFirst),
+    request.get(requestsFields.crossStreetSecond)
   ]
     .filter(s => s !== undefined)
     .join(" & ");
-  let name = "our neighbor";
-  if (streets) {
-    name += ` at ${streets}`;
+
+  let quadrant = request.get(requestsFields.neighborhoodArea);
+  const { nw, sw, ne, se } = requestsFields.neighborhoodArea_options;
+  if ([nw, sw, ne, se].includes(quadrant)) {
+    quadrant += ` ${str("common:neighborhood", "Crown Heights")}`;
   }
-  let quadrant =
-    request.get("Neighborhood Area (See Map)") || "Other - Unknown";
-  if (quadrant.match(/^NE|SE|SW|NE$/)) {
-    quadrant += " Crown Heights";
-  }
-  let firstName = request.get("First Name");
+
+  let firstName = request.get(requestsFields.firstName);
   firstName = firstName ? ` ${firstName}` : "";
 
-  const services =
-    request.get("What type(s) of support are you seeking?") || [];
-  let aidType = "for aid from";
+  const services = request.get(requestsFields.supportType) || [];
   let needs = services.join(", ");
-  if (isEqual(services, ["Deliver groceries or supplies to me"])) {
+  if (isEqual(services, [requestsFields.supportType_options.delivery])) {
     // eslint-disable-line
-    aidType = "to deliver groceries to";
     needs = "Groceries / Shopping";
   }
 
   const extraFields = [
-    ["Timeline", request.get("Time Sensitivity") || "When convenient"],
-    ["Neighborhood", quadrant],
-    ["Need", needs],
-    ["Cross Streets", streets],
-    ["Language", (request.get("Languages") || []).join("/")],
-    ["Description", request.get("Intake General Notes") || "No notes"],
-    ["Code", request.get("Code")]
+    [
+      str("slackapp:requestBotPost.post.fields.timeline.name", "Timeline"),
+      request.get(requestsFields.timeSensitivity) ||
+        str(
+          "slackapp:requestBotPost.post.fields.timeline.default",
+          "When convenient"
+        )
+    ],
+    [
+      str(
+        "slackapp:requestBotPost.post.fields.neighborhood.name",
+        "Neighborhood"
+      ),
+      quadrant ||
+        str(
+          "slackapp:requestBotPost.post.fields.neighborhood.default",
+          "Other - Unknown"
+        )
+    ],
+    [str("slackapp:requestBotPost.post.fields.needs.name", "Need"), needs],
+    [
+      str("slackapp:requestBotPost.post.fields.streets.name", "Cross Streets"),
+      streets
+    ],
+    [
+      str("slackapp:requestBotPost.post.fields.language.name", "Language"),
+      (request.get(requestsFields.languages) || []).join("/")
+    ],
+    [
+      str("slackapp:requestBotPost.post.fields.notes.name", "Description"),
+      request.get(requestsFields.intakeNotes) ||
+        str("slackapp:requestBotPost.post.fields.notes.default", "No notes")
+    ],
+    ["Code", request.get(requestsFields.code)] // No str because we need to regex it after
   ];
-  const status = ":red_circle:";
+  const status = str(
+    "slackapp:requestBotPost.post.statusPrefix.default",
+    ":red_circle:"
+  );
   const fieldRepresentation = extraFields
     .filter(kv => kv[1])
     .map(kv => `*${kv[0]}*: ${kv[1].trim()}`)
     .join("\n");
   // HACK: use non-breaking space as a delimiter between the status and the rest of the message: \u00A0
-  return `${status}\u00A0Hey <!channel> we have a new request ${aidType} ${name} in *${quadrant}*:
+  return `${status}\u00A0${str("slackapp:requestBotPost.post.message.intro", {
+    defaultValue: `Hey <!channel> we have a new request from our neighbor {{firstName}} at {{streets}} in *{{quadrant}}*`,
+    firstName,
+    streets,
+    quadrant
+  })}:
 ${fieldRepresentation}
-*Want to volunteer to help our neighbor${firstName}?* Comment on this thread and <@${slackId}> will follow up with more details.
-_Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive._`;
+${str("slackapp:requestBotPost.post.message.outro", {
+  defaultValue: `*Want to volunteer to help our neighbor{{firstName}}?* Comment on this thread and {{- intakeSlackId}} will follow up with more details.
+_Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive._`,
+  intakeSlackId: `<@${slackId}>`,
+  firstName
+})}`;
 }
