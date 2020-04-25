@@ -30,7 +30,7 @@ exports.neighborhoodFinderUpdateRequestHandler = async (req, res) => {
     [requestFields.crossStreetFirst]: street_1,
     [requestFields.crossStreetSecond]: street_2,
     [requestFields.neighborhoodArea]: Object.values(
-      requestFields.neighborhoodAreaSeeMap_options
+      requestFields.neighborhoodArea_options
     ).includes(quadrant)
       ? quadrant
       : requestFields.neighborhoodArea_options.notCrownHeights
