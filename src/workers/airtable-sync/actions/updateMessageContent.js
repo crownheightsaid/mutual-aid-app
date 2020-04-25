@@ -42,7 +42,7 @@ module.exports = async function updateMessageContent(record) {
   // Set up the status emoji/phrase
   // HACK: use non-breaking space as a delimiter between the status and the rest of the message: \u00A0
   const statusBadge = getStatusBadge(record);
-  const contentWithoutStatus = content.replace(/.*\u00A0/, "");
+  const contentWithoutStatus = content.replace(/^(.|[\r\n])*\u00A0/, "");
   let newContent = `${statusBadge}\u00A0`;
 
   // Shout-out the delivery volunteer if applicable
