@@ -43,7 +43,7 @@ module.exports = async function updateMessageContent(record) {
   // HACK: use non-breaking space as a delimiter between the status and the rest of the message: \u00A0
   const statusBadge = getStatusBadge(record);
   const contentWithoutStatus = content.replace(/^(.|[\r\n])*\u00A0/, "");
-  let newContent = `${statusBadge}\u00A0`;
+  let newContent = `${statusBadge}\u00A0${contentWithoutStatus}\n`;
 
   // Shout-out the delivery volunteer if applicable
   const deliveryVolunteer = record.get(requestFields.deliverySlackId);
@@ -52,11 +52,10 @@ module.exports = async function updateMessageContent(record) {
     !contentWithoutStatus.includes(`${deliveryVolunteer}`)
   ) {
     newContent += str("slackapp:requestBotPost.post.deliveryCongrats", {
-      defaultValue: `:tada:Shout out to {{- deliveryVolunteer}} for volunteering to help!\n`,
+      defaultValue: `Shout out to {{- deliveryVolunteer}} for volunteering to help! :tada:\n`,
       deliveryVolunteer: `<@${deliveryVolunteer}>`
     });
   }
-  newContent += contentWithoutStatus;
 
   console.log(
     `${record.get(requestFields.code)} now ${record.get(
