@@ -30,10 +30,7 @@ const MissingMap = () => {
   const { t: str } = useTranslation();
   return (
     <div>
-      {str(
-        "webapp:zoneFinder.map.error",
-        "Mapbox token is missing. This means that the map cannot be displayed, but should not affect the functionality of the page. Please inform"
-      )}
+      {str("webapp:zoneFinder.map.error")}
       &nbsp;
       <a href={str("webapp:slack.techChannelUrl")}>
         {str("webapp:slack.techChannel")}

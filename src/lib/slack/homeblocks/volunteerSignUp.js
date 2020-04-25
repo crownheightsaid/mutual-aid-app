@@ -5,10 +5,7 @@ module.exports = [
     type: "section",
     text: {
       type: "mrkdwn",
-      text: str(
-        "slackapp:home.volunteerSignUp.message",
-        "Your Slack email isn't in our volunteer records.\nIf you want to get involved more please fill it out!"
-      )
+      text: str("slackapp:home.volunteerSignUp.message")
     }
   },
   {
@@ -18,15 +15,9 @@ module.exports = [
         type: "button",
         text: {
           type: "plain_text",
-          text: str(
-            "slackapp:home.volunteerSignUp.formButton.text",
-            "Volunteering Form"
-          )
+          text: str("slackapp:home.volunteerSignUp.formButton.text")
         },
-        url: str(
-          "slackapp:home.volunteerSignUp.formButton.url",
-          "https://airtable.com/shraIzCNdiMwW1bpP"
-        ),
+        url: str("slackapp:home.volunteerSignUp.formButton.url"),
         action_id: "volunteer-form"
       }
     ]
@@ -35,10 +26,7 @@ module.exports = [
     type: "section",
     text: {
       type: "mrkdwn",
-      text: str(
-        "slackapp:home.volunteerSignUp.errorMessage",
-        "If you already submitted one, it might take this page a few minutes to update 💦💾💾💦"
-      )
+      text: str("slackapp:home.volunteerSignUp.errorMessage")
     }
   }
 ];

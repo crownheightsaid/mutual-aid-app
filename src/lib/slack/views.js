@@ -17,11 +17,11 @@ const errorView = msg => {
     type: "modal",
     title: {
       type: "plain_text",
-      text: str("slackapp:modal.error.title", "Error :(")
+      text: str("slackapp:modal.error.title")
     },
     close: {
       type: "plain_text",
-      text: str("common:close", "Close"),
+      text: str("common:close"),
       emoji: true
     },
     blocks: [
@@ -41,7 +41,7 @@ const successView = msg => {
     type: "modal",
     title: {
       type: "plain_text",
-      text: str("slackapp:modal.success.title", "Done!")
+      text: str("slackapp:modal.success.title")
     },
     close: {
       type: "plain_text",

@@ -44,7 +44,7 @@ exports.nycmaIntakeHandler = async (req, res, next) => {
       "airtable:manyc.request.message.neighborhoods",
       "Neighborhoods (please fill out manually for now):"
     )}\n`,
-    manyc.neighborhood || str("common:notAvailable", "n/a")
+    manyc.neighborhood || str("common:notAvailable")
   ];
   const nycmaRequest = {
     message: requestMessage.join(" "),

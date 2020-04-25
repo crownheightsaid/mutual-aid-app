@@ -144,7 +144,7 @@
         "intro": "Hey <!channel> we have a new request from our neighbor {{firstName}} at {{streets}} in *{{quadrant}}*",
         "outro": "*Want to volunteer to help our neighbor{{firstName}}?* Comment on this thread and {{- intakeSlackId}} will follow up with more details.\n_Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive._"
       },
-      "deliveryCongrats": ":tada:Shout out to {{- deliveryVolunteer}} for volunteering to help!\n"
+      "deliveryCongrats": ":tada: Shout out to {{- deliveryVolunteer}} for volunteering to help! :tada:\n"
     }
   },
   "editBotPost": {

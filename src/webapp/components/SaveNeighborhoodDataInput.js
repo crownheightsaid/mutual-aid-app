@@ -58,10 +58,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
         <TextField
           id="request_code"
           name="request_code"
-          label={str(
-            "webapp:zoneFinder.airtableUpdate.codeLabel",
-            "Request code, e.g. V8DLS4"
-          )}
+          label={str("webapp:zoneFinder.airtableUpdate.codeLabel")}
           type="text"
           margin="normal"
           variant="outlined"
@@ -80,10 +77,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
                   aria-label="request_code"
                   onClick={handleAddToAirtable}
                 >
-                  {str(
-                    "webapp:zoneFinder.airtableUpdate.submit",
-                    "Update address"
-                  )}
+                  {str("webapp:zoneFinder.airtableUpdate.submit")}
                 </Button>
               </InputAdornment>
             )
@@ -93,10 +87,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
       {loading && <CircularProgress />}
       {!error && data && data.success && (
         <Typography variant="caption" className={classes.successMessage}>
-          {str(
-            "webapp:zoneFinder.airtableUpdate.success",
-            "Successfully updated request"
-          )}
+          {str("webapp:zoneFinder.airtableUpdate.success")}
         </Typography>
       )}
     </Box>

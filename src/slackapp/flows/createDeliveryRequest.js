@@ -86,17 +86,11 @@ async function selectRequestForSending(payload) {
 
   if (err) {
     view = errorView(
-      `${str(
-        "slackapp:requestBotPost.modal.error.pendingRequests",
-        `Error looking up pending requests:`
-      )} ${err}`
+      `${str("slackapp:requestBotPost.modal.error.pendingRequests")} ${err}`
     );
   } else if (requests.length === 0) {
     view = errorView(
-      str(
-        "slackapp:requestBotPost.modal.error.noPendingRequests",
-        "Couldn't find any pending requests. Do you have requests assigned to you in the 'Delivery Needed' state?\n It's also possible you already posted this in Slack using the bot."
-      )
+      str("slackapp:requestBotPost.modal.error.noPendingRequests")
     );
   } else {
     view = await makeRequestSelectionView(requests);
@@ -118,8 +112,7 @@ async function draftRequest(payload) {
   if (err) {
     return errorResponse(
       `${str(
-        "slackapp:requestBotPost.modal.error.requestNotFound",
-        `Request wasn't found`
+        "slackapp:requestBotPost.modal.error.requestNotFound"
       )}: ${code} ${err}`
     );
   }
@@ -142,8 +135,7 @@ async function draftConfirm(payload) {
   if (err) {
     return errorResponse(
       `${str(
-        "slackapp:requestBotPost.modal.error.requestNotFound",
-        `Request wasn't found`
+        "slackapp:requestBotPost.modal.error.requestNotFound"
       )}: ${code} ${err}`
     );
   }
@@ -213,15 +205,12 @@ async function makeRequestSelectionView(requests) {
     },
     submit: {
       type: "plain_text",
-      text: str(
-        "slackapp:requestBotPost.modal.picker.submit",
-        "Create Message"
-      ),
+      text: str("slackapp:requestBotPost.modal.picker.submit"),
       emoji: true
     },
     close: {
       type: "plain_text",
-      text: str("common:cancel", "Cancel"),
+      text: str("common:cancel"),
       emoji: true
     },
     blocks: [
@@ -236,10 +225,7 @@ async function makeRequestSelectionView(requests) {
         },
         label: {
           type: "plain_text",
-          text: str(
-            "slackapp:requestBotPost.modal.picker.message",
-            "Pick a request"
-          ),
+          text: str("slackapp:requestBotPost.modal.picker.message"),
           emoji: true
         }
       }
@@ -264,12 +250,12 @@ async function makeRequestDraftView(payload, request) {
     },
     submit: {
       type: "plain_text",
-      text: str("slackapp:requestBotPost.modal.draft.submit", "Preview"),
+      text: str("slackapp:requestBotPost.modal.draft.submit"),
       emoji: true
     },
     close: {
       type: "plain_text",
-      text: str("common:cancel", "Cancel"),
+      text: str("common:cancel"),
       emoji: true
     },
     blocks: [
@@ -282,10 +268,7 @@ async function makeRequestDraftView(payload, request) {
           initial_channel: requestsChannel.id,
           placeholder: {
             type: "plain_text",
-            text: str(
-              "slackapp:requestBotPost.modal.draft.channelSelect",
-              "Select a channel"
-            ),
+            text: str("slackapp:requestBotPost.modal.draft.channelSelect"),
             emoji: true
           }
         },
@@ -306,10 +289,7 @@ async function makeRequestDraftView(payload, request) {
         },
         label: {
           type: "plain_text",
-          text: str(
-            "slackapp:requestBotPost.modal.draft.label",
-            "Draft Message"
-          ),
+          text: str("slackapp:requestBotPost.modal.draft.label"),
           emoji: true
         }
       }
@@ -339,12 +319,12 @@ function makeConfirmationView(request, channelId, content) {
     },
     submit: {
       type: "plain_text",
-      text: str("slackapp:requestBotPost.modal.confirm.submit", "Send"),
+      text: str("slackapp:requestBotPost.modal.confirm.submit"),
       emoji: true
     },
     close: {
       type: "plain_text",
-      text: str("slackapp:requestBotPost.modal.confirm.edit", "Edit"),
+      text: str("slackapp:requestBotPost.modal.confirm.edit"),
       emoji: true
     },
     blocks: [
@@ -390,7 +370,7 @@ function suggestedTemplate(payload, request) {
   let quadrant = request.get(requestsFields.neighborhoodArea);
   const { nw, sw, ne, se } = requestsFields.neighborhoodArea_options;
   if ([nw, sw, ne, se].includes(quadrant)) {
-    quadrant += ` ${str("common:neighborhood", "Crown Heights")}`;
+    quadrant += ` ${str("common:neighborhood")}`;
   }
 
   let firstName = request.get(requestsFields.firstName);
@@ -413,36 +393,24 @@ function suggestedTemplate(payload, request) {
         )
     ],
     [
-      str(
-        "slackapp:requestBotPost.post.fields.neighborhood.name",
-        "Neighborhood"
-      ),
+      str("slackapp:requestBotPost.post.fields.neighborhood.name"),
       quadrant ||
-        str(
-          "slackapp:requestBotPost.post.fields.neighborhood.default",
-          "Other - Unknown"
-        )
+        str("slackapp:requestBotPost.post.fields.neighborhood.default")
     ],
-    [str("slackapp:requestBotPost.post.fields.needs.name", "Need"), needs],
+    [str("slackapp:requestBotPost.post.fields.needs.name"), needs],
+    [str("slackapp:requestBotPost.post.fields.streets.name"), streets],
     [
-      str("slackapp:requestBotPost.post.fields.streets.name", "Cross Streets"),
-      streets
-    ],
-    [
-      str("slackapp:requestBotPost.post.fields.language.name", "Language"),
+      str("slackapp:requestBotPost.post.fields.language.name"),
       (request.get(requestsFields.languages) || []).join("/")
     ],
     [
-      str("slackapp:requestBotPost.post.fields.notes.name", "Description"),
+      str("slackapp:requestBotPost.post.fields.notes.name"),
       request.get(requestsFields.intakeNotes) ||
-        str("slackapp:requestBotPost.post.fields.notes.default", "No notes")
+        str("slackapp:requestBotPost.post.fields.notes.default")
     ],
     ["Code", request.get(requestsFields.code)] // No str because we need to regex it after
   ];
-  const status = str(
-    "slackapp:requestBotPost.post.statusPrefix.default",
-    ":red_circle:"
-  );
+  const status = str("slackapp:requestBotPost.post.statusPrefix.default");
   const fieldRepresentation = extraFields
     .filter(kv => kv[1])
     .map(kv => `*${kv[0]}*: ${kv[1].trim()}`)

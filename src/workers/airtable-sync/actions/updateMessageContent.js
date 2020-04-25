@@ -52,7 +52,7 @@ module.exports = async function updateMessageContent(record) {
     !contentWithoutStatus.includes(`${deliveryVolunteer}`)
   ) {
     newContent += str("slackapp:requestBotPost.post.deliveryCongrats", {
-      defaultValue: `Shout out to {{- deliveryVolunteer}} for volunteering to help! :tada:\n`,
+      defaultValue: `:tada: Shout out to {{- deliveryVolunteer}} for volunteering to help! :tada:\n`,
       deliveryVolunteer: `<@${deliveryVolunteer}>`
     });
   }

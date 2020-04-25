@@ -78,16 +78,8 @@ export default function NeighborhoodFinder() {
       "webapp:zoneFinder.email.subject",
       "Covid Resources NYC"
     );
-    const resourceLinks = [
-      str(
-        "webapp:zoneFinder.email.resourceUrl",
-        "https://docs.google.com/document/d/18WYGoVlJuXYc3QFN1RABnARZlwDG3aLQsnNokl1KhZQ/edit"
-      )
-    ];
-    let bodyString = str(
-      "webapp:zoneFinder.email.body",
-      "Sorry we couldn't help out :/\nHere's a regularly updated list of resources:\n\n"
-    );
+    const resourceLinks = [str("webapp:zoneFinder.email.resourceUrl")];
+    let bodyString = str("webapp:zoneFinder.email.body");
 
     resourceLinks.forEach(resourceLink => {
       bodyString += `${resourceLink}\n\n`;
@@ -110,10 +102,7 @@ export default function NeighborhoodFinder() {
           )}&body=${encodeURIComponent(bodyString)}`}
         >
           <Button variant="contained" endIcon={<MailOutlineIcon />}>
-            {str(
-              "webapp:zoneFinder.sendResources.emailButtonText",
-              "Email Aid Resource Links"
-            )}
+            {str("webapp:zoneFinder.sendResources.emailButtonText")}
           </Button>
         </a>
       </>
@@ -176,10 +165,7 @@ export default function NeighborhoodFinder() {
             <TextField
               disabled
               id="cross-1"
-              label={str(
-                "webapp:zoneFinder.label.crossStreetFirst",
-                "Cross Street #1"
-              )}
+              label={str("webapp:zoneFinder.label.crossStreetFirst")}
               value={data.intersection.street_1}
               variant="outlined"
               className={classes.field}
@@ -187,10 +173,7 @@ export default function NeighborhoodFinder() {
             <TextField
               disabled
               id="cross-2"
-              label={str(
-                "webapp:zoneFinder.label.crossStreetSecond",
-                "Cross Street #2"
-              )}
+              label={str("webapp:zoneFinder.label.crossStreetSecond")}
               value={data.intersection.street_2}
               variant="outlined"
               className={classes.field}
@@ -198,15 +181,9 @@ export default function NeighborhoodFinder() {
             <TextField
               disabled
               id="neighborhood"
-              label={str(
-                "webapp:zoneFinder.label.neighborhoodLabel",
-                "Neighborhood"
-              )}
+              label={str("webapp:zoneFinder.label.neighborhoodLabel")}
               value={data.neighborhoodName || str("common:notAvailable")}
-              helperText={str(
-                "webapp:zoneFinder.label.neighborhoodError",
-                "If both this and zone are unavailable, double check the map: https://bit.ly/2UrZPkA"
-              )}
+              helperText={str("webapp:zoneFinder.label.neighborhoodError")}
               variant="outlined"
               className={classes.field}
             />
@@ -235,10 +212,7 @@ export default function NeighborhoodFinder() {
         {error && (
           <>
             <Typography className={classes.text} variant="body1">
-              {str(
-                "webapp:zoneFinder.geoError.message",
-                "Error loading. Please try again. If it fails again, let us know in"
-              )}
+              {str("webapp:zoneFinder.geoError.message")}
               &nbsp;
               <a href={str("webapp:slack.techChannelUrl")}>
                 {str("webapp:slack.techChannel")}

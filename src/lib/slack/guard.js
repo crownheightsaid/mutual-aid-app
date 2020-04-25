@@ -10,12 +10,7 @@ module.exports = f => {
       console.error("Got error when processing: %0", e);
       return slackapi.views.open({
         trigger_id: payload.trigger_id,
-        view: errorView(
-          `${str(
-            "slackapp:modal.error.defaultMessage",
-            `Oops got an error`
-          )}: ${e}`
-        )
+        view: errorView(`${str("slackapp:modal.error.defaultMessage")}: ${e}`)
       });
     });
   };

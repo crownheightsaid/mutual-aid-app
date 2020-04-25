@@ -47,10 +47,7 @@ async function editPost(payload) {
   if (!message) {
     return openError(
       payload.trigger_id,
-      str(
-        "slackapp:editBotPost.modal.error.notAMessage",
-        "This shortcut can only be used on messages."
-      )
+      str("slackapp:editBotPost.modal.error.notAMessage")
     );
   }
 
@@ -58,10 +55,7 @@ async function editPost(payload) {
   if (message.bot_id !== botUser.bot_id) {
     return openError(
       payload.trigger_id,
-      str(
-        "slackapp:editBotPost.modal.error.notBotPost",
-        "You can only edit messages posted by the bot."
-      )
+      str("slackapp:editBotPost.modal.error.notBotPost")
     );
   }
 
@@ -69,10 +63,7 @@ async function editPost(payload) {
   if (!canEdit) {
     return openError(
       payload.trigger_id,
-      str(
-        "slackapp:editBotPost.modal.error.noPermission",
-        "You aren't permitted to edit this message."
-      )
+      str("slackapp:editBotPost.modal.error.noPermission")
     );
   }
 
@@ -96,18 +87,10 @@ async function saveEdits(payload) {
   } catch (e) {
     console.error("Error updating message %O %O", meta, e);
     return errorResponse(
-      `${str(
-        "slackapp:editBotPost.modal.error.default",
-        `Failed to update message`
-      )}: ${e}`
+      `${str("slackapp:editBotPost.modal.error.default")}: ${e}`
     );
   }
-  return successResponse(
-    str(
-      "slackapp:editBotPost.modal.success.update",
-      "The message was successfully updated"
-    )
-  );
+  return successResponse(str("slackapp:editBotPost.modal.success.update"));
 }
 
 async function deletePost(payload) {
@@ -122,21 +105,13 @@ async function deletePost(payload) {
     return slackapi.views.push({
       trigger_id: payload.trigger_id,
       view: errorView(
-        `${str(
-          "slackapp:editBotPost.modal.error.deletion",
-          `Error deleting message`
-        )}: ${e}`
+        `${str("slackapp:editBotPost.modal.error.deletion")}: ${e}`
       )
     });
   }
   return slackapi.views.update({
     view_id: payload.view.id,
-    view: successView(
-      str(
-        "slackapp:editBotPost.modal.success.deletion",
-        "Message successfully deleted"
-      )
-    )
+    view: successView(str("slackapp:editBotPost.modal.success.deletion"))
   });
 }
 
@@ -173,7 +148,7 @@ async function makeEditPostView(payload, message, channel) {
     },
     submit: {
       type: "plain_text",
-      text: str("common:save", "Save"),
+      text: str("common:save"),
       emoji: true
     },
     close: {
@@ -193,10 +168,7 @@ async function makeEditPostView(payload, message, channel) {
         },
         label: {
           type: "plain_text",
-          text: str(
-            "slackapp:editBotPost.modal.label.edit",
-            "You can edit the post's content:"
-          ),
+          text: str("slackapp:editBotPost.modal.label.edit"),
           emoji: true
         }
       },
@@ -204,19 +176,13 @@ async function makeEditPostView(payload, message, channel) {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: str(
-            "slackapp:editBotPost.modal.label.deletion",
-            "Or, if you'd like you can remove the post entirely:"
-          )
+          text: str("slackapp:editBotPost.modal.label.deletion")
         },
         accessory: {
           type: "button",
           text: {
             type: "plain_text",
-            text: str(
-              "slackapp:editBotPost.modal.button.deletion",
-              "Delete Post"
-            ),
+            text: str("slackapp:editBotPost.modal.button.deletion"),
             emoji: true
           },
           action_id: deletePost.id,
@@ -224,16 +190,12 @@ async function makeEditPostView(payload, message, channel) {
           confirm: {
             title: {
               type: "plain_text",
-              text: str(
-                "slackapp:editBotPost.modal.button.confirm",
-                "Are you sure?"
-              )
+              text: str("slackapp:editBotPost.modal.button.confirm")
             },
             text: {
               type: "mrkdwn",
               text: str(
-                "slackapp:editBotPost.modal.success.button.confirmMessage",
-                "The post cannot be un-deleted and any threads will remain."
+                "slackapp:editBotPost.modal.success.button.confirmMessage"
               )
             },
             confirm: {
