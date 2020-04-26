@@ -1,6 +1,23 @@
 const { merge } = require("lodash");
 const { airbase } = require("~airtable/bases");
 
+const requestNotInSlack = r => {
+  const meta = r.get(fields.meta);
+  let parsed = {};
+  try {
+    parsed = JSON.parse(meta);
+  } catch {
+    console.log("Invalid meta %s: %O", r.get(fields.code), meta);
+  }
+  return parsed.slack_ts === undefined;
+};
+
+// Delivery cluster requests are handled separately
+const notForDrivingCluster = r => {
+  const forDrivingCluster = r.get(fields.forDrivingClusters);
+  return !forDrivingCluster;
+};
+
 exports.deleteRequest = async recordId => {
   console.log("Deleting record");
   try {
@@ -49,6 +66,32 @@ exports.findRequestByExternalId = async externalId => {
   }
 };
 
+// Find open requests that area already in Slack
+exports.findDeliveryNeededRequests = async () => {
+  const requestOpenStates = [
+    fields.status_options.dispatchStarted,
+    fields.status_options.deliveryNeeded
+  ];
+  const statusConstraints = requestOpenStates.map(
+    s => `{${fields.status}} = '${s}'`
+  );
+  const formula = `OR(${statusConstraints.join(", ")})`;
+  try {
+    const requests = await requestsTable
+      .select({
+        filterByFormula: formula
+      })
+      .all();
+
+    return [
+      requests.filter(r => !requestNotInSlack(r)).filter(notForDrivingCluster),
+      null
+    ];
+  } catch (e) {
+    return [[], `Error while looking up open requests: ${e}`];
+  }
+};
+
 // Returns requests that are to be posted in a public requests channel
 exports.findOpenRequestsForSlack = async () => {
   const requestOpenStates = [
@@ -65,23 +108,11 @@ exports.findOpenRequestsForSlack = async () => {
         filterByFormula: formula
       })
       .all();
-    const notInSlack = r => {
-      const meta = r.get(fields.meta);
-      let parsed = {};
-      try {
-        parsed = JSON.parse(meta);
-      } catch {
-        console.log("Invalid meta %s: %O", r.get(fields.code), meta);
-      }
-      return parsed.slack_ts === undefined;
-    };
-    // Delivery cluster requests are handled separately
-    const notForDrivingCluster = r => {
-      const forDrivingCluster = r.get(fields.forDrivingClusters);
-      return !forDrivingCluster;
-    };
 
-    return [requests.filter(notInSlack).filter(notForDrivingCluster), null];
+    return [
+      requests.filter(requestNotInSlack).filter(notForDrivingCluster),
+      null
+    ];
   } catch (e) {
     return [[], `Error while looking up open requests: ${e}`];
   }
