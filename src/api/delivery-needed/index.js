@@ -2,7 +2,7 @@ const { findDeliveryNeededRequests } = require("~airtable/tables/requests");
 const { fields } = require("~airtable/tables/requests");
 const { fetchCoordFromCrossStreets } = require("./fetchCoordFromCrossStreets");
 
-exports.deliveryRequiredRequestHandler = async (req, res) => {
+exports.deliveryNeededRequestHandler = async (req, res) => {
   const [requestObj, requestErr] = await findDeliveryNeededRequests();
 
   if (!requestObj) {

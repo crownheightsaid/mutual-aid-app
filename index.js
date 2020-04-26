@@ -15,8 +15,8 @@ const {
   neighborhoodFinderUpdateRequestHandler
 } = require("./src/api/neighborhood-finder/update-request.js");
 const {
-  deliveryRequiredRequestHandler
-} = require("./src/api/delivery-required/index.js");
+  deliveryNeededRequestHandler
+} = require("./src/api/delivery-needed/index.js");
 
 /* eslint-disable global-require  */
 const app = express();
@@ -80,7 +80,7 @@ app.post(
   neighborhoodFinderUpdateRequestHandler
 );
 
-app.get("/api/delivery-required/requests.json", deliveryRequiredRequestHandler);
+app.get("/api/delivery-needed/requests.json", deliveryNeededRequestHandler);
 
 // ==================================================================
 // API Routes (w/ Basic Auth)
