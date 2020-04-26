@@ -1,7 +1,5 @@
 const LRU = require("lru-cache");
 
-let cacheInstance;
-
 const DEFAULT_CACHE_OPTIONS = {
   max: 500,
   length() {
@@ -12,11 +10,8 @@ const DEFAULT_CACHE_OPTIONS = {
 };
 
 exports.makeCache = (options = {}) => {
-  cacheInstance =
-    cacheInstance ||
-    new LRU({
-      ...DEFAULT_CACHE_OPTIONS,
-      ...options
-    });
-  return cacheInstance;
+  return new LRU({
+    ...DEFAULT_CACHE_OPTIONS,
+    ...options
+  });
 };

@@ -21,9 +21,7 @@ exports.fetchCoordFromCrossStreets = async address => {
   // look in cache
   if (cache.peek(cacheKey)) {
     geoResult = cache.get(cacheKey);
-    console.log("cache hit");
   } else {
-    console.log("cache miss");
     // if not found, fetch from Google and cache
     geoResult = await googleGeoClient.geocode({
       params: {
