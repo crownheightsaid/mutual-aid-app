@@ -183,8 +183,8 @@ const fields = (exports.fields = {
   crossStreetFirst: "Cross Street #1",
   crossStreetSecond: "Cross Street #2",
   email: "Email Address",
-  neighborhoodAreaSeeMap: "Neighborhood Area (See Map)",
-  neighborhoodAreaSeeMap_options: {
+  neighborhoodArea: "Neighborhood Area (See Map)",
+  neighborhoodArea_options: {
     ne: "NE",
     nw: "NW",
     se: "SE",

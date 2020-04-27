@@ -32,10 +32,11 @@ module.exports = {
     "import/resolver": {
       alias: {
         map: [
+          ["~lib", "./src/lib"],
           ["~airtable", "./src/lib/airtable"],
           ["~slack", "./src/lib/slack"],
-          ["~assets", "./src/lib/assets"],
-          ["~constants", "./src/lib/constants.js"]
+          ["~strings", "./src/lib/strings"],
+          ["~assets", "./src/lib/assets"]
         ],
         extensions: ['.ts', '.js', '.jsx', '.json']
       },

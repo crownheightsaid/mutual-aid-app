@@ -4,14 +4,15 @@
   "scripts": {
     "lint": "eslint src",
     "fix": "eslint --fix src",
+    "find-new-strings": "i18next-scanner --config ./src/lib/strings/__i18nextScanner.config.js 'scripts/**/*.js' 'src/**/*.js'",
     "local": "npm run local:react & npm run local:express",
     "local:express": "NODE_ENV=dev node index.js",
     "local:slack": "NODE_ENV=dev ngrok http 5000",
-    "local:react": "NODE_ENV=dev react-scripts start",
+    "local:react": "REACT_APP_CONTEXT=true NODE_ENV=dev react-scripts start",
     "local:airtable-sync": "NODE_ENV=dev node -r module-alias/register ./src/workers/airtable-sync/worker.js",
     "local:script": "DOTENV_CONFIG_PATH=./.env node -r module-alias/register -r dotenv/config",
     "prod:express": "node index.js",
-    "prod:react": "react-scripts build",
+    "prod:react": "REACT_APP_CONTEXT=true react-scripts build",
     "prod:script": "DOTENV_CONFIG_PATH=./.env.prod node -r module-alias/register -r dotenv/config",
     "build": "npm run prod:react",
     "start": "npm run prod:express"
@@ -21,10 +22,11 @@
     "node": "12.16.x"
   },
   "_moduleAliases": {
+    "~lib": "src/lib",
     "~airtable": "src/lib/airtable",
     "~slack": "src/lib/slack",
     "~assets": "src/lib/assets",
-    "~constants": "src/lib/constants.js"
+    "~strings": "src/lib/strings"
   },
   "proxy": "http://localhost:5000",
   "dependencies": {
@@ -46,6 +48,9 @@
     "express-basic-auth": "1.2.0",
     "geojson-utils": "1.1.0",
     "geonames.js": "2.3.0",
+    "i18next": "19.4.3",
+    "i18next-fs-backend": "1.0.1",
+    "i18next-http-backend": "1.0.4",
     "lodash": "^4.17.15",
     "mapbox-gl": "^1.9.1",
     "mocha": "^7.1.1",
@@ -53,6 +58,7 @@
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-helmet": "^5.2.1",
+    "react-i18next": "11.3.5",
     "react-mapbox-gl": "^4.8.3",
     "react-scripts": "3.4.0",
     "twilio": "3.42.1"
@@ -75,6 +81,7 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-react": "7.19.0",
     "eslint-plugin-react-hooks": "^2.3.0",
+    "i18next-scanner": "2.11.0",
     "ngrok": "3.2.7",
     "prettier": "^1.18.2"
   },

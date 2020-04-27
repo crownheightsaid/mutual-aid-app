@@ -1,0 +1,14 @@
+{
+  "manyc": {
+    "request": {
+      "message": {
+        "intro": "This is a request from a different system.",
+        "supportType": "The type of support requested is:",
+        "otherSupport": "In a free-form request they said:",
+        "community": "They are in this hard-hit community:",
+        "neighborhoods": "Neighborhoods (please fill out manually for now):"
+      },
+      "contactError": "If there's no email too, please tell #tech!"
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "zoneFinder": {
+    "map": {
+      "error": "Mapbox token is missing. This means that the map cannot be displayed, but should not affect the functionality of the page. Please inform"
+    },
+    "airtableUpdate": {
+      "message": "Update a request with the above address",
+      "codeLabel": "Request code, e.g. V8DLS4",
+      "submit": "Update address",
+      "success": "Successfully updated request"
+    },
+    "email": {
+      "subject": "Covid Resources NYC",
+      "resourceUrl": "https://docs.google.com/document/d/18WYGoVlJuXYc3QFN1RABnARZlwDG3aLQsnNokl1KhZQ/edit",
+      "body": "Sorry we couldn't help out :/\nHere's a regularly updated list of resources:\n\n"
+    },
+    "sendResources": {
+      "message": "You can use the link below to send more resources if needed!",
+      "emailButtonText": "Email Aid Resource Links"
+    },
+    "title": "{{neighborhood}} Neighborhood Finder",
+    "message": {
+      "info": "Enter an address and we will look up cross streets and the neighborhood.",
+      "help": "For best results, enter street and town (Ex: 1550 dean st brooklyn)",
+      "privacy": "The address will not be stored or logged :)"
+    },
+    "label": {
+      "crossStreetFirst": "Cross Street #1",
+      "crossStreetSecond": "Cross Street #2",
+      "neighborhoodLabel": "Neighborhood",
+      "neighborhoodError": "If both this and zone are unavailable, double check the map: https://bit.ly/2UrZPkA",
+      "zone": "{{neighborhood}} Volunteer Zone"
+    },
+    "geoError": {
+      "message": "Error loading. Please try again. If it fails again, let us know in"
+    }
+  },
+  "slack": {
+    "techChannelUrl": "https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD",
+    "techChannel": "#tech"
+  }
+}

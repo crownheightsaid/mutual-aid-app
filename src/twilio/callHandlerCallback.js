@@ -3,6 +3,7 @@ const {
   createRequest,
   findRequestByPhone
 } = require("~airtable/tables/requests");
+const { str } = require("~strings/i18nextWrappers");
 
 module.exports = async (req, res) => {
   const twilReq = req.body;
@@ -29,16 +30,24 @@ module.exports = async (req, res) => {
     console.log(`New record from twilio voice: ${record.getId()}`);
   }
 
+  // This most likely won't be played. People usually hang up after voicemail.
   const response = new twilio.twiml.VoiceResponse();
   if (e) {
+    console.log(`Twilio callback error: ${e}`);
     response.say(
       { voice: "alice", language: "en-US" },
-      "Sorry there was an error on our end. Please call back in a minute."
+      str(
+        "twilio:goodbye.error",
+        "Sorry there was an error on our end. Please call back in a minute."
+      )
     );
   } else {
     response.say(
       { voice: "alice", language: "en-US" },
-      "Thank you. You will hear from a neighbor as soon as possible."
+      str(
+        "twilio:goodbye.success",
+        "Thank you. You will hear from a neighbor as soon as possible."
+      )
     );
   }
 
