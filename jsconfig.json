@@ -2,10 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "~lib/*": ["./src/lib/*"],
       "~airtable/*": ["./src/lib/airtable/*"],
       "~slack/*": ["./src/lib/slack/*"],
       "~assets/*": ["./src/lib/assets/*"],
-      "~constants": ["./src/lib/constants.js"]
+      "~strings/*": ["./src/lib/strings/*"]
     }
   },
   "exclude": ["node_modules", "**/node_modules/*"]

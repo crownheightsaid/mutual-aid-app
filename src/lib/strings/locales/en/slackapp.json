@@ -1,0 +1,177 @@
+{
+  "channels": {
+    "admin": "admin",
+    "artAndDesign": "art_and_design",
+    "carsAndBikes": "cars_and_bikes",
+    "communityRequests": "community_needs",
+    "intakeVolunteers": "intake_volunteers",
+    "deliveryVolunteers": "delivery_volunteers",
+    "flyering": "flyer_squad",
+    "tech": "tech"
+  },
+  "usergroups": {
+    "cars": "cars",
+    "bikes": "bikes"
+  },
+  "modal": {
+    "error": {
+      "defaultMessage": "Oops got an error",
+      "title": "Error :("
+    },
+    "success": {
+      "title": "Done!"
+    }
+  },
+  "home": {
+    "base": {
+      "welcome": "Welcome to Crown Heights Mutual Aid Slack!\n\nCheck out the quick welcome doc below.\nIt's made with love by neighbors in this Slack 🎉🎉🎉",
+      "welcomeDocButton": {
+        "text": "Welcome Doc",
+        "url": "https://docs.google.com/document/d/14eV4UuY1Z78GJ_eRM0rt2ROudAIrfONav4UZP_iknNU/preview"
+      }
+    },
+    "newVolunteer": {
+      "message": "Thanks for signing up to volunteer!\n If you want to call neighbors in need, please see if there are any upcoming intake training shifts:",
+      "trainingButton": {
+        "text": "Upcoming Intake Training",
+        "url": "https://docs.google.com/spreadsheets/d/1T7FRsDVbV4Og8wyFN2Afopl9lZ4ojNuXMB5J6ELo_lw/edit#gid=2033187665"
+      }
+    },
+    "trainedVolunteer": {
+      "message": "You've been trained for intake! Here are some links for ya:",
+      "shiftSignUpButton": {
+        "text": "Intake Shift Sign Up",
+        "url": "https://docs.google.com/spreadsheets/d/1T7FRsDVbV4Og8wyFN2Afopl9lZ4ojNuXMB5J6ELo_lw/edit"
+      },
+      "intakeGuideButton": {
+        "text": "Intake Guide",
+        "url": "https://docs.google.com/document/d/104HjEeFTLt17CGB8Oc31knC4--FDqWyKSidIfekSPr4/preview"
+      }
+    },
+    "volunteerSignUp": {
+      "message": "Your Slack email isn't in our volunteer records.\nIf you want to get involved more please fill it out!",
+      "formButton": {
+        "text": "Volunteering Form",
+        "url": "https://airtable.com/shraIzCNdiMwW1bpP"
+      },
+      "errorMessage": "If you already submitted one, it might take this page a few minutes to update 💦💾💾💦"
+    }
+  },
+  "assignDelivery": {
+    "error": {
+      "noRequest": "We couldn't find a request with that code. Please make sure it exists in the Requests table.",
+      "noVolunteer": "No intake volunteer was assigned to the request ID you entered :/",
+      "alreadyAssigned": "This request looks like it already has a delivery volunteer!",
+      "noPermission": "It doesn't look like you are assigned to this request :/\nLet #tech know if we messed up.",
+      "airtableError": "Error updating the Request in Airtable. Please try again.\n\n You can update Airtable and message the delivery volunteer manually if it still doesn't work :/",
+      "default": "An error occured. Let us know in #tech"
+    },
+    "dm": {
+      "code": "Request Code",
+      "firstName": "First Name",
+      "phone": "Phone",
+      "crossStreets": "Cross Streets",
+      "notes": "Request Notes"
+    },
+    "postNotify": {
+      "message": "{{delivererName}} you're on! You'll get a DM soon with details :slightly_smiling_face:"
+    },
+    "success": "Delivery assigned!",
+    "modal": {
+      "manualCode": "Please enter code manually",
+      "messageIntro": "You found a delivery volunteer! 🎉🎉",
+      "message": "If you give us the request code, we'll update all the airtable info and start a DM between you both.",
+      "code": "Request Code",
+      "dmOption": "Start a DM with request info between you and the assignee",
+      "threadOption": "Reply to the thread with confirmation",
+      "botOptionText": "Bot Options",
+      "title": "Assign to Delivery"
+    }
+  },
+  "requestBotPost": {
+    "modal": {
+      "title": "Create Delivery Request",
+      "error": {
+        "noVolunteer": "No volunteer with email: {{- userEmail}}. Did you use your slack email to sign up?",
+        "pendingRequests": "Error looking up pending requests:",
+        "noPendingRequests": "Couldn't find any pending requests. Do you have requests assigned to you in the 'Delivery Needed' state?\n It's also possible you already posted this in Slack using the bot.",
+        "requestNotFound": "Request wasn't found"
+      },
+      "picker": {
+        "submit": "Create Message",
+        "message": "Pick a request"
+      },
+      "draft": {
+        "submit": "Preview",
+        "channelSelect": "Select a channel",
+        "label": "Draft Message"
+      },
+      "confirm": {
+        "submit": "Send",
+        "edit": "Edit"
+      }
+    },
+    "post": {
+      "fields": {
+        "timeline": {
+          "name": "Timeline",
+          "default": "When convenient"
+        },
+        "neighborhood": {
+          "name": "Neighborhood",
+          "default": "Other - Unknown"
+        },
+        "needs": {
+          "name": "Need"
+        },
+        "streets": {
+          "name": "Cross Streets"
+        },
+        "language": {
+          "name": "Language"
+        },
+        "notes": {
+          "name": "Description",
+          "default": "No notes"
+        }
+      },
+      "statusPrefix": {
+        "default": ":red_circle:",
+        "assigned": ":white_check_mark: REQUEST ASSIGNED\n",
+        "completed": ":heavy_check_mark:  REQUEST COMPLETED\n"
+      },
+      "message": {
+        "intro": "Hey <!channel> we have a new request from our neighbor {{firstName}} at {{streets}} in *{{quadrant}}*",
+        "outro": "*Want to volunteer to help our neighbor{{firstName}}?* Comment on this thread and {{- intakeSlackId}} will follow up with more details.\n_Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive._"
+      },
+      "deliveryCongrats": ":tada: Shout out to {{- deliveryVolunteer}} for volunteering to help! :tada:\n"
+    }
+  },
+  "editBotPost": {
+    "modal": {
+      "error": {
+        "notAMessage": "This shortcut can only be used on messages.",
+        "notBotPost": "You can only edit messages posted by the bot.",
+        "noPermission": "You aren't permitted to edit this message.",
+        "default": "Failed to update message",
+        "deletion": "Error deleting message"
+      },
+      "success": {
+        "update": "The message was successfully updated",
+        "deletion": "Message successfully deleted",
+        "button": {
+          "confirmMessage": "The post cannot be un-deleted and any threads will remain."
+        }
+      },
+      "title": "Edit Post",
+      "label": {
+        "edit": "You can edit the post's content:",
+        "deletion": "Or, if you'd like you can remove the post entirely:"
+      },
+      "button": {
+        "deletion": "Delete Post",
+        "confirm": "Are you sure?"
+      }
+    }
+  }
+}

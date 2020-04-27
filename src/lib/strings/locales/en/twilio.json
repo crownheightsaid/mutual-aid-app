@@ -1,0 +1,12 @@
+{
+  "home": {
+    "welcome": {
+      "voicemail_url": "__NOT_TRANSLATED__",
+      "messageWhenNoVoicemail": "Thanks for calling our mutual aid group. Please tell us what you need, and then a neighbor volunteer will contact you soon. Stay safe!"
+    }
+  },
+  "goodbye": {
+    "error": "Sorry there was an error on our end. Please call back in a minute.",
+    "success": "Thank you. You will hear from a neighbor as soon as possible."
+  }
+}

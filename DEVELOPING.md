@@ -1,16 +1,19 @@
 This project is a monorepo. The different components are:
-- `src/`
+- `src/lib`
   - Common functionality that is very low level (constants, minimal Slack API, minimal airtable API, etc)
+  - Subpackages can be referenced with a tilde: `require(~airtable/bases)`
 - `src/slackapp`
   - Contains HTTP webhooks that Slack will call in response to user action 
 - `src/api`
   - HTTP api that this app provides
+- `src/twilio`
+  - Barebones twilio callbacks for recording a voicemail and creating a new airtable record 
 - `src/webapp`
-  - Frontend for the app, built with React 
+  - Frontend for the app, built with React. Built to `/public` in project root
 - `src/workers`
   - Logic that runs on a schedule (polling airtable etc) 
 - `scripts/`
-  - One-off scripts for things like backfill
+  - One-off scripts for things like backfill. Can also be useful for bulk adding users to slack channels
 
 Each component has it's own DEVELOPING.md for developing locally. You can learn most of it from reading the scripts in `package.json`.
 

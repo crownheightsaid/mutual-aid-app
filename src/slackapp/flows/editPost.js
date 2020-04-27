@@ -6,14 +6,16 @@ const {
 } = require("~slack/views");
 const slackapi = require("~slack/webApi");
 const guard = require("~slack/guard");
+const { ADMIN_CHANNEL, INTAKE_CHANNEL } = require("~slack/constants");
 const { findChannelByName, listMembers } = require("~slack/channels");
+const { str } = require("~strings/i18nextWrappers");
 
 editPost.id = "edit_post";
 saveEdits.id = "save_post_edit";
 deletePost.id = "delete_post";
 
 // Members of these channels can edit messages
-const editorsAllowedChannels = ["#admin", "#intake_volunteers"];
+const editorsAllowedChannels = [ADMIN_CHANNEL, INTAKE_CHANNEL];
 
 /**
  * Adds a message shortcut to allow users to edit bot messages.
@@ -45,7 +47,7 @@ async function editPost(payload) {
   if (!message) {
     return openError(
       payload.trigger_id,
-      "This shortcut can only be used on messages."
+      str("slackapp:editBotPost.modal.error.notAMessage")
     );
   }
 
@@ -53,7 +55,7 @@ async function editPost(payload) {
   if (message.bot_id !== botUser.bot_id) {
     return openError(
       payload.trigger_id,
-      "You can only edit messages posted by the bot."
+      str("slackapp:editBotPost.modal.error.notBotPost")
     );
   }
 
@@ -61,7 +63,7 @@ async function editPost(payload) {
   if (!canEdit) {
     return openError(
       payload.trigger_id,
-      "You aren't permitted to edit this message."
+      str("slackapp:editBotPost.modal.error.noPermission")
     );
   }
 
@@ -84,9 +86,11 @@ async function saveEdits(payload) {
     });
   } catch (e) {
     console.error("Error updating message %O %O", meta, e);
-    return errorResponse(`Failed to update message: ${e}`);
+    return errorResponse(
+      `${str("slackapp:editBotPost.modal.error.default")}: ${e}`
+    );
   }
-  return successResponse("The message was successfully updated");
+  return successResponse(str("slackapp:editBotPost.modal.success.update"));
 }
 
 async function deletePost(payload) {
@@ -100,12 +104,14 @@ async function deletePost(payload) {
     console.error("Error deleting message %O %O", meta, e);
     return slackapi.views.push({
       trigger_id: payload.trigger_id,
-      view: errorView(`Error deleting message: ${e}`)
+      view: errorView(
+        `${str("slackapp:editBotPost.modal.error.deletion")}: ${e}`
+      )
     });
   }
   return slackapi.views.update({
     view_id: payload.view.id,
-    view: successView("Message successfully deleted")
+    view: successView(str("slackapp:editBotPost.modal.success.deletion"))
   });
 }
 
@@ -137,17 +143,17 @@ async function makeEditPostView(payload, message, channel) {
     private_metadata: JSON.stringify(meta),
     title: {
       type: "plain_text",
-      text: "Edit Post",
+      text: str("slackapp:editBotPost.modal.title", "Edit Post"),
       emoji: true
     },
     submit: {
       type: "plain_text",
-      text: "Save",
+      text: str("common:save"),
       emoji: true
     },
     close: {
       type: "plain_text",
-      text: "Cancel",
+      text: str("common:cancel"),
       emoji: true
     },
     blocks: [
@@ -162,7 +168,7 @@ async function makeEditPostView(payload, message, channel) {
         },
         label: {
           type: "plain_text",
-          text: "You can edit the post's content:",
+          text: str("slackapp:editBotPost.modal.label.edit"),
           emoji: true
         }
       },
@@ -170,13 +176,13 @@ async function makeEditPostView(payload, message, channel) {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: "Or, if you'd like you can remove the post entirely:"
+          text: str("slackapp:editBotPost.modal.label.deletion")
         },
         accessory: {
           type: "button",
           text: {
             type: "plain_text",
-            text: "Delete Post",
+            text: str("slackapp:editBotPost.modal.button.deletion"),
             emoji: true
           },
           action_id: deletePost.id,
@@ -184,19 +190,21 @@ async function makeEditPostView(payload, message, channel) {
           confirm: {
             title: {
               type: "plain_text",
-              text: "Are you sure?"
+              text: str("slackapp:editBotPost.modal.button.confirm")
             },
             text: {
               type: "mrkdwn",
-              text: "The post cannot be un-deleted and any threads will remain."
+              text: str(
+                "slackapp:editBotPost.modal.success.button.confirmMessage"
+              )
             },
             confirm: {
               type: "plain_text",
-              text: "Delete Post"
+              text: str("slackapp:editBotPost.modal.button.deletion")
             },
             deny: {
               type: "plain_text",
-              text: "Cancel"
+              text: str("common:cancel")
             },
             style: "danger"
           },

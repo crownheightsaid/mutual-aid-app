@@ -1,6 +1,6 @@
 const slackapi = require("~slack/webApi");
 const { findChannelByName } = require("~slack/channels");
-const { REIMBURSEMENT_CHANNEL } = require("~constants");
+const { REIMBURSEMENT_CHANNEL } = require("~slack/constants");
 const {
   findPaymentRequestBySlackThreadId,
   fields: paymentRequestFields

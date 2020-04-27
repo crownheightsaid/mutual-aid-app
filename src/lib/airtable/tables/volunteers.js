@@ -28,9 +28,11 @@ exports.findVolunteerById = async id => {
 // Schema
 // ==================================================================
 
-const volunteersTableName = (exports.tableName = "Volunteers");
-const volunteersTable = (exports.table = airbase(volunteersTableName));
-const fields = (exports.fields = {
+const volunteersTableName = (exports.volunteersTableName = "Volunteers");
+const volunteersTable = (exports.volunteersTable = airbase(
+  volunteersTableName
+));
+const fields = (exports.volunteersFields = {
   email: "volunteer_email",
   phone: "volunteer_phone",
   streetFirst: "volunteer_street_1",

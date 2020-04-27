@@ -24,7 +24,7 @@ exports.createRequest = async request => {
       [fields.crossStreetFirst]: request.crossStreets || "",
       [fields.email]: request.email || "",
       [fields.timeSensitivity]: request.urgency || "",
-      [fields.status]: fields.status_options.dispatchNeeded
+      [fields.status]: request.status || fields.status_options.dispatchNeeded
     });
     return [record, null];
   } catch (e) {
@@ -49,7 +49,8 @@ exports.findRequestByExternalId = async externalId => {
   }
 };
 
-exports.findOpenRequests = async () => {
+// Returns requests that are to be posted in a public requests channel
+exports.findOpenRequestsForSlack = async () => {
   const requestOpenStates = [
     fields.status_options.dispatchStarted,
     fields.status_options.deliveryNeeded
@@ -74,17 +75,26 @@ exports.findOpenRequests = async () => {
       }
       return parsed.slack_ts === undefined;
     };
-    return [requests.filter(notInSlack), null];
+    // Delivery cluster requests are handled separately
+    const notForDrivingCluster = r => {
+      const forDrivingCluster = r.get(fields.forDrivingClusters);
+      return !forDrivingCluster;
+    };
+
+    return [requests.filter(notInSlack).filter(notForDrivingCluster), null];
   } catch (e) {
     return [[], `Error while looking up open requests: ${e}`];
   }
 };
 
 exports.findRequestByCode = async code => {
+  if (code && code.length < 4) {
+    return [null, `Request code must be at least 4 characters.`];
+  }
   try {
     const records = await requestsTable
       .select({
-        filterByFormula: `({${fields.code}} = '${code}')`
+        filterByFormula: `(FIND('${code}', {${fields.code}}) > 0)`
       })
       .firstPage();
     if (records.length === 0) {
@@ -97,6 +107,24 @@ exports.findRequestByCode = async code => {
   }
 };
 
+exports.findRequestByPhone = async phone => {
+  try {
+    const records = await requestsTable
+      .select({
+        maxRecords: 1,
+        fields: [fields.phone],
+        filterByFormula: `({${fields.phone}} = '${phone}')`
+      })
+      .firstPage();
+    if (records && records.length === 0) {
+      return [null, "No existing request with that phone"];
+    }
+    return [records[0], null];
+  } catch (e) {
+    return [null, `Error while finding request: ${e}`];
+  }
+};
+
 // `update` should look like:
 // {
 //   "Some Requests Field": "New Value",
@@ -104,10 +132,13 @@ exports.findRequestByCode = async code => {
 //   "Meta": {key: "value"}
 // }
 exports.updateRequestByCode = async (code, update) => {
+  if (code && code.length < 4) {
+    return [null, `Request code must be at least 4 characters.`];
+  }
   try {
     const records = await requestsTable
       .select({
-        filterByFormula: `({${fields.code}} = '${code}')`
+        filterByFormula: `(FIND('${code}', {${fields.code}}) > 0)`
       })
       .firstPage();
     if (records.length === 0) {
@@ -152,8 +183,8 @@ const fields = (exports.fields = {
   crossStreetFirst: "Cross Street #1",
   crossStreetSecond: "Cross Street #2",
   email: "Email Address",
-  neighborhoodAreaSeeMap: "Neighborhood Area (See Map)",
-  neighborhoodAreaSeeMap_options: {
+  neighborhoodArea: "Neighborhood Area (See Map)",
+  neighborhoodArea_options: {
     ne: "NE",
     nw: "NW",
     se: "SE",

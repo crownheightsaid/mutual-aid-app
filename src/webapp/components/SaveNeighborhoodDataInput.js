@@ -6,6 +6,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import { useTranslation } from "react-i18next";
 import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles(theme => ({
@@ -23,6 +24,7 @@ const forceInputUppercase = e => {
 };
 
 const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
+  const { t: str } = useTranslation();
   const classes = useStyles();
   const [requestCode, setRequestCode] = useState("");
   const [{ data, loading, error }, submit] = useAxios(
@@ -47,11 +49,16 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
   return (
     <Box className={className}>
       <form onSubmit={handleAddToAirtable} autoComplete="off">
-        <Typography variant="h6">Update a request with the above address</Typography>
+        <Typography variant="h6">
+          {str(
+            "webapp:zoneFinder.airtableUpdate.message",
+            "Update a request with the above address"
+          )}
+        </Typography>
         <TextField
           id="request_code"
           name="request_code"
-          label="Request code, e.g. V8DL"
+          label={str("webapp:zoneFinder.airtableUpdate.codeLabel")}
           type="text"
           margin="normal"
           variant="outlined"
@@ -70,7 +77,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
                   aria-label="request_code"
                   onClick={handleAddToAirtable}
                 >
-                  Update address
+                  {str("webapp:zoneFinder.airtableUpdate.submit")}
                 </Button>
               </InputAdornment>
             )
@@ -79,9 +86,8 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
       </form>
       {loading && <CircularProgress />}
       {!error && data && data.success && (
-        <Typography variant="caption" className={classes.successMessage}
-        >
-          Successfully updated request
+        <Typography variant="caption" className={classes.successMessage}>
+          {str("webapp:zoneFinder.airtableUpdate.success")}
         </Typography>
       )}
     </Box>

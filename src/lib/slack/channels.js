@@ -53,6 +53,25 @@ module.exports.addBotToChannel = async channelId => {
   }
 };
 
+module.exports.isUserInChannel = async (userId, channelName) => {
+  try {
+    const convoResult = await slackapi.users.conversations({
+      token: process.env.SLACK_BOT_TOKEN,
+      user: userId,
+      types: "public_channel,private_channel",
+      exclude_archived: true
+    });
+    return [
+      !!convoResult.channels.filter(channel =>
+        channel.name.includes(channelName.replace("#", ""))
+      ).length,
+      null
+    ];
+  } catch (e) {
+    return [null, e];
+  }
+};
+
 /**
  * Returns the user ids of the members of the given channel
  */

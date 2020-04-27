@@ -3,7 +3,7 @@ const { findChannelByName } = require("~slack/channels");
 const {
   fields: paymentRequestFields
 } = require("~airtable/tables/paymentRequests");
-const { REIMBURSEMENT_CHANNEL } = require("~constants");
+const { REIMBURSEMENT_CHANNEL } = require("~slack/constants");
 
 /**
  * Updates the slack payment request message to account for completion.

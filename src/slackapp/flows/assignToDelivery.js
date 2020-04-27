@@ -8,9 +8,14 @@ const slackapi = require("~slack/webApi");
 const { addBotToChannel } = require("~slack/channels");
 const {
   updateRequestByCode,
-  findRequestByCode
+  findRequestByCode,
+  fields: requestFields
 } = require("~airtable/tables/requests");
-const { findVolunteerById } = require("~airtable/tables/volunteers");
+const {
+  findVolunteerById,
+  volunteersFields
+} = require("~airtable/tables/volunteers");
+const { str } = require("~strings/i18nextWrappers");
 
 exports.atdViewSubmission = async payload => {
   try {
@@ -35,25 +40,26 @@ exports.atdViewSubmission = async payload => {
     if (err) {
       return messageErrorResponse(
         "requestblock",
-        "We couldn't find a request with that code. Please make sure it exists in the Requests table."
+        str("slackapp:assignDelivery.error.noRequest")
       );
     }
     console.log("Pre intake");
-    const volId = request.get("Intake volunteer");
+    const volId = request.get(requestFields.intakeVolunteer);
     if (!volId) {
       return messageErrorResponse(
         "requestblock",
-        "No intake volunteer was assigned to the request ID you entered :/"
+        str("slackapp:assignDelivery.error.noVolunteer")
       );
     }
     console.log("Pre status check");
     if (
-      request.get("Status") === "Delivery Assigned" ||
-      request.get("Delivery slackId")
+      request.get(requestFields.status) ===
+        requestFields.status_options.deliveryAssigned ||
+      request.get(requestFields.deliverySlackId)
     ) {
       return messageErrorResponse(
         "requestblock",
-        "This request looks like it already has a delivery volunteer!"
+        str("slackapp:assignDelivery.error.alreadyAssigned")
       );
     }
     console.log("Pre volunteer");
@@ -61,14 +67,14 @@ exports.atdViewSubmission = async payload => {
     if (verr) {
       throw new Error(verr);
     }
-    const assignedVolunteerEmail = volunteer.get("volunteer_email");
+    const assignedVolunteerEmail = volunteer.get(volunteersFields.email);
     if (slackUserEmail.toLowerCase() !== assignedVolunteerEmail.toLowerCase()) {
       console.log(
         `Request Code Error Assignment: ${requestCode}\n${slackUserEmail}`
       );
       return messageErrorResponse(
         "requestblock",
-        "It doesn't look like you are assigned to this request :/\nLet #tech know if we messed up."
+        str("slackapp:assignDelivery.error.noPermission")
       );
     }
     const delivererSlackId = flowMetadata.delivererId;
@@ -78,15 +84,13 @@ exports.atdViewSubmission = async payload => {
     });
     const deliveryName = userResponse.user.real_name;
     const [_updated, uerr] = await updateRequestByCode(requestCode, {
-      Status: "Delivery Assigned",
-      "Delivery volunteer": deliveryName,
-      "Delivery slackId": delivererSlackId
+      [requestFields.status]: requestFields.status_options.deliveryAssigned,
+      [requestFields.deliveryVolunteer]: deliveryName,
+      [requestFields.deliverySlackId]: delivererSlackId
     });
     if (uerr) {
       console.log(`Request Code Error: ${requestCode}\n${uerr}`);
-      return errorResponse(
-        "Error updating the Request in Airtable. Please try again.\n\n You can update Airtable and message the delivery volunteer manually if it still doesn't work :/"
-      );
+      return errorResponse(str("slackapp:assignDelivery.error.airtableError"));
     }
     if (shouldDirectMessage) {
       const dmResponse = await slackapi.conversations.open({
@@ -95,25 +99,35 @@ exports.atdViewSubmission = async payload => {
       });
       const messageId = dmResponse.channel.id;
       const dmLines = [
-        `*Request Code:*\n>${request.get("Code") || "N/A"}`,
-        `*First Name:*\n>${request.get("First Name") || "N/A"}`,
-        `*Phone:*\n>${request.get("Phone")}`,
-        `*Cross Streets:*\n>${request.get("Cross Street #1")} & ${request.get(
-          "Cross Street #2"
+        `*${str("slackapp:assignDelivery.dm.code")}:*\n>${request.get(
+          requestFields.code
+        ) || str("common:notAvailable")}`,
+        `*${str("slackapp:assignDelivery.dm.firstName")}:*\n>${request.get(
+          requestFields.firstName
+        ) || str("common:notAvailable")}`,
+        `*${str("slackapp:assignDelivery.dm.phone")}:*\n>${request.get(
+          requestFields.phone
         )}`,
-        `*Request Notes:*\n>${request.get("Intake General Notes")}`
+        `*${str("slackapp:assignDelivery.dm.crossStreets")}:*\n>${request.get(
+          requestFields.crossStreetFirst
+        )} & ${request.get(requestFields.crossStreetSecond)}`,
+        `*${str("slackapp:assignDelivery.dm.notes")}:*\n>${request.get(
+          requestFields.intakeNotes
+        ) || str("common:notAvailable")}`
       ];
       await slackapi.chat.postMessage({
         token: process.env.SLACK_BOT_TOKEN,
         channel: messageId,
-        text: "Delivery has been assigned!",
+        text: str(
+          "common:assignDelivery.dm.message.default",
+          "Delivery has been assigned!"
+        ),
         blocks: [
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text:
-                "Thanks to you both for volunteering. Here's some details on the request. Let's help some neighbors!"
+              text: str("common:assignDelivery.dm.message.text")
             }
           },
           {
@@ -127,10 +141,7 @@ exports.atdViewSubmission = async payload => {
             type: "section",
             text: {
               type: "mrkdwn",
-              text:
-                "_*Reminder:* When you make a delivery, drop the groceries at the door," +
-                " step 6 feet away, and make sure that the recipient knows " +
-                "to wipe down all the groceries (or wash with soap and water)_"
+              text: str("common:assignDelivery.dm.message.reminder")
             }
           }
         ]
@@ -141,12 +152,18 @@ exports.atdViewSubmission = async payload => {
         token: process.env.SLACK_BOT_TOKEN,
         channel: flowMetadata.channelId,
         thread_ts: flowMetadata.threadId,
-        text: `${deliveryName} you're on! You'll get a DM soon with details :)`
+        text: str("slackapp:assignDelivery.postNotify.message", {
+          defaultValue:
+            "{{delivererName}} you're on! You'll get a DM soon with details :slightly_smiling_face:",
+          delivererName: deliveryName
+        })
       });
     }
-    return successResponse("Delivery assigned!");
+    return successResponse(str("slackapp:assignDelivery.success"));
   } catch (error) {
-    return errorResponse(`An error occured. Let us know in #tech: ${error}`);
+    return errorResponse(
+      `${str("slackapp:assignDelivery.error.default")}: ${error}`
+    );
   }
 };
 
@@ -155,7 +172,7 @@ const atdSubmitCallback = "assign-to-delivery-submit";
 exports.atdViewSubmissionCallbackId = atdSubmitCallback;
 exports.atdViewOpen = async payload => {
   await addBotToChannel(payload.channel.id);
-  let codeGuess = "Please enter code manually :/";
+  let codeGuess = str("slackapp:assignDelivery.modal.manualCode");
   // This means it's a reply and we can try to look for a request Code.
   if (payload.message.thread_ts !== payload.message.ts) {
     try {
@@ -167,7 +184,7 @@ exports.atdViewOpen = async payload => {
         inclusive: true
       });
       assert(requestMessage.messages.length !== 0, "No messages found.");
-      const capturingRegex = /Code[^\w\d]+(?<code>[\w\d]{4})[^\w\d]*\n/;
+      const capturingRegex = /Code[^\w\d]+(?<code>[\w\d]{4,6})[^\w\d]*\n/;
       const found = requestMessage.messages[0].text.match(capturingRegex);
       if (found.groups.code) {
         codeGuess = found.groups.code;
@@ -191,26 +208,25 @@ exports.atdViewOpen = async payload => {
         private_metadata: JSON.stringify(metadata),
         title: {
           type: "plain_text",
-          text: "Assign to Delivery"
+          text: str("slackapp:assignDelivery.modal.title", "Assign to Delivery")
         },
         submit: {
           type: "plain_text",
-          text: "Submit"
+          text: str("common:submit")
         },
         blocks: [
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: "You found a delivery volunteer! 🎉🎉"
+              text: str("slackapp:assignDelivery.modal.messageIntro")
             }
           },
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text:
-                "If you give us the request code, we'll update all the airtable info and start a DM between you both."
+              text: str("slackapp:assignDelivery.modal.message")
             }
           },
           {
@@ -220,12 +236,12 @@ exports.atdViewOpen = async payload => {
               type: "plain_text_input",
               action_id: "request_code",
               min_length: 4,
-              max_length: 4,
+              max_length: 6,
               initial_value: codeGuess
             },
             label: {
               type: "plain_text",
-              text: "Request Code"
+              text: str("slackapp:assignDelivery.modal.code")
             }
           },
           {
@@ -239,8 +255,7 @@ exports.atdViewOpen = async payload => {
                 {
                   text: {
                     type: "plain_text",
-                    text:
-                      "Start a DM with request info between you and the assignee"
+                    text: str("slackapp:assignDelivery.modal.dmOption")
                   },
                   value: "should_start_dm"
                 }
@@ -250,15 +265,20 @@ exports.atdViewOpen = async payload => {
                 {
                   text: {
                     type: "plain_text",
-                    text: "Reply to the thread with confirmation"
+                    text: str(
+                      "slackapp:assignDelivery.modal.threadOption",
+                      "Reply to the thread with confirmation"
+                    )
                   },
                   value: "should_reply"
                 },
                 {
                   text: {
                     type: "plain_text",
-                    text:
+                    text: str(
+                      "slackapp:assignDelivery.modal.dmOption",
                       "Start a DM with request info between you and the assignee"
+                    )
                   },
                   value: "should_start_dm"
                 }
@@ -266,7 +286,7 @@ exports.atdViewOpen = async payload => {
             },
             label: {
               type: "plain_text",
-              text: "Bot Options"
+              text: str("slackapp:assignDelivery.modal.botOptionText")
             }
           }
         ]
