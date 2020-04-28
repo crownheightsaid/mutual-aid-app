@@ -26,7 +26,7 @@ module.exports = async function newPaymentRequest(record) {
     existingPaymentRequest &&
     existingPaymentRequest.get(paymentRequestsFields.slackThreadId)
   ) {
-    handleExistingPaymentRequest(
+    await handleExistingPaymentRequest(
       existingPaymentRequest,
       code,
       reimbursementChannel
@@ -150,6 +150,7 @@ const handleExistingPaymentRequest = async (
   code,
   reimbursementChannel
 ) => {
+  console.log(`Handling duplicate paymentRequest for code: ${code}`);
   const existingThreadId = existingPaymentRequest.get(
     paymentRequestsFields.slackThreadId
   );
