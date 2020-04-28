@@ -2,6 +2,7 @@ const slackapi = require("~slack/webApi");
 const { findChannelByName } = require("~slack/channels");
 const { paymentRequestsFields } = require("~airtable/tables/paymentRequests");
 const { REIMBURSEMENT_CHANNEL } = require("~slack/constants");
+const { str } = require("~strings/i18nextWrappers");
 
 /**
  * Updates the slack payment request message to account for completion.
@@ -29,7 +30,7 @@ module.exports = async function updateMessage(paymentRequest) {
   // Set up the status emoji/phrase
   // HACK: use non-breaking space as a delimiter between the status and the rest of the message: \u00A0
   const statusBadge = getStatusBadge(paymentRequest);
-  const contentWithoutStatus = content.replace(/.*\u00A0/, "");
+  const contentWithoutStatus = content.replace(/^(.|[\r\n])*\u00A0/, "");
   console.log(contentWithoutStatus);
   const newContent = `${statusBadge}\u00A0${contentWithoutStatus}`;
   console.log(newContent);
@@ -44,9 +45,15 @@ module.exports = async function updateMessage(paymentRequest) {
 function getStatusBadge(record) {
   const isPaid = record.get(paymentRequestsFields.isPaid);
   if (isPaid) {
-    return ":white_check_mark: REIMBURSED\n";
+    return str(
+      "slackapp:reimbursementBotPost.post.statusPrefix.completed",
+      ":heavy_check_mark: REIMBURSED\n"
+    );
   }
-  return ":red_circle:";
+  return str(
+    "slackapp:reimbursementBotPost.post.statusPrefix.default",
+    ":red_circle:"
+  );
 }
 
 async function getExistingMessage(ts, channel) {

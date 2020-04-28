@@ -13,6 +13,7 @@ const {
   fields: requestFields,
   findRequestByCode
 } = require("~airtable/tables/requests");
+const { str } = require("~strings/i18nextWrappers");
 
 module.exports = async function newPaymentRequest(record) {
   const reimbursementChannel = await findChannelByName(REIMBURSEMENT_CHANNEL);
@@ -49,11 +50,13 @@ module.exports = async function newPaymentRequest(record) {
 };
 
 async function makeMessageText(reimbursement, request, reimbursementCode) {
-  let intro = "Another delivery has been completed and could use reimbursement";
   const firstName = reimbursement.get(paymentRequestsFields.firstName);
-  if (firstName) {
-    intro = `${firstName} completed a delivery and could use reimbursement`;
-  }
+  const delivererSlackId = request.get(requestFields.deliverySlackId);
+  const deliveryUser = delivererSlackId ? `<@${delivererSlackId}>` : null;
+  const intro = str("slackapp:reimbursementBotPost.post.message.intro", {
+    defaultValue: `Hey neighbors! {{- deliverer}} completed a delivery and could use reimbursement! :tada::tada:`,
+    deliverer: deliveryUser || firstName || "A neighbor"
+  });
 
   const paymentMethods = [];
   const venmoId = reimbursement.get(paymentRequestsFields.venmoId);
@@ -70,15 +73,6 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
   }
   if (paymentMethods.length === 0) {
     paymentMethods.push(["Payment Methods", cashAppId]);
-  }
-
-  const donation = reimbursement.get(paymentRequestsFields.donation);
-  const donationField = [];
-  if (donation) {
-    donationField.push([
-      "Deliverer Donation",
-      `$${reimbursement.get(paymentRequestsFields.donation)}`
-    ]);
   }
 
   let intakeVol = null;
@@ -108,10 +102,16 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
   const extraFields = [
     [
       "Code",
-      reimbursementCode || "@chma-admins this request is missing a code!"
+      reimbursementCode ||
+        str(
+          "slackapp:reimbursementBotPost.post.fields.code.default",
+          "@chma-admins this request is missing a code!"
+        )
     ],
-    ["Message", slackMessage ? `-\n${slackMessage}` : "None provided"],
-    ...donationField,
+    [
+      "Message",
+      slackMessage ? `-\n${slackMessage}` : str("common:notAvailable")
+    ],
     [
       "Amount Needed",
       `$${reimbursement.get(paymentRequestsFields.reimbursementAmount)}`
@@ -120,15 +120,13 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
     ...intakeVolField,
     ...receiptFields
   ];
-  const status = ":red_circle:";
+  const status = str("slackapp:reimbursementBotPost.post.statusPrefix.default");
   const fieldRepresentation = extraFields
     .filter(kv => kv[1])
     .map(kv => `*${kv[0]}*: ${kv[1].trim()}`)
     .join("\n");
   // HACK: use non-breaking space as a delimiter between the status and the rest of the message: \u00A0
-  return `${status}\u00A0Hey neighbors! ${intro}:\n${fieldRepresentation}
+  return `${status}\u00A0${intro}:\n${fieldRepresentation}
   
-*Want to send money?* Please send any amount to a payment method above and then reply to this post with the amount sent.
-The bot isn't smart and will register the first number it finds, so please try and only include one dollar amount!
-This example works fine:\n> Sent 20!`;
+${str("slackapp:reimbursementBotPost.post.message.outro")}`;
 }
