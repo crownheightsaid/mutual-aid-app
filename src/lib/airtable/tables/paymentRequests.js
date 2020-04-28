@@ -36,14 +36,14 @@ exports.updatePaymentRequestByCode = async (code, update) => {
   }
 };
 
-exports.findPaymentRequestByCode = async code => {
+exports.findPaymentRequestsInSlack = async code => {
   if (code && code.length < 4) {
     return [null, `Request code must be at least 4 characters.`];
   }
   try {
     const records = await paymentRequestsTable
       .select({
-        filterByFormula: `(FIND('${code}', {${fields.requestCode}}) > 0)`
+        filterByFormula: `AND(FIND('${code}', {${fields.requestCode}}) > 0, {${fields.slackThreadId}} != BLANK())`
       })
       .firstPage();
     if (records.length === 0) {

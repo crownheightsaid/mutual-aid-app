@@ -8,7 +8,7 @@ const {
 const {
   paymentRequestsFields,
   paymentRequestsTable,
-  findPaymentRequestByCode
+  findPaymentRequestsInSlack
 } = require("~airtable/tables/paymentRequests");
 const {
   fields: requestFields,
@@ -21,11 +21,8 @@ module.exports = async function newPaymentRequest(record) {
   await addBotToChannel(reimbursementChannel.id);
 
   const code = record.get(paymentRequestsFields.requestCode).toUpperCase();
-  const [existingPaymentRequest, _e] = await findPaymentRequestByCode(code);
-  if (
-    existingPaymentRequest &&
-    existingPaymentRequest.get(paymentRequestsFields.slackThreadId)
-  ) {
+  const [existingPaymentRequest, _e] = await findPaymentRequestsInSlack(code);
+  if (existingPaymentRequest) {
     await handleExistingPaymentRequest(
       existingPaymentRequest,
       code,
