@@ -7,7 +7,8 @@ const {
 } = require("~airtable/tables/volunteers");
 const {
   paymentRequestsFields,
-  paymentRequestsTable
+  paymentRequestsTable,
+  findPaymentRequestByCode
 } = require("~airtable/tables/paymentRequests");
 const {
   fields: requestFields,
@@ -20,6 +21,19 @@ module.exports = async function newPaymentRequest(record) {
   await addBotToChannel(reimbursementChannel.id);
 
   const code = record.get(paymentRequestsFields.requestCode).toUpperCase();
+  const [existingPaymentRequest, _e] = await findPaymentRequestByCode(code);
+  if (
+    existingPaymentRequest &&
+    existingPaymentRequest.get(paymentRequestsFields.slackThreadId)
+  ) {
+    handleExistingPaymentRequest(
+      existingPaymentRequest,
+      code,
+      reimbursementChannel
+    );
+    return;
+  }
+
   const [request, _rErr] = await findRequestByCode(code);
   // lookup if reimbursement request already exists for that code
   console.debug(
@@ -130,3 +144,34 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
   
 ${str("slackapp:reimbursementBotPost.post.message.outro")}`;
 }
+
+const handleExistingPaymentRequest = async (
+  existingPaymentRequest,
+  code,
+  reimbursementChannel
+) => {
+  const existingThreadId = existingPaymentRequest.get(
+    paymentRequestsFields.slackThreadId
+  );
+  const existingThreadLink = await slackapi.chat.getPermalink({
+    channel: reimbursementChannel.id,
+    message_ts: existingThreadId
+  });
+  const existingMessage = str(
+    "slackapp:reimbursementBotPost.duplicatePost.message",
+    {
+      defaultValue:
+        "*Duplicate Code!*\nThere is already a reimbursement post in this channel for request code {{- code}}. Here is a link to the original post. If there's an issue, please tag @chma-admins!\n{{- threadLink}}",
+      code,
+      threadLink: existingThreadLink
+    }
+  );
+  const deliveryMessage = await slackapi.chat.postMessage({
+    channel: reimbursementChannel.id,
+    unfurl_media: false,
+    text: existingMessage
+  });
+  if (!deliveryMessage.ok) {
+    console.debug(`Couldn't post duplicate payment request: ${code}`);
+  }
+};

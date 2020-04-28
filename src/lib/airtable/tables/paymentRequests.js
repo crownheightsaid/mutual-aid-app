@@ -11,7 +11,7 @@ exports.updatePaymentRequestByCode = async (code, update) => {
   try {
     const records = await paymentRequestsTable
       .select({
-        filterByFormula: `({${fields.requestCode}} = '${code}')`
+        filterByFormula: `(FIND('${code}', {${fields.requestCode}}) > 0)`
       })
       .firstPage();
     if (records.length === 0) {
@@ -33,6 +33,26 @@ exports.updatePaymentRequestByCode = async (code, update) => {
     return [updatedRecords[0], null];
   } catch (e) {
     return [null, `Error while processing update: ${e}`];
+  }
+};
+
+exports.findPaymentRequestByCode = async code => {
+  if (code && code.length < 4) {
+    return [null, `Request code must be at least 4 characters.`];
+  }
+  try {
+    const records = await paymentRequestsTable
+      .select({
+        filterByFormula: `(FIND('${code}', {${fields.requestCode}}) > 0)`
+      })
+      .firstPage();
+    if (records.length === 0) {
+      return [null, "No paymentrequests found with that code."];
+    }
+    const record = records[0];
+    return [record, null];
+  } catch (e) {
+    return [null, `Error while finding request: ${e}`];
   }
 };
 
@@ -83,7 +103,8 @@ exports.findReimbursablePaymentRequests = async () => {
 // Schema
 // ==================================================================
 
-const paymentRequestsTableName = (exports.paymentRequestsTableName = "PaymentRequests");
+const paymentRequestsTableName = (exports.paymentRequestsTableName =
+  "PaymentRequests");
 const paymentRequestsTable = (exports.paymentRequestsTable = paymentsAirbase(
   paymentRequestsTableName
 ));
