@@ -43,7 +43,7 @@ exports.findPaymentRequestsInSlack = async code => {
   try {
     const records = await paymentRequestsTable
       .select({
-        filterByFormula: `AND(FIND('${code}', {${fields.requestCode}}) > 0, {${fields.slackThreadId}} != BLANK())`
+        filterByFormula: `AND((FIND('${code}', {${fields.requestCode}}) > 0), {${fields.slackThreadId}})`
       })
       .firstPage();
     if (records.length === 0) {

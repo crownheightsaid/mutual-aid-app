@@ -23,7 +23,6 @@ module.exports = async function newPaymentRequest(record) {
   const code = record.get(paymentRequestsFields.requestCode).toUpperCase();
   const [existingPaymentRequest, _e] = await findPaymentRequestsInSlack(code);
   if (existingPaymentRequest) {
-    console.log(existingPaymentRequest);
     await handleExistingPaymentRequest(
       existingPaymentRequest,
       code,
