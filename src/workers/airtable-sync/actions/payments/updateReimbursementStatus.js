@@ -1,15 +1,13 @@
 const slackapi = require("~slack/webApi");
 const { findChannelByName } = require("~slack/channels");
-const {
-  fields: paymentRequestFields
-} = require("~airtable/tables/paymentRequests");
+const { paymentRequestsFields } = require("~airtable/tables/paymentRequests");
 const { REIMBURSEMENT_CHANNEL } = require("~slack/constants");
 
 /**
  * Updates the slack payment request message to account for completion.
  */
 module.exports = async function updateMessage(paymentRequest) {
-  const slackThreadId = paymentRequest.get(paymentRequestFields.slackThreadId);
+  const slackThreadId = paymentRequest.get(paymentRequestsFields.slackThreadId);
   if (!slackThreadId) {
     return;
   }
@@ -44,7 +42,7 @@ module.exports = async function updateMessage(paymentRequest) {
 };
 
 function getStatusBadge(record) {
-  const isPaid = record.get(paymentRequestFields.isPaid);
+  const isPaid = record.get(paymentRequestsFields.isPaid);
   if (isPaid) {
     return ":white_check_mark: REIMBURSED\n";
   }

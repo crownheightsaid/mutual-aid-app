@@ -83,11 +83,11 @@ exports.findReimbursablePaymentRequests = async () => {
 // Schema
 // ==================================================================
 
-const paymentRequestsTableName = (exports.tableName = "PaymentRequests");
-const paymentRequestsTable = (exports.table = paymentsAirbase(
+const paymentRequestsTableName = (exports.paymentRequestsTableName = "PaymentRequests");
+const paymentRequestsTable = (exports.paymentRequestsTable = paymentsAirbase(
   paymentRequestsTableName
 ));
-const fields = (exports.fields = {
+const fields = (exports.paymentRequestsFields = {
   id: "ID",
   amount: "Amount",
   receipts: "Receipts",
@@ -123,7 +123,7 @@ const fields = (exports.fields = {
     directAid: "Direct Aid"
   }
 });
-exports.sensitiveFields = [
+exports.paymentRequestsSensitiveFields = [
   fields.phone,
   fields.venmoId,
   fields.paypalId,

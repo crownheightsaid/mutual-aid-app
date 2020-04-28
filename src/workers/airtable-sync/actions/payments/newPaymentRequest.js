@@ -2,12 +2,12 @@ const slackapi = require("~slack/webApi");
 const { findChannelByName, addBotToChannel } = require("~slack/channels");
 const { REIMBURSEMENT_CHANNEL } = require("~slack/constants");
 const {
-  fields: volunteerFields,
+  volunteersFields,
   findVolunteerById
 } = require("~airtable/tables/volunteers");
 const {
-  fields: paymentRequestFields,
-  table: paymentRequestsTable
+  paymentRequestsFields,
+  paymentRequestsTable
 } = require("~airtable/tables/paymentRequests");
 const {
   fields: requestFields,
@@ -18,14 +18,14 @@ module.exports = async function newPaymentRequest(record) {
   const reimbursementChannel = await findChannelByName(REIMBURSEMENT_CHANNEL);
   await addBotToChannel(reimbursementChannel.id);
 
-  const code = record.get(paymentRequestFields.requestCode).toUpperCase();
+  const code = record.get(paymentRequestsFields.requestCode).toUpperCase();
   const [request, _rErr] = await findRequestByCode(code);
   // lookup if reimbursement request already exists for that code
   console.debug(
     `New Payment Request: ${record.get(
-      paymentRequestFields.id
-    )} | ${code} | ${record.get(paymentRequestFields.amount)} | ${record.get(
-      paymentRequestFields.created
+      paymentRequestsFields.id
+    )} | ${code} | ${record.get(paymentRequestsFields.amount)} | ${record.get(
+      paymentRequestsFields.created
     )}`
   );
 
@@ -43,28 +43,28 @@ module.exports = async function newPaymentRequest(record) {
   await paymentRequestsTable.update([
     {
       id: record.getId(),
-      fields: { [paymentRequestFields.slackThreadId]: deliveryMessage.ts }
+      fields: { [paymentRequestsFields.slackThreadId]: deliveryMessage.ts }
     }
   ]);
 };
 
 async function makeMessageText(reimbursement, request, reimbursementCode) {
   let intro = "Another delivery has been completed and could use reimbursement";
-  const firstName = reimbursement.get(paymentRequestFields.firstName);
+  const firstName = reimbursement.get(paymentRequestsFields.firstName);
   if (firstName) {
     intro = `${firstName} completed a delivery and could use reimbursement`;
   }
 
   const paymentMethods = [];
-  const venmoId = reimbursement.get(paymentRequestFields.venmoId);
+  const venmoId = reimbursement.get(paymentRequestsFields.venmoId);
   if (venmoId) {
     paymentMethods.push(["Venmo", venmoId]);
   }
-  const paypalId = reimbursement.get(paymentRequestFields.paypalId);
+  const paypalId = reimbursement.get(paymentRequestsFields.paypalId);
   if (paypalId) {
     paymentMethods.push(["Paypal", paypalId]);
   }
-  const cashAppId = reimbursement.get(paymentRequestFields.cashAppId);
+  const cashAppId = reimbursement.get(paymentRequestsFields.cashAppId);
   if (cashAppId) {
     paymentMethods.push(["Cash App", cashAppId]);
   }
@@ -72,12 +72,12 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
     paymentMethods.push(["Payment Methods", cashAppId]);
   }
 
-  const donation = reimbursement.get(paymentRequestFields.donation);
+  const donation = reimbursement.get(paymentRequestsFields.donation);
   const donationField = [];
   if (donation) {
     donationField.push([
       "Deliverer Donation",
-      `$${reimbursement.get(paymentRequestFields.donation)}`
+      `$${reimbursement.get(paymentRequestsFields.donation)}`
     ]);
   }
 
@@ -88,14 +88,14 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
     );
   }
   const intakeVolField = [];
-  if (intakeVol && intakeVol.get(volunteerFields.slackId)) {
+  if (intakeVol && intakeVol.get(volunteersFields.slackId)) {
     intakeVolField.push([
       "Intake Volunteer",
-      `<@${intakeVol.get(volunteerFields.slackId)}>`
+      `<@${intakeVol.get(volunteersFields.slackId)}>`
     ]);
   }
 
-  const receipts = reimbursement.get(paymentRequestFields.receipts) || [];
+  const receipts = reimbursement.get(paymentRequestsFields.receipts) || [];
   const receiptFields = [];
   receipts.forEach((receipt, i) => {
     receiptFields.push([
@@ -104,7 +104,7 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
     ]);
   });
 
-  const slackMessage = reimbursement.get(paymentRequestFields.slackMessage);
+  const slackMessage = reimbursement.get(paymentRequestsFields.slackMessage);
   const extraFields = [
     [
       "Code",
@@ -114,7 +114,7 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
     ...donationField,
     [
       "Amount Needed",
-      `$${reimbursement.get(paymentRequestFields.reimbursementAmount)}`
+      `$${reimbursement.get(paymentRequestsFields.reimbursementAmount)}`
     ],
     ...paymentMethods,
     ...intakeVolField,

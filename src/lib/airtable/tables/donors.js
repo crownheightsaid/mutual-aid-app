@@ -4,9 +4,9 @@ const { paymentsAirbase } = require("~airtable/bases");
 // Schema
 // ==================================================================
 
-const donorsTableName = (exports.tableName = "Donors");
-const donorsTable = (exports.table = paymentsAirbase(donorsTableName));
-const fields = (exports.fields = {
+const donorsTableName = (exports.donorsTableName = "Donors");
+const donorsTable = (exports.donorsTable = paymentsAirbase(donorsTableName));
+const fields = (exports.donorsFields = {
   id: "ID",
   paymentMethods: "PaymentMethods",
   paymentMethods_options: {

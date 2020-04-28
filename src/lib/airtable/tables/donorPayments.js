@@ -45,7 +45,7 @@ const donorPaymentsTableName = (exports.donorPaymentsTableName =
 const donorPaymentsTable = (exports.donorPaymentsTable = paymentsAirbase(
   donorPaymentsTableName
 ));
-const fields = (exports.donorPaymentFields = {
+const fields = (exports.donorPaymentsFields = {
   id: "ID",
   amount: "Amount",
   donor: "Donor",
@@ -85,4 +85,4 @@ const fields = (exports.donorPaymentFields = {
   lastProcessed: "Last Processed",
   donorMobile: "DonorMobile"
 });
-exports.sensitiveDonorPaymentFields = [fields.donorMobile];
+exports.donorPaymentsSensitiveFields = [fields.donorMobile];
