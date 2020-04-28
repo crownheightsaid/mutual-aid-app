@@ -23,7 +23,6 @@ module.exports = async function newPaymentRequest(record) {
   const code = record.get(paymentRequestsFields.requestCode).toUpperCase();
   const [existingPaymentRequest, _e] = await findPaymentRequestsInSlack(code);
   if (existingPaymentRequest) {
-    console.log(existingPaymentRequest);
     await handleExistingPaymentRequest(
       existingPaymentRequest,
       code,
@@ -168,6 +167,7 @@ const handleExistingPaymentRequest = async (
   const deliveryMessage = await slackapi.chat.postMessage({
     channel: reimbursementChannel.id,
     unfurl_media: false,
+    unfurl_links: false,
     text: existingMessage
   });
   if (!deliveryMessage.ok) {
