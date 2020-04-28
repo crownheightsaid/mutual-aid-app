@@ -161,7 +161,7 @@ const handleExistingPaymentRequest = async (
       defaultValue:
         "*Duplicate Code!*\nThere is already a reimbursement post in this channel for request code {{- code}}. Here is a link to the original post. If there's an issue, please tag @chma-admins!\n{{- threadLink}}",
       code,
-      threadLink: existingThreadLink
+      threadLink: existingThreadLink.permalink
     }
   );
   const deliveryMessage = await slackapi.chat.postMessage({
