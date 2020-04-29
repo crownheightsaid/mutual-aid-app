@@ -28,7 +28,8 @@ exports.fetchCoordFromCrossStreets = async address => {
         address,
         region: "us",
         components: {
-          locality: "Brooklyn"
+          locality: "New York City",
+          sublocality: "Brooklyn"
         },
         key: process.env.GOOGLE_MAPS_API_KEY
       },
