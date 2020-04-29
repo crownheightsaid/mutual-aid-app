@@ -15,6 +15,9 @@ const { nycmaOuttakeHandler } = require("./src/api/authed/outtake/manyc.js");
 const {
   neighborhoodFinderUpdateRequestHandler
 } = require("./src/api/neighborhood-finder/update-request.js");
+const {
+  deliveryNeededRequestHandler
+} = require("./src/api/delivery-needed/index.js");
 
 /* eslint-disable global-require  */
 const app = express();
@@ -77,6 +80,8 @@ app.post(
   "/api/neighborhood-finder/update-request",
   neighborhoodFinderUpdateRequestHandler
 );
+
+app.get("/api/delivery-needed/requests.json", deliveryNeededRequestHandler);
 
 // ==================================================================
 // API Routes (w/ Basic Auth)
