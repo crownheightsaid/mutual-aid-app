@@ -10,7 +10,7 @@ const {
 } = require("~airtable/tables/volunteers");
 const { wait } = require("./utils");
 
-/* eslint-disable no-await-in-loop, no-loop-func, guard-for-in */
+/* eslint-disable no-await-in-loop, no-loop-func, guard-for-in, no-continue */
 (async () => {
   const allResults = await volunteersTable
     .select({
@@ -29,6 +29,9 @@ const { wait } = require("./utils");
       [volSlackId] = await getSlackIdForEmail(
         volunteerRecord.get(volunteersFields.email)
       );
+    }
+    if (!volSlackId) {
+      continue;
     }
     const waysToHelp = volunteerRecord.get(volunteersFields.waysToHelp) || [];
     waysToHelp.forEach(interest => {
@@ -51,7 +54,9 @@ const { wait } = require("./utils");
     console.log(`Total Volunteers for Channel: ${users.length}`);
     console.log(`Already users: ${alreadyUsers.length}`);
 
-    const newUsers = users.filter(user => !alreadyUsers.includes(user));
+    const newUsers = users.filter(
+      user => !alreadyUsers.includes(user) && user.startsWith("U")
+    );
 
     console.log(`Newly Added: ${newUsers.length}`);
     // Chunk adding users to channel by 50
