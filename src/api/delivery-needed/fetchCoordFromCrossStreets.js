@@ -4,8 +4,8 @@ const { makeCache } = require("../../lib/cache/makeCache");
 let googleGeoClient;
 let cache;
 
-// cache lookups for 7 days (miliseconds)
-const CACHE_AGE = 7 * 24 * 60 * 60 * 1000;
+// cache lookups for 1 day (miliseconds)
+const CACHE_AGE = 1 * 24 * 60 * 60 * 1000;
 
 const makeCacheKey = address => {
   return `geoCache-${address}`;
@@ -28,7 +28,7 @@ exports.fetchCoordFromCrossStreets = async address => {
         address,
         region: "us",
         components: {
-          locality: "New York City"
+          locality: "Brooklyn"
         },
         key: process.env.GOOGLE_MAPS_API_KEY
       },
