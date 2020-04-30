@@ -1,9 +1,12 @@
 const { paymentsAirbase } = require("~airtable/bases");
 
-exports.createDonorPayment = async donorPayment => {
+// Expects mapping of fields
+exports.createDonorPayment = async donorPaymentFields => {
   console.debug("creating donor payments record");
   try {
-    const record = await donorPaymentsTable.create(donorPayment);
+    const record = await donorPaymentsTable.create([
+      { fields: donorPaymentFields }
+    ]);
     return [record, null];
   } catch (e) {
     console.error(`Couldn't create request: ${e}`);
@@ -37,14 +40,16 @@ exports.findDonorPaymentByCode = async code => {
 // Schema
 // ==================================================================
 
-const donorPaymentsTableName = (exports.tableName = "DonorPayments");
-const donorPaymentsTable = (exports.table = paymentsAirbase(
+const donorPaymentsTableName = (exports.donorPaymentsTableName =
+  "DonorPayments");
+const donorPaymentsTable = (exports.donorPaymentsTable = paymentsAirbase(
   donorPaymentsTableName
 ));
-const fields = (exports.fields = {
+const fields = (exports.donorPaymentsFields = {
   id: "ID",
   amount: "Amount",
   donor: "Donor",
+  donorSlackId: "DonorSlackId",
   paymentRequest: "PaymentRequest",
   donorConfirmation: "DonorConfirmation",
   donorConfirmation_options: {
@@ -76,14 +81,8 @@ const fields = (exports.fields = {
   code: "Code",
   lastModified: "Last Modified",
   disputes: "Disputes",
-  toBalancer: "ToBalancer",
-  fromBalancer: "FromBalancer",
   meta: "Meta",
   lastProcessed: "Last Processed",
-  donorMobile: "DonorMobile",
-  recipientMobile: "RecipientMobile",
-  toBalancerMobile: "ToBalancerMobile",
-  payerMobile: "PayerMobile",
-  fromBalancerMobile: "FromBalancerMobile",
-  payeeMobile: "PayeeMobile"
+  donorMobile: "DonorMobile"
 });
+exports.donorPaymentsSensitiveFields = [fields.donorMobile];

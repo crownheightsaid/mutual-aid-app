@@ -1,4 +1,5 @@
 const slackapi = require("~slack/webApi");
+const { getExistingMessage } = require("~slack/channels");
 const { fields: requestFields } = require("~airtable/tables/requests");
 const { str } = require("~strings/i18nextWrappers");
 
@@ -78,17 +79,4 @@ function getStatusBadge(record) {
     "slackapp:requestBotPost.post.statusPrefix.default",
     ":red_circle:"
   );
-}
-
-async function getExistingMessage(ts, channel) {
-  const message = await slackapi.conversations.history({
-    channel,
-    latest: ts,
-    limit: 1,
-    inclusive: true
-  });
-  if (!message.messages[0]) {
-    return null;
-  }
-  return message.messages[0];
 }

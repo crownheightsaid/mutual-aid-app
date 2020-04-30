@@ -8,6 +8,10 @@ exports.ADMIN_CHANNEL = str("slackapp:channels.admin");
 exports.ARTS_CHANNEL = str("slackapp:channels.artAndDesign");
 exports.CARS_AND_BIKES_CHANNEL = str("slackapp:channels.carsAndBikes");
 exports.REQUESTS_CHANNEL = str("slackapp:channels.communityRequests");
+exports.REIMBURSEMENT_CHANNEL = str(
+  "slackapp:channels.communityReimbursements",
+  "community_reimbursement"
+);
 exports.INTAKE_CHANNEL = str("slackapp:channels.intakeVolunteers");
 exports.DELIVERY_CHANNEL = str("slackapp:channels.deliveryVolunteers");
 exports.FLYERS_CHANNEL = str("slackapp:channels.flyering");

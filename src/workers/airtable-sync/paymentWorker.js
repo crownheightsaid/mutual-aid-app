@@ -1,16 +1,17 @@
 const ChangeDetector = require("airtable-change-detector");
 const {
-  table: donorsTable,
-  fields: donorFields,
-  SENSITIVE_FIELDS: sensitiveDonorFields
-} = require("~airtable/tables/donors");
+  donorPaymentsTable,
+  donorPaymentsFields,
+  donorPaymentsSensitiveFields
+} = require("~airtable/tables/donorPayments");
 const {
-  table: paymentRequestsTable,
-  fields: paymentRequestFields,
-  SENSITIVE_FIELDS: sensitivePaymentRequestFields
+  paymentRequestsTable,
+  paymentRequestsFields,
+  paymentRequestsSensitiveFields
 } = require("~airtable/tables/paymentRequests");
-const newDonor = require("./actions/payments/newDonor");
+const newExternalDonorPayment = require("./actions/payments/newExternalDonorPayment");
 const newPaymentRequest = require("./actions/payments/newPaymentRequest");
+const updateReimbursementMessage = require("./actions/payments/updateReimbursementStatus");
 
 const defaultInterval = 10000;
 
@@ -28,43 +29,56 @@ function startWorker(interval) {
   };
 
   const paymentRequestChanges = new ChangeDetector(paymentRequestsTable, {
-    senstiveFields: sensitivePaymentRequestFields,
+    senstiveFields: paymentRequestsSensitiveFields,
     ...sharedDetectorOptions
   });
   paymentRequestChanges.pollWithInterval(
     "airtable-sync.payment-requests",
-    interval,
+    interval + 3000, // Stagger polling to avoid rate limit
     async recordsChanged => {
       console.info(`Found ${recordsChanged.length} changes in PaymentRequests`);
       const promises = [];
       recordsChanged.forEach(record => {
         if (
-          record.didChange(paymentRequestFields.id) &&
-          !record.getPrior(paymentRequestFields.id)
+          record.didChange(paymentRequestsFields.id) &&
+          !record.getPrior(paymentRequestsFields.id)
         ) {
           promises.push(newPaymentRequest(record));
+        }
+        if (record.didChange(paymentRequestsFields.isPaid)) {
+          promises.push(updateReimbursementMessage(record));
         }
       });
       return Promise.all(promises);
     }
   );
 
-  const donorSignupChanges = new ChangeDetector(donorsTable, {
-    senstiveFields: sensitiveDonorFields,
+  const donorSignupChanges = new ChangeDetector(donorPaymentsTable, {
+    senstiveFields: donorPaymentsSensitiveFields,
     ...sharedDetectorOptions
   });
   donorSignupChanges.pollWithInterval(
-    "airtable-sync.donors",
+    "airtable-sync.donor-payments",
     interval,
     async recordsChanged => {
-      console.info(`Found ${recordsChanged.length} changes in Donors`);
+      console.info(`Found ${recordsChanged.length} changes in Donor Payments`);
       const promises = [];
       recordsChanged.forEach(record => {
-        if (
-          record.didChange(donorFields.id) &&
-          !record.getPrior(donorFields.id)
-        ) {
-          promises.push(newDonor(record));
+        const isExternal = !record.get(donorPaymentsFields.donorSlackId);
+        if (isExternal) {
+          // this logic is needed because the donorPayment isn't created at once
+          const hasAmountAndRequest =
+            record.get(donorPaymentsFields.amount) &&
+            record.get(donorPaymentsFields.paymentRequest);
+          const isNewAmount =
+            record.didChange(donorPaymentsFields.amount) &&
+            !record.getPrior(donorPaymentsFields.amount);
+          const isNewPaymentRequest =
+            record.didChange(donorPaymentsFields.paymentRequest) &&
+            !record.getPrior(donorPaymentsFields.paymentRequest);
+          if (hasAmountAndRequest && (isNewAmount || isNewPaymentRequest)) {
+            promises.push(newExternalDonorPayment(record));
+          }
         }
       });
       return Promise.all(promises);

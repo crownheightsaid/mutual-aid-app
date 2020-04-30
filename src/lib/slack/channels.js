@@ -93,3 +93,16 @@ module.exports.listMembers = async channelId => {
   }
   return [members, null];
 };
+
+module.exports.getExistingMessage = async (ts, channel) => {
+  const message = await slackapi.conversations.history({
+    channel,
+    latest: ts,
+    limit: 1,
+    inclusive: true
+  });
+  if (!message.messages[0]) {
+    return null;
+  }
+  return message.messages[0];
+};
