@@ -36,8 +36,8 @@ exports.updatePaymentRequestByCode = async (code, update) => {
   }
 };
 
-exports.findPaymentRequestsInSlack = async code => {
-  if (code && code.length < 4) {
+exports.findPaymentRequestInSlack = async code => {
+  if (!code || code.length < 4) {
     return [null, `Request code must be at least 4 characters.`];
   }
   try {

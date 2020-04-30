@@ -1,5 +1,5 @@
 const slackapi = require("~slack/webApi");
-const { findChannelByName } = require("~slack/channels");
+const { findChannelByName, getExistingMessage } = require("~slack/channels");
 const { paymentRequestsFields } = require("~airtable/tables/paymentRequests");
 const { REIMBURSEMENT_CHANNEL } = require("~slack/constants");
 const { str } = require("~strings/i18nextWrappers");
@@ -54,17 +54,4 @@ function getStatusBadge(record) {
     "slackapp:reimbursementBotPost.post.statusPrefix.default",
     ":red_circle:"
   );
-}
-
-async function getExistingMessage(ts, channel) {
-  const message = await slackapi.conversations.history({
-    channel,
-    latest: ts,
-    limit: 1,
-    inclusive: true
-  });
-  if (!message.messages[0]) {
-    return null;
-  }
-  return message.messages[0];
 }
