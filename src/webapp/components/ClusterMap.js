@@ -59,11 +59,11 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
                 "circle-color": [
                   "step",
                   ["get", "point_count"],
-                  "#51bbd6",
+                  "orangered",
                   5,
-                  "#f1f075",
+                  "orangered",
                   20,
-                  "#f28cb1"
+                  "orangered"
                 ],
                 "circle-radius": [
                   "step",
@@ -73,7 +73,9 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
                   30,
                   20,
                   40
-                ]
+                ],
+                "circle-stroke-width": 1,
+                "circle-stroke-color": "#e73e00"
               }}
               onClick={e => {
                 const features = map.queryRenderedFeatures(e.point, {
@@ -100,8 +102,11 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
               filter={["has", "point_count"]}
               layout={{
                 "text-field": "{point_count_abbreviated}",
-                "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-                "text-size": 12
+                "text-font": ["Arial Unicode MS Bold"],
+                "text-size": 14
+              }}
+              paint={{
+                "text-color": "#ffffff"
               }}
             />
 
@@ -111,10 +116,10 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
               sourceId="clusterSource"
               filter={["!", ["has", "point_count"]]}
               paint={{
-                "circle-color": "#000",
-                "circle-radius": 4,
+                "circle-color": "orangered",
+                "circle-radius": 6,
                 "circle-stroke-width": 1,
-                "circle-stroke-color": "#fff"
+                "circle-stroke-color": "#e73e00"
               }}
               onClick={e => {
                 setPopup({
