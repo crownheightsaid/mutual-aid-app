@@ -9,7 +9,13 @@ import ClusterMap from "../components/ClusterMap";
 
 const useStyles = makeStyles(theme => ({
   ...sharedStylesFn(theme),
-  mapRoot: {}
+  root: {
+    'flex-direction': 'row',
+    margin: theme.spacing(4)
+  },
+  mapRoot: {
+    marginTop: theme.spacing(4)
+  },
 }));
 
 export default function DeliveryNeeded() {
@@ -24,11 +30,13 @@ export default function DeliveryNeeded() {
   }
 
   if (error) {
-    return <Box>{""+error}</Box>;
+    return <Box>{`${error}`}</Box>;
   }
   return (
     <Box className={classes.root}>
-      <Typography variant="h4">CHMA Delivery Needed</Typography>
+      <Box className={classes.heading}>
+        <Typography variant="h4">CHMA Delivery Needed</Typography>
+      </Box>
       <Box className={classes.mapRoot}>
         <ClusterMap
           containerStyle={{ height: "500px", width: "800px" }}
