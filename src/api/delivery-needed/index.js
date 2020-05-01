@@ -22,8 +22,7 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
 
   const requestsWithCoordsPromises = requestObj.map(async r => {
     let metaJSON = {};
-    let slackChannelId;
-    let slackTimestamp;
+    let slackUrl = '';
     const location = await fetchCoordFromCrossStreets(
       `
       ${r.fields[crossStreetFirst]},
@@ -34,8 +33,9 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
 
     try {
       metaJSON = JSON.parse(r.fields[meta]);
-      slackChannelId = metaJSON.slack_channel;
-      slackTimestamp = metaJSON.slack_ts;
+      const slackChannelId = metaJSON.slack_channel;
+      const slackTimestamp = metaJSON.slack_ts;
+      slackUrl = `https://crownheightsmutualaid.slack.com/archives/${slackChannelId}/p${slackTimestamp}`
     } catch {
       console.log("[deliveryNeededRequestHandler] could not parse meta", r.fields.meta);
     }
@@ -53,8 +53,7 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
           [crossStreetSecond]: r.fields[crossStreetSecond],
           [neighborhoodAreaSeeMap]: r.fields[neighborhoodAreaSeeMap],
           [firstName]: r.fields[firstName],
-          slackChannelId,
-          slackTimestamp
+          slackUrl
         }
       }
     };
