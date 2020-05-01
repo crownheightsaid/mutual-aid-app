@@ -16,12 +16,14 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
     crossStreetFirst,
     crossStreetSecond,
     meta,
-    neighborhoodAreaSeeMap
+    neighborhoodAreaSeeMap,
+    firstName
   } = fields;
 
   const requestsWithCoordsPromises = requestObj.map(async r => {
     let metaJSON = {};
     let slackChannelId;
+    let slackTimestamp;
     const location = await fetchCoordFromCrossStreets(
       `
       ${r.fields[crossStreetFirst]},
@@ -32,9 +34,10 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
 
     try {
       metaJSON = JSON.parse(r.fields[meta]);
-      slackChannelId = metaJSON.slackChannel;
+      slackChannelId = metaJSON.slack_channel;
+      slackTimestamp = metaJSON.slack_ts;
     } catch {
-      console.log("could not parse", r.fields.meta);
+      console.log("[deliveryNeededRequestHandler] could not parse meta", r.fields.meta);
     }
     return {
       type: "Feature",
@@ -49,7 +52,9 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
           [crossStreetFirst]: r.fields[crossStreetFirst],
           [crossStreetSecond]: r.fields[crossStreetSecond],
           [neighborhoodAreaSeeMap]: r.fields[neighborhoodAreaSeeMap],
-          slackChannelId
+          [firstName]: r.fields[firstName],
+          slackChannelId,
+          slackTimestamp
         }
       }
     };
