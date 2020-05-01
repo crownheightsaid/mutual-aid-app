@@ -3,33 +3,45 @@ import { Popup } from "react-mapbox-gl";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Link from "@material-ui/core/Link";
+import Divider from "@material-ui/core/Divider";
+import { makeStyles } from "@material-ui/core/styles";
 
-const RequestPopup = ({ data }) => {
-  const { lngLat, meta } = data;
+const useStyles = makeStyles(theme => ({
+  divider: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2)
+  }
+}));
+
+const RequestPopup = ({ requests }) => {
+  const classes = useStyles();
   return (
     <Popup
-      coordinates={lngLat}
+      coordinates={requests[0].lngLat}
       offset={{
         "bottom-left": [12, -38],
         bottom: [0, -38],
         "bottom-right": [-12, -38]
       }}
     >
-      <Box>
-        <Typography variant="h6">{meta["First Name"]}</Typography>
-        <Typography variant="body1">
-          {meta["Cross Street #1"]}
-          {" and "}
-          {meta["Cross Street #2"]}
-        </Typography>
-        <Link href={meta.slackUrl} target="_blank">
-          See details on Slack
-        </Link>
-        <Typography variant="body2">
-          Request code:
-          {meta.Code}
-        </Typography>
-      </Box>
+      {requests.map(({ _, meta }, i) => (
+        <Box key={meta.Code}>
+          <Typography variant="h6">{meta["First Name"]}</Typography>
+          <Typography variant="body1">
+            {meta["Cross Street #1"]}
+            {" and "}
+            {meta["Cross Street #2"]}
+          </Typography>
+          <Link href={meta.slackUrl} target="_blank">
+            See details on Slack
+          </Link>
+          <Typography variant="body2">
+            Request code:
+            {meta.Code}
+          </Typography>
+          {i !== requests.length - 1 && <Divider className={classes.divider} />}
+        </Box>
+      ))}
     </Popup>
   );
 };

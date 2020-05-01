@@ -86,14 +86,18 @@ const ClusterMapLayers = () => {
               "circle-stroke-color": "#e73e00"
             }}
             onClick={e => {
-              const meta = JSON.parse(e.features[0].properties.meta);
-              setPopup({
-                lngLat: e.lngLat,
-                meta
-              });
+              setPopup(
+                e.features.map(feat => {
+                  const meta = JSON.parse(feat.properties.meta);
+                  return {
+                    lngLat: e.lngLat,
+                    meta
+                  };
+                })
+              );
             }}
           />
-          {popup && <RequestPopup data={popup} />}
+          {popup && <RequestPopup requests={popup} />}
         </>
       )}
     </MapContext.Consumer>

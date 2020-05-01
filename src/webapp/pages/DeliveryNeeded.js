@@ -39,7 +39,7 @@ export default function DeliveryNeeded() {
       </Box>
       <Box className={classes.mapRoot}>
         <ClusterMap
-          containerStyle={{ height: "500px", width: "800px" }}
+          containerStyle={{ height: "550px", width: "100%" }}
           geoJsonData={data}
         />
       </Box>
