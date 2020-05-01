@@ -1,5 +1,5 @@
-import React from "react";
-import { Layer, Source, MapContext } from "react-mapbox-gl";
+import React, { useState } from "react";
+import { Layer, Source, MapContext, Popup } from "react-mapbox-gl";
 import { LngLat } from "mapbox-gl";
 import { findBounds } from "../helpers/mapbox-coordinates";
 import {
@@ -24,6 +24,8 @@ const makeBounds = geoJsonData => {
 };
 
 const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
+  const [popup, setPopup] = useState();
+
   if (!geoJsonData) {
     return null;
   }
@@ -34,21 +36,20 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
       bounds={makeBounds(geoJsonData)}
       containerStyle={containerStyle}
     >
+      <QuadrantsLayers />
+      <Source
+        id="clusterSource"
+        geoJsonSource={{
+          type: "geojson",
+          data: geoJsonData,
+          cluster: true,
+          clusterMaxZoom: 14,
+          clusterRadius: 30
+        }}
+      />
       <MapContext.Consumer>
         {map => (
           <>
-            <QuadrantsLayers />
-            <Source
-              id="clusterSource"
-              geoJsonSource={{
-                type: "geojson",
-                data: geoJsonData,
-                cluster: true,
-                clusterMaxZoom: 14,
-                clusterRadius: 30
-              }}
-            />
-
             <Layer
               sourceId="clusterSource"
               type="circle"
@@ -115,13 +116,29 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
                 "circle-stroke-width": 1,
                 "circle-stroke-color": "#fff"
               }}
-              onClick={(_, event) => {
-                window.alert("hello");
+              onClick={e => {
+                setPopup({
+                  lngLat: e.lngLat,
+                  meta: e.features[0].properties.meta
+                });
               }}
             />
           </>
         )}
       </MapContext.Consumer>
+
+      {popup && (
+        <Popup
+          coordinates={popup.lngLat}
+          offset={{
+            "bottom-left": [12, -38],
+            bottom: [0, -38],
+            "bottom-right": [-12, -38]
+          }}
+        >
+          {popup.meta}
+        </Popup>
+      )}
     </BasicMap>
   );
 };
