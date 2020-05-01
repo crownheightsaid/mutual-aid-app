@@ -1,7 +1,7 @@
 {
   "zoneFinder": {
     "map": {
-      "error": "Mapbox token is missing. This means that the map cannot be displayed, but should not affect the functionality of the page. Please inform"
+      "error": "Mapbox token is missing. Please inform"
     },
     "airtableUpdate": {
       "message": "Update a request with the above address",

@@ -1,13 +1,17 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
-const MissingMap = () => (
-  <div>
-    Mapbox token is missing. This means that the map cannot be displayed, but
-    should not affect the functionality of the page. Please inform&nbsp;
-    <a href="https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD">
-      #tech.
-    </a>
-  </div>
-);
+const MissingMap = () => {
+  const { t: str } = useTranslation();
+  return (
+    <div>
+      {str("webapp:zoneFinder.map.error")}
+      &nbsp;
+      <a href={str("webapp:slack.techChannelUrl")}>
+        {str("webapp:slack.techChannel")}
+      </a>
+    </div>
+  );
+};
 
 export default MissingMap;
