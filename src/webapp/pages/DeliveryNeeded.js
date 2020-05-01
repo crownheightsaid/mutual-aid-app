@@ -6,6 +6,7 @@ import useAxios from "axios-hooks";
 import { CircularProgress } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import { useTranslation } from "react-i18next";
 import { sharedStylesFn } from "../style/sharedStyles";
 import ClusterMap from "../components/ClusterMap";
 
@@ -25,6 +26,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function DeliveryNeeded() {
   const classes = useStyles();
+  const { t: str } = useTranslation();
   const [{ data, loading, error }] = useAxios({
     url: `/api/delivery-needed/requests.json`,
     method: "get"
@@ -40,7 +42,12 @@ export default function DeliveryNeeded() {
   return (
     <Box className={classes.root}>
       <Box className={classes.heading}>
-        <Typography variant="h4">CHMA Delivery Needed</Typography>
+        <Typography variant="h4">
+          {str("webapp:deliveryNeeded.title", {
+            defaultValue: "{{neighborhood}} Delivery Needed",
+            neighborhood: str("common:neighborhood")
+          })}
+        </Typography>
       </Box>
       <Box className={classes.mapRoot}>
         <ClusterMap
@@ -50,28 +57,41 @@ export default function DeliveryNeeded() {
       </Box>
       <Box className={classes.description}>
         <Typography variant="body1">
-          Above is a map of all open requests marked "Delivery Needed".
+          {str("webapp:deliveryNeeded.mapDesc", {
+            defaultValue:
+              'Above is a map of all open requests marked "Delivery Needed"'
+          })}
         </Typography>
         <List>
           <ListItem>
-            Each dot represents a location with one or more requests. This location is only representative of the cross street data. We do not store full addresses.
+            {str("webapp:description:dot", {
+              defaultValue: `Each dot represents a location with one or more requests. This
+            location is only representative of the cross street data. We do not
+            store full addresses.`
+            })}
           </ListItem>
           <ListItem>
-            Click on each cluster (large circle with a number) to zoom into
-            individual request.
+            {str("webapp:description:clickDot", {defaultValue:`Click on each cluster (large circle with a number) to zoom into
+            individual request.`
+            })}
           </ListItem>
           <ListItem>
-            Click on a dot to pop up details. There is a link to the Slack post
-            for more details, where you can also claim the delivery.
+            {str("webapp:description:popUp", {
+              defaultValue: `Click on a dot to pop up details. There is a link to the Slack post
+            for more details, where you can also claim the delivery.`
+            })}
           </ListItem>
           <ListItem>
-            Some dots may represent multiple requests at the same cross-streets.
-            Clicking on them will display all of the requests.
+            {str("webapp:description:popUp",  {defaultValue:`Some dots may represent multiple requests at the same cross-streets.
+            Clicking on them will display all of the requests.`
+            })}
           </ListItem>
           <ListItem>
-            Questions or concerns? Please let us know in <a href="https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD">
-                #tech.
-              </a>
+            {str("webapp:description:questions", {
+              defaultValue: `Questions or concerns? Please let us know in`})}
+            <a href={str("webapp:slack.techChannelUrl")}>
+                 {str("webapp:slack.techChannel")}
+            </a>
           </ListItem>
         </List>
       </Box>
