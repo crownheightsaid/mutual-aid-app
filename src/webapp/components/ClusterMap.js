@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Layer, Source, MapContext, Popup } from "react-mapbox-gl";
 import { LngLat } from "mapbox-gl";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import Link from "@material-ui/core/Link";
 import { findBounds } from "../helpers/mapbox-coordinates";
 import {
   CROWN_HEIGHTS_BOUNDS,
@@ -61,9 +64,9 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
                   ["get", "point_count"],
                   "orangered",
                   5,
-                  "orangered",
-                  20,
-                  "orangered"
+                  "#d03800",
+                  10,
+                  "#a22b00"
                 ],
                 "circle-radius": [
                   "step",
@@ -73,9 +76,7 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
                   30,
                   20,
                   40
-                ],
-                "circle-stroke-width": 1,
-                "circle-stroke-color": "#e73e00"
+                ]
               }}
               onClick={e => {
                 const features = map.queryRenderedFeatures(e.point, {
@@ -122,9 +123,10 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
                 "circle-stroke-color": "#e73e00"
               }}
               onClick={e => {
+                const meta = JSON.parse(e.features[0].properties.meta);
                 setPopup({
                   lngLat: e.lngLat,
-                  meta: e.features[0].properties.meta
+                  meta
                 });
               }}
             />
@@ -135,13 +137,27 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
       {popup && (
         <Popup
           coordinates={popup.lngLat}
-          offset={{
+            offset={{
             "bottom-left": [12, -38],
             bottom: [0, -38],
             "bottom-right": [-12, -38]
           }}
         >
-          {popup.meta}
+          <Box>
+            <Typography variant="h6">{popup.meta["First Name"]}</Typography>
+            <Typography variant="body1">
+              {popup.meta["Cross Street #1"]}
+              {' and '}
+              {popup.meta["Cross Street #2"]}
+            </Typography>
+            <Link
+              href={`https://crownheightsmutualaid.slack.com/archives/${popup.meta.slackChannelId}/p${popup.meta.slackTimestamp}`}
+              target="_blank"
+            >
+              See details on Slack
+            </Link>
+            <Typography variant="body2">Request code: {popup.meta.Code}</Typography>
+          </Box>
         </Popup>
       )}
     </BasicMap>
