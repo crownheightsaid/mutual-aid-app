@@ -110,7 +110,7 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
               sourceId="clusterSource"
               filter={["!", ["has", "point_count"]]}
               paint={{
-                "circle-color": "#11b4da",
+                "circle-color": "#000",
                 "circle-radius": 4,
                 "circle-stroke-width": 1,
                 "circle-stroke-color": "#fff"
