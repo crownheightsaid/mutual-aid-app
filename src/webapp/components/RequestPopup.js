@@ -5,6 +5,7 @@ import Box from "@material-ui/core/Box";
 import Link from "@material-ui/core/Link";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(theme => ({
   divider: {
@@ -15,6 +16,8 @@ const useStyles = makeStyles(theme => ({
 
 const RequestPopup = ({ requests }) => {
   const classes = useStyles();
+  const { t: str } = useTranslation();
+
   return (
     <Popup
       coordinates={requests[0].lngLat}
@@ -33,10 +36,14 @@ const RequestPopup = ({ requests }) => {
             {meta["Cross Street #2"]}
           </Typography>
           <Link href={meta.slackUrl} target="_blank">
-            See details on Slack
+            {str("webapp:deliveryNeeded.popup.slackLink", {
+              defaultValue: `See details on Slack`
+            })}
           </Link>
           <Typography variant="body2">
-            Request code:
+            {str("webapp:deliveryNeeded.popup.requestCode", {
+              defaultValue: `Request code:`
+            })}
             {meta.Code}
           </Typography>
           {i !== requests.length - 1 && <Divider className={classes.divider} />}
