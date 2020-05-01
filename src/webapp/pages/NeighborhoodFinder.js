@@ -9,12 +9,13 @@ import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
+import { useTranslation } from "react-i18next";
 import QuadrantMap from "../components/QuadrantMap";
 import SaveNeighborhoodDataInput from "../components/SaveNeighborhoodDataInput";
 import { sharedStylesFn } from "../style/sharedStyles";
 
 const useStyles = makeStyles(theme => ({
-  ...sharedStylesFn(theme),
+   ...sharedStylesFn(theme),
   mapRoot: {
     flex: 1
   },
@@ -27,6 +28,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function NeighborhoodFinder() {
+  const { t: str } = useTranslation();
   const classes = useStyles();
   const [formAddress, setAddress] = useState("");
   const [{ data, loading, error }, submit] = useAxios(
@@ -47,11 +49,12 @@ export default function NeighborhoodFinder() {
   };
 
   const EmailButton = () => {
-    const resourceLinks = [
-      "https://docs.google.com/document/d/18WYGoVlJuXYc3QFN1RABnARZlwDG3aLQsnNokl1KhZQ/edit"
-    ];
-    let bodyString =
-      "Sorry we couldn't help out :/\nHere's a regularly updated list of resources:\n\n";
+    const subjectString = str(
+      "webapp:zoneFinder.email.subject",
+      "Covid Resources NYC"
+    );
+    const resourceLinks = [str("webapp:zoneFinder.email.resourceUrl")];
+    let bodyString = str("webapp:zoneFinder.email.body");
 
     resourceLinks.forEach(resourceLink => {
       bodyString += `${resourceLink}\n\n`;
@@ -60,18 +63,21 @@ export default function NeighborhoodFinder() {
     return (
       <>
         <Typography className={classes.text} variant="body1">
-          You can use the link below to send more resources if needed!
+          {str(
+            "webapp:zoneFinder.sendResources.message",
+            "You can use the link below to send more resources if needed!"
+          )}
         </Typography>
         <a
           target="_blank"
           className={classes.link}
           rel="noopener noreferrer"
-          href={`mailto:?subject=Coronavirus%20Resources%20NYC&body=${encodeURIComponent(
-            bodyString
-          )}`}
+          href={`mailto:?subject=${encodeURIComponent(
+            subjectString
+          )}&body=${encodeURIComponent(bodyString)}`}
         >
           <Button variant="contained" endIcon={<MailOutlineIcon />}>
-            Email Aid Resource Links
+            {str("webapp:zoneFinder.sendResources.emailButtonText")}
           </Button>
         </a>
       </>
@@ -83,17 +89,28 @@ export default function NeighborhoodFinder() {
       <Box className={classes.formRoot}>
         <Box>
           <Typography className={classes.text} variant="h4">
-            Crown Heights Neighborhood Finder
+            {str("webapp:zoneFinder.title", {
+              defaultValue: "{{neighborhood}} Neighborhood Finder",
+              neighborhood: str("common:neighborhood")
+            })}
           </Typography>
           <Typography className={classes.text} variant="body1">
-            Enter an address and we will look up cross streets and the
-            neighborhood.
+            {str(
+              "webapp:zoneFinder.message.info",
+              "Enter an address and we will look up cross streets and the neighborhood."
+            )}
           </Typography>
           <Typography className={classes.text} variant="body1">
-            For best results, enter street and town (Ex: 1550 dean st brooklyn)
+            {str(
+              "webapp:zoneFinder.message.help",
+              "For best results, enter street and town (Ex: 1550 dean st brooklyn)"
+            )}
           </Typography>
           <Typography className={classes.text} variant="body1">
-            The address will not be stored or logged :)
+            {str(
+              "webapp:zoneFinder.message.privacy",
+              "The address will not be stored or logged :)"
+            )}
           </Typography>
         </Box>
         <form onSubmit={handleSubmit} autoComplete="off">
@@ -111,7 +128,7 @@ export default function NeighborhoodFinder() {
               endAdornment: (
                 <InputAdornment position="end">
                   <Button aria-label="address-submit" onClick={handleSubmit}>
-                    Submit
+                    {str("common:submit")}
                   </Button>
                 </InputAdornment>
               )
@@ -123,7 +140,7 @@ export default function NeighborhoodFinder() {
             <TextField
               disabled
               id="cross-1"
-              label="Cross Street #1"
+              label={str("webapp:zoneFinder.label.crossStreetFirst")}
               value={data.intersection.street_1}
               variant="outlined"
               className={classes.field}
@@ -131,7 +148,7 @@ export default function NeighborhoodFinder() {
             <TextField
               disabled
               id="cross-2"
-              label="Cross Street #2"
+              label={str("webapp:zoneFinder.label.crossStreetSecond")}
               value={data.intersection.street_2}
               variant="outlined"
               className={classes.field}
@@ -139,17 +156,20 @@ export default function NeighborhoodFinder() {
             <TextField
               disabled
               id="neighborhood"
-              label="Neighborhood"
-              value={data.neighborhoodName || "Unavailable"}
-              helperText="If both this and zone are unavailable, double check the map: https://bit.ly/2UrZPkA"
+              label={str("webapp:zoneFinder.label.neighborhoodLabel")}
+              value={data.neighborhoodName || str("common:notAvailable")}
+              helperText={str("webapp:zoneFinder.label.neighborhoodError")}
               variant="outlined"
               className={classes.field}
             />
             <TextField
               disabled
               id="zone"
-              label="Crown Heights Volunteer Zone"
-              value={data.quadrant || "Unavailable"}
+              label={str("webapp:zoneFinder.label.zone", {
+                defaultValue: "{{neighborhood}} Volunteer Zone",
+                neighborhood: str("common:neighborhood")
+              })}
+              value={data.quadrant || str("common:notAvailable")}
               variant="outlined"
               className={classes.field}
             />
@@ -167,10 +187,10 @@ export default function NeighborhoodFinder() {
         {error && (
           <>
             <Typography className={classes.text} variant="body1">
-              Error loading. Please try again. If it fails again, let us know in
+              {str("webapp:zoneFinder.geoError.message")}
               &nbsp;
-              <a href="https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD">
-                #tech.
+              <a href={str("webapp:slack.techChannelUrl")}>
+                {str("webapp:slack.techChannel")}
               </a>
             </Typography>
             <Divider className={classes.divider} />
