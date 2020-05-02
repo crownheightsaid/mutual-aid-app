@@ -6,15 +6,24 @@ import Link from "@material-ui/core/Link";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
+import CloseIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles(theme => ({
   divider: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2)
+  },
+  closeIcon: {
+    position: "absolute",
+    right: 0,
+    top: 0
+  },
+  root: {
+    position: "relative"
   }
 }));
 
-const RequestPopup = ({ requests }) => {
+const RequestPopup = ({ requests, closePopup }) => {
   const classes = useStyles();
   const { t: str } = useTranslation();
 
@@ -28,7 +37,8 @@ const RequestPopup = ({ requests }) => {
       }}
     >
       {requests.map(({ _, meta }, i) => (
-        <Box key={meta.Code}>
+        <Box key={meta.Code} className={classes.root}>
+          <CloseIcon onClick={closePopup} fontSize="small" className={classes.closeIcon} />
           <Typography variant="h6">{meta["First Name"]}</Typography>
           <Typography variant="body1">
             {meta["Cross Street #1"]}

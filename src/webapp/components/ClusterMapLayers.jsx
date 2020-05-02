@@ -97,7 +97,7 @@ const ClusterMapLayers = () => {
               );
             }}
           />
-          {popup && <RequestPopup requests={popup} />}
+          {popup && <RequestPopup closePopup={()=>setPopup()} requests={popup} />}
         </>
       )}
     </MapContext.Consumer>
