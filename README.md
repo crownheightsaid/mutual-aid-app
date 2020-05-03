@@ -1,19 +1,21 @@
 Go to [developing](DEVELOPING.md) if you want to contribute! Most folders contain a DEVELOPING guide as well.
 _________________________________________________________________________
 
+## Overview 
+
 This is an app for doing mutual aid related tasks! It is based on airtable, and requires
 certain airtable fields. If you already have an airtable, or need help setting this up, feel
 free to reach out!
 
 The app can provide the following (all optional):
-1. Twilio - Support for a phone hotline that adds to airtable
-1. Slack Bot - Support for a slack bot that can:
+1. **Twilio** - Support for a phone hotline that adds to airtable
+1. **Slack Bot** - Support for a slack bot that can:
     1. Aid in posting info from airtable to slack
     1. Aid in marking airtable from slack
-1. Web page - Supports:
+1. **Web page** - Supports:
     1. A map that shows open requests
     1. A tool for looking up cross streets + neighborhood zone (not provided) for an address
-1. Reimbursment system - Separate Airtable base that is used to track reimbursements
+1. **Reimbursment system** - Separate Airtable base that is used to track reimbursements
 
 _____________________________________________________________________________________________________
 
