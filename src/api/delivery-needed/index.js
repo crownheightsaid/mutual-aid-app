@@ -1,6 +1,7 @@
 const { findDeliveryNeededRequests } = require("~airtable/tables/requests");
 const { fields } = require("~airtable/tables/requests");
 const { fetchCoordFromCrossStreets } = require("./fetchCoordFromCrossStreets");
+const slackapi = require("~slack/webApi");
 
 exports.deliveryNeededRequestHandler = async (req, res) => {
   const [requestObj, requestErr] = await findDeliveryNeededRequests();
@@ -16,12 +17,13 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
     crossStreetFirst,
     crossStreetSecond,
     meta,
-    neighborhoodAreaSeeMap
+    neighborhoodAreaSeeMap,
+    firstName
   } = fields;
 
   const requestsWithCoordsPromises = requestObj.map(async r => {
     let metaJSON = {};
-    let slackChannelId;
+    let slackPermalink = {};
     const location = await fetchCoordFromCrossStreets(
       `
       ${r.fields[crossStreetFirst]},
@@ -32,10 +34,25 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
 
     try {
       metaJSON = JSON.parse(r.fields[meta]);
-      slackChannelId = metaJSON.slackChannel;
     } catch {
-      console.log("could not parse", r.fields.meta);
+      console.error(
+        "[deliveryNeededRequestHandler] could not parse meta",
+        r.fields.meta
+      );
     }
+
+    try {
+      const channel = metaJSON.slack_channel;
+      const timestamp = metaJSON.slack_ts;
+      slackPermalink = await slackapi.chat.getPermalink({
+        channel,
+        message_ts: timestamp
+      });
+    } catch {
+      console.error(`[deliveryNeededRequestHandler] could not fetch slack URL
+        for requestCode: ${r.fields[code]} channel: ${metaJSON.slack_channel} and timestamp: ${metaJSON.slack_ts}`);
+    }
+
     return {
       type: "Feature",
       geometry: {
@@ -49,7 +66,8 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
           [crossStreetFirst]: r.fields[crossStreetFirst],
           [crossStreetSecond]: r.fields[crossStreetSecond],
           [neighborhoodAreaSeeMap]: r.fields[neighborhoodAreaSeeMap],
-          slackChannelId
+          [firstName]: r.fields[firstName],
+          slackPermalink: slackPermalink.ok ? slackPermalink.permalink : ""
         }
       }
     };

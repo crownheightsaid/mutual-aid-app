@@ -12,35 +12,10 @@ import Divider from "@material-ui/core/Divider";
 import { useTranslation } from "react-i18next";
 import QuadrantMap from "../components/QuadrantMap";
 import SaveNeighborhoodDataInput from "../components/SaveNeighborhoodDataInput";
+import { sharedStylesFn } from "../style/sharedStyles";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    paddingTop: theme.spacing(3),
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      display: "flex"
-    }
-  },
-  field: {
-    marginTop: theme.spacing(2),
-    width: "85%"
-  },
-  link: {
-    color: "inherit",
-    textDecoration: "none",
-    "&:hover": {
-      textDecoration: "none"
-    }
-  },
-  divider: {
-    marginBottom: theme.spacing(3),
-    marginTop: theme.spacing(3)
-  },
-  text: {
-    marginBottom: theme.spacing(1)
-  },
+   ...sharedStylesFn(theme),
   mapRoot: {
     flex: 1
   },
@@ -225,7 +200,7 @@ export default function NeighborhoodFinder() {
       </Box>
 
       <Box className={classes.mapRoot}>
-        <QuadrantMap location={data && data.location} />
+        <QuadrantMap locations={data && [data.location]} />
       </Box>
     </Box>
   );

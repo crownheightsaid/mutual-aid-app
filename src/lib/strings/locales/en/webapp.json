@@ -1,7 +1,7 @@
 {
   "zoneFinder": {
     "map": {
-      "error": "Mapbox token is missing. This means that the map cannot be displayed, but should not affect the functionality of the page. Please inform"
+      "error": "Mapbox token is missing. Please inform"
     },
     "airtableUpdate": {
       "message": "Update a request with the above address",
@@ -38,5 +38,21 @@
   "slack": {
     "techChannelUrl": "https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD",
     "techChannel": "#tech"
+  },
+  "deliveryNeeded": {
+    "title": "{{neighborhood}} Delivery Needed",
+    "mapDesc": "Above is a map of all open requests marked \"Delivery Needed\"",
+    "description": {
+      "dot": "Each dot represents a location with one or more requests. This\n            location is only representative of the cross street data. We do not\n            store full addresses.",
+      "clickDot": "Click on each cluster (large circle with a number) to zoom into\n            individual request.",
+      "popUp": "Click on a dot to pop up details. There is a link to the Slack post\n            for more details, where you can also claim the delivery.",
+      "questions": "Questions or concerns? Please let us know in",
+      "multipleRequests": "Some dots may represent multiple requests at the same cross-streets.\n            Clicking on them will display all of the requests."
+    },
+    "popup": {
+      "slackLink": "See details on Slack",
+      "requestCode": "Request code:",
+      "cantFindSlack": "Can't find Slack link, please search for request code in Slack."
+    }
   }
 }
