@@ -1,3 +1,5 @@
+// Reusable Mapbox map component
+
 import React from "react";
 import ReactMapboxGl, { ZoomControl } from "react-mapbox-gl";
 import MissingMap from "./MissingMap";
