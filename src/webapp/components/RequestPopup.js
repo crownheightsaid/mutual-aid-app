@@ -38,18 +38,33 @@ const RequestPopup = ({ requests, closePopup }) => {
     >
       {requests.map(({ _, meta }, i) => (
         <Box key={meta.Code} className={classes.root}>
-          <CloseIcon onClick={closePopup} fontSize="small" className={classes.closeIcon} />
+          <CloseIcon
+            onClick={closePopup}
+            fontSize="small"
+            className={classes.closeIcon}
+          />
           <Typography variant="h6">{meta["First Name"]}</Typography>
           <Typography variant="body1">
             {meta["Cross Street #1"]}
             {" and "}
             {meta["Cross Street #2"]}
           </Typography>
-          <Link href={meta.slackUrl} target="_blank">
-            {str("webapp:deliveryNeeded.popup.slackLink", {
-              defaultValue: `See details on Slack`
-            })}
-          </Link>
+
+          {meta.slackPermalink ? (
+            <Link href={meta.slackPermalink} target="_blank">
+              {str("webapp:deliveryNeeded.popup.slackLink", {
+                defaultValue: `See details on Slack`
+              })}
+            </Link>
+          ) : (
+            <Typography variant="body2">
+              {str(
+                "webapp:deliveryNeeded.popup.cantFindSlack",
+                `Can't find Slack link, please search for request code in Slack.`
+              )}
+            </Typography>
+          )}
+
           <Typography variant="body2">
             {str("webapp:deliveryNeeded.popup.requestCode", {
               defaultValue: `Request code:`
