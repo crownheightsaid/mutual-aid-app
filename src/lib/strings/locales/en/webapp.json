@@ -51,7 +51,8 @@
     },
     "popup": {
       "slackLink": "See details on Slack",
-      "requestCode": "Request code:"
+      "requestCode": "Request code:",
+      "cantFindSlack": "Can't find Slack link, please search for request code in Slack."
     }
   }
 }
