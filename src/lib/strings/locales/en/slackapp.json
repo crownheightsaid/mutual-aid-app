@@ -194,5 +194,33 @@
     "duplicatePost": {
       "message": "*Duplicate Code!*\n:robot_face::robot_face: There is already a reimbursement post for the code {{- code}}. Here is a link to the original post. If there's an issue, please tag @chma-admins!\n{{- threadLink}}"
     }
+  },
+  "deliverySummaryPost": {
+    "intro": "*Delivey Request Summary*",
+    "error": "Oops, we hit an error while generating this summary. Please contact {{- channel}}. ({{- error}})",
+    "noOpenRequests": "There aren’t any open deliveries. Great job everyone! :meow-party:",
+    "unknownCrossStreets": "we aren't sure where",
+    "neighborhoodHeader": "*{{- name}}* ({{- count}} Unassigned)",
+    "requestRow": "{{- badgeEmoji}} *{{- code}}* ({{- crossStreets}}) {{- age}} *<{{- slackLink}}|View>*",
+    "neighborhoodFooter": "and {{- count}} more request",
+    "neighborhoodFooter_plural": "and {{- count}} more requests",
+    "age": "posted 1 day ago",
+    "age_0": "posted today",
+    "age_plural": "posted {{- count}} days ago",
+    "priorities": {
+      "overdue": {
+        "name": "Overdue",
+        "emoji": ":fire:"
+      },
+      "dragging": {
+        "name": "Dragging",
+        "emoji": ":warning:"
+      },
+      "current": {
+        "name": "Current",
+        "emoji": ":information_source:"
+      }
+    },
+    "outro": "If you would like to claim one of these deliveries, please comment on the ticket thread by following the _link to the request above_"
   }
 }
