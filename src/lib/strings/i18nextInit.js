@@ -17,7 +17,7 @@ const commonI18nOptions = {
   cleanCode: true, // auto-lowercase lang codes
   load: "languageOnly", // e.g. only load 'en' for 'en-US'
   initImmediate: false, // Blocking init
-  debug: !!process.env.DEBUG,
+  debug: !!process.env.DEBUG && !process.env.I18N_NEXT_QUIET,
   returnEmptyString: false,
   returnNull: false
 };

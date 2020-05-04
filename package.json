@@ -28,6 +28,15 @@
     "~assets": "src/lib/assets",
     "~strings": "src/lib/strings"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "~lib/(.*)": "<rootDir>src/lib/$1",
+      "~airtable/(.*)": "<rootDir>src/lib/airtable/$1",
+      "~slack/(.*)": "<rootDir>src/lib/slack/$1",
+      "~assets/(.*)": "<rootDir>src/lib/assets/$1",
+      "~strings/(.*)": "<rootDir>/src/lib/strings/$1"
+    }
+  },
   "proxy": "http://localhost:5000",
   "dependencies": {
     "@googlemaps/google-maps-services-js": "2.4.2",
@@ -51,6 +60,7 @@
     "i18next": "19.4.3",
     "i18next-fs-backend": "1.0.1",
     "i18next-http-backend": "1.0.4",
+    "jest": "^25.5.4",
     "lodash": "^4.17.15",
     "lru-cache": "^5.1.1",
     "mapbox-gl": "^1.9.1",
