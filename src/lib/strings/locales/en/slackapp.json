@@ -193,6 +193,10 @@
     },
     "duplicatePost": {
       "message": "*Duplicate Code!*\n:robot_face::robot_face: There is already a reimbursement post for the code {{- code}}. Here is a link to the original post. If there's an issue, please tag @chma-admins!\n{{- threadLink}}"
+    },
+    "requestNotFound": {
+      "message": "*Request Not Found!*\n The request code for a reimbursement didn't exist! If there's an issue, please tag @chma-admins!",
+      "noCode": "PaymentRequest has no code :/"
     }
   }
 }

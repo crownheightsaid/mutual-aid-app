@@ -21,6 +21,14 @@ module.exports = async function newPaymentRequest(record) {
   await addBotToChannel(reimbursementChannel.id);
 
   const code = record.get(paymentRequestsFields.requestCode).toUpperCase();
+  console.debug(
+    `New Payment Request: ${record.get(
+      paymentRequestsFields.id
+    )} | ${code} | ${record.get(paymentRequestsFields.amount)} | ${record.get(
+      paymentRequestsFields.created
+    )}`
+  );
+
   const [existingPaymentRequest, _e] = await findPaymentRequestInSlack(code);
   if (existingPaymentRequest) {
     await handleExistingPaymentRequest(
@@ -32,14 +40,10 @@ module.exports = async function newPaymentRequest(record) {
   }
 
   const [request, _rErr] = await findRequestByCode(code);
-  // lookup if reimbursement request already exists for that code
-  console.debug(
-    `New Payment Request: ${record.get(
-      paymentRequestsFields.id
-    )} | ${code} | ${record.get(paymentRequestsFields.amount)} | ${record.get(
-      paymentRequestsFields.created
-    )}`
-  );
+  if (!request) {
+    await handleNoRequestFound(record, code, reimbursementChannel);
+    return;
+  }
 
   const messageText = await makeMessageText(record, request, code);
   const deliveryMessage = await slackapi.chat.postMessage({
@@ -172,5 +176,44 @@ const handleExistingPaymentRequest = async (
   });
   if (!deliveryMessage.ok) {
     console.debug(`Couldn't post duplicate payment request: ${code}`);
+  }
+};
+
+const handleNoRequestFound = async (newRecord, code, reimbursementChannel) => {
+  console.log(`Handling no request found for code: ${code}`);
+
+  const slackMessage = newRecord.get(paymentRequestsFields.slackMessage);
+  const firstName = newRecord.get(paymentRequestsFields.firstName);
+  const notFoundIntro = str(
+    "slackapp:reimbursementBotPost.requestNotFound.message",
+    "*Request Not Found!*\n The request code for a reimbursement didn't exist! If there's an issue, please tag @chma-admins!"
+  );
+  const extraFields = [
+    [
+      "Code",
+      code ||
+        str(
+          "slackapp:reimbursementBotPost.requestNotFound.noCode",
+          "PaymentRequest has no code :/"
+        )
+    ],
+    ["Name", firstName ? `-\n${firstName}` : str("common:notAvailable")],
+    [
+      "Message",
+      slackMessage ? `-\n${slackMessage}` : str("common:notAvailable")
+    ]
+  ];
+  const fieldRepresentation = extraFields
+    .filter(kv => kv[1])
+    .map(kv => `*${kv[0]}*: ${kv[1].trim()}`)
+    .join("\n");
+  const deliveryMessage = await slackapi.chat.postMessage({
+    channel: reimbursementChannel.id,
+    unfurl_media: false,
+    unfurl_links: false,
+    text: `${notFoundIntro}\n\n${fieldRepresentation}`
+  });
+  if (!deliveryMessage.ok) {
+    console.debug(`Couldn't post not found payment request: ${code}`);
   }
 };
