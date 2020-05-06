@@ -83,6 +83,7 @@ const fields = (exports.donorPaymentsFields = {
   disputes: "Disputes",
   meta: "Meta",
   lastProcessed: "Last Processed",
-  donorMobile: "DonorMobile"
+  donorMobile: "DonorMobile",
+  posted: "Posted"
 });
 exports.donorPaymentsSensitiveFields = [fields.donorMobile];

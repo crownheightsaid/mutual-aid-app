@@ -10,6 +10,7 @@ const {
   paymentRequestsSensitiveFields
 } = require("~airtable/tables/paymentRequests");
 const newExternalDonorPayment = require("./actions/payments/newExternalDonorPayment");
+const newConfirmedExternalDonorPayment = require("./actions/payments/newConfirmedExternalDonorPayment");
 const newPaymentRequest = require("./actions/payments/newPaymentRequest");
 const updateReimbursementMessage = require("./actions/payments/updateReimbursementStatus");
 
@@ -70,14 +71,16 @@ function startWorker(interval) {
           const hasAmountAndRequest =
             record.get(donorPaymentsFields.amount) &&
             record.get(donorPaymentsFields.paymentRequest);
-          const isNewAmount =
-            record.didChange(donorPaymentsFields.amount) &&
-            !record.getPrior(donorPaymentsFields.amount);
-          const isNewPaymentRequest =
-            record.didChange(donorPaymentsFields.paymentRequest) &&
-            !record.getPrior(donorPaymentsFields.paymentRequest);
-          if (hasAmountAndRequest && (isNewAmount || isNewPaymentRequest)) {
+          const isPosted = record.get(donorPaymentsFields.posted);
+          if (hasAmountAndRequest && !isPosted) {
             promises.push(newExternalDonorPayment(record));
+          }
+          const isCompleted =
+            record.didChange(donorPaymentsFields.status) &&
+            record.get(donorPaymentsFields.status) ===
+              donorPaymentsFields.status_options.completed;
+          if (isPosted && isCompleted) {
+            promises.push(newConfirmedExternalDonorPayment(record));
           }
         }
       });

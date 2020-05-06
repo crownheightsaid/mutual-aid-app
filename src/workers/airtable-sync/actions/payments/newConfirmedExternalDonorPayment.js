@@ -1,53 +1,42 @@
 const slackapi = require("~slack/webApi");
 const { findChannelByName } = require("~slack/channels");
 const { REIMBURSEMENT_CHANNEL } = require("~slack/constants");
+const { donorsFields, findDonorById } = require("~airtable/tables/donors");
 const {
   paymentRequestsFields,
   findPaymentRequestById
 } = require("~airtable/tables/paymentRequests");
-const {
-  donorPaymentsFields,
-  donorPaymentsTable
-} = require("~airtable/tables/donorPayments");
+const { donorPaymentsFields } = require("~airtable/tables/donorPayments");
 
-module.exports = async function newExternalDonorPayment(record) {
+module.exports = async function newConfirmedExternalDonorPayment(record) {
   const reimbursementChannel = await findChannelByName(REIMBURSEMENT_CHANNEL);
   const dpId = record.get(donorPaymentsFields.id);
   console.debug(
-    `New External Donor Payment: ${dpId} |  $${record.get(
+    `New Confirmed External Donor Payment: ${dpId} |  $${record.get(
       donorPaymentsFields.amount
     )}`
   );
 
   const prId = record.get(donorPaymentsFields.paymentRequest);
   const [paymentRequest] = await findPaymentRequestById(prId);
-  if (!paymentRequest) {
-    console.debug(`No payment request for donor payment: ${dpId}`);
-    return;
-  }
   const slackThreadId = paymentRequest.get(paymentRequestsFields.slackThreadId);
-  if (!slackThreadId) {
-    console.debug(
-      `No slack thread for payment request: ${paymentRequest.get(
-        paymentRequestsFields.id
-      )}`
-    );
-    return;
-  }
+
+  const dId = record.get(donorPaymentsFields.donor);
+  const [donor] = await findDonorById(dId);
+  const nameMessage =
+    donor && donor.get(donorsFields.firstName)
+      ? `${donor.get(donorsFields.firstName)}, a pledge`
+      : `A pledge`;
 
   const newDonationAmount = record.get(donorPaymentsFields.amount);
+  const balance = paymentRequest.get(paymentRequestsFields.balance);
+  const message =
+    balance <= 0 ? "Reimbursement is complete!!" : `Just ${balance} to go!`;
 
   await slackapi.chat.postMessage({
     token: process.env.SLACK_BOT_TOKEN,
     channel: reimbursementChannel.id,
     thread_ts: slackThreadId,
-    text: `A pledge has been asked to send you $${newDonationAmount}. Stay tuned!`
+    text: `Confirmed! ${nameMessage}, has sent you $${newDonationAmount}. ${message}`
   });
-
-  await donorPaymentsTable.update([
-    {
-      id: record.getId(),
-      fields: { [donorPaymentsFields.posted]: true }
-    }
-  ]);
 };
