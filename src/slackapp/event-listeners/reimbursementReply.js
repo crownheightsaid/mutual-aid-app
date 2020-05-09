@@ -36,8 +36,6 @@ const filterAndReply = async event => {
   }
 
   const newDonationAmount = Number(amountMatches[0]);
-  const oldBalance = paymentRequest.get(paymentRequestsFields.balance);
-  const newBalance = oldBalance - newDonationAmount;
 
   const [record] = await createDonorPayment({
     [donorPaymentsFields.amount]: newDonationAmount,
@@ -54,15 +52,18 @@ const filterAndReply = async event => {
     return;
   }
 
+  const oldBalance = paymentRequest.get(paymentRequestsFields.balance);
+  const newBalance = oldBalance - newDonationAmount;
   const message =
     newBalance <= 0
       ? "reimbursement is complete!!"
-      : `just ${newBalance} to go!`;
+      : `just ${newBalance.toFixed(2)} to go!`;
   await slackapi.chat.postMessage({
     token: process.env.SLACK_BOT_TOKEN,
     channel: reimbursementChannel.id,
     thread_ts: event.thread_ts,
-    text: `Thanks <@${event.user}>! They sent ${newDonationAmount}, ${message}`
+    text: `Thanks <@${event.user}>!
+They sent ${newDonationAmount.toFixed(2)}, ${message}`
   });
 };
 

@@ -125,7 +125,9 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
     ],
     [
       "Amount Needed",
-      `$${reimbursement.get(paymentRequestsFields.reimbursementAmount)}`
+      `$${reimbursement
+        .get(paymentRequestsFields.reimbursementAmount)
+        .toFixed(2)}`
     ],
     ...paymentMethods,
     ...intakeVolField,

@@ -32,8 +32,8 @@ module.exports = async function newExternalDonorPayment(record) {
     return;
   }
 
-  const newDonationAmount = record.get(donorPaymentsFields.amount);
-  const balance = paymentRequest.get(paymentRequestsFields.balance);
+  const newDonationAmount = record.get(donorPaymentsFields.amount).toFixed(2);
+  const balance = paymentRequest.get(paymentRequestsFields.balance).toFixed(2);
   const message =
     balance <= 0 ? "reimbursement is complete!!" : `just ${balance} to go!`;
 
