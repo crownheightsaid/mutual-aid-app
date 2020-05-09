@@ -72,7 +72,13 @@
       "firstName": "First Name",
       "phone": "Phone",
       "crossStreets": "Cross Streets",
-      "notes": "Request Notes"
+      "notes": "Request Notes",
+      "message": {
+        "default": "Delivery has been assigned!",
+        "text": "Thanks to you both for volunteering. Here's some details on the request. Let's help some neighbors!",
+        "reminder": "_*Reminder:* When you make a delivery, drop the groceries at the door, step 6 feet away, and make sure that the recipient knows to wipe down all the groceries (or wash with soap and water)_",
+        "outro": "*Submit your receipt:* Afterwards, please fill out this handy <{{- reimbursementUrl}}|reimbursement form>, it will automatically post to the #community_reimbursement channel!\n\nFor more info, please see the <{{- guideUrl}}|delivery guide>."
+      }
     },
     "postNotify": {
       "message": "{{delivererName}} you're on! You'll get a DM soon with details :slightly_smiling_face:"
@@ -143,7 +149,9 @@
       },
       "message": {
         "intro": "Hey Crown Heights, we have a new request from our neighbor {{firstName}} at {{streets}} in *{{quadrant}}*",
-        "outro": "*Want to volunteer to help our neighbor{{firstName}}?* Comment on this thread and {{- intakeSlackId}} will follow up with more details.\n_Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive._"
+        "outro": "*Want to volunteer to help our neighbor{{firstName}}?* Comment on this thread and {{- intakeSlackId}} will follow up with more details.\n_Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive._",
+        "outroPay": "Submit your receipt: please fill out this handy reimbursement form, it will automatically post to the #community_reimbursement channel!\nFor more information, please see the delivery guide.",
+        "guide": "For more information, please see the <{{- guideUrl}}|delivery guide>."
       },
       "deliveryCongrats": ":tada: Shout out to {{- deliveryVolunteer}} for volunteering to help! :tada:\n"
     }

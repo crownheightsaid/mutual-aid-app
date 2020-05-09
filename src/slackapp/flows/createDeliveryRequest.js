@@ -428,5 +428,9 @@ ${str("slackapp:requestBotPost.post.message.outro", {
 _Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive._`,
   intakeSlackId: `<@${slackId}>`,
   firstName
+})}
+${str("slackapp:requestBotPost.post.message.guide", {
+  defaultValue: `For more information, please see the <{{- guideUrl}}|delivery guide>.`,
+  guideUrl: str("common:links.deliveryGuide")
 })}`;
 }

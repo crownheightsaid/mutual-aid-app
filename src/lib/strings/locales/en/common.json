@@ -2,17 +2,12 @@
   "notAvailable": "n/a",
   "appName": "Crown Heights Mutual Aid",
   "close": "Close",
-  "assignDelivery": {
-    "dm": {
-      "message": {
-        "default": "Delivery has been assigned!",
-        "text": "Thanks to you both for volunteering. Here's some details on the request. Let's help some neighbors!",
-        "reminder": "_*Reminder:* When you make a delivery, drop the groceries at the door, step 6 feet away, and make sure that the recipient knows to wipe down all the groceries (or wash with soap and water)_"
-      }
-    }
-  },
   "submit": "Submit",
   "cancel": "Cancel",
   "neighborhood": "Crown Heights",
-  "save": "Save"
+  "save": "Save",
+  "links": {
+    "reimbursementForm": "https://airtable.com/shrnf6M0YLn8IwJ71",
+    "deliveryGuide": "https://docs.google.com/document/d/1gLQsC3QUylavyzEYXWa7MVuk-H0DOnVtQtFm2fBXDQg/preview"
+  }
 }
