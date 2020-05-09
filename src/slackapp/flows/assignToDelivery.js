@@ -119,7 +119,7 @@ exports.atdViewSubmission = async payload => {
         token: process.env.SLACK_BOT_TOKEN,
         channel: messageId,
         text: str(
-          "common:assignDelivery.dm.message.default",
+          "slackapp:assignDelivery.dm.message.default",
           "Delivery has been assigned!"
         ),
         blocks: [
@@ -127,7 +127,7 @@ exports.atdViewSubmission = async payload => {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: str("common:assignDelivery.dm.message.text")
+              text: str("slackapp:assignDelivery.dm.message.text")
             }
           },
           {
@@ -141,7 +141,19 @@ exports.atdViewSubmission = async payload => {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: str("common:assignDelivery.dm.message.reminder")
+              text: str("slackapp:assignDelivery.dm.message.reminder")
+            }
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: str("slackapp:assignDelivery.dm.message.outro", {
+                defaultValue:
+                  "*Submit your receipt:* Afterwards, please fill out this handy <{{- reimbursementUrl}}|reimbursement form>, it will automatically post to the #community_reimbursement channel!\n\nFor more information, please see the <{{- guideUrl}}|delivery guide>.",
+                reimbursementUrl: str("common:links.reimbursementForm"),
+                guideUrl: str("common:links.deliveryGuide")
+              })
             }
           }
         ]

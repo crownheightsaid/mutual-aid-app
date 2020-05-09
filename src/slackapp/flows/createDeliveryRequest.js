@@ -54,6 +54,7 @@ module.exports.register = function register(slackInteractions) {
  * Presents a new modal with a selector for all open requests (that aren't on slack already)
  */
 async function selectRequestForSending(payload) {
+  console.log("select");
   const slackUserResponse = await slackapi.users.info({
     token: process.env.SLACK_BOT_TOKEN,
     user: payload.user.id
@@ -105,6 +106,7 @@ async function selectRequestForSending(payload) {
  * Makes a suggestested message and allows the user to edit it and choose which channel to send to.
  */
 async function draftRequest(payload) {
+  console.log("draftre");
   const code =
     payload.view.state.values.select_request.selected_request.selected_option
       .value;
@@ -127,6 +129,7 @@ async function draftRequest(payload) {
  * Renders the message as markdown and lets the user confirm or go back to editing
  */
 async function draftConfirm(payload) {
+  console.log("draftcon");
   const code = payload.view.private_metadata;
   const { values } = payload.view.state;
   const content = values.draft_message.draft_message.value;
@@ -428,5 +431,9 @@ ${str("slackapp:requestBotPost.post.message.outro", {
 _Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive._`,
   intakeSlackId: `<@${slackId}>`,
   firstName
+})}
+${str("slackapp:requestBotPost.post.message.guide", {
+  defaultValue: `For more information, please see the <{{- guideUrl}}|delivery guide>.`,
+  guideUrl: str("common:links.deliveryGuide")
 })}`;
 }
