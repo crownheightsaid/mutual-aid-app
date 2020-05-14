@@ -12,7 +12,7 @@ const { str } = require("~strings/i18nextWrappers");
       const holderInfo = holder.split(":");
       return {
         venmoHandle: holderInfo[0],
-        venmoUser: `<@${holderInfo[1]}>`
+        slackId: `<@${holderInfo[1]}>`
       };
     });
     const bucketName = "mutual-aid-volunteer-slack.appspot.com";
@@ -54,13 +54,14 @@ const { str } = require("~strings/i18nextWrappers");
       userStartForToday + groupSize
     );
     const hatHolder = hatHolders[daysSinceFirstRun % hatHolders.length];
+    await sendMessage(users[0], hatHolder);
     for (const user of usersToMessage) {
       await sendMessage(user, hatHolder);
       await wait(1000);
     }
     console.log(`Processed: ${usersToMessage.length}`);
   } catch (err) {
-    console.log(JSON.stringify(err));
+    console.log(err);
   }
 })();
 
@@ -71,17 +72,17 @@ const sendMessage = async (userId, hatHolder) => {
   });
   const dmLines = [
     `Some more details,`,
-    `   - ${str(
+    `>${str(
       "slackapp:passHat.dm.message.details.first",
       ":rabbit::tophat::question: The rundown: To help fund our grocery aid deliveries and make sure all bills are paid, we’ve created this *hat*, the kind passed around at concerts, collecting tips for the band. Everyday the hat is passed to different CHMA members, but we promise you won’t get the hat again for at least a few weeks!"
     )}`,
-    `   - ${str(
+    `>${str(
       "slackapp:passHat.dm.message.details.second",
       ":money_with_wings: So if you’re able to donate any amount, whether it’s $3 or $30, please do! You’d be helping out a lot--no donation is too small! If you’re unable to donate, no worries at all! We don't track who is and isn't donating"
     )}`,
-    `   - ${str("slackapp:passHat.dm.message.details.third", {
+    `>${str("slackapp:passHat.dm.message.details.third", {
       defaultValue:
-        ":pie: It’s as easy as venmoing {{- venmoHandle}}. This Venmo account belongs to {{- venmoUser}} who will disburse the funds they collect to our delivery volunteers in need of reimbursements (receipts posted in #community_reimbursement). Use a :tophat: or :luckyhat: in the venmo comment, or just type in CHMA hat!",
+        ":pie: It’s as easy as *venmoing {{- venmoHandle}}*. This Venmo account belongs to {{- venmoUser}} who will disburse the funds they collect to our delivery volunteers in need of reimbursements (receipts posted in #community_reimbursement). Use a :tophat: or :luckyhat: in the venmo comment, or just type in CHMA hat!",
       venmoUser: hatHolder.slackId,
       venmoHandle: hatHolder.venmoHandle
     })}`
@@ -90,10 +91,7 @@ const sendMessage = async (userId, hatHolder) => {
   await slackapi.chat.postMessage({
     token: process.env.SLACK_BOT_TOKEN,
     channel: messageId,
-    text: str(
-      "slackapp:assignDelivery.dm.message.default",
-      "Delivery has been assigned!"
-    ),
+    text: str("slackapp:passHat.dm.default", "Pass the hat!"),
     blocks: [
       {
         type: "section",
@@ -111,7 +109,7 @@ const sendMessage = async (userId, hatHolder) => {
           type: "mrkdwn",
           text: str("slackapp:passHat.dm.message.tldr", {
             defaultValue:
-              ":meow-party: *tl;dr:* If able, please venmo {{- venmoHandle}} a small donation today. They will use all the funds to cover our grocery deliveries! :bike:",
+              "*tl;dr:* If able, please venmo *{{- venmoHandle}}* a small donation today. They will use all the funds to cover our grocery deliveries! :bike:",
             venmoHandle: hatHolder.venmoHandle
           })
         }

@@ -206,5 +206,20 @@
       "message": "*Request Not Found!*\n :robot_face::robot_face: The request code for a reimbursement didn't exist! If there's an issue, please tag @chma-admins!",
       "noCode": "PaymentRequest has no code :/"
     }
+  },
+  "passHat": {
+    "dm": {
+      "message": {
+        "details": {
+          "first": ":rabbit::tophat::question: The rundown: To help fund our grocery aid deliveries and make sure all bills are paid, we’ve created this *hat*, the kind passed around at concerts, collecting tips for the band. Everyday the hat is passed to different CHMA members, but we promise you won’t get the hat again for at least a few weeks!",
+          "second": ":money_with_wings: So if you’re able to donate any amount, whether it’s $3 or $30, please do! You’d be helping out a lot--no donation is too small! If you’re unable to donate, no worries at all! We don't track who is and isn't donating",
+          "third": ":pie: It’s as easy as *venmoing {{- venmoHandle}}*. This Venmo account belongs to {{- venmoUser}} who will disburse the funds they collect to our delivery volunteers in need of reimbursements (receipts posted in #community_reimbursement). Use a :tophat: or :luckyhat: in the venmo comment, or just type in CHMA hat!"
+        },
+        "intro": ":luckyhat: CHMA Hat! :luckyhat:\nHi there! We’re passing the CHMA hat to you today!",
+        "tldr": "*tl;dr:* If able, please venmo *{{- venmoHandle}}* a small donation today. They will use all the funds to cover our grocery deliveries! :bike:",
+        "outro": "Thank you for all you do in Crown Heights Mutual Aid! :fist:"
+      },
+      "default": "Pass the hat!"
+    }
   }
 }
