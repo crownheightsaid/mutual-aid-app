@@ -30,6 +30,7 @@
   },
   "proxy": "http://localhost:5000",
   "dependencies": {
+    "@google-cloud/storage": "4.7.0",
     "@googlemaps/google-maps-services-js": "2.4.2",
     "@material-ui/core": "4.9.10",
     "@material-ui/icons": "^4.9.1",
