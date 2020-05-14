@@ -49,14 +49,22 @@ const { str } = require("~strings/i18nextWrappers");
     }
 
     console.log(`Day in cycle: ${dayInCycle}`);
+    console.log(`Group Size: ${groupSize}`);
     const usersToMessage = users.slice(
       userStartForToday,
       userStartForToday + groupSize
     );
     const hatHolder = hatHolders[daysSinceFirstRun % hatHolders.length];
-    await sendMessage(users[0], hatHolder);
     for (const user of usersToMessage) {
-      await sendMessage(user, hatHolder);
+      try {
+        await sendMessage(user, hatHolder);
+      } catch (e) {
+        console.log(`Error for ${user}`);
+        if (e.data.error !== "user_not_found") {
+          throw e;
+        }
+        console.log(e);
+      }
       await wait(1000);
     }
     console.log(`Processed: ${usersToMessage.length}`);
