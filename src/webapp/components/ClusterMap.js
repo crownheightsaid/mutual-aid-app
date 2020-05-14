@@ -46,7 +46,9 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
           clusterRadius: 30
         }}
       />
-      <ClusterMapLayers />
+      <ClusterMapLayers
+        geoJsonData={geoJsonData}
+      />
     </BasicMap>
   );
 };

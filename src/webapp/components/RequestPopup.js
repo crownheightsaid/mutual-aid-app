@@ -31,9 +31,9 @@ const RequestPopup = ({ requests, closePopup }) => {
     <Popup
       coordinates={requests[0].lngLat}
       offset={{
-        "bottom-left": [12, -38],
-        bottom: [0, -38],
-        "bottom-right": [-12, -38]
+        "bottom-left": [6, -19],
+        bottom: [0, -19],
+        "bottom-right": [-6, -19]
       }}
     >
       {requests.map(({ meta }, i) => (
