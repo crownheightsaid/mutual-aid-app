@@ -36,33 +36,14 @@ const makePopupData = (features, lngLat) => {
   });
 };
 
-const getRequestParam = () => {
-  const searchStr = window.location && window.location.search;
-  return searchStr
-    .slice(1)
-    .split("&")
-    .reduce((acc, token) => {
-      const matches = token.match(/request=(.*)/);
-      return matches ? matches[1] : acc;
-    }, "");
-};
-
-const ClusterMapLayers = ({ geoJsonData }) => {
+const ClusterMapLayers = ({ geoJsonData, paramRequest }) => {
   const [popup, setPopup] = useState();
 
   // display popup if request code is present in URL search param
   useEffect(() => {
-    const requestCode = getRequestParam();
-    if (requestCode && geoJsonData && geoJsonData.features) {
-      // find feature, simulate click on latlng on map
-      const currRequest = geoJsonData.features.filter(
-        feat => feat.properties.meta.Code === requestCode
-      )[0];
-      if (currRequest) {
-        setPopup(
-          makePopupData([currRequest], currRequest.geometry.coordinates)
-        );
-      }
+    if (paramRequest) {
+      const { geometry: { coordinates }} = paramRequest;
+      setPopup(makePopupData([paramRequest], coordinates));
     }
   }, []);
 
