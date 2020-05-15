@@ -61,8 +61,9 @@ const RequestNotFoundAlert = ({ requestCode }) => {
 };
 
 const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
-  let paramRequest;
   const requestCode = getRequestParam();
+
+  let paramRequest;
 
   if (requestCode && geoJsonData && geoJsonData.features) {
     // find first feature with code match to be passed
@@ -81,9 +82,14 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
     return null;
   }
 
+  // there is a requestCode but the request object does not exist
+  const paramRequestNotFound = requestCode && !paramRequest;
+
   return (
     <>
-      {!paramRequest && <RequestNotFoundAlert requestCode={requestCode} />}
+      {paramRequestNotFound && (
+        <RequestNotFoundAlert requestCode={requestCode} />
+      )}
 
       <BasicMap
         center={CROWN_HEIGHTS_CENTER_COORD}
