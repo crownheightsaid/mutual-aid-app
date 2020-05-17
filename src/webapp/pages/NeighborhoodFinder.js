@@ -12,10 +12,10 @@ import Divider from "@material-ui/core/Divider";
 import { useTranslation } from "react-i18next";
 import QuadrantMap from "../components/QuadrantMap";
 import SaveNeighborhoodDataInput from "../components/SaveNeighborhoodDataInput";
-import { sharedStylesFn } from "../style/sharedStyles";
+import sharedStylesFn from "../style/sharedStyles";
 
 const useStyles = makeStyles(theme => ({
-   ...sharedStylesFn(theme),
+  ...sharedStylesFn(theme),
   mapRoot: {
     flex: 1
   },

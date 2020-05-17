@@ -7,7 +7,7 @@ import { CircularProgress } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import { useTranslation } from "react-i18next";
-import { sharedStylesFn } from "../style/sharedStyles";
+import sharedStylesFn from "../style/sharedStyles";
 import ClusterMap from "../components/ClusterMap";
 
 const useStyles = makeStyles(theme => ({

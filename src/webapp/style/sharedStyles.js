@@ -27,4 +27,4 @@ const sharedStylesFn = theme => ({
     marginBottom: theme.spacing(1)
   }
 });
-export { sharedStylesFn };
+export default sharedStylesFn;

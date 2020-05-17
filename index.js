@@ -4,7 +4,7 @@ require("~strings/i18nextInit");
 
 const path = require("path");
 const express = require("express");
-const morgan = require('morgan')
+const morgan = require("morgan");
 const twilio = require("twilio");
 const basicAuth = require("express-basic-auth");
 const bodyParser = require("body-parser");
@@ -22,7 +22,7 @@ const {
 
 /* eslint-disable global-require  */
 const app = express();
-app.use(morgan('tiny'))
+app.use(morgan("tiny"));
 
 if (!process.env.AIRTABLE_BASE || !process.env.AIRTABLE_KEY) {
   console.warn("An airtable key is missing. Something will probably break :/");

@@ -36,7 +36,7 @@ const RequestPopup = ({ requests, closePopup }) => {
         "bottom-right": [-12, -38]
       }}
     >
-      {requests.map(({ _, meta }, i) => (
+      {requests.map(({ meta }, i) => (
         <Box key={meta.Code} className={classes.root}>
           <CloseIcon
             onClick={closePopup}

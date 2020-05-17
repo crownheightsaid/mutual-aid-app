@@ -34,7 +34,6 @@ const BasicMap = ({ center, bounds, containerStyle, children }) => (
     <ZoomControl />
 
     {children}
-
   </MapboxMap>
 );
 
