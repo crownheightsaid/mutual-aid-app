@@ -8,7 +8,8 @@
     "deliveryVolunteers": "delivery_volunteers",
     "flyering": "flyer_squad",
     "tech": "tech",
-    "communityReimbursements": "community_reimbursement"
+    "communityReimbursements": "community_reimbursement",
+    "hatHolders": "hat_holders"
   },
   "usergroups": {
     "cars": "cars",

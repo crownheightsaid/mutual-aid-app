@@ -16,6 +16,7 @@ exports.INTAKE_CHANNEL = str("slackapp:channels.intakeVolunteers");
 exports.DELIVERY_CHANNEL = str("slackapp:channels.deliveryVolunteers");
 exports.FLYERS_CHANNEL = str("slackapp:channels.flyering");
 exports.TECH_CHANNEL = str("slackapp:channels.tech");
+exports.HAT_CHANNEL = str("slackapp:channels.hatHolders");
 
 // Slack usergroups
 exports.CARS_USERGROUP = str("slackapp:usergroups.cars");
