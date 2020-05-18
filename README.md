@@ -3,8 +3,8 @@ _________________________________________________________________________
 
 ## Overview 
 
-Functionality walkthrough (dated May 17, 2020): youtube.com/watch?v=SyrOdZVb-zw  
-Technical walkthrough (dated May 17, 2020): youtube.com/watch?v=b1QW5YNtBaM
+[Functionality walkthrough](https://youtube.com/watch?v=SyrOdZVb-zw) (dated May 17, 2020)  
+[Technical walkthrough](https://youtube.com/watch?v=b1QW5YNtBaM) (dated May 17, 2020)
 
 This is an app for doing mutual aid related tasks! It is based on airtable, and requires
 certain airtable fields. If you already have an airtable, or need help setting this up, feel
