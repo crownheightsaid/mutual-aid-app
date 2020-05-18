@@ -1,6 +1,8 @@
 const { Storage } = require("@google-cloud/storage");
 const _ = require("lodash");
 const slackapi = require("~slack/webApi");
+const { findChannelByName } = require("~slack/channels");
+const { HAT_CHANNEL } = require("~slack/constants");
 const { wait } = require("./utils");
 const { str } = require("~strings/i18nextWrappers");
 
@@ -32,7 +34,6 @@ const { str } = require("~strings/i18nextWrappers");
     const file = bucket.file(passTheHatFilename);
     const res = await file.download();
     const users = JSON.parse(res[0]);
-    console.log(`Total Users: ${users.length}`);
 
     const daysSinceFirstRun = daysSince(new Date(2020, 5, 12));
     const daysInCycle = 25;
@@ -47,14 +48,21 @@ const { str } = require("~strings/i18nextWrappers");
       // Add remaining users to last group
       groupSize += users.length % daysInCycle;
     }
-
-    console.log(`Day in cycle: ${dayInCycle}`);
-    console.log(`Group Size: ${groupSize}`);
     const usersToMessage = users.slice(
       userStartForToday,
       userStartForToday + groupSize
     );
     const hatHolder = hatHolders[daysSinceFirstRun % hatHolders.length];
+
+    const infoLines = [
+      `Total Users: ${users.length}`,
+      `Day in cycle: ${dayInCycle}`,
+      `Group size: ${groupSize}`,
+      `Hat holder: ${hatHolder.slackId}`,
+      `Hat holder venmo: ${hatHolder.venmoHandle}`
+    ];
+    infoLines.forEach(line => console.log(line));
+    await sendHatHolderMessage(infoLines.join("\n"));
     for (const user of usersToMessage) {
       try {
         await sendMessage(user, hatHolder);
@@ -70,8 +78,27 @@ const { str } = require("~strings/i18nextWrappers");
     console.log(`Processed: ${usersToMessage.length}`);
   } catch (err) {
     console.log(err);
+    await sendHatHolderMessage(`Error: ${err}`);
   }
 })();
+
+const sendHatHolderMessage = async message => {
+  try {
+    const hatHolderChannel = await findChannelByName(HAT_CHANNEL);
+
+    const hatMessage = await slackapi.chat.postMessage({
+      channel: hatHolderChannel.id,
+      unfurl_media: false,
+      text: message
+    });
+    if (!hatMessage.ok) {
+      console.log(`Couldn't post hat holder message`);
+    }
+  } catch (e) {
+    console.log(`Couldn't post hat holder message`);
+    console.log(e);
+  }
+};
 
 const sendMessage = async (userId, hatHolder) => {
   const dmResponse = await slackapi.conversations.open({
