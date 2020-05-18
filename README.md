@@ -3,9 +3,15 @@ _________________________________________________________________________
 
 ## Overview 
 
+Functionality walkthrough (dated May 17, 2020): youtube.com/watch?v=SyrOdZVb-zw  
+Technical walkthrough (dated May 17, 2020): youtube.com/watch?v=b1QW5YNtBaM
+
 This is an app for doing mutual aid related tasks! It is based on airtable, and requires
 certain airtable fields. If you already have an airtable, or need help setting this up, feel
 free to reach out!
+
+**Note:** this app is severly undertested! it's used in 'production', but development is rapid.
+YMMV.
 
 The app can provide the following (all optional):
 1. **Twilio** - Support for a phone hotline that adds to airtable
