@@ -20,7 +20,10 @@ module.exports = async function newPaymentRequest(record) {
   const reimbursementChannel = await findChannelByName(REIMBURSEMENT_CHANNEL);
   await addBotToChannel(reimbursementChannel.id);
 
-  const code = record.get(paymentRequestsFields.requestCode).toUpperCase();
+  const code = record
+    .get(paymentRequestsFields.requestCode)
+    .toUpperCase()
+    .trim();
   console.debug(
     `New Payment Request: ${record.get(
       paymentRequestsFields.id
