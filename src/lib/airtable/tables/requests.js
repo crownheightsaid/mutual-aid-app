@@ -289,6 +289,7 @@ const fields = (exports.fields = {
   firstName: "First Name",
   triggerBackfill: "Trigger Backfill",
   neighborhood: "Neighborhood MA-NYC",
+  householdSize: "Household Size",
   forDrivingClusters: "For Driving Clusters"
 });
 exports.SENSITIVE_FIELDS = [

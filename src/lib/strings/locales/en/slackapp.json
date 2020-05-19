@@ -141,7 +141,8 @@
         "notes": {
           "name": "Description",
           "default": "No notes"
-        }
+        },
+        "householdSize": "Household Size"
       },
       "statusPrefix": {
         "default": ":red_circle:",

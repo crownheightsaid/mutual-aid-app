@@ -397,6 +397,10 @@ function suggestedTemplate(payload, request) {
       quadrant ||
         str("slackapp:requestBotPost.post.fields.neighborhood.default")
     ],
+    [
+      str("slackapp:requestBotPost.post.fields.householdSize"),
+      request.get(requestsFields.householdSize) || str("common:notAvailable")
+    ],
     [str("slackapp:requestBotPost.post.fields.needs.name"), needs],
     [str("slackapp:requestBotPost.post.fields.streets.name"), streets],
     [
