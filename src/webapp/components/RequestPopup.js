@@ -48,27 +48,21 @@ const RequestPopup = ({ requests, closePopup }) => {
             fontSize="small"
             className={classes.closeIcon}
           />
-          <Typography variant="h6">{meta["First Name"]}</Typography>
+          <Typography variant="h6">
+            {meta.slackPermalink ? (
+              <Link href={meta.slackPermalink} underline="always" target="_blank">
+                {meta["First Name"]}
+              </Link>
+            ) : (
+              meta["First Name"]
+            )}
+          </Typography>
+
           <Typography variant="body1">
             {meta["Cross Street #1"]}
             {" and "}
             {meta["Cross Street #2"]}
           </Typography>
-
-          {meta.slackPermalink ? (
-            <Link href={meta.slackPermalink} target="_blank">
-              {str("webapp:deliveryNeeded.popup.slackLink", {
-                defaultValue: `See details on Slack`
-              })}
-            </Link>
-          ) : (
-            <Typography variant="body2">
-              {str(
-                "webapp:deliveryNeeded.popup.cantFindSlack",
-                `Can't find Slack link, please search for request code in Slack.`
-              )}
-            </Typography>
-          )}
 
           <Typography variant="body2">
             {str("webapp:deliveryNeeded.popup.requestCode", {
@@ -85,6 +79,16 @@ const RequestPopup = ({ requests, closePopup }) => {
               color="primary"
             />
           )}
+
+          {!meta.slackPermalink && (
+            <Typography variant="body2" color="error">
+              {str(
+                "webapp:deliveryNeeded.popup.cantFindSlack",
+                `Can't find Slack link, please search for request code in Slack.`
+              )}
+            </Typography>
+          )}
+
           {i !== requests.length - 1 && <Divider className={classes.divider} />}
         </Box>
       ))}
