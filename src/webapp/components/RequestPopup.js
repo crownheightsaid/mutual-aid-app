@@ -50,7 +50,11 @@ const RequestPopup = ({ requests, closePopup }) => {
           />
           <Typography variant="h6">
             {meta.slackPermalink ? (
-              <Link href={meta.slackPermalink} underline="always" target="_blank">
+              <Link
+                href={meta.slackPermalink}
+                underline="always"
+                target="_blank"
+              >
                 {meta["First Name"]}
               </Link>
             ) : (
@@ -77,6 +81,7 @@ const RequestPopup = ({ requests, closePopup }) => {
               label="Driving Cluster"
               icon={<DriveEtaIcon />}
               color="primary"
+              size="small"
             />
           )}
 
