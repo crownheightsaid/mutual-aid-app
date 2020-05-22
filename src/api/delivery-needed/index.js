@@ -10,7 +10,8 @@ const {
   meta,
   neighborhoodAreaSeeMap,
   firstName,
-  forDrivingClusters
+  forDrivingClusters,
+  householdSize
 } = fields;
 
 const makeFeature = async r => {
@@ -60,6 +61,7 @@ const makeFeature = async r => {
         [neighborhoodAreaSeeMap]: r.fields[neighborhoodAreaSeeMap],
         [firstName]: r.fields[firstName],
         [forDrivingClusters]: Boolean(r.fields[forDrivingClusters]),
+        [householdSize]: r.fields[householdSize],
         slackPermalink: slackPermalink.ok ? slackPermalink.permalink : ""
       }
     }

@@ -7,6 +7,7 @@ import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";
+import GroupIcon from "@material-ui/icons/Group";
 import DriveEtaIcon from "@material-ui/icons/DriveEta";
 import Chip from "@material-ui/core/Chip";
 
@@ -23,7 +24,10 @@ const useStyles = makeStyles(theme => ({
   root: {
     position: "relative"
   },
-  drivingClusterChip: {
+  chipRow: {
+    "& > *": {
+      marginRight: theme.spacing(0.5)
+    },
     marginTop: theme.spacing(2)
   }
 }));
@@ -75,15 +79,23 @@ const RequestPopup = ({ requests, closePopup }) => {
             {meta.Code}
           </Typography>
 
-          {meta["For Driving Clusters"] && (
+          <Box className={classes.chipRow}>
             <Chip
-              className={classes.drivingClusterChip}
-              label="Driving Cluster"
-              icon={<DriveEtaIcon />}
-              color="primary"
+              label={`${meta["Household Size"] || "n/a"}`}
+              icon={<GroupIcon />}
+              color="secondary"
               size="small"
             />
-          )}
+
+            {meta["For Driving Clusters"] && (
+              <Chip
+                label="Driving Cluster"
+                icon={<DriveEtaIcon />}
+                color="primary"
+                size="small"
+              />
+            )}
+          </Box>
 
           {!meta.slackPermalink && (
             <Typography variant="body2" color="error">
