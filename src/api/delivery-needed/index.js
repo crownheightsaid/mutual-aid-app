@@ -18,7 +18,8 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
     crossStreetSecond,
     meta,
     neighborhoodAreaSeeMap,
-    firstName
+    firstName,
+    forDrivingClusters
   } = fields;
 
   const requestsWithCoordsPromises = requestObj.map(async r => {
@@ -67,6 +68,7 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
           [crossStreetSecond]: r.fields[crossStreetSecond],
           [neighborhoodAreaSeeMap]: r.fields[neighborhoodAreaSeeMap],
           [firstName]: r.fields[firstName],
+          [forDrivingClusters]: Boolean(r.fields[forDrivingClusters]),
           slackPermalink: slackPermalink.ok ? slackPermalink.permalink : ""
         }
       }
