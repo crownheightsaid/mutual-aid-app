@@ -7,6 +7,8 @@ import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";
+import DriveEtaIcon from "@material-ui/icons/DriveEta";
+import Chip from "@material-ui/core/Chip";
 
 const useStyles = makeStyles(theme => ({
   divider: {
@@ -20,6 +22,9 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     position: "relative"
+  },
+  drivingClusterChip: {
+    marginTop: theme.spacing(2)
   }
 }));
 
@@ -71,6 +76,15 @@ const RequestPopup = ({ requests, closePopup }) => {
             })}
             {meta.Code}
           </Typography>
+
+          {meta["For Driving Clusters"] && (
+            <Chip
+              className={classes.drivingClusterChip}
+              label="Driving Cluster"
+              icon={<DriveEtaIcon />}
+              color="primary"
+            />
+          )}
           {i !== requests.length - 1 && <Divider className={classes.divider} />}
         </Box>
       ))}

@@ -12,8 +12,8 @@ import BasicMap from "./BasicMap";
 import { QuadrantsLayers } from "./QuadrantMap";
 import ClusterMapLayers from "./ClusterMapLayers";
 
-const makeBounds = geoJsonData => {
-  const lnglats = geoJsonData.features.map(f => {
+const makeBounds = features => {
+  const lnglats = features.map(f => {
     const [lng, lat] = f.geometry.coordinates;
     return new LngLat(lng, lat);
   });
@@ -61,25 +61,27 @@ const RequestNotFoundAlert = ({ requestCode }) => {
 };
 
 const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
-  const requestCode = getRequestParam();
+  if (!geoJsonData) {
+    return null;
+  }
 
   let paramRequest;
+  const requestCode = getRequestParam();
+  const { requests, drivingClusterRequests } = geoJsonData;
+  const { features: reqFeatures } = requests;
+  const { features: clusterFeatures } = drivingClusterRequests;
+  const allRequests = [...reqFeatures, ...clusterFeatures];
 
-  if (requestCode && geoJsonData && geoJsonData.features) {
+  if (requestCode) {
     // find first feature with code match to be passed
     // into ClusterMapLayers
-    const { features } = geoJsonData;
-    [paramRequest] = features.filter(
+    [paramRequest] = allRequests.filter(
       ({
         properties: {
           meta: { Code }
         }
       }) => Code === requestCode
     );
-  }
-
-  if (!geoJsonData) {
-    return null;
   }
 
   // there is a requestCode but the request object does not exist
@@ -93,21 +95,40 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
 
       <BasicMap
         center={CROWN_HEIGHTS_CENTER_COORD}
-        bounds={makeBounds(geoJsonData)}
+        bounds={makeBounds(allRequests)}
         containerStyle={containerStyle}
       >
         <QuadrantsLayers />
         <Source
-          id="clusterSource"
+          id="requestsSource"
           geoJsonSource={{
             type: "geojson",
-            data: geoJsonData,
+            data: requests,
             cluster: true,
             clusterMaxZoom: 14,
             clusterRadius: 30
           }}
         />
-        <ClusterMapLayers paramRequest={paramRequest} />
+        <Source
+          id="drivingClusterRequestsSource"
+          geoJsonSource={{
+            type: "geojson",
+            data: drivingClusterRequests,
+            cluster: true,
+            clusterMaxZoom: 14,
+            clusterRadius: 30
+          }}
+        />
+        <ClusterMapLayers
+          sourceId="requestsSource"
+          paramRequest={paramRequest}
+          color="orangered"
+        />
+        <ClusterMapLayers
+          sourceId="drivingClusterRequestsSource"
+          paramRequest={paramRequest}
+          color="rebeccapurple"
+        />
       </BasicMap>
     </>
   );

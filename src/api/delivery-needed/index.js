@@ -91,7 +91,7 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
       type: "FeatureCollection",
       features: regularRequests
     },
-    clusters: {
+    drivingClusterRequests: {
       type: "FeatureCollection",
       features: clusterRequests
     }
