@@ -9,5 +9,14 @@
   "links": {
     "reimbursementForm": "https://airtable.com/shrnf6M0YLn8IwJ71",
     "deliveryGuide": "https://docs.google.com/document/d/1gLQsC3QUylavyzEYXWa7MVuk-H0DOnVtQtFm2fBXDQg/preview"
+  },
+  "webapp": {
+    "deliveryNeeded": {
+      "requestNotFound": {
+        "message": "Request with code {{requestCode}} is not found. This means that the request is no longer in 'Delivery Needed' status.",
+        "redirectLink": "/delivery-needed",
+        "redirectMessage": "See all requests instead."
+      }
+    }
   }
 }

@@ -3,7 +3,7 @@
    If the state belongs to the same component as the Map/BasicMap, it re-renders
    the map on any state change, causing the viewport and zoom to be reset
    */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Layer, MapContext } from "react-mapbox-gl";
 import RequestPopup from "./RequestPopup";
 
@@ -24,8 +24,28 @@ const handleClusterOnClick = (map, e) => {
     });
 };
 
-const ClusterMapLayers = () => {
+const makePopupData = (features, lngLat) => {
+  return features.map(feat => {
+    const metaSrc = feat.properties.meta;
+    const meta =
+      typeof metaSrc == "string" ? JSON.parse(feat.properties.meta) : metaSrc;
+    return {
+      lngLat,
+      meta
+    };
+  });
+};
+
+const ClusterMapLayers = ({ geoJsonData, paramRequest }) => {
   const [popup, setPopup] = useState();
+
+  // display popup if request code is present in URL search param
+  useEffect(() => {
+    if (paramRequest) {
+      const { geometry: { coordinates }} = paramRequest;
+      setPopup(makePopupData([paramRequest], coordinates));
+    }
+  }, []);
 
   return (
     <MapContext.Consumer>
@@ -86,18 +106,12 @@ const ClusterMapLayers = () => {
               "circle-stroke-color": "#e73e00"
             }}
             onClick={e => {
-              setPopup(
-                e.features.map(feat => {
-                  const meta = JSON.parse(feat.properties.meta);
-                  return {
-                    lngLat: e.lngLat,
-                    meta
-                  };
-                })
-              );
+              setPopup(makePopupData(e.features, e.lngLat));
             }}
           />
-          {popup && <RequestPopup closePopup={()=>setPopup()} requests={popup} />}
+          {popup && (
+            <RequestPopup closePopup={() => setPopup()} requests={popup} />
+          )}
         </>
       )}
     </MapContext.Consumer>
