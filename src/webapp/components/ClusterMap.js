@@ -96,7 +96,7 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
   // there is a requestCode but the request object does not exist
   const paramRequestNotFound = requestCode && !paramRequest;
 
-  const noRequestsFound = geoJsonData.length === 0;
+  const noRequestsFound = geoJsonData.features.length === 0;
 
   return (
     <>
