@@ -16,6 +16,9 @@
         "message": "Request with code {{requestCode}} is not found. This means that the request is no longer in 'Delivery Needed' status.",
         "redirectLink": "/delivery-needed",
         "redirectMessage": "See all requests instead."
+      },
+      "noRequests": {
+        "message": "No requests found. Some requests may not have been posted in Slack yet or be marked for driving clusters."
       }
     }
   }

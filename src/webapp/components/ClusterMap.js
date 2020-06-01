@@ -60,6 +60,17 @@ const RequestNotFoundAlert = ({ requestCode }) => {
   );
 };
 
+const NoRequestsAlert = () => {
+  const { t: str } = useTranslation();
+  return (
+    <Alert severity="warning">
+      {str("webapp.deliveryNeeded.noRequests.message", {
+        defaultValue: "No requests found. Some requests may not have been posted in Slack yet or be marked for driving clusters."
+      })}
+    </Alert>
+  )
+}
+
 const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
   const requestCode = getRequestParam();
 
@@ -85,10 +96,16 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
   // there is a requestCode but the request object does not exist
   const paramRequestNotFound = requestCode && !paramRequest;
 
+  const noRequestsFound = geoJsonData.features.length === 0;
+
   return (
     <>
       {paramRequestNotFound && (
         <RequestNotFoundAlert requestCode={requestCode} />
+      )}
+
+      {noRequestsFound && (
+        <NoRequestsAlert />
       )}
 
       <BasicMap
