@@ -151,7 +151,7 @@
       },
       "message": {
         "intro": "Hey Crown Heights, we have a new request from our neighbor {{firstName}} at {{streets}} in *{{quadrant}}*",
-        "outro": "*Want to volunteer to help our neighbor{{firstName}}?* Comment on this thread and {{- intakeSlackId}} will follow up with more details.\n_Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive._",
+        "outro": "*Want to volunteer to help our neighbor{{firstName}}?* Comment on this thread and {{- intakeSlackId}} will follow up with more details.\n_Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive. Please do not volunteer if you have been in large crowds or demonstrations within the last 5 days._",
         "outroPay": "Submit your receipt: please fill out this handy reimbursement form, it will automatically post to the #community_reimbursement channel!\nFor more information, please see the delivery guide.",
         "guide": "For more information, please see the <{{- guideUrl}}|delivery guide>."
       },
