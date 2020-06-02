@@ -42,17 +42,16 @@ const RequestNotFoundAlert = ({ requestCode }) => {
   const { t: str } = useTranslation();
   return (
     <Alert severity="warning">
-      {str("webapp.deliveryNeeded.requestNotFound.message", {
+      {str("webapp:deliveryNeeded.requestNotFound.message", {
         defaultValue: `Request with code {{requestCode}} is not found. This means that the request is no longer in 'Delivery Needed' status.`,
         requestCode
-      })}
-{" "}
+      })}{" "}
       <a
-        href={str("webapp.deliveryNeeded.requestNotFound.redirectLink", {
+        href={str("webapp:deliveryNeeded.requestNotFound.redirectLink", {
           defaultValue: "/delivery-needed"
         })}
       >
-        {str("webapp.deliveryNeeded.requestNotFound.redirectMessage", {
+        {str("webapp:deliveryNeeded.requestNotFound.redirectMessage", {
           defaultValue: `See all requests instead.`
         })}
       </a>
@@ -64,12 +63,13 @@ const NoRequestsAlert = () => {
   const { t: str } = useTranslation();
   return (
     <Alert severity="warning">
-      {str("webapp.deliveryNeeded.noRequests.message", {
-        defaultValue: "No requests found. Some requests may not have been posted in Slack yet or be marked for driving clusters."
+      {str("webapp:deliveryNeeded.noRequests.message", {
+        defaultValue:
+          "No requests found. Some requests may not have been posted in Slack yet or be marked for driving clusters."
       })}
     </Alert>
-  )
-}
+  );
+};
 
 const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
   const requestCode = getRequestParam();
@@ -104,9 +104,7 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
         <RequestNotFoundAlert requestCode={requestCode} />
       )}
 
-      {noRequestsFound && (
-        <NoRequestsAlert />
-      )}
+      {noRequestsFound && <NoRequestsAlert />}
 
       <BasicMap
         center={CROWN_HEIGHTS_CENTER_COORD}
