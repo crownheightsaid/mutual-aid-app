@@ -37,7 +37,7 @@
     "@material-ui/lab": "^4.0.0-alpha.53",
     "@material-ui/styles": "4.9.10",
     "@reach/router": "^1.3.3",
-    "@slack/events-api": "2.3.2",
+    "@slack/events-api": "2.3.3",
     "@slack/interactive-messages": "1.5.0",
     "@slack/web-api": "5.8.0",
     "airtable": "0.8.1",
