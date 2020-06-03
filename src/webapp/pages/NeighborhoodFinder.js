@@ -13,11 +13,15 @@ import { useTranslation } from "react-i18next";
 import QuadrantMap from "../components/QuadrantMap";
 import SaveNeighborhoodDataInput from "../components/SaveNeighborhoodDataInput";
 import sharedStylesFn from "../style/sharedStyles";
+import queryString from "query-string";
 
 const useStyles = makeStyles(theme => ({
   ...sharedStylesFn(theme),
   mapRoot: {
     flex: 1
+  },
+  rootMinimalView: {
+    flexDirection: "column"
   },
   formRoot: {
     flex: 1
@@ -38,6 +42,8 @@ export default function NeighborhoodFinder() {
     },
     { manual: true } // Don't send on render
   );
+  const { minimal_view } = queryString.parse(window.location.search);
+  const minimalView = minimal_view === "true";
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -85,8 +91,9 @@ export default function NeighborhoodFinder() {
   };
 
   return (
-    <Box className={classes.root}>
+    <Box className={`${classes.root} ${minimalView ? classes.rootMinimalView : ""}`}>
       <Box className={classes.formRoot}>
+        {!minimalView &&
         <Box>
           <Typography className={classes.text} variant="h4">
             {str("webapp:zoneFinder.title", {
@@ -112,7 +119,7 @@ export default function NeighborhoodFinder() {
               "The address will not be stored or logged :)"
             )}
           </Typography>
-        </Box>
+        </Box>}
         <form onSubmit={handleSubmit} autoComplete="off">
           <TextField
             id="address"
@@ -202,6 +209,11 @@ export default function NeighborhoodFinder() {
       <Box className={classes.mapRoot}>
         <QuadrantMap locations={data && [data.location]} />
       </Box>
+
+      {minimalView && <Box>
+        <span>{str("webapp:zoneFinder.minimalView.help")} </span>
+        <a href="/neighborhood-finder">{str("webapp:zoneFinder.minimalView.linkToFullViewText")}</a>
+      </Box>}
     </Box>
   );
 }

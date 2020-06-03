@@ -33,6 +33,10 @@
     },
     "geoError": {
       "message": "Error loading. Please try again. If it fails again, let us know in"
+    },
+    "minimalView": {
+      "help": "Need help?",
+      "linkToFullViewText": "See full version of map."
     }
   },
   "slack": {
