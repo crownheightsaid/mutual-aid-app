@@ -367,14 +367,17 @@ function suggestedTemplate(payload, request) {
     .filter(s => s !== undefined)
     .join(" & ");
 
+  const mapUrl = str("slackapp:requestBotPost.post.fields.streets.mapUrl", {
+    defaultValue: `https://crownheightsma.herokuapp.com/delivery-needed?request={{requestCode}}`,
+    requestCode: request.get(requestsFields.code)
+  });
+
   const streetsURL = str(
-    "slackapp:requestBotPost.post.fields.streets.url",
+    "slackapp:requestBotPost.post.fields.streets.streetsWithMapUrl",
     {
-      defaultValue: `<a href="{{endpoint}}?request={{requestCode}}">${streets}</a>`
-    },
-    {
-      endpoint: "https://crownheightsma.herokuapp.com/delivery-needed",
-      requestCode: requestsFields.code
+      defaultValue: `<{{- mapUrl}}|{{streets}}>`,
+      mapUrl,
+      streets
     }
   );
 
@@ -445,7 +448,7 @@ _Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/f
   firstName
 })}
 ${str("slackapp:requestBotPost.post.message.guide", {
-  defaultValue: `For more information, please see the <{{- guideUrl}}|delivery guide>.`,
+  defaultValue: `For more information, please see the <{{- guideUrl}}|delivery guide>`,
   guideUrl: str("common:links.deliveryGuide")
 })}`;
 }
