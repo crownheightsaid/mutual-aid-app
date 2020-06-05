@@ -367,6 +367,17 @@ function suggestedTemplate(payload, request) {
     .filter(s => s !== undefined)
     .join(" & ");
 
+  const streetsURL = str(
+    "slackapp:requestBotPost.post.fields.streets.url",
+    {
+      defaultValue: `<a href="{{endpoint}}?request={{requestCode}}">${streets}</a>`
+    },
+    {
+      endpoint: "https://crownheightsma.herokuapp.com/delivery-needed",
+      requestCode: requestsFields.code
+    }
+  );
+
   let quadrant = request.get(requestsFields.neighborhoodArea);
   const { nw, sw, ne, se } = requestsFields.neighborhoodArea_options;
   if ([nw, sw, ne, se].includes(quadrant)) {
@@ -402,7 +413,7 @@ function suggestedTemplate(payload, request) {
       request.get(requestsFields.householdSize) || str("common:notAvailable")
     ],
     [str("slackapp:requestBotPost.post.fields.needs.name"), needs],
-    [str("slackapp:requestBotPost.post.fields.streets.name"), streets],
+    [str("slackapp:requestBotPost.post.fields.streets.name"), streetsURL],
     [
       str("slackapp:requestBotPost.post.fields.language.name"),
       (request.get(requestsFields.languages) || []).join("/")
