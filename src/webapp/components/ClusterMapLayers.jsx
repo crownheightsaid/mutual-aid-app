@@ -108,6 +108,8 @@ const ClusterMapLayers = ({ geoJsonData, paramRequest }) => {
             onClick={e => {
               setPopup(makePopupData(e.features, e.lngLat));
             }}
+            onMouseEnter={e => e.target.getCanvas().style.cursor = 'pointer'}
+            onMouseLeave={e => e.target.getCanvas().style.cursor = 'grab'}
           />
           {popup && (
             <RequestPopup closePopup={() => setPopup()} requests={popup} />
