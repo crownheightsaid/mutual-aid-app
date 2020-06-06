@@ -156,7 +156,10 @@ async function sendMessage(payload) {
   // Send the message
   const deliveryMessage = await slackapi.chat.postMessage({
     channel: context.channelId,
-    text: context.content
+    text: context.content,
+    // We don't want any unfurling of links in the message
+    unfurl_media: false,
+    unfurl_links: false
   });
   if (!deliveryMessage.ok) {
     return errorResponse(
