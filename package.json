@@ -105,5 +105,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "version": "0.50.0",
+  "release-it": {
+    "hooks": {
+      "after:bump": "npx auto-changelog -p -l 15"
+    }
   }
 }
