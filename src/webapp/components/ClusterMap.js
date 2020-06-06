@@ -42,10 +42,10 @@ const RequestNotFoundAlert = ({ requestCode }) => {
   const { t: str } = useTranslation();
   return (
     <Alert severity="warning">
-      {str("webapp:deliveryNeeded.requestNotFound.message", {
+      {`${str("webapp:deliveryNeeded.requestNotFound.message", {
         defaultValue: `Request with code {{requestCode}} is not found. This means that the request is no longer in 'Delivery Needed' status.`,
         requestCode
-      })}{" "}
+      })} `}
       <a
         href={str("webapp:deliveryNeeded.requestNotFound.redirectLink", {
           defaultValue: "/delivery-needed"

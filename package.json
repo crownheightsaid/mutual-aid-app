@@ -2,8 +2,8 @@
   "name": "mutual-aid-app",
   "description": "",
   "scripts": {
-    "lint": "eslint src",
-    "fix": "eslint --fix src",
+    "lint": "eslint src scripts",
+    "fix": "eslint --fix src scripts",
     "find-new-strings": "i18next-scanner --config ./src/lib/strings/__i18nextScanner.config.js 'scripts/**/*.js' 'src/**/*.js'",
     "local": "npm run local:react & npm run local:express",
     "local:express": "NODE_ENV=dev node index.js",
