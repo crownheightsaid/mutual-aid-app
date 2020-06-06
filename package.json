@@ -2,6 +2,7 @@
   "name": "mutual-aid-app",
   "description": "",
   "scripts": {
+    "release": "release-it",
     "lint": "eslint src scripts",
     "fix": "eslint --fix src scripts",
     "find-new-strings": "i18next-scanner --config ./src/lib/strings/__i18nextScanner.config.js 'scripts/**/*.js' 'src/**/*.js'",
@@ -72,6 +73,7 @@
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "7.9.5",
+    "auto-changelog": "^2.0.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.5.0",
@@ -88,7 +90,8 @@
     "eslint-plugin-react-hooks": "^2.3.0",
     "i18next-scanner": "2.11.0",
     "ngrok": "3.2.7",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "release-it": "^13.6.2"
   },
   "private": true,
   "browserslist": {
