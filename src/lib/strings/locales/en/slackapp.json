@@ -133,7 +133,9 @@
           "name": "Need"
         },
         "streets": {
-          "name": "Cross Streets"
+          "name": "Cross Streets",
+          "mapUrl": "https://crownheightsma.herokuapp.com/delivery-needed?request={{requestCode}}",
+          "streetsWithMapUrl": "<{{- mapUrl}}|{{streets}}>"
         },
         "language": {
           "name": "Language"
