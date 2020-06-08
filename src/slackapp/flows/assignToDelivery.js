@@ -111,6 +111,9 @@ exports.atdViewSubmission = async payload => {
         `*${str("slackapp:assignDelivery.dm.crossStreets")}:*\n>${request.get(
           requestFields.crossStreetFirst
         )} & ${request.get(requestFields.crossStreetSecond)}`,
+        `*${str("slackapp:assignDelivery.dm.householdSize")}:*\n>${request.get(
+          requestFields.householdSize
+        ) || str("common:notAvailable")}`,
         `*${str("slackapp:assignDelivery.dm.notes")}:*\n>${request.get(
           requestFields.intakeNotes
         ) || str("common:notAvailable")}`
