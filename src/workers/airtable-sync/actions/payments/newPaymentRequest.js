@@ -60,7 +60,10 @@ module.exports = async function newPaymentRequest(record) {
     return;
   }
 
-  if (record.get(paymentRequestsFields.type) === paymentRequestsFields.type_options.reimbursement) {
+  if (
+    record.get(paymentRequestsFields.type) ===
+    paymentRequestsFields.type_options.reimbursement
+  ) {
     await markRequestComplete(code);
   }
 
