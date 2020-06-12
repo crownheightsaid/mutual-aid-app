@@ -54,8 +54,7 @@ exports.atdViewSubmission = async payload => {
     console.log("Pre status check");
     if (
       request.get(requestFields.status) ===
-        requestFields.status_options.deliveryAssigned ||
-      request.get(requestFields.deliverySlackId)
+      requestFields.status_options.deliveryAssigned
     ) {
       return messageErrorResponse(
         "requestblock",
