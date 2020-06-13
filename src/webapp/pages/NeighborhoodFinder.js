@@ -6,6 +6,7 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import SmsIcon from "@material-ui/icons/Sms";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
@@ -56,7 +57,12 @@ export default function NeighborhoodFinder() {
     });
   };
 
-  const EmailButton = () => {
+  const smsNumberPrompt = (subjectString, bodyString) => {
+    console.log(subjectString);
+    console.log(bodyString);
+  };
+
+  const SendResourcesButton = () => {
     const subjectString = str(
       "webapp:zoneFinder.email.subject",
       "Covid Resources NYC"
@@ -88,6 +94,14 @@ export default function NeighborhoodFinder() {
             {str("webapp:zoneFinder.sendResources.emailButtonText")}
           </Button>
         </a>
+        <Button
+          className={classes.link}
+          onClick={smsNumberPrompt(subjectString, bodyString)}
+          variant="contained"
+          endIcon={<SmsIcon />}
+        >
+          {str("webapp:zoneFinder.sendResources.smsButtonText")}
+        </Button>
       </>
     );
   };
@@ -194,7 +208,7 @@ export default function NeighborhoodFinder() {
             />
 
             <Divider className={classes.divider} />
-            <EmailButton />
+            <SendResourcesButton />
           </>
         )}
         {loading && <CircularProgress />}
@@ -208,7 +222,7 @@ export default function NeighborhoodFinder() {
               </a>
             </Typography>
             <Divider className={classes.divider} />
-            <EmailButton />
+            <SendResourcesButton />
           </>
         )}
       </Box>
