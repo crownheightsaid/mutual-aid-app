@@ -5,8 +5,6 @@ import { CircularProgress } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import MailOutlineIcon from "@material-ui/icons/MailOutline";
-import SmsIcon from "@material-ui/icons/Sms";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
@@ -14,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import queryString from "query-string";
 import QuadrantMap from "../components/QuadrantMap";
 import SaveNeighborhoodDataInput from "../components/SaveNeighborhoodDataInput";
+import SendResourcesButton from "../components/SendResourcesButton";
 import sharedStylesFn from "../style/sharedStyles";
 
 const useStyles = makeStyles(theme => ({
@@ -55,55 +54,6 @@ export default function NeighborhoodFinder() {
         address: formAddress
       }
     });
-  };
-
-  const smsNumberPrompt = (subjectString, bodyString) => {
-    console.log(subjectString);
-    console.log(bodyString);
-  };
-
-  const SendResourcesButton = () => {
-    const subjectString = str(
-      "webapp:zoneFinder.email.subject",
-      "Covid Resources NYC"
-    );
-    const resourceLinks = [str("webapp:zoneFinder.email.resourceUrl")];
-    let bodyString = str("webapp:zoneFinder.email.body");
-
-    resourceLinks.forEach(resourceLink => {
-      bodyString += `${resourceLink}\n\n`;
-    });
-
-    return (
-      <>
-        <Typography className={classes.text} variant="body1">
-          {str(
-            "webapp:zoneFinder.sendResources.message",
-            "You can use the link below to send more resources if needed!"
-          )}
-        </Typography>
-        <a
-          target="_blank"
-          className={classes.link}
-          rel="noopener noreferrer"
-          href={`mailto:?subject=${encodeURIComponent(
-            subjectString
-          )}&body=${encodeURIComponent(bodyString)}`}
-        >
-          <Button variant="contained" endIcon={<MailOutlineIcon />}>
-            {str("webapp:zoneFinder.sendResources.emailButtonText")}
-          </Button>
-        </a>
-        <Button
-          className={classes.link}
-          onClick={smsNumberPrompt(subjectString, bodyString)}
-          variant="contained"
-          endIcon={<SmsIcon />}
-        >
-          {str("webapp:zoneFinder.sendResources.smsButtonText")}
-        </Button>
-      </>
-    );
   };
 
   return (
