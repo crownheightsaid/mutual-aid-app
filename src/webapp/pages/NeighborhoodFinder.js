@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import queryString from "query-string";
 import QuadrantMap from "../components/QuadrantMap";
 import SaveNeighborhoodDataInput from "../components/SaveNeighborhoodDataInput";
-import SendResourcesButton from "../components/SendResourcesButton";
+import SendResourcesButtons from "../components/SendResourcesButtons";
 import sharedStylesFn from "../style/sharedStyles";
 
 const useStyles = makeStyles(theme => ({
@@ -158,7 +158,7 @@ export default function NeighborhoodFinder() {
             />
 
             <Divider className={classes.divider} />
-            <SendResourcesButton />
+            <SendResourcesButtons />
           </>
         )}
         {loading && <CircularProgress />}
@@ -172,7 +172,7 @@ export default function NeighborhoodFinder() {
               </a>
             </Typography>
             <Divider className={classes.divider} />
-            <SendResourcesButton />
+            <SendResourcesButtons />
           </>
         )}
       </Box>

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import SmsIcon from "@material-ui/icons/Sms";
 import Button from "@material-ui/core/Button";
 import { useTranslation } from "react-i18next";
+import SendSmsDialog from "./SendSmsDialog";
 import sharedStylesFn from "../style/sharedStyles";
 
 const useStyles = makeStyles(theme => ({
@@ -15,6 +16,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SendResourcesButton = () => {
+  const [showSmsDialog, setShowSmsDialog] = useState(false);
+
   const { t: str } = useTranslation();
   const classes = useStyles();
   const subjectString = str(
@@ -29,7 +32,10 @@ const SendResourcesButton = () => {
     bodyString += `${resourceLink}\n\n`;
   });
 
-  const smsNumberPrompt = () => {};
+  let smsDialog;
+  if (showSmsDialog) {
+    smsDialog = <SendSmsDialog message={bodyString} />;
+  }
 
   return (
     <>
@@ -57,12 +63,13 @@ const SendResourcesButton = () => {
       </a>
       <Button
         className={classes.buttons}
-        onClick={smsNumberPrompt(subjectString, bodyString)}
+        onClick={() => setShowSmsDialog(true)}
         variant="contained"
         endIcon={<SmsIcon />}
       >
         {str("webapp:zoneFinder.sendResources.smsButtonText")}
       </Button>
+      {smsDialog}
     </>
   );
 };

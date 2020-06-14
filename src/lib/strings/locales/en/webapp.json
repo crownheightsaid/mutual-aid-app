@@ -19,6 +19,11 @@
       "emailButtonText": "Email Aid Resource Links",
       "smsButtonText": "Text Aid Resource Links"
     },
+		"sendSms": {
+			"inputLabel": "Phone Number",
+			"cancelButtonText": "Cancel",
+			"sendSmsButtonText": "Send SMS"
+		},
     "title": "{{neighborhood}} Neighborhood Finder",
     "message": {
       "info": "Enter an address and we will look up cross streets and the neighborhood.",
