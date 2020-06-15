@@ -74,9 +74,11 @@ if (process.env.TWILIO_AUTH_TOKEN) {
 // API Routes
 // ==================================================================
 
-if (process.env.TWILIO_AUTH_TOKEN && 
-	process.env.TWILIO_SID && 
-	process.env.TWILIO_PHONE_NUMBER) {
+if (
+  process.env.TWILIO_AUTH_TOKEN &&
+  process.env.TWILIO_SID &&
+  process.env.TWILIO_PHONE_NUMBER
+) {
 
   const { sendSms } = require("./src/api/neiborhood-finder/send-sms");
   app.post("/api/send-sms", sendSms);
