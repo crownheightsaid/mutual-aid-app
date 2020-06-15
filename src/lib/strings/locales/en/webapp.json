@@ -17,7 +17,7 @@
     "sendResources": {
       "message": "You can use the link below to send more resources if needed!",
       "emailButtonText": "Email Aid Resource Links",
-      "smsButtonText": "Text Aid Resource Links"
+      "smsButtonText": "SMS Aid Resource Links"
     },
     "title": "{{neighborhood}} Neighborhood Finder",
     "message": {
