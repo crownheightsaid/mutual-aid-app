@@ -78,11 +78,11 @@ if (process.env.TWILIO_AUTH_TOKEN &&
 	process.env.TWILIO_SID && 
 	process.env.TWILIO_PHONE_NUMBER) {
 
-  const { sendSms } = require("./src/api/sms/send-sms");
-	app.post("/api/send-sms", sendSms);
+  const { sendSms } = require("./src/api/neiborhood-finder/send-sms");
+  app.post("/api/send-sms", sendSms);
 
 } else {
-	console.log('Missing twilio credentials, sms sending not enabled')
+  console.log('Missing twilio credentials, sms sending not enabled')
 }
 
 if (process.env.GOOGLE_MAPS_API_KEY && process.env.GEONAME_CLIENT_ID) {
