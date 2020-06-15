@@ -4,7 +4,6 @@ const client = require("twilio")(
 );
 
 exports.sendSms = async (req, res) => {
-  console.log(req.body);
   const { phoneNumber, smsMessage } = req.body;
 
   if (!phoneNumber || !smsMessage) {
