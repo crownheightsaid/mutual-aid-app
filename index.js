@@ -80,7 +80,7 @@ if (
   process.env.TWILIO_PHONE_NUMBER
 ) {
 
-  const { sendSms } = require("./src/api/neiborhood-finder/send-sms");
+  const { sendSms } = require("./src/api/neighborhood-finder/send-sms");
   app.post("/api/send-sms", sendSms);
 
 } else {
