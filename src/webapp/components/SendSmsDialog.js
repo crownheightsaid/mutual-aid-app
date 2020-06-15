@@ -38,10 +38,11 @@ const SendSmsDialog = ({ message, isOpen, onClose }) => {
   );
 
   useEffect(() => {
-    if (data) {
+    if (data && data.success && phoneNumber) {
       onClose();
+      setPhoneNumber("");
     }
-  }, [data, onClose]);
+  }, [data, onClose, phoneNumber]);
 
   const validatePhoneNumber = number => {
     const phoneNumberRegEx = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
