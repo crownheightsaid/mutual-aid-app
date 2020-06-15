@@ -19,8 +19,8 @@ const {
   neighborhoodFinderUpdateRequestHandler
 } = require("./src/api/neighborhood-finder/update-request.js");
 const {
-	neighborhoodFinderSendSmsAidResrouces
-} = require("./src/api/neighborhood-finder/sms-aid-resource.js");
+  sendSms
+} = require("./src/api/sms/send-sms");
 const {
   deliveryNeededRequestHandler
 } = require("./src/api/delivery-needed/index.js");
@@ -77,6 +77,11 @@ if (process.env.TWILIO_AUTH_TOKEN) {
 // API Routes
 // ==================================================================
 
+app.post(
+  "/api/send-sms",
+	sendSms
+);
+
 if (process.env.GOOGLE_MAPS_API_KEY && process.env.GEONAME_CLIENT_ID) {
   app.post("/api/geo/address-metadata", addressHandler);
 } else {
@@ -86,11 +91,6 @@ if (process.env.GOOGLE_MAPS_API_KEY && process.env.GEONAME_CLIENT_ID) {
 app.post(
   "/api/neighborhood-finder/update-request",
   neighborhoodFinderUpdateRequestHandler
-);
-
-app.post(
-  "/api/neighborhood-finder/sms-aid-resources",
-  neighborhoodFinderSendSmsAidResrouces
 );
 
 app.get("/api/delivery-needed/requests.json", deliveryNeededRequestHandler);

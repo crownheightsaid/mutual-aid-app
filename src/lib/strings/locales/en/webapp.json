@@ -19,11 +19,6 @@
       "emailButtonText": "Email Aid Resource Links",
       "smsButtonText": "Text Aid Resource Links"
     },
-    "sendSms": {
-      "inputLabel": "Phone Number",
-      "cancelButtonText": "Cancel",
-      "sendSmsButtonText": "Send SMS"
-    },
     "title": "{{neighborhood}} Neighborhood Finder",
     "message": {
       "info": "Enter an address and we will look up cross streets and the neighborhood.",
@@ -45,6 +40,14 @@
       "linkToFullViewText": "See full version of map."
     }
   },
+	"sendSms": {
+		"inputLabel": "Phone Number",
+		"cancelButtonText": "Cancel",
+		"sendSmsButtonText": "Send SMS",
+		"messageInfo": "Here is the text of the SMS that will send:",
+		"apiErrorMessage": "There was a problem sending this SMS :(. Please try again. If it fails again, let us know in",
+		"invalidPhoneMessage": "Please enter a valid phone number."
+	},
   "slack": {
     "techChannelUrl": "https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD",
     "techChannel": "#tech"

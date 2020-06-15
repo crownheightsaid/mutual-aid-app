@@ -32,10 +32,7 @@ const SendResourcesButton = () => {
     bodyString += `${resourceLink}\n\n`;
   });
 
-  let smsDialog;
-  if (showSmsDialog) {
-    smsDialog = <SendSmsDialog message={bodyString} />;
-  }
+  const smsBodyString = `${subjectString}\n\n${bodyString}`;
 
   return (
     <>
@@ -69,7 +66,11 @@ const SendResourcesButton = () => {
       >
         {str("webapp:zoneFinder.sendResources.smsButtonText")}
       </Button>
-      {smsDialog}
+      <SendSmsDialog
+        isOpen={showSmsDialog}
+        onClose={() => setShowSmsDialog(false)}
+        message={smsBodyString}
+      />
     </>
   );
 };
