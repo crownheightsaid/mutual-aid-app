@@ -63,6 +63,13 @@ module.exports = async function updateMessageContent(record) {
       requestFields.status
     )} => ${statusBadge}`
   );
+
+  if (record.get(requestFields.status) === requestFields.status_options.deliveryAssigned) {
+    newContent = newContent.split('\n').filter(line => {
+      return !line.startsWith(`*${str("slackapp:requestBotPost.post.fields.streets.name")}*`);
+    }).join('\n');
+  }
+
   await slackapi.chat.update({
     channel: meta["slack_channel"],
     ts: meta["slack_ts"],
