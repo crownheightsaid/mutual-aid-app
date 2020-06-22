@@ -64,10 +64,18 @@ module.exports = async function updateMessageContent(record) {
     )} => ${statusBadge}`
   );
 
-  if (record.get(requestFields.status) === requestFields.status_options.deliveryAssigned) {
-    newContent = newContent.split('\n').filter(line => {
-      return !line.startsWith(`*${str("slackapp:requestBotPost.post.fields.streets.name")}*`);
-    }).join('\n');
+  if (
+    record.get(requestFields.status) ===
+    requestFields.status_options.deliveryAssigned
+  ) {
+    newContent = newContent
+      .split("\n")
+      .filter(line => {
+        return !line.startsWith(
+          `*${str("slackapp:requestBotPost.post.fields.streets.name")}*`
+        );
+      })
+      .join("\n");
   }
 
   await slackapi.chat.update({
