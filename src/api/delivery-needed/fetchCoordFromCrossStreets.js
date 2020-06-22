@@ -41,6 +41,10 @@ exports.fetchCoordFromCrossStreets = async address => {
 
   // use first result
   const [first, ..._rest] = geoResult.data.results;
+  if (!first) {
+    return null;
+  }
+
   const {
     geometry: { location }
   } = first;
