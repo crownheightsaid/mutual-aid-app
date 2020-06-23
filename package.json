@@ -91,7 +91,8 @@
     "i18next-scanner": "2.11.0",
     "ngrok": "3.2.7",
     "prettier": "^1.18.2",
-    "release-it": "^13.6.2"
+    "release-it": "^13.6.2",
+    "twilio-run": "^2.7.0"
   },
   "private": true,
   "browserslist": {

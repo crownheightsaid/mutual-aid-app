@@ -14,7 +14,6 @@ exports.handler = function(context, event, callback) {
       response
         .gather({ numDigits: 1, timeout: 30, actionOnEmptyResult: "true" })
         .play("pause1.mp3");
-    //  End of SWITCH block
   }
 
   function sendSMS() {
