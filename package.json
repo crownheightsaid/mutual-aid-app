@@ -16,7 +16,10 @@
     "prod:react": "REACT_APP_CONTEXT=true react-scripts build",
     "prod:script": "DOTENV_CONFIG_PATH=./.env.prod node -r module-alias/register -r dotenv/config -r ~strings/i18nextInit",
     "build": "npm run prod:react",
-    "start": "npm run prod:express"
+    "start": "npm run prod:express",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-twilio": "twilio-run",
+    "deploy-twilio": "twilio-run deploy"
   },
   "main": "index.js",
   "engines": {

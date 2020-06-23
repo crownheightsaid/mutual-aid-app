@@ -56,7 +56,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // ==================================================================
 
 if (process.env.TWILIO_AUTH_TOKEN) {
-  app.post(
+  /*app.post(
     "/twilio/call-handler",
     twilio.webhook({ protocol: "https" }),
     require("./src/twilio/callHandler.js")
@@ -65,7 +65,7 @@ if (process.env.TWILIO_AUTH_TOKEN) {
     "/twilio/call-handler-callback",
     twilio.webhook({ protocol: "https" }),
     require("./src/twilio/callHandlerCallback.js")
-  );
+  );*/
 } else {
   console.log("TWILIO_AUTH_TOKEN not set. Twilio callbacks not enabled.");
 }
