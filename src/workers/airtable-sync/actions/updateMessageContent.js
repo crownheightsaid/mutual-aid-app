@@ -73,22 +73,21 @@ module.exports = async function updateMessageContent(record) {
     record.get(requestFields.status) ===
     requestFields.status_options.deliveryAssigned
   ) {
+    const linkRegex = /<http.*\|(.+)>/;
     newContent = newContent
       .split("\n")
       .map(line => {
         if (line.startsWith(streetsLineHeading)) {
-          const crossStreets = [
-            record.get(requestFields.crossStreetFirst),
-            record.get(requestFields.crossStreetSecond)
-          ]
-            .filter(s => s !== undefined)
-            .join(" & ");
-
-          return `${streetsLineHeading}: ${crossStreets}`;
+          if (line.match(linkRegex)) {
+            return line.replace(linkRegex, "$1");
+          } else {
+            return null;
+          }
         }
 
         return line;
       })
+      .filter(line => line !== null)
       .join("\n");
   }
 

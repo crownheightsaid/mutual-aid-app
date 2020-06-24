@@ -1,61 +1,99 @@
+jest.mock("~slack/channels", () => ({ getExistingMessage: jest.fn() }));
+jest.mock("~slack/webApi", () => ({ chat: { update: jest.fn() } }));
+
 require("~strings/i18nextInit");
+const {
+  chat: { update: updateFn }
+} = require("~slack/webApi");
+const { getExistingMessage: getExistingMessageFn } = require("~slack/channels");
 const { Record } = require("airtable");
 const updateMessageContent = require("./updateMessageContent");
 const requests = require("~airtable/tables/requests");
 
-jest.mock("~slack/webApi", () => ({ chat: { update: jest.fn() } }));
-const {
-  chat: { update: updateFn }
-} = require("~slack/webApi");
-
-jest.mock("~slack/channels", () => ({
-  getExistingMessage: jest.fn().mockResolvedValue({
-    text: `:red_circle: Hey Crown Heights, we have a new request from our neighbor  at St Johns Pl &amp; Nostrand Ave in *NW Crown Heights*:
-*Timeline*: When convenient
-*Neighborhood*: NW Crown Heights
-*Household Size*: n/a
-*Cross Streets*: <https://crownheightsma.herokuapp.com/delivery-needed?request=RN7SQ3|St Johns Pl &amp; Nostrand Ave>
-*Description*: No notes
-*Code*: RN7SQ3
-*Want to volunteer to help our neighbor?* Comment on this thread and <@U013U0V27HU> will follow up with more details.
-_Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive. If you have been in large crowds or demonstrations, please wait 5 days after a negative test result or 14 days of self-isolation without a test._
-For more information, please see the <https://docs.google.com/document/d/1gLQsC3QUylavyzEYXWa7MVuk-H0DOnVtQtFm2fBXDQg/preview|delivery guide>.`
-  })
-}));
-
 describe('When request has been posted with status "Delivery Needed"', () => {
   let requestRecord;
 
-  beforeEach(() => {
-    requestRecord = new Record(requests.tableName, "id-1", {
-      [requests.fields.status]: requests.fields.status_options.deliveryNeeded
+  describe('and the record does not have cross streets', () => {
+    
+    beforeEach(() => {
+      getExistingMessageFn.mockResolvedValue({text: `*Household Size*: n/a
+*Cross Streets*: <https://crownheightsma.herokuapp.com/delivery-needed?request=RN7SQ3|>
+*Description*: No notes`});
+      
+      requestRecord = new Record(requests.tableName, "id-1", {
+        [requests.fields.status]: requests.fields.status_options.deliveryNeeded,
+        [requests.fields.crossStreetFirst]: null,
+        [requests.fields.crossStreetSecond]: null
+      });
+      
+      // this function is added by airtable-change-detector
+      requestRecord.getMeta = () => ({
+        slack_ts: "some-slack-ts",
+        slack_channel: "some-slack-channel"
+      });
     });
 
-    // this function is added by airtable-change-detector
-    requestRecord.getMeta = () => ({
-      slack_ts: "some-slack-ts",
-      slack_channel: "some-slack-channel"
+    describe('and the status is changed to "Delivery Assigned"', () => {
+
+      beforeEach(() => {
+        updateFn.mockClear();
+
+        requestRecord.set(
+          requests.fields.status,
+          requests.fields.status_options.deliveryAssigned
+        );
+      });
+
+      test("the cross streets line is removed from the post", async () => {
+        await updateMessageContent(requestRecord);
+
+        expect(updateFn.mock.calls[0][0].text).not.toMatch(/\*Cross Streets\*/)
+      });
     });
   });
 
-  describe('and the status is changed to "Delivery Assigned"', () => {
+  describe('and the request has cross streets', () => {
+
     beforeEach(() => {
-      requestRecord.set(
-        requests.fields.status,
-        requests.fields.status_options.deliveryAssigned
-      );
-    });
+      getExistingMessageFn.mockResolvedValue({text: `*Household Size*: n/a
+*Cross Streets*: <https://crownheightsma.herokuapp.com/delivery-needed?request=RN7SQ3|St Johns Pl &amp; Nostrand Ave>
+*Description*: No notes`});
 
-    test("the delivery map link is removed from the post", async () => {
-      await updateMessageContent(requestRecord);
-
-      updateFn.mock.calls[0][0].text.split("\n").forEach(line => {
-        if (line.startsWith(`*Cross Streets*`)) {
-          expect(line).not.toMatch(/<http.*>/);
-        }
+      requestRecord = new Record(requests.tableName, "id-1", {
+        [requests.fields.status]: requests.fields.status_options.deliveryNeeded,
+        [requests.fields.crossStreetFirst]: 'St Johns Pl',
+        [requests.fields.crossStreetSecond]: 'Nostrand Ave'
       });
 
-      expect.assertions(1);
+      // this function is added by airtable-change-detector
+      requestRecord.getMeta = () => ({
+        slack_ts: "some-slack-ts",
+        slack_channel: "some-slack-channel"
+      });
+    });
+
+    describe('and the status is changed to "Delivery Assigned"', () => {
+
+      beforeEach(() => {
+        updateFn.mockClear();
+
+        requestRecord.set(
+          requests.fields.status,
+          requests.fields.status_options.deliveryAssigned
+        );
+      });
+
+      test("the delivery map link is removed from the post", async () => {
+        await updateMessageContent(requestRecord);
+
+        updateFn.mock.calls[0][0].text.split("\n").forEach(line => {
+          if (line.startsWith(`*Cross Streets*`)) {
+            expect(line).not.toMatch(/<http.*>/);
+          }
+        });
+
+        expect.assertions(1);
+      });
     });
   });
 });
