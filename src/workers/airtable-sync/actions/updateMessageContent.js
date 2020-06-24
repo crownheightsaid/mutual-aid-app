@@ -65,8 +65,10 @@ module.exports = async function updateMessageContent(record) {
   );
 
   const streetsLineHeading = `*${str(
-    "slackapp:requestBotPost.post.fields.streets.name"
+    "slackapp:requestBotPost.post.fields.streets.name",
+    "Cross Streets"
   )}*`;
+
   if (
     record.get(requestFields.status) ===
     requestFields.status_options.deliveryAssigned
@@ -74,7 +76,7 @@ module.exports = async function updateMessageContent(record) {
     newContent = newContent
       .split("\n")
       .map(line => {
-        if (!line.startsWith(streetsLineHeading)) {
+        if (line.startsWith(streetsLineHeading)) {
           const crossStreets = [
             record.get(requestFields.crossStreetFirst),
             record.get(requestFields.crossStreetSecond)
@@ -84,6 +86,8 @@ module.exports = async function updateMessageContent(record) {
 
           return `${streetsLineHeading}: ${crossStreets}`;
         }
+
+        return line;
       })
       .join("\n");
   }

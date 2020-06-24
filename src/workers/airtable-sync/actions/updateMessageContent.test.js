@@ -1,5 +1,5 @@
+require("~strings/i18nextInit");
 const { Record } = require("airtable");
-const { str } = require("~strings/i18nextWrappers");
 const updateMessageContent = require("./updateMessageContent");
 const requests = require("~airtable/tables/requests");
 
@@ -47,23 +47,15 @@ describe('When request has been posted with status "Delivery Needed"', () => {
     });
 
     test("the delivery map link is removed from the post", async () => {
-      try {
-        await updateMessageContent(requestRecord);
+      await updateMessageContent(requestRecord);
 
-        updateFn.mock.calls[0][0].text.split("\n").forEach(line => {
-          if (
-            line.startsWith(
-              `*${str("slackapp:requestBotPost.post.fields.streets.name")}*`
-            )
-          ) {
-            expect(line).not.toMatch(/<http.*>/);
-          }
-        });
+      updateFn.mock.calls[0][0].text.split("\n").forEach(line => {
+        if (line.startsWith(`*Cross Streets*`)) {
+          expect(line).not.toMatch(/<http.*>/);
+        }
+      });
 
-        expect.hasAssertions();
-      } catch (e) {
-        fail(e);
-      }
+      expect.assertions(1);
     });
   });
 });
