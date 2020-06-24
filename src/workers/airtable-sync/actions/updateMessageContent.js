@@ -80,9 +80,8 @@ module.exports = async function updateMessageContent(record) {
         if (line.startsWith(streetsLineHeading)) {
           if (line.match(linkRegex)) {
             return line.replace(linkRegex, "$1");
-          } else {
-            return null;
           }
+          return null;
         }
 
         return line;
