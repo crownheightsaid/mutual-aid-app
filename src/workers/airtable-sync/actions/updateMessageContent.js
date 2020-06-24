@@ -64,16 +64,26 @@ module.exports = async function updateMessageContent(record) {
     )} => ${statusBadge}`
   );
 
+  const streetsLineHeading = `*${str(
+    "slackapp:requestBotPost.post.fields.streets.name"
+  )}*`;
   if (
     record.get(requestFields.status) ===
     requestFields.status_options.deliveryAssigned
   ) {
     newContent = newContent
       .split("\n")
-      .filter(line => {
-        return !line.startsWith(
-          `*${str("slackapp:requestBotPost.post.fields.streets.name")}*`
-        );
+      .map(line => {
+        if (!line.startsWith(streetsLineHeading)) {
+          const crossStreets = [
+            record.get(requestFields.crossStreetFirst),
+            record.get(requestFields.crossStreetSecond)
+          ]
+            .filter(s => s !== undefined)
+            .join(" & ");
+
+          return `${streetsLineHeading}: ${crossStreets}`;
+        }
       })
       .join("\n");
   }
