@@ -87,7 +87,10 @@ function getStatusBadge(record) {
 }
 
 function deliveryAssigned(request) {
-  return request.get(requestFields.status) === requestFields.status_options.deliveryAssigned 
+  return (
+    request.get(requestFields.status) ===
+    requestFields.status_options.deliveryAssigned
+  );
 }
 
 function removeMapLink(messageText) {
