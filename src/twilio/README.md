@@ -1,8 +1,8 @@
 this folder holds serverless Assets + Functions that we have deployed via Twilio Runtime.
 
-- functions/pause.js runs when someone calls the hotline (plays an .mp3 voicemail from /assets, asks for dialtone input, and then redirects to sms/pauses-resources if the caller requests text messages)
+- functions/pause.js runs when someone calls the hotline (plays an .mp3 voicemail from assets folder, asks for dialtone input, and then redirects to sms/pauses-resources if the caller requests text messages)
 - functions/sms/pause-resources.js runs when someone texts the hotline, explaining that the phone line is on pause and offering resources (2 text messages)
-- assets folder includes voicemail message about pausing the phone, mp3
+
 
 this folder also holds the required .env variables for the Twilio Runtime environment.
 
