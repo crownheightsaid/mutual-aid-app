@@ -1,19 +1,10 @@
 {
 	"projects": {
 		"AC2232b0eb4a28b188880935911ff2badb": {
-<<<<<<< HEAD
 			"serviceSid": "ZSa1653eaa90a0bfb8842dc6dda5bca80b",
-			"latestBuild": "ZB4655a09cb4c316fe8447981e082dfd98"
+			"latestBuild": "ZB363cfc81b6d5cbe8d580a282794e2e21"
 		}
 	},
 	"serviceSid": "ZSa1653eaa90a0bfb8842dc6dda5bca80b",
-	"latestBuild": "ZB4655a09cb4c316fe8447981e082dfd98"
-=======
-			"serviceSid": "ZS92f2a6556904c7ee36d653d7c40f8ab7",
-			"latestBuild": "ZB37a855e2d2ca1de476ea305478438e07"
-		}
-	},
-	"serviceSid": "ZS92f2a6556904c7ee36d653d7c40f8ab7",
-	"latestBuild": "ZB37a855e2d2ca1de476ea305478438e07"
->>>>>>> e0a9e67a825c546f4d4630a8e76ce902e6a646f4
+	"latestBuild": "ZB363cfc81b6d5cbe8d580a282794e2e21"
 }
