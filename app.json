@@ -42,6 +42,10 @@
       "description": "Go to https://www.twilio.com/console and copy what's under 'ACCOUNT SID'",
       "required": false
     },
+    "REACT_APP_TWILIO_FUNCTIONS_URL": {
+      "description": "Endpoint where twilio functions are hosted - use npm run local:twilio for ngrok URL in dev",
+      "required": false
+    },
     "TWILIO_VOICEMAIL_URL": {
       "description": "A url to an mp3 to play when someone calls your Twilio number. Twilio lets you host files here: https://www.twilio.com/console/assets/public",
       "required": false

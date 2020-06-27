@@ -8,6 +8,9 @@ import { useTranslation } from "react-i18next";
 import SendSmsDialog from "./SendSmsDialog";
 import sharedStylesFn from "../style/sharedStyles";
 
+const { REACT_APP_TWILIO_FUNCTIONS_URL } = process.env;
+const { REACT_APP_TWILIO_PHONE_NUMBER } = process.env;
+
 const useStyles = makeStyles(theme => ({
   ...sharedStylesFn(theme),
   buttons: {
@@ -58,14 +61,19 @@ const SendResourcesButton = () => {
           {str("webapp:zoneFinder.sendResources.emailButtonText")}
         </Button>
       </a>
-      <Button
-        className={classes.buttons}
-        onClick={() => setShowSmsDialog(true)}
-        variant="contained"
-        endIcon={<SmsIcon />}
-      >
-        {str("webapp:zoneFinder.sendResources.smsButtonText")}
-      </Button>
+      {REACT_APP_TWILIO_FUNCTIONS_URL && REACT_APP_TWILIO_PHONE_NUMBER ? (
+        <Button
+          className={classes.buttons}
+          onClick={() => setShowSmsDialog(true)}
+          variant="contained"
+          endIcon={<SmsIcon />}
+        >
+          {str("webapp:zoneFinder.sendResources.smsButtonText")}
+        </Button>
+      ) : (
+        undefined
+      )}
+
       <SendSmsDialog
         isOpen={showSmsDialog}
         onClose={() => setShowSmsDialog(false)}

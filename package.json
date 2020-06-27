@@ -12,7 +12,7 @@
     "local:react": "REACT_APP_CONTEXT=true NODE_ENV=dev react-scripts start",
     "local:airtable-sync": "NODE_ENV=dev node -r module-alias/register ./src/workers/airtable-sync/worker.js",
     "local:script": "DOTENV_CONFIG_PATH=./.env node -r module-alias/register -r dotenv/config -r ~strings/i18nextInit",
-    "local:twilio": "twilio-run start --ngrok='' src/twilio",
+    "local:twilio": "twilio-run start --ngrok='' --port 3001 src/twilio",
     "prod:express": "node index.js",
     "prod:react": "REACT_APP_CONTEXT=true react-scripts build",
     "prod:script": "DOTENV_CONFIG_PATH=./.env.prod node -r module-alias/register -r dotenv/config -r ~strings/i18nextInit",

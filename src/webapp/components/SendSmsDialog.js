@@ -21,28 +21,31 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const TWILIO_FUNCTIONS_URL = process.env.REACT_APP_TWILIO_FUNCTIONS_URL;
+const TWILIO_PHONE_NUMBER_FROM = process.env.REACT_APP_TWILIO_PHONE_NUMBER;
+
 const SendSmsDialog = ({ message, isOpen, onClose }) => {
   const { t: str } = useTranslation();
   const [smsMessage, setSmsMessage] = useState(message);
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumberTo, setPhoneNumberTo] = useState("");
   const [invalidPhoneNumber, setInvalidPhoneNumber] = useState(false);
 
   const classes = useStyles();
 
   const [{ data, loading, error }, submit] = useAxios(
     {
-      url: `/api/send-sms`,
+      url: `${TWILIO_FUNCTIONS_URL}/sms/send-sms`,
       method: "post"
     },
     { manual: true } // Don't send on render
   );
 
   useEffect(() => {
-    if (data && data.success && phoneNumber) {
+    if (data && data.success && phoneNumberTo) {
       onClose();
-      setPhoneNumber("");
+      setPhoneNumberTo("");
     }
-  }, [data, onClose, phoneNumber]);
+  }, [data, onClose, phoneNumberTo]);
 
   const validatePhoneNumber = number => {
     const phoneNumberRegEx = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
@@ -56,13 +59,9 @@ const SendSmsDialog = ({ message, isOpen, onClose }) => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    if (validatePhoneNumber(phoneNumber)) {
-      submit({
-        data: {
-          smsMessage,
-          phoneNumber
-        }
-      });
+    if (validatePhoneNumber(phoneNumberTo)) {
+      const postArgs = `message=${smsMessage}&to=${phoneNumberTo}&from=${TWILIO_PHONE_NUMBER_FROM}`;
+      submit({ data: postArgs });
     }
   };
 
@@ -93,8 +92,8 @@ const SendSmsDialog = ({ message, isOpen, onClose }) => {
             invalidPhoneNumber && str("webapp:sendSms.invalidPhoneMessage")
           }
           id="sms-dialog-message"
-          value={phoneNumber}
-          onChange={e => setPhoneNumber(e.target.value)}
+          value={phoneNumberTo}
+          onChange={e => setPhoneNumberTo(e.target.value)}
           label={str("webapp:sendSms.inputLabel")}
           type="string"
           fullWidth
