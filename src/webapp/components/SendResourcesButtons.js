@@ -23,6 +23,8 @@ const SendResourcesButton = () => {
 
   const { t: str } = useTranslation();
   const classes = useStyles();
+
+  // email message building
   const subjectString = str(
     "webapp:zoneFinder.email.subject",
     "Covid Resources NYC"
@@ -35,7 +37,11 @@ const SendResourcesButton = () => {
     bodyString += `${resourceLink}\n\n`;
   });
 
-  const smsBodyString = `${subjectString}\n\n${bodyString}`;
+  // sms message building
+  const sorryWeCouldntHelp = str("twilio:messages.sorryWeCouldntHelp");
+  const smsResources = str("twilio:messages.resources");
+
+  const smsBodyString = `${sorryWeCouldntHelp}${smsResources}`;
 
   return (
     <>

@@ -28,7 +28,7 @@ if (process.env.REACT_APP_CONTEXT) {
     .use(require("react-i18next").initReactI18next)
     .init({
       ...commonI18nOptions,
-      ns: [ns.webapp, ns.common],
+      ns: [ns.webapp, ns.common, ns.twilio],
       preload: ["en"],
       backend: {
         loadPath: "/locales/{{lng}}/{{ns}}.json"
