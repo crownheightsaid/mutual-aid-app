@@ -42,10 +42,6 @@
       "description": "Phone number where SMS will be sent from, go to https://www.twilio.com/console/phone-numbers/incoming and use DEV NUMBER",
       "required": false
     },
-    "TWILIO_VOICEMAIL_URL": {
-      "description": "A url to an mp3 to play when someone calls your Twilio number. Twilio lets you host files here: https://www.twilio.com/console/assets/public",
-      "required": false
-    },
     "GEONAME_CLIENT_ID": {
       "description": "Your geoname username. Use if you need /geo API routes (used in the website). It's free to get and use! https://www.geonames.org/login. After creating an account, make sure to enable the API: https://www.geonames.org/enablefreewebservice",
       "required": false
