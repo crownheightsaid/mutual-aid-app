@@ -100,7 +100,6 @@
     "eslint-plugin-react": "7.19.0",
     "eslint-plugin-react-hooks": "^2.3.0",
     "i18next-scanner": "2.11.0",
-    "jest": "^26.0.1",
     "ngrok": "3.2.7",
     "prettier": "^1.18.2",
     "release-it": "^13.6.2",
