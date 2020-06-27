@@ -32,6 +32,12 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
       `
     );
 
+    if (!location) {
+      console.error(`[deliveryNeededRequestHandler] could not fetch address location 
+        for requestCode: ${r.fields[code]}`);
+      return null;
+    }
+
     try {
       metaJSON = JSON.parse(r.fields[meta]);
     } catch {
@@ -74,5 +80,8 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
   });
 
   const requestsClean = await Promise.all(requestsWithCoordsPromises);
-  return res.send({ type: "FeatureCollection", features: requestsClean });
+  return res.send({
+    type: "FeatureCollection",
+    features: requestsClean.filter(request => !!request)
+  });
 };
