@@ -51,41 +51,6 @@ if (process.env.SLACK_BOT_TOKEN && process.env.SLACK_SIGNING_SECRET) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// ==================================================================
-// Twilio Webhooks
-// ==================================================================
-
-if (process.env.TWILIO_AUTH_TOKEN) {
-  app.post(
-    "/twilio/call-handler",
-    twilio.webhook({ protocol: "https" }),
-    require("./src/twilio/callHandler.js")
-  );
-  app.post(
-    "/twilio/call-handler-callback",
-    twilio.webhook({ protocol: "https" }),
-    require("./src/twilio/callHandlerCallback.js")
-  );
-} else {
-  console.log("TWILIO_AUTH_TOKEN not set. Twilio callbacks not enabled.");
-}
-
-// ==================================================================
-// API Routes
-// ==================================================================
-
-if (
-  process.env.TWILIO_AUTH_TOKEN &&
-  process.env.TWILIO_SID &&
-  process.env.TWILIO_PHONE_NUMBER
-) {
-
-  const { sendSms } = require("./src/api/neighborhood-finder/send-sms");
-  app.post("/api/send-sms", sendSms);
-
-} else {
-  console.log('Missing twilio credentials, sms sending not enabled')
-}
 
 if (process.env.GOOGLE_MAPS_API_KEY && process.env.GEONAME_CLIENT_ID) {
   app.post("/api/geo/address-metadata", addressHandler);
