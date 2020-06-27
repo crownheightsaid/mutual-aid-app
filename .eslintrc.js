@@ -16,6 +16,7 @@ module.exports = {
     },
     sourceType: "module"
   },
+  ignorePatterns: ['node_modules'],
   rules: {
     "no-unused-vars": ["error", { "varsIgnorePattern": "_.+" }],
     "no-multi-assign": ["off"],
