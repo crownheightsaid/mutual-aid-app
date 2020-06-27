@@ -34,14 +34,6 @@
       "description": "Go to the 'Basic Information' tab for your app (https://api.slack.com/apps/<your-app-id>/general). This is 'Signing Secret'",
       "required": false
     },
-    "TWILIO_AUTH_TOKEN": {
-      "description": "Go to https://www.twilio.com/console and copy what's under 'AUTH TOKEN'",
-      "required": false
-    },
-    "TWILIO_ACCOUNT_SID": {
-      "description": "Go to https://www.twilio.com/console and copy what's under 'ACCOUNT SID'",
-      "required": false
-    },
     "REACT_APP_TWILIO_FUNCTIONS_URL": {
       "description": "Endpoint where twilio functions are hosted - use npm run local:twilio for ngrok URL in dev",
       "required": false
