@@ -46,6 +46,10 @@
       "description": "Endpoint where twilio functions are hosted - use npm run local:twilio for ngrok URL in dev",
       "required": false
     },
+    "REACT_APP_TWILIO_PHONE_NUMBER": {
+      "description": "Phone number where SMS will be sent from, go to https://www.twilio.com/console/phone-numbers/incoming and use DEV NUMBER",
+      "required": false
+    },
     "TWILIO_VOICEMAIL_URL": {
       "description": "A url to an mp3 to play when someone calls your Twilio number. Twilio lets you host files here: https://www.twilio.com/console/assets/public",
       "required": false

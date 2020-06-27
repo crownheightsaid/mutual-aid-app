@@ -1,4 +1,4 @@
-exports.handler = function sendTwilioSms(context, event, callback) {
+exports.handler = function sendSms(context, event, callback) {
   const twilioClient = context.getTwilioClient();
   twilioClient.messages.create(
     {
@@ -10,6 +10,7 @@ exports.handler = function sendTwilioSms(context, event, callback) {
       console.log("1 message sent");
       const response = new Twilio.Response(); // eslint-disable-line no-undef
 
+      // We call this function from web, so allow cross-origin
       const headers = {
         "Access-Control-Allow-Origin": "*"
       };
