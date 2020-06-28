@@ -1,8 +1,8 @@
 import React from "react";
 import { Feature, Layer, Source } from "react-mapbox-gl";
 import { LngLat } from "mapbox-gl";
-import quadrantsGeoJSON from "../../lib/assets/crownheights.json";
-import { findBounds } from "../helpers/mapbox-coordinates";
+import quadrantsGeoJSON from "lib/assets/crownheights.json";
+import { findBounds } from "webapp/helpers/mapbox-coordinates";
 import BasicMap from "./BasicMap";
 import {
   CROWN_HEIGHTS_BOUNDS,

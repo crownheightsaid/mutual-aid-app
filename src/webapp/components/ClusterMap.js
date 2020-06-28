@@ -3,7 +3,7 @@ import { Source } from "react-mapbox-gl";
 import { LngLat } from "mapbox-gl";
 import Alert from "@material-ui/lab/Alert";
 import { useTranslation } from "react-i18next";
-import { findBounds } from "../helpers/mapbox-coordinates";
+import { findBounds } from "webapp/helpers/mapbox-coordinates";
 import {
   CROWN_HEIGHTS_BOUNDS,
   CROWN_HEIGHTS_CENTER_COORD
