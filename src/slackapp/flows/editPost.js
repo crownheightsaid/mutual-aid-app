@@ -9,6 +9,7 @@ const guard = require("~slack/guard");
 const { ADMIN_CHANNEL, INTAKE_CHANNEL } = require("~slack/constants");
 const { findChannelByName, listMembers } = require("~slack/channels");
 const { str } = require("~strings/i18nextWrappers");
+const { unlinkSlackMessage } = require("~airtable/tables/requests");
 
 editPost.id = "edit_post";
 saveEdits.id = "save_post_edit";
@@ -109,6 +110,19 @@ async function deletePost(payload) {
       )
     });
   }
+
+  try {
+    await unlinkSlackMessage(meta.message_ts, meta.message_channel);
+  } catch (e) {
+    console.error("Error unlinking message %0 %0 in Airtable", meta, e);
+    return slackapi.views.push({
+      trigger_id: payload.trigger_id,
+      view: errorView(
+        `${str("slackapp:editBotPost.modal.error.deletion")}: ${e}`
+      )
+    });
+  }
+
   return slackapi.views.update({
     view_id: payload.view.id,
     view: successView(str("slackapp:editBotPost.modal.success.deletion"))
