@@ -17,7 +17,7 @@
     "prod:script": "DOTENV_CONFIG_PATH=./.env.prod node -r module-alias/register -r dotenv/config -r ~strings/i18nextInit",
     "build": "npm run prod:react",
     "start": "npm run prod:express",
-    "test": "jest"
+    "test": "react-scripts test"
   },
   "main": "index.js",
   "engines": {
@@ -99,7 +99,6 @@
     "eslint-plugin-react": "7.19.0",
     "eslint-plugin-react-hooks": "^2.3.0",
     "i18next-scanner": "2.11.0",
-    "jest": "^26.1.0",
     "ngrok": "3.2.7",
     "prettier": "^2.0.5",
     "release-it": "^13.6.4"
