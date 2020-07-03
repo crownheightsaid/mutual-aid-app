@@ -1,5 +1,5 @@
 exports.handler = function voicePause(context, event, callback) {
-  const response = new Twilio.twiml.VoiceResponse();
+  const response = new Twilio.twiml.VoiceResponse(); // eslint-disable-line no-undef
   switch (event.Digits) {
     case "9":
       response.say(
