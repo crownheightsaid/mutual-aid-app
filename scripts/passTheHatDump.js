@@ -21,8 +21,8 @@ const { wait } = require("./utils");
           process.env.GOOGLE_PRIVATE_KEY,
           new RegExp("\\\\n", "g"),
           "\n"
-        )
-      }
+        ),
+      },
     });
     const bucket = storage.bucket(bucketName);
 
@@ -33,23 +33,23 @@ const { wait } = require("./utils");
       if (!cursor) {
         usersResult = await slackapi.users.list({
           token: process.env.SLACK_BOT_TOKEN,
-          limit: 50
+          limit: 50,
         });
       } else {
         usersResult = await slackapi.users.list({
           token: process.env.SLACK_BOT_TOKEN,
           limit: 50,
-          cursor
+          cursor,
         });
       }
       cursor = usersResult.response_metadata.next_cursor;
 
       const userMembers = usersResult.members
         .filter(
-          member =>
+          (member) =>
             !member.is_bot && !member.deleted && !member.id.includes("SLACKBOT")
         )
-        .map(u => u.id);
+        .map((u) => u.id);
       users = users.concat(userMembers);
       console.log(`Added ${userMembers.length}`);
       await wait(100);

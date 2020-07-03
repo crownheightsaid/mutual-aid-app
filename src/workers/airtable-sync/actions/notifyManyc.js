@@ -32,8 +32,8 @@ async function sendManycStatus(status, manycId) {
     const res = await axios.post(process.env.MANYC_WEBHOOK_URL, {
       manyc: {
         id: manycId,
-        status
-      }
+        status,
+      },
     });
     if (res.status !== 200) {
       console.log(`Manyc webhook failed: ${res.statusText}`);

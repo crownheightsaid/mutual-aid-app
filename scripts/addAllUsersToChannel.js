@@ -6,9 +6,9 @@ const { wait } = require("./utils");
 const isUserInChannel = async (userId, channelId) => {
   const convoResult = await slackapi.users.conversations({
     token: process.env.SLACK_BOT_TOKEN,
-    user: userId
+    user: userId,
   });
-  return !!convoResult.channels.filter(channel => channel.id === channelId)
+  return !!convoResult.channels.filter((channel) => channel.id === channelId)
     .length;
 };
 
@@ -25,21 +25,21 @@ const isUserInChannel = async (userId, channelId) => {
       if (!cursor) {
         usersResult = await slackapi.users.list({
           token: process.env.SLACK_BOT_TOKEN,
-          limit: 20
+          limit: 20,
         });
       } else {
         usersResult = await slackapi.users.list({
           token: process.env.SLACK_BOT_TOKEN,
           limit: 20,
-          cursor
+          cursor,
         });
       }
       cursor = usersResult.response_metadata.next_cursor;
 
       const userMembers = usersResult.members.filter(
-        member => !member.is_bot && !member.id.includes("SLACKBOT")
+        (member) => !member.is_bot && !member.id.includes("SLACKBOT")
       );
-      const userIds = userMembers.map(member => member.id);
+      const userIds = userMembers.map((member) => member.id);
       const notAddedUserIds = [];
       for (const userId of userIds) {
         try {
@@ -56,7 +56,7 @@ const isUserInChannel = async (userId, channelId) => {
         const inviteResult = await slackapi.conversations.invite({
           token: process.env.SLACK_BOT_TOKEN,
           channel: channelId,
-          users: notAddedUserIds.join(",")
+          users: notAddedUserIds.join(","),
         });
 
         console.log("Invite result:");

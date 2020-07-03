@@ -2,28 +2,28 @@ const assert = require("assert").strict;
 const {
   errorResponse,
   successResponse,
-  messageErrorResponse
+  messageErrorResponse,
 } = require("~slack/views");
 const slackapi = require("~slack/webApi");
 const { addBotToChannel } = require("~slack/channels");
 const {
   updateRequestByCode,
   findRequestByCode,
-  fields: requestFields
+  fields: requestFields,
 } = require("~airtable/tables/requests");
 const {
   findVolunteerById,
-  volunteersFields
+  volunteersFields,
 } = require("~airtable/tables/volunteers");
 const { str } = require("~strings/i18nextWrappers");
 
-exports.atdViewSubmission = async payload => {
+exports.atdViewSubmission = async (payload) => {
   try {
     const flowMetadata = JSON.parse(payload.view.private_metadata);
     const volunteerSlackId = payload.user.id;
     const slackUserResponse = await slackapi.users.info({
       token: process.env.SLACK_BOT_TOKEN,
-      user: volunteerSlackId
+      user: volunteerSlackId,
     });
     const slackUserEmail = slackUserResponse.user.profile.email;
 
@@ -32,10 +32,10 @@ exports.atdViewSubmission = async payload => {
       payload.view.state.values.options_block.options.selected_options;
     const shouldReplyOnThread =
       checkedOptions &&
-      checkedOptions.find(option => option.value === "should_reply");
+      checkedOptions.find((option) => option.value === "should_reply");
     const shouldDirectMessage =
       checkedOptions &&
-      checkedOptions.find(option => option.value === "should_start_dm");
+      checkedOptions.find((option) => option.value === "should_start_dm");
     const [request, err] = await findRequestByCode(requestCode);
     if (err) {
       return messageErrorResponse(
@@ -79,13 +79,13 @@ exports.atdViewSubmission = async payload => {
     const delivererSlackId = flowMetadata.delivererId;
     const userResponse = await slackapi.users.info({
       token: process.env.SLACK_BOT_TOKEN,
-      user: delivererSlackId
+      user: delivererSlackId,
     });
     const deliveryName = userResponse.user.real_name;
     const [_updated, uerr] = await updateRequestByCode(requestCode, {
       [requestFields.status]: requestFields.status_options.deliveryAssigned,
       [requestFields.deliveryVolunteer]: deliveryName,
-      [requestFields.deliverySlackId]: delivererSlackId
+      [requestFields.deliverySlackId]: delivererSlackId,
     });
     if (uerr) {
       console.log(`Request Code Error: ${requestCode}\n${uerr}`);
@@ -94,28 +94,28 @@ exports.atdViewSubmission = async payload => {
     if (shouldDirectMessage) {
       const dmResponse = await slackapi.conversations.open({
         token: process.env.SLACK_BOT_TOKEN,
-        users: `${delivererSlackId},${volunteerSlackId}`
+        users: `${delivererSlackId},${volunteerSlackId}`,
       });
       const messageId = dmResponse.channel.id;
       const dmLines = [
-        `*${str("slackapp:assignDelivery.dm.code")}:*\n>${request.get(
-          requestFields.code
-        ) || str("common:notAvailable")}`,
-        `*${str("slackapp:assignDelivery.dm.firstName")}:*\n>${request.get(
-          requestFields.firstName
-        ) || str("common:notAvailable")}`,
+        `*${str("slackapp:assignDelivery.dm.code")}:*\n>${
+          request.get(requestFields.code) || str("common:notAvailable")
+        }`,
+        `*${str("slackapp:assignDelivery.dm.firstName")}:*\n>${
+          request.get(requestFields.firstName) || str("common:notAvailable")
+        }`,
         `*${str("slackapp:assignDelivery.dm.phone")}:*\n>${request.get(
           requestFields.phone
         )}`,
         `*${str("slackapp:assignDelivery.dm.crossStreets")}:*\n>${request.get(
           requestFields.crossStreetFirst
         )} & ${request.get(requestFields.crossStreetSecond)}`,
-        `*${str("slackapp:assignDelivery.dm.householdSize")}:*\n>${request.get(
-          requestFields.householdSize
-        ) || str("common:notAvailable")}`,
-        `*${str("slackapp:assignDelivery.dm.notes")}:*\n>${request.get(
-          requestFields.intakeNotes
-        ) || str("common:notAvailable")}`
+        `*${str("slackapp:assignDelivery.dm.householdSize")}:*\n>${
+          request.get(requestFields.householdSize) || str("common:notAvailable")
+        }`,
+        `*${str("slackapp:assignDelivery.dm.notes")}:*\n>${
+          request.get(requestFields.intakeNotes) || str("common:notAvailable")
+        }`,
       ];
       await slackapi.chat.postMessage({
         token: process.env.SLACK_BOT_TOKEN,
@@ -129,22 +129,22 @@ exports.atdViewSubmission = async payload => {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: str("slackapp:assignDelivery.dm.message.text")
-            }
+              text: str("slackapp:assignDelivery.dm.message.text"),
+            },
           },
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: dmLines.join("\n")
-            }
+              text: dmLines.join("\n"),
+            },
           },
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: str("slackapp:assignDelivery.dm.message.reminder")
-            }
+              text: str("slackapp:assignDelivery.dm.message.reminder"),
+            },
           },
           {
             type: "section",
@@ -154,11 +154,11 @@ exports.atdViewSubmission = async payload => {
                 defaultValue:
                   "*Submit your receipt:* Afterwards, please fill out this handy <{{- reimbursementUrl}}|reimbursement form>, it will automatically post to the #community_reimbursement channel!\n\nFor more information, please see the <{{- guideUrl}}|delivery guide>.",
                 reimbursementUrl: str("common:links.reimbursementForm"),
-                guideUrl: str("common:links.deliveryGuide")
-              })
-            }
-          }
-        ]
+                guideUrl: str("common:links.deliveryGuide"),
+              }),
+            },
+          },
+        ],
       });
     }
     if (shouldReplyOnThread) {
@@ -169,8 +169,8 @@ exports.atdViewSubmission = async payload => {
         text: str("slackapp:assignDelivery.postNotify.message", {
           defaultValue:
             "{{delivererName}} you're on! You'll get a DM soon with details :slightly_smiling_face:",
-          delivererName: deliveryName
-        })
+          delivererName: deliveryName,
+        }),
       });
     }
     return successResponse(str("slackapp:assignDelivery.success"));
@@ -184,7 +184,7 @@ exports.atdViewSubmission = async payload => {
 const atdSubmitCallback = "assign-to-delivery-submit";
 
 exports.atdViewSubmissionCallbackId = atdSubmitCallback;
-exports.atdViewOpen = async payload => {
+exports.atdViewOpen = async (payload) => {
   await addBotToChannel(payload.channel.id);
   let codeGuess = str("slackapp:assignDelivery.modal.manualCode");
   // This means it's a reply and we can try to look for a request Code.
@@ -195,7 +195,7 @@ exports.atdViewOpen = async payload => {
         channel: payload.channel.id,
         latest: payload.message.thread_ts,
         limit: 1,
-        inclusive: true
+        inclusive: true,
       });
       assert(requestMessage.messages.length !== 0, "No messages found.");
       const capturingRegex = /Code[^\w\d]+(?<code>[\w\d]{4,6})[^\w\d]*\n/;
@@ -210,7 +210,7 @@ exports.atdViewOpen = async payload => {
   const metadata = {
     delivererId: payload.message.user,
     channelId: payload.channel.id,
-    threadId: payload.message.thread_ts // undefined if thread should not be replied to
+    threadId: payload.message.thread_ts, // undefined if thread should not be replied to
   };
   try {
     await slackapi.views.open({
@@ -222,26 +222,29 @@ exports.atdViewOpen = async payload => {
         private_metadata: JSON.stringify(metadata),
         title: {
           type: "plain_text",
-          text: str("slackapp:assignDelivery.modal.title", "Assign to Delivery")
+          text: str(
+            "slackapp:assignDelivery.modal.title",
+            "Assign to Delivery"
+          ),
         },
         submit: {
           type: "plain_text",
-          text: str("common:submit")
+          text: str("common:submit"),
         },
         blocks: [
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: str("slackapp:assignDelivery.modal.messageIntro")
-            }
+              text: str("slackapp:assignDelivery.modal.messageIntro"),
+            },
           },
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: str("slackapp:assignDelivery.modal.message")
-            }
+              text: str("slackapp:assignDelivery.modal.message"),
+            },
           },
           {
             type: "input",
@@ -251,12 +254,12 @@ exports.atdViewOpen = async payload => {
               action_id: "request_code",
               min_length: 4,
               max_length: 6,
-              initial_value: codeGuess
+              initial_value: codeGuess,
             },
             label: {
               type: "plain_text",
-              text: str("slackapp:assignDelivery.modal.code")
-            }
+              text: str("slackapp:assignDelivery.modal.code"),
+            },
           },
           {
             type: "input",
@@ -269,10 +272,10 @@ exports.atdViewOpen = async payload => {
                 {
                   text: {
                     type: "plain_text",
-                    text: str("slackapp:assignDelivery.modal.dmOption")
+                    text: str("slackapp:assignDelivery.modal.dmOption"),
                   },
-                  value: "should_start_dm"
-                }
+                  value: "should_start_dm",
+                },
               ],
               options: [
                 // IF CHANGING, make sure to reflect right above
@@ -282,9 +285,9 @@ exports.atdViewOpen = async payload => {
                     text: str(
                       "slackapp:assignDelivery.modal.threadOption",
                       "Reply to the thread with confirmation"
-                    )
+                    ),
                   },
-                  value: "should_reply"
+                  value: "should_reply",
                 },
                 {
                   text: {
@@ -292,19 +295,19 @@ exports.atdViewOpen = async payload => {
                     text: str(
                       "slackapp:assignDelivery.modal.dmOption",
                       "Start a DM with request info between you and the assignee"
-                    )
+                    ),
                   },
-                  value: "should_start_dm"
-                }
-              ]
+                  value: "should_start_dm",
+                },
+              ],
             },
             label: {
               type: "plain_text",
-              text: str("slackapp:assignDelivery.modal.botOptionText")
-            }
-          }
-        ]
-      }
+              text: str("slackapp:assignDelivery.modal.botOptionText"),
+            },
+          },
+        ],
+      },
     });
   } catch (error) {
     console.error(JSON.stringify(error));

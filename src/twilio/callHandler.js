@@ -17,7 +17,7 @@ module.exports = (req, res) => {
   }
 
   response.record({
-    action: "/twilio/call-handler-callback"
+    action: "/twilio/call-handler-callback",
   });
 
   res.set("Content-Type", "text/xml");
