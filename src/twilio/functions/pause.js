@@ -1,4 +1,4 @@
-exports.handler = function(context, event, callback) {
+exports.handler = function voicePause(context, event, callback) {
   const response = new Twilio.twiml.VoiceResponse();
   switch (event.Digits) {
     case "9":

@@ -7,7 +7,10 @@
     "start": "twilio-run",
     "deploy": "twilio-run deploy"
   },
-  "dependencies": {},
+  "dependencies": {
+    "airtable": "^0.8.1",
+    "twilio": "^3.47.0"
+  },
   "devDependencies": {
     "twilio-run": "^2.6.0"
   },
