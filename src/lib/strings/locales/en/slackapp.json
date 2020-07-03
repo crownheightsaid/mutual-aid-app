@@ -7,7 +7,7 @@
     "intakeVolunteers": "intake_volunteers",
     "deliveryVolunteers": "delivery_volunteers",
     "flyering": "flyer_squad",
-    "tech": "tech",
+    "tech": "wg_tech",
     "communityReimbursements": "community_reimbursement",
     "hatHolders": "hat_holders"
   },

@@ -1,13 +1,20 @@
+const { EventEmitter } = require("events");
 const ChangeDetector = require("airtable-change-detector");
 const {
   table: requestsTable,
   fields: requestFields,
   SENSITIVE_FIELDS: sensitiveRequestFields
 } = require("~airtable/tables/requests");
+const sendErrorNotification = require("~slack/errorNotification");
 const updateMessageContent = require("./actions/updateMessageContent");
 const notifyManyc = require("./actions/notifyManyc");
 
 const defaultInterval = 10000;
+
+const errorEmitter = new EventEmitter();
+errorEmitter.on("error", error => {
+  sendErrorNotification(error);
+});
 
 function startWorker(interval) {
   let pollInterval = interval;
@@ -19,7 +26,8 @@ function startWorker(interval) {
   }
   const sharedDetectorOptions = {
     writeDelayMs: 100,
-    lastProcessedFieldName: "Last Processed"
+    lastProcessedFieldName: "Last Processed",
+    errorEmitter
   };
 
   const requestChanges = new ChangeDetector(requestsTable, {
