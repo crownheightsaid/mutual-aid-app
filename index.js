@@ -5,7 +5,6 @@ require("~strings/i18nextInit");
 const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
-const twilio = require("twilio");
 const basicAuth = require("express-basic-auth");
 const bodyParser = require("body-parser");
 const airtableWorker = require("./src/workers/airtable-sync/worker");
@@ -52,23 +51,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // ==================================================================
-// Twilio Webhooks
+// Twilio Functions: written separately, deployed as serverless functions in src/twilio subpackage
 // ==================================================================
-
-if (process.env.TWILIO_AUTH_TOKEN) {
-  /*app.post(
-    "/twilio/call-handler",
-    twilio.webhook({ protocol: "https" }),
-    require("./src/twilio/callHandler.js")
-  );
-  app.post(
-    "/twilio/call-handler-callback",
-    twilio.webhook({ protocol: "https" }),
-    require("./src/twilio/callHandlerCallback.js")
-  );*/
-} else {
-  console.log("TWILIO_AUTH_TOKEN not set. Twilio callbacks not enabled.");
-}
 
 // ==================================================================
 // API Routes
