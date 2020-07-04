@@ -12,7 +12,8 @@ const {
 } = require("~airtable/tables/paymentRequests");
 const {
   fields: requestFields,
-  findRequestByCode
+  findRequestByCode,
+  updateRequestByCode
 } = require("~airtable/tables/requests");
 const { str } = require("~strings/i18nextWrappers");
 
@@ -59,6 +60,13 @@ module.exports = async function newPaymentRequest(record) {
     return;
   }
 
+  if (
+    record.get(paymentRequestsFields.type) ===
+    paymentRequestsFields.type_options.reimbursement
+  ) {
+    await markRequestComplete(code);
+  }
+
   await paymentRequestsTable.update([
     {
       id: record.getId(),
@@ -66,6 +74,12 @@ module.exports = async function newPaymentRequest(record) {
     }
   ]);
 };
+
+async function markRequestComplete(code) {
+  await updateRequestByCode(code, {
+    [requestFields.status]: requestFields.status_options.requestComplete
+  });
+}
 
 async function makeMessageText(reimbursement, request, reimbursementCode) {
   const firstName = reimbursement.get(paymentRequestsFields.firstName);

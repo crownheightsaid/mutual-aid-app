@@ -42,17 +42,16 @@ const RequestNotFoundAlert = ({ requestCode }) => {
   const { t: str } = useTranslation();
   return (
     <Alert severity="warning">
-      {str("webapp.deliveryNeeded.requestNotFound.message", {
+      {`${str("webapp:deliveryNeeded.requestNotFound.message", {
         defaultValue: `Request with code {{requestCode}} is not found. This means that the request is no longer in 'Delivery Needed' status.`,
         requestCode
-      })}
-{" "}
+      })} `}
       <a
-        href={str("webapp.deliveryNeeded.requestNotFound.redirectLink", {
+        href={str("webapp:deliveryNeeded.requestNotFound.redirectLink", {
           defaultValue: "/delivery-needed"
         })}
       >
-        {str("webapp.deliveryNeeded.requestNotFound.redirectMessage", {
+        {str("webapp:deliveryNeeded.requestNotFound.redirectMessage", {
           defaultValue: `See all requests instead.`
         })}
       </a>
@@ -60,7 +59,36 @@ const RequestNotFoundAlert = ({ requestCode }) => {
   );
 };
 
+const NoRequestsAlert = () => {
+  const { t: str } = useTranslation();
+  return (
+    <Alert severity="warning">
+      {str("webapp:deliveryNeeded.noRequests.message", {
+        defaultValue:
+          "No requests found. Some requests may not have been posted in Slack yet or be marked for driving clusters."
+      })}
+    </Alert>
+  );
+};
+
 const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
+  const requestCode = getRequestParam();
+
+  let paramRequest;
+
+  if (requestCode && geoJsonData && geoJsonData.features) {
+    // find first feature with code match to be passed
+    // into ClusterMapLayers
+    const { features } = geoJsonData;
+    [paramRequest] = features.filter(
+      ({
+        properties: {
+          meta: { Code }
+        }
+      }) => Code === requestCode
+    );
+  }
+
   if (!geoJsonData) {
     return null;
   }
@@ -86,16 +114,18 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
 
   // there is a requestCode but the request object does not exist
   const paramRequestNotFound = requestCode && !paramRequest;
-
+  const noRequestsFound = geoJsonData.features.length === 0;
   return (
     <>
       {paramRequestNotFound && (
         <RequestNotFoundAlert requestCode={requestCode} />
       )}
 
+      {noRequestsFound && <NoRequestsAlert />}
+
       <BasicMap
         center={CROWN_HEIGHTS_CENTER_COORD}
-        bounds={makeBounds(allRequests)}
+        bounds={makeBounds(geoJsonData)}
         containerStyle={containerStyle}
       >
         <QuadrantsLayers />

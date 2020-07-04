@@ -2,8 +2,9 @@
   "name": "mutual-aid-app",
   "description": "",
   "scripts": {
-    "lint": "eslint src",
-    "fix": "eslint --fix src",
+    "release": "release-it",
+    "lint": "eslint src scripts",
+    "fix": "eslint --fix src scripts",
     "find-new-strings": "i18next-scanner --config ./src/lib/strings/__i18nextScanner.config.js 'scripts/**/*.js' 'src/**/*.js'",
     "local": "npm run local:react & npm run local:express",
     "local:express": "NODE_ENV=dev node index.js",
@@ -15,7 +16,8 @@
     "prod:react": "REACT_APP_CONTEXT=true react-scripts build",
     "prod:script": "DOTENV_CONFIG_PATH=./.env.prod node -r module-alias/register -r dotenv/config -r ~strings/i18nextInit",
     "build": "npm run prod:react",
-    "start": "npm run prod:express"
+    "start": "npm run prod:express",
+    "test": "react-scripts test"
   },
   "main": "index.js",
   "engines": {
@@ -28,16 +30,25 @@
     "~assets": "src/lib/assets",
     "~strings": "src/lib/strings"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "^~lib(.*)$": "<rootDir>/src/lib$1",
+      "^~airtable(.*)$": "<rootDir>/src/lib/airtable$1",
+      "^~slack(.*)$": "<rootDir>/src/lib/slack$1",
+      "^~assets(.*)$": "<rootDir>/src/lib/assets$1",
+      "^~strings(.*)$": "<rootDir>/src/lib/strings$1"
+    }
+  },
   "proxy": "http://localhost:5000",
   "dependencies": {
     "@google-cloud/storage": "4.7.0",
     "@googlemaps/google-maps-services-js": "2.4.2",
-    "@material-ui/core": "4.9.10",
+    "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.53",
-    "@material-ui/styles": "4.9.10",
-    "@reach/router": "^1.3.3",
-    "@slack/events-api": "2.3.2",
+    "@material-ui/styles": "^4.10.0",
+    "@reach/router": "^1.3.4",
+    "@slack/events-api": "2.3.3",
     "@slack/interactive-messages": "1.5.0",
     "@slack/web-api": "5.8.0",
     "airtable": "0.8.1",
@@ -51,26 +62,28 @@
     "geojson-utils": "1.1.0",
     "geonames.js": "2.3.0",
     "i18next": "19.4.3",
-    "i18next-fs-backend": "1.0.1",
-    "i18next-http-backend": "1.0.4",
+    "i18next-fs-backend": "^1.0.7",
+    "i18next-http-backend": "^1.0.16",
     "lodash": "^4.17.15",
     "lru-cache": "^5.1.1",
     "mapbox-gl": "1.10.1",
     "mocha": "^7.1.1",
     "module-alias": "2.2.2",
     "morgan": "1.10.0",
+    "query-string": "^6.12.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-helmet": "^5.2.1",
     "react-i18next": "11.3.5",
-    "react-mapbox-gl": "^4.8.3",
-    "react-scripts": "3.4.0",
+    "react-mapbox-gl": "^4.8.6",
+    "react-scripts": "^3.4.1",
     "twilio": "3.42.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "7.9.5",
+    "auto-changelog": "^2.0.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.5.0",
@@ -80,14 +93,15 @@
     "eslint-plugin-flowtype": "4.7.0",
     "eslint-plugin-import": "2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-no-unsanitized": "^3.0.2",
-    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-no-unsanitized": "^3.1.2",
+    "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-react": "7.19.0",
     "eslint-plugin-react-hooks": "^2.3.0",
     "i18next-scanner": "2.11.0",
     "ngrok": "3.2.7",
-    "prettier": "^1.18.2"
+    "prettier": "^2.0.5",
+    "release-it": "^13.6.4"
   },
   "private": true,
   "browserslist": {
@@ -101,5 +115,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "version": "0.56.0",
+  "release-it": {
+    "hooks": {
+      "after:bump": "npx auto-changelog -p -l 15"
+    }
   }
 }

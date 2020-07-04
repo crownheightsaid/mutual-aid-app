@@ -25,6 +25,12 @@ const makeFeature = async r => {
       `
   );
 
+  if (!location) {
+    console.error(`[deliveryNeededRequestHandler] could not fetch address location 
+      for requestCode: ${r.fields[code]}`);
+    return null;
+  }
+
   try {
     metaJSON = JSON.parse(r.fields[meta]);
   } catch {
@@ -91,11 +97,11 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
   return res.send({
     requests: {
       type: "FeatureCollection",
-      features: regularRequests
+      features: regularRequests.filter(request => !!request)
     },
     drivingClusterRequests: {
       type: "FeatureCollection",
-      features: clusterRequests
+      features: clusterRequests.filter(request => !!request)
     }
   });
 };

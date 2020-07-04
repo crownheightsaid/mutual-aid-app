@@ -79,7 +79,8 @@
         "text": "Thanks to you both for volunteering. Here's some details on the request. Let's help some neighbors!",
         "reminder": "_*Reminder:* When you make a delivery, drop the groceries at the door, step 6 feet away, and make sure that the recipient knows to wipe down all the groceries (or wash with soap and water)_",
         "outro": "*Submit your receipt:* Afterwards, please fill out this handy <{{- reimbursementUrl}}|reimbursement form>, it will automatically post to the #community_reimbursement channel!\n\nFor more info, please see the <{{- guideUrl}}|delivery guide>."
-      }
+      },
+      "householdSize": "Household Size"
     },
     "postNotify": {
       "message": "{{delivererName}} you're on! You'll get a DM soon with details :slightly_smiling_face:"
@@ -133,7 +134,9 @@
           "name": "Need"
         },
         "streets": {
-          "name": "Cross Streets"
+          "name": "Cross Streets",
+          "mapUrl": "https://crownheightsma.herokuapp.com/delivery-needed?request={{requestCode}}",
+          "streetsWithMapUrl": "<{{- mapUrl}}|{{streets}}>"
         },
         "language": {
           "name": "Language"
@@ -151,7 +154,7 @@
       },
       "message": {
         "intro": "Hey Crown Heights, we have a new request from our neighbor {{firstName}} at {{streets}} in *{{quadrant}}*",
-        "outro": "*Want to volunteer to help our neighbor{{firstName}}?* Comment on this thread and {{- intakeSlackId}} will follow up with more details.\n_Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive._",
+        "outro": "*Want to volunteer to help our neighbor{{firstName}}?* Comment on this thread and {{- intakeSlackId}} will follow up with more details.\n_Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive. If you have been in large crowds or demonstrations, please wait 5 days after a negative test result or 14 days of self-isolation without a test._",
         "outroPay": "Submit your receipt: please fill out this handy reimbursement form, it will automatically post to the #community_reimbursement channel!\nFor more information, please see the delivery guide.",
         "guide": "For more information, please see the <{{- guideUrl}}|delivery guide>."
       },
@@ -214,7 +217,7 @@
       "message": {
         "details": {
           "first": ":rabbit::tophat::question: The rundown: To help fund our grocery aid deliveries and make sure all bills are paid, we’ve created this *hat*, the kind passed around at concerts, collecting tips for the band. Everyday the hat is passed to different CHMA members, but we promise you won’t get the hat again for at least a few weeks!",
-          "second": ":money_with_wings: So if you’re able to donate any amount, whether it’s $3 or $30, please do! You’d be helping out a lot--no donation is too small! If you’re unable to donate, no worries at all! We don't track who is and isn't donating",
+          "second": ":money_with_wings: So if you’re able to donate any amount, whether it’s $3 or $30, please do! You’d be helping out a lot--no donation is too small! If you’re unable to donate, no worries at all!",
           "third": ":pie: It’s as easy as *venmoing {{- venmoHandle}}*. This Venmo account belongs to {{- venmoUser}} who will disburse the funds they collect to our delivery volunteers in need of reimbursements (receipts posted in #community_reimbursement). Use a :tophat: or :luckyhat: in the venmo comment, or just type in CHMA hat!"
         },
         "intro": ":luckyhat: CHMA Hat! :luckyhat:\nHi there! We’re passing the CHMA hat to you today!",

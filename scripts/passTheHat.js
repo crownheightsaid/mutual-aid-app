@@ -37,7 +37,9 @@ const { str } = require("~strings/i18nextWrappers");
 
     const daysSinceFirstRun = daysSince(new Date(2020, 5, 12));
     const daysInCycle = 25;
-    const dayInCycle = daysSinceFirstRun % daysInCycle;
+    const dayInCycle = daysInCycle - (daysSinceFirstRun % daysInCycle);
+    console.log(daysSinceFirstRun);
+    console.log(dayInCycle);
 
     // Number of users to receive a DM on a given day
     let groupSize = Math.floor(users.length / daysInCycle);
@@ -173,6 +175,7 @@ const sendMessage = async (userId, hatHolder) => {
 const daysSince = startDate => {
   const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
   const today = new Date();
+  today.setHours(8); // When the script runs in prod, used for testing.
 
-  return Math.round(Math.abs((today - startDate) / oneDay));
+  return Math.round(Math.abs((today.getTime() - startDate.getTime()) / oneDay));
 };

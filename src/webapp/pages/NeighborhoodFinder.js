@@ -10,6 +10,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import { useTranslation } from "react-i18next";
+import queryString from "query-string";
 import QuadrantMap from "../components/QuadrantMap";
 import SaveNeighborhoodDataInput from "../components/SaveNeighborhoodDataInput";
 import sharedStylesFn from "../style/sharedStyles";
@@ -18,6 +19,9 @@ const useStyles = makeStyles(theme => ({
   ...sharedStylesFn(theme),
   mapRoot: {
     flex: 1
+  },
+  rootMinimalView: {
+    flexDirection: "column"
   },
   formRoot: {
     flex: 1
@@ -38,6 +42,10 @@ export default function NeighborhoodFinder() {
     },
     { manual: true } // Don't send on render
   );
+  /* eslint-disable camelcase */
+  const { minimal_view } = queryString.parse(window.location.search);
+  const minimalView = minimal_view === "true";
+  /* eslint-enable camelcase */
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -85,34 +93,40 @@ export default function NeighborhoodFinder() {
   };
 
   return (
-    <Box className={classes.root}>
+    <Box
+      className={`${classes.root} ${
+        minimalView ? classes.rootMinimalView : ""
+      }`}
+    >
       <Box className={classes.formRoot}>
-        <Box>
-          <Typography className={classes.text} variant="h4">
-            {str("webapp:zoneFinder.title", {
-              defaultValue: "{{neighborhood}} Neighborhood Finder",
-              neighborhood: str("common:neighborhood")
-            })}
-          </Typography>
-          <Typography className={classes.text} variant="body1">
-            {str(
-              "webapp:zoneFinder.message.info",
-              "Enter an address and we will look up cross streets and the neighborhood."
-            )}
-          </Typography>
-          <Typography className={classes.text} variant="body1">
-            {str(
-              "webapp:zoneFinder.message.help",
-              "For best results, enter street and town (Ex: 1550 dean st brooklyn)"
-            )}
-          </Typography>
-          <Typography className={classes.text} variant="body1">
-            {str(
-              "webapp:zoneFinder.message.privacy",
-              "The address will not be stored or logged :)"
-            )}
-          </Typography>
-        </Box>
+        {!minimalView && (
+          <Box>
+            <Typography className={classes.text} variant="h4">
+              {str("webapp:zoneFinder.title", {
+                defaultValue: "{{neighborhood}} Neighborhood Finder",
+                neighborhood: str("common:neighborhood")
+              })}
+            </Typography>
+            <Typography className={classes.text} variant="body1">
+              {str(
+                "webapp:zoneFinder.message.info",
+                "Enter an address and we will look up cross streets and the neighborhood."
+              )}
+            </Typography>
+            <Typography className={classes.text} variant="body1">
+              {str(
+                "webapp:zoneFinder.message.help",
+                "For best results, enter street and town (Ex: 1550 dean st brooklyn)"
+              )}
+            </Typography>
+            <Typography className={classes.text} variant="body1">
+              {str(
+                "webapp:zoneFinder.message.privacy",
+                "The address will not be stored or logged :)"
+              )}
+            </Typography>
+          </Box>
+        )}
         <form onSubmit={handleSubmit} autoComplete="off">
           <TextField
             id="address"
@@ -202,6 +216,15 @@ export default function NeighborhoodFinder() {
       <Box className={classes.mapRoot}>
         <QuadrantMap locations={data && [data.location]} />
       </Box>
+
+      {minimalView && (
+        <Box>
+          <span>{str("webapp:zoneFinder.minimalView.help")}</span>
+          <a href="/neighborhood-finder">
+            {str("webapp:zoneFinder.minimalView.linkToFullViewText")}
+          </a>
+        </Box>
+      )}
     </Box>
   );
 }

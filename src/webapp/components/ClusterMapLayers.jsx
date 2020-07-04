@@ -37,6 +37,9 @@ const makePopupData = (features, lngLat) => {
 const ClusterMapLayers = ({ geoJsonData, paramRequest, sourceId, color }) => {
   const [popup, setPopup] = useState();
 
+  const setCursorPointer = e => e.target.getCanvas().style.cursor = 'pointer';
+  const setCursorGrab = e => e.target.getCanvas().style.cursor = 'grab';
+
   // display popup if request code is present in URL search param
   useEffect(() => {
     if (paramRequest) {
@@ -79,6 +82,8 @@ const ClusterMapLayers = ({ geoJsonData, paramRequest, sourceId, color }) => {
               ]
             }}
             onClick={e => handleClusterOnClick(map, e, layerId, sourceId)}
+            onMouseEnter={setCursorPointer}
+            onMouseLeave={setCursorGrab}
           />
 
           <Layer
@@ -108,6 +113,8 @@ const ClusterMapLayers = ({ geoJsonData, paramRequest, sourceId, color }) => {
             onClick={e => {
               setPopup(makePopupData(e.features, e.lngLat));
             }}
+            onMouseEnter={setCursorPointer}
+            onMouseLeave={setCursorGrab}
           />
           {popup && (
             <RequestPopup closePopup={() => setPopup()} requests={popup} />

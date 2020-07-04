@@ -1,4 +1,5 @@
 const { merge } = require("lodash");
+const _ = require("lodash");
 const { airbase } = require("~airtable/bases");
 
 const requestNotInSlack = r => {
@@ -190,6 +191,39 @@ exports.updateRequestByCode = async (code, update) => {
     return [null, `Error while processing update: ${e}`];
   }
 };
+
+exports.unlinkSlackMessage = async (slackTs, slackChannel) => {
+  const tsFilter = `"slack_ts":"${slackTs}"`;
+  const channelFilter = `"slack_channel":"${slackChannel}"`;
+  const filter = `AND(SEARCH('${tsFilter}', {${fields.meta}}), SEARCH('${channelFilter}', {${fields.meta}}))`;
+  await requestsTable
+    .select({
+      filterByFormula: filter
+    })
+    .eachPage((records, fetchNextPage) => {
+      records.forEach(async record => {
+        const meta = removeSlackMeta(record.get(fields.meta));
+
+        try {
+          await requestsTable.update([
+            { id: record.id, fields: { [fields.meta]: meta } }
+          ]);
+        } catch (e) {
+          console.error("Error updating Request %O %O", record.id, e);
+        }
+      });
+
+      fetchNextPage();
+    });
+};
+
+const removeSlackMeta = meta =>
+  _.chain(meta)
+    .thru(JSON.parse)
+    .omit("slack_ts")
+    .omit("slack_channel")
+    .thru(JSON.stringify)
+    .value();
 
 // ==================================================================
 // Schema
