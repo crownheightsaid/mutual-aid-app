@@ -6,14 +6,14 @@ import { useTranslation } from "react-i18next";
 import { findBounds } from "../helpers/mapbox-coordinates";
 import {
   CROWN_HEIGHTS_BOUNDS,
-  CROWN_HEIGHTS_CENTER_COORD
+  CROWN_HEIGHTS_CENTER_COORD,
 } from "../helpers/map-constants";
 import BasicMap from "./BasicMap";
 import { QuadrantsLayers } from "./QuadrantMap";
 import ClusterMapLayers from "./ClusterMapLayers";
 
-const makeBounds = features => {
-  const lnglats = features.map(f => {
+const makeBounds = (features) => {
+  const lnglats = features.map((f) => {
     const [lng, lat] = f.geometry.coordinates;
     return new LngLat(lng, lat);
   });
@@ -44,15 +44,15 @@ const RequestNotFoundAlert = ({ requestCode }) => {
     <Alert severity="warning">
       {`${str("webapp:deliveryNeeded.requestNotFound.message", {
         defaultValue: `Request with code {{requestCode}} is not found. This means that the request is no longer in 'Delivery Needed' status.`,
-        requestCode
+        requestCode,
       })} `}
       <a
         href={str("webapp:deliveryNeeded.requestNotFound.redirectLink", {
-          defaultValue: "/delivery-needed"
+          defaultValue: "/delivery-needed",
         })}
       >
         {str("webapp:deliveryNeeded.requestNotFound.redirectMessage", {
-          defaultValue: `See all requests instead.`
+          defaultValue: `See all requests instead.`,
         })}
       </a>
     </Alert>
@@ -65,7 +65,7 @@ const NoRequestsAlert = () => {
     <Alert severity="warning">
       {str("webapp:deliveryNeeded.noRequests.message", {
         defaultValue:
-          "No requests found. Some requests may not have been posted in Slack yet or be marked for driving clusters."
+          "No requests found. Some requests may not have been posted in Slack yet or be marked for driving clusters.",
       })}
     </Alert>
   );
@@ -75,26 +75,6 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
   const requestCode = getRequestParam();
 
   let paramRequest;
-
-  if (requestCode && geoJsonData && geoJsonData.features) {
-    // find first feature with code match to be passed
-    // into ClusterMapLayers
-    const { features } = geoJsonData;
-    [paramRequest] = features.filter(
-      ({
-        properties: {
-          meta: { Code }
-        }
-      }) => Code === requestCode
-    );
-  }
-
-  if (!geoJsonData) {
-    return null;
-  }
-
-  let paramRequest;
-  const requestCode = getRequestParam();
   const { requests, drivingClusterRequests } = geoJsonData;
   const { features: reqFeatures } = requests;
   const { features: clusterFeatures } = drivingClusterRequests;
@@ -106,15 +86,15 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
     [paramRequest] = allRequests.filter(
       ({
         properties: {
-          meta: { Code }
-        }
+           meta: { Code },
+        },
       }) => Code === requestCode
     );
   }
 
   // there is a requestCode but the request object does not exist
   const paramRequestNotFound = requestCode && !paramRequest;
-  const noRequestsFound = geoJsonData.features.length === 0;
+  const noRequestsFound = allRequests.length === 0;
   return (
     <>
       {paramRequestNotFound && (
@@ -125,7 +105,7 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
 
       <BasicMap
         center={CROWN_HEIGHTS_CENTER_COORD}
-        bounds={makeBounds(geoJsonData)}
+        bounds={makeBounds(allRequests)}
         containerStyle={containerStyle}
       >
         <QuadrantsLayers />
@@ -136,7 +116,7 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
             data: requests,
             cluster: true,
             clusterMaxZoom: 14,
-            clusterRadius: 30
+            clusterRadius: 30,
           }}
         />
         <Source
@@ -146,7 +126,7 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
             data: drivingClusterRequests,
             cluster: true,
             clusterMaxZoom: 14,
-            clusterRadius: 30
+            clusterRadius: 30,
           }}
         />
         <ClusterMapLayers
