@@ -1,7 +1,7 @@
 const twilio = require("twilio");
 const {
   createRequest,
-  findRequestByPhone
+  findRequestByPhone,
 } = require("~airtable/tables/requests");
 const { str } = require("~strings/i18nextWrappers");
 
@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
     twilioSid,
     phone,
     status,
-    source: "voice"
+    source: "voice",
   };
   const [record, e] = await createRequest(newRequest);
   if (record) {
