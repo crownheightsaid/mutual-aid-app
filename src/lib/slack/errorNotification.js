@@ -31,7 +31,7 @@ module.exports = async function sendErrorNotification(error) {
     const wgTechChannel = await findChannelByName(TECH_CHANNEL);
     await slackapi.chat.postMessage({
       channel: wgTechChannel.id,
-      text: errText
+      text: errText,
     });
 
     sentErrors.push([error.message, now]);
