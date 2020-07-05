@@ -18,10 +18,10 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
     crossStreetSecond,
     meta,
     neighborhoodAreaSeeMap,
-    firstName
+    firstName,
   } = fields;
 
-  const requestsWithCoordsPromises = requestObj.map(async r => {
+  const requestsWithCoordsPromises = requestObj.map(async (r) => {
     let metaJSON = {};
     let slackPermalink = {};
     const location = await fetchCoordFromCrossStreets(
@@ -52,7 +52,7 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
       const timestamp = metaJSON.slack_ts;
       slackPermalink = await slackapi.chat.getPermalink({
         channel,
-        message_ts: timestamp
+        message_ts: timestamp,
       });
     } catch {
       console.error(`[deliveryNeededRequestHandler] could not fetch slack URL
@@ -63,7 +63,7 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
       type: "Feature",
       geometry: {
         type: "Point",
-        coordinates: [location.lng, location.lat]
+        coordinates: [location.lng, location.lat],
       },
       properties: {
         title: r.fields[code],
@@ -73,15 +73,15 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
           [crossStreetSecond]: r.fields[crossStreetSecond],
           [neighborhoodAreaSeeMap]: r.fields[neighborhoodAreaSeeMap],
           [firstName]: r.fields[firstName],
-          slackPermalink: slackPermalink.ok ? slackPermalink.permalink : ""
-        }
-      }
+          slackPermalink: slackPermalink.ok ? slackPermalink.permalink : "",
+        },
+      },
     };
   });
 
   const requestsClean = await Promise.all(requestsWithCoordsPromises);
   return res.send({
     type: "FeatureCollection",
-    features: requestsClean.filter(request => !!request)
+    features: requestsClean.filter((request) => !!request),
   });
 };

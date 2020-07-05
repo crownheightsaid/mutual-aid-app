@@ -15,20 +15,20 @@ import QuadrantMap from "../components/QuadrantMap";
 import SaveNeighborhoodDataInput from "../components/SaveNeighborhoodDataInput";
 import sharedStylesFn from "../style/sharedStyles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
   mapRoot: {
-    flex: 1
+    flex: 1,
   },
   rootMinimalView: {
-    flexDirection: "column"
+    flexDirection: "column",
   },
   formRoot: {
-    flex: 1
+    flex: 1,
   },
   saveNeibDataInput: {
-    marginTop: theme.spacing(4)
-  }
+    marginTop: theme.spacing(4),
+  },
 }));
 
 export default function NeighborhoodFinder() {
@@ -38,7 +38,7 @@ export default function NeighborhoodFinder() {
   const [{ data, loading, error }, submit] = useAxios(
     {
       url: `/api/geo/address-metadata`,
-      method: "post"
+      method: "post",
     },
     { manual: true } // Don't send on render
   );
@@ -47,12 +47,12 @@ export default function NeighborhoodFinder() {
   const minimalView = minimal_view === "true";
   /* eslint-enable camelcase */
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     submit({
       data: {
-        address: formAddress
-      }
+        address: formAddress,
+      },
     });
   };
 
@@ -64,7 +64,7 @@ export default function NeighborhoodFinder() {
     const resourceLinks = [str("webapp:zoneFinder.email.resourceUrl")];
     let bodyString = str("webapp:zoneFinder.email.body");
 
-    resourceLinks.forEach(resourceLink => {
+    resourceLinks.forEach((resourceLink) => {
       bodyString += `${resourceLink}\n\n`;
     });
 
@@ -104,7 +104,7 @@ export default function NeighborhoodFinder() {
             <Typography className={classes.text} variant="h4">
               {str("webapp:zoneFinder.title", {
                 defaultValue: "{{neighborhood}} Neighborhood Finder",
-                neighborhood: str("common:neighborhood")
+                neighborhood: str("common:neighborhood"),
               })}
             </Typography>
             <Typography className={classes.text} variant="body1">
@@ -136,7 +136,7 @@ export default function NeighborhoodFinder() {
             margin="normal"
             variant="outlined"
             required
-            onChange={e => setAddress(e.target.value)}
+            onChange={(e) => setAddress(e.target.value)}
             className={classes.field}
             InputProps={{
               endAdornment: (
@@ -145,7 +145,7 @@ export default function NeighborhoodFinder() {
                     {str("common:submit")}
                   </Button>
                 </InputAdornment>
-              )
+              ),
             }}
           />
         </form>
@@ -181,7 +181,7 @@ export default function NeighborhoodFinder() {
               id="zone"
               label={str("webapp:zoneFinder.label.zone", {
                 defaultValue: "{{neighborhood}} Volunteer Zone",
-                neighborhood: str("common:neighborhood")
+                neighborhood: str("common:neighborhood"),
               })}
               value={data.quadrant || str("common:notAvailable")}
               variant="outlined"

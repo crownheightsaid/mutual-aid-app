@@ -2,7 +2,7 @@ const { createMessageAdapter } = require("@slack/interactive-messages");
 const {
   atdViewSubmission,
   atdViewSubmissionCallbackId,
-  atdViewOpen
+  atdViewOpen,
 } = require("../flows/assignToDelivery.js");
 
 const createDeliveryRequest = require("../flows/createDeliveryRequest");
@@ -25,7 +25,7 @@ const atdViewOpenEntryId = "assign-to-delivery";
 slackInteractions.action(
   {
     type: "message_action",
-    callbackId: atdViewOpenEntryId
+    callbackId: atdViewOpenEntryId,
   },
   atdViewOpen
 );

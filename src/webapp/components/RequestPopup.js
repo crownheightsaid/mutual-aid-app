@@ -8,19 +8,19 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   divider: {
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
   },
   closeIcon: {
     position: "absolute",
     right: 0,
-    top: 0
+    top: 0,
   },
   root: {
-    position: "relative"
-  }
+    position: "relative",
+  },
 }));
 
 const RequestPopup = ({ requests, closePopup }) => {
@@ -33,7 +33,7 @@ const RequestPopup = ({ requests, closePopup }) => {
       offset={{
         "bottom-left": [6, -19],
         bottom: [0, -19],
-        "bottom-right": [-6, -19]
+        "bottom-right": [-6, -19],
       }}
     >
       {requests.map(({ meta }, i) => (
@@ -53,7 +53,7 @@ const RequestPopup = ({ requests, closePopup }) => {
           {meta.slackPermalink ? (
             <Link href={meta.slackPermalink} target="_blank">
               {str("webapp:deliveryNeeded.popup.slackLink", {
-                defaultValue: `See details on Slack`
+                defaultValue: `See details on Slack`,
               })}
             </Link>
           ) : (
@@ -67,7 +67,7 @@ const RequestPopup = ({ requests, closePopup }) => {
 
           <Typography variant="body2">
             {str("webapp:deliveryNeeded.popup.requestCode", {
-              defaultValue: `Request code:`
+              defaultValue: `Request code:`,
             })}
             {meta.Code}
           </Typography>
