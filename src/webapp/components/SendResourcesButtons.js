@@ -11,11 +11,11 @@ import sharedStylesFn from "../style/sharedStyles";
 const { REACT_APP_TWILIO_FUNCTIONS_URL } = process.env;
 const { REACT_APP_TWILIO_PHONE_NUMBER } = process.env;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
   buttons: {
-    marginRight: 20
-  }
+    marginRight: 20,
+  },
 }));
 
 const SendResourcesButton = () => {
@@ -33,7 +33,7 @@ const SendResourcesButton = () => {
   const resourceLinks = [str("webapp:zoneFinder.email.resourceUrl")];
 
   let bodyString = str("webapp:zoneFinder.email.body");
-  resourceLinks.forEach(resourceLink => {
+  resourceLinks.forEach((resourceLink) => {
     bodyString += `${resourceLink}\n\n`;
   });
 
@@ -76,9 +76,7 @@ const SendResourcesButton = () => {
         >
           {str("webapp:zoneFinder.sendResources.smsButtonText")}
         </Button>
-      ) : (
-        undefined
-      )}
+      ) : undefined}
 
       <SendSmsDialog
         isOpen={showSmsDialog}

@@ -4,7 +4,7 @@ exports.handler = function sendSms(context, event, callback) {
     {
       to: event.to,
       from: event.from,
-      body: event.message
+      body: event.message,
     },
     function loggingCallback() {
       console.log("1 message sent");
@@ -12,7 +12,7 @@ exports.handler = function sendSms(context, event, callback) {
 
       // We call this function from web, so allow cross-origin
       const headers = {
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "*",
       };
 
       // Set headers in response
