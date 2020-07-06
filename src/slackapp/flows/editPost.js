@@ -2,13 +2,14 @@ const {
   errorView,
   successView,
   successResponse,
-  errorResponse
+  errorResponse,
 } = require("~slack/views");
 const slackapi = require("~slack/webApi");
 const guard = require("~slack/guard");
 const { ADMIN_CHANNEL, INTAKE_CHANNEL } = require("~slack/constants");
 const { findChannelByName, listMembers } = require("~slack/channels");
 const { str } = require("~strings/i18nextWrappers");
+const { unlinkSlackMessage } = require("~airtable/tables/requests");
 
 editPost.id = "edit_post";
 saveEdits.id = "save_post_edit";
@@ -25,7 +26,7 @@ module.exports.register = function register(slackInteractions) {
   slackInteractions.action(
     {
       type: "message_action",
-      callbackId: editPost.id
+      callbackId: editPost.id,
     },
     guard(editPost)
   );
@@ -33,7 +34,7 @@ module.exports.register = function register(slackInteractions) {
   // Handle button that deletes post
   slackInteractions.action(
     {
-      actionId: deletePost.id
+      actionId: deletePost.id,
     },
     guard(deletePost)
   );
@@ -70,7 +71,7 @@ async function editPost(payload) {
   const view = await makeEditPostView(payload, message, channel);
   return slackapi.views.open({
     trigger_id: payload.trigger_id,
-    view
+    view,
   });
 }
 
@@ -82,7 +83,7 @@ async function saveEdits(payload) {
     await slackapi.chat.update({
       channel: meta.message_channel,
       ts: meta.message_ts,
-      text: content
+      text: content,
     });
   } catch (e) {
     console.error("Error updating message %O %O", meta, e);
@@ -98,7 +99,7 @@ async function deletePost(payload) {
   try {
     await slackapi.chat.delete({
       channel: meta.message_channel,
-      ts: meta.message_ts
+      ts: meta.message_ts,
     });
   } catch (e) {
     console.error("Error deleting message %O %O", meta, e);
@@ -106,12 +107,25 @@ async function deletePost(payload) {
       trigger_id: payload.trigger_id,
       view: errorView(
         `${str("slackapp:editBotPost.modal.error.deletion")}: ${e}`
-      )
+      ),
     });
   }
+
+  try {
+    await unlinkSlackMessage(meta.message_ts, meta.message_channel);
+  } catch (e) {
+    console.error("Error unlinking message %0 %0 in Airtable", meta, e);
+    return slackapi.views.push({
+      trigger_id: payload.trigger_id,
+      view: errorView(
+        `${str("slackapp:editBotPost.modal.error.deletion")}: ${e}`
+      ),
+    });
+  }
+
   return slackapi.views.update({
     view_id: payload.view.id,
-    view: successView(str("slackapp:editBotPost.modal.success.deletion"))
+    view: successView(str("slackapp:editBotPost.modal.success.deletion")),
   });
 }
 
@@ -135,7 +149,7 @@ async function userCanEditMessage(user, message) {
 async function makeEditPostView(payload, message, channel) {
   const meta = {
     message_channel: channel.id,
-    message_ts: message.ts
+    message_ts: message.ts,
   };
   const editPostBlocks = {
     type: "modal",
@@ -144,17 +158,17 @@ async function makeEditPostView(payload, message, channel) {
     title: {
       type: "plain_text",
       text: str("slackapp:editBotPost.modal.title", "Edit Post"),
-      emoji: true
+      emoji: true,
     },
     submit: {
       type: "plain_text",
       text: str("common:save"),
-      emoji: true
+      emoji: true,
     },
     close: {
       type: "plain_text",
       text: str("common:cancel"),
-      emoji: true
+      emoji: true,
     },
     blocks: [
       {
@@ -164,54 +178,54 @@ async function makeEditPostView(payload, message, channel) {
           type: "plain_text_input",
           action_id: "message",
           initial_value: message.text,
-          multiline: true
+          multiline: true,
         },
         label: {
           type: "plain_text",
           text: str("slackapp:editBotPost.modal.label.edit"),
-          emoji: true
-        }
+          emoji: true,
+        },
       },
       {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: str("slackapp:editBotPost.modal.label.deletion")
+          text: str("slackapp:editBotPost.modal.label.deletion"),
         },
         accessory: {
           type: "button",
           text: {
             type: "plain_text",
             text: str("slackapp:editBotPost.modal.button.deletion"),
-            emoji: true
+            emoji: true,
           },
           action_id: deletePost.id,
           style: "danger",
           confirm: {
             title: {
               type: "plain_text",
-              text: str("slackapp:editBotPost.modal.button.confirm")
+              text: str("slackapp:editBotPost.modal.button.confirm"),
             },
             text: {
               type: "mrkdwn",
               text: str(
                 "slackapp:editBotPost.modal.success.button.confirmMessage"
-              )
+              ),
             },
             confirm: {
               type: "plain_text",
-              text: str("slackapp:editBotPost.modal.button.deletion")
+              text: str("slackapp:editBotPost.modal.button.deletion"),
             },
             deny: {
               type: "plain_text",
-              text: str("common:cancel")
+              text: str("common:cancel"),
             },
-            style: "danger"
+            style: "danger",
           },
-          value: "delete_post"
-        }
-      }
-    ]
+          value: "delete_post",
+        },
+      },
+    ],
   };
   return editPostBlocks;
 }
@@ -220,6 +234,6 @@ function openError(triggerId, message) {
   console.log(`Got error: ${message}`);
   return slackapi.views.open({
     trigger_id: triggerId,
-    view: errorView(message)
+    view: errorView(message),
   });
 }

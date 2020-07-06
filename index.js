@@ -5,7 +5,6 @@ require("~strings/i18nextInit");
 const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
-const twilio = require("twilio");
 const basicAuth = require("express-basic-auth");
 const bodyParser = require("body-parser");
 const airtableWorker = require("./src/workers/airtable-sync/worker");
@@ -13,13 +12,13 @@ const airtablePaymentsWorker = require("./src/workers/airtable-sync/paymentWorke
 const { nycmaIntakeHandler } = require("./src/api/authed/intake/manyc.js");
 const { nycmaOuttakeHandler } = require("./src/api/authed/outtake/manyc.js");
 const {
-  addressHandler
+  addressHandler,
 } = require("./src/api/neighborhood-finder/get-address-meta.js");
 const {
-  neighborhoodFinderUpdateRequestHandler
+  neighborhoodFinderUpdateRequestHandler,
 } = require("./src/api/neighborhood-finder/update-request.js");
 const {
-  deliveryNeededRequestHandler
+  deliveryNeededRequestHandler,
 } = require("./src/api/delivery-needed/index.js");
 
 /* eslint-disable global-require  */
@@ -51,6 +50,9 @@ if (process.env.SLACK_BOT_TOKEN && process.env.SLACK_SIGNING_SECRET) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// ==================================================================
+// API Routes
+// ==================================================================
 
 if (process.env.GOOGLE_MAPS_API_KEY && process.env.GEONAME_CLIENT_ID) {
   app.post("/api/geo/address-metadata", addressHandler);
@@ -72,7 +74,7 @@ app.get("/api/delivery-needed/requests.json", deliveryNeededRequestHandler);
 if (process.env.BASIC_AUTH_USERS) {
   const allUsers = {};
   const userPass = process.env.BASIC_AUTH_USERS.split(";");
-  userPass.forEach(pair => {
+  userPass.forEach((pair) => {
     const [user, pass] = pair.split(":");
     allUsers[user] = pass;
   });
@@ -80,7 +82,7 @@ if (process.env.BASIC_AUTH_USERS) {
   app.use(
     "/api/authed/*",
     basicAuth({
-      users: allUsers
+      users: allUsers,
     })
   );
   app.post("/api/authed/intake/nycma", nycmaIntakeHandler);

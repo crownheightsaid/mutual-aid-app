@@ -4,7 +4,7 @@ const FilesystemResourceBackend = require("i18next-fs-backend");
 const HttpResourceBackend = require("i18next-http-backend");
 const {
   SUPPORTED_LANGS,
-  NAMESPACES_MAPPINGS: ns
+  NAMESPACES_MAPPINGS: ns,
 } = require("./i18nextConstants");
 
 /* eslint-disable global-require  */
@@ -19,7 +19,7 @@ const commonI18nOptions = {
   initImmediate: false, // Blocking init
   debug: !!process.env.DEBUG,
   returnEmptyString: false,
-  returnNull: false
+  returnNull: false,
 };
 if (process.env.REACT_APP_CONTEXT) {
   // TODO, react-language-detector
@@ -31,8 +31,8 @@ if (process.env.REACT_APP_CONTEXT) {
       ns: [ns.webapp, ns.common, ns.twilio],
       preload: ["en"],
       backend: {
-        loadPath: "/locales/{{lng}}/{{ns}}.json"
-      }
+        loadPath: "/locales/{{lng}}/{{ns}}.json",
+      },
     });
 } else {
   i18next.use(FilesystemResourceBackend).init({
@@ -40,7 +40,7 @@ if (process.env.REACT_APP_CONTEXT) {
     ns: [ns.common, ns.airtable, ns.twilio, ns.slackapp],
     preload: SUPPORTED_LANGS,
     backend: {
-      loadPath: join(__dirname, "./locales/{{lng}}/{{ns}}.json")
-    }
+      loadPath: join(__dirname, "./locales/{{lng}}/{{ns}}.json"),
+    },
   });
 }

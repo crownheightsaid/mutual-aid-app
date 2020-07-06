@@ -12,7 +12,7 @@ const fields = (exports.donorsFields = {
   paymentMethods_options: {
     venmo: "Venmo",
     paypal: "Paypal",
-    cashApp: "CashApp"
+    cashApp: "CashApp",
   },
   phone: "Phone",
   firstName: "FirstName",
@@ -22,6 +22,6 @@ const fields = (exports.donorsFields = {
   lastModified: "Last Modified",
   created: "Created",
   meta: "Meta",
-  lastProcessed: "Last Processed"
+  lastProcessed: "Last Processed",
 });
 exports.sensitiveFields = [fields.phone];

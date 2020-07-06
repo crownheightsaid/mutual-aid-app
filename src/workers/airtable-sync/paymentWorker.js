@@ -2,12 +2,12 @@ const ChangeDetector = require("airtable-change-detector");
 const {
   donorPaymentsTable,
   donorPaymentsFields,
-  donorPaymentsSensitiveFields
+  donorPaymentsSensitiveFields,
 } = require("~airtable/tables/donorPayments");
 const {
   paymentRequestsTable,
   paymentRequestsFields,
-  paymentRequestsSensitiveFields
+  paymentRequestsSensitiveFields,
 } = require("~airtable/tables/paymentRequests");
 const newExternalDonorPayment = require("./actions/payments/newExternalDonorPayment");
 const newPaymentRequest = require("./actions/payments/newPaymentRequest");
@@ -25,20 +25,20 @@ function startWorker(interval) {
   }
   const sharedDetectorOptions = {
     writeDelayMs: 100,
-    lastProcessedFieldName: "Last Processed"
+    lastProcessedFieldName: "Last Processed",
   };
 
   const paymentRequestChanges = new ChangeDetector(paymentRequestsTable, {
     senstiveFields: paymentRequestsSensitiveFields,
-    ...sharedDetectorOptions
+    ...sharedDetectorOptions,
   });
   paymentRequestChanges.pollWithInterval(
     "airtable-sync.payment-requests",
     interval + 3000, // Stagger polling to avoid rate limit
-    async recordsChanged => {
+    async (recordsChanged) => {
       console.info(`Found ${recordsChanged.length} changes in PaymentRequests`);
       const promises = [];
-      recordsChanged.forEach(record => {
+      recordsChanged.forEach((record) => {
         if (
           record.didChange(paymentRequestsFields.id) &&
           !record.getPrior(paymentRequestsFields.id)
@@ -55,15 +55,15 @@ function startWorker(interval) {
 
   const donorSignupChanges = new ChangeDetector(donorPaymentsTable, {
     senstiveFields: donorPaymentsSensitiveFields,
-    ...sharedDetectorOptions
+    ...sharedDetectorOptions,
   });
   donorSignupChanges.pollWithInterval(
     "airtable-sync.donor-payments",
     interval,
-    async recordsChanged => {
+    async (recordsChanged) => {
       console.info(`Found ${recordsChanged.length} changes in Donor Payments`);
       const promises = [];
-      recordsChanged.forEach(record => {
+      recordsChanged.forEach((record) => {
         const isExternal = !record.get(donorPaymentsFields.donorSlackId);
         if (isExternal) {
           // this logic is needed because the donorPayment isn't created at once
