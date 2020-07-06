@@ -7,7 +7,7 @@ exports.handler = function firstSms(context, event, callback) {
       body:
         "You have reached Crown Heights Mutual Aid. We are a network of neighbors helping neighbors. We are volunteers who give our time, pool our resources, and stand in solidarity with our neighbors in need.\n\nBetween June 21st and July 19th 2020 we will not be able to take new calls. We are using this time to call back the thousands of neighbors who called us before June 21st.\n\nIf you called us before June 21st, your call is recorded. We are prioritizing our Crown Heights neighbors at this time, but will do our best to call everyone back. We are planning to re-open our phone line on July 19th 2020."
     })
-    .then(function seecondSms() {
+    .then(function secondSms() {
       twilioClient.messages.create(
         {
           to: event.From,
