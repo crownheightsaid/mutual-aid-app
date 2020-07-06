@@ -9,7 +9,7 @@ const {
   paymentRequestsFields,
   paymentRequestsTable,
   findPaymentRequestInSlack,
-  deletePaymentRequest
+  deletePaymentRequest,
 } = require("~airtable/tables/paymentRequests");
 const {
   fields: requestFields,

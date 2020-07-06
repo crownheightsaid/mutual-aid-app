@@ -2,21 +2,24 @@ const mockDestroyFn = jest.fn();
 
 jest.mock("~airtable/bases", () => ({
   paymentsAirbase: () => ({
-    destroy: mockDestroyFn
-  })
-}))
+    destroy: mockDestroyFn,
+  }),
+}));
 
-const { deletePaymentRequest, paymentRequestsTableName } = require('./paymentRequests');
 const { Record } = require("airtable");
+const {
+  deletePaymentRequest,
+  paymentRequestsTableName,
+} = require("./paymentRequests");
 
-describe('deletePaymentRequest', () => {
+describe("deletePaymentRequest", () => {
   let paymentRequestRecord;
 
   beforeEach(() => {
-    paymentRequestRecord = new Record(paymentRequestsTableName, 'some-id');
-  })
+    paymentRequestRecord = new Record(paymentRequestsTableName, "some-id");
+  });
 
-  test('sends a delete request to the Payment Request table', async () => {
+  test("sends a delete request to the Payment Request table", async () => {
     await deletePaymentRequest(paymentRequestRecord);
 
     expect(mockDestroyFn).toHaveBeenCalledWith(paymentRequestRecord.id);
