@@ -1,7 +1,8 @@
 const { merge } = require("lodash");
+const _ = require("lodash");
 const { airbase } = require("~airtable/bases");
 
-const requestNotInSlack = r => {
+const requestNotInSlack = (r) => {
   const meta = r.get(fields.meta);
   let parsed = {};
   try {
@@ -13,12 +14,12 @@ const requestNotInSlack = r => {
 };
 
 // Delivery cluster requests are handled separately
-const notForDrivingCluster = r => {
+const notForDrivingCluster = (r) => {
   const forDrivingCluster = r.get(fields.forDrivingClusters);
   return !forDrivingCluster;
 };
 
-exports.deleteRequest = async recordId => {
+exports.deleteRequest = async (recordId) => {
   console.log("Deleting record");
   try {
     const records = await requestsTable.destroy([recordId]);
@@ -29,7 +30,7 @@ exports.deleteRequest = async recordId => {
   }
 };
 
-exports.createRequest = async request => {
+exports.createRequest = async (request) => {
   // TODO: add asserts for non-|| fields below
   console.log("creating record");
   try {
@@ -41,7 +42,7 @@ exports.createRequest = async request => {
       [fields.crossStreetFirst]: request.crossStreets || "",
       [fields.email]: request.email || "",
       [fields.timeSensitivity]: request.urgency || "",
-      [fields.status]: request.status || fields.status_options.dispatchNeeded
+      [fields.status]: request.status || fields.status_options.dispatchNeeded,
     });
     return [record, null];
   } catch (e) {
@@ -50,11 +51,11 @@ exports.createRequest = async request => {
   }
 };
 
-exports.findRequestByExternalId = async externalId => {
+exports.findRequestByExternalId = async (externalId) => {
   try {
     const record = await requestsTable
       .select({
-        filterByFormula: `({${fields.externalId}} = '${externalId}')`
+        filterByFormula: `({${fields.externalId}} = '${externalId}')`,
       })
       .firstPage();
     return record
@@ -70,22 +71,24 @@ exports.findRequestByExternalId = async externalId => {
 exports.findDeliveryNeededRequests = async () => {
   const requestOpenStates = [
     fields.status_options.dispatchStarted,
-    fields.status_options.deliveryNeeded
+    fields.status_options.deliveryNeeded,
   ];
   const statusConstraints = requestOpenStates.map(
-    s => `{${fields.status}} = '${s}'`
+    (s) => `{${fields.status}} = '${s}'`
   );
   const formula = `OR(${statusConstraints.join(", ")})`;
   try {
     const requests = await requestsTable
       .select({
-        filterByFormula: formula
+        filterByFormula: formula,
       })
       .all();
 
     return [
-      requests.filter(r => !requestNotInSlack(r)).filter(notForDrivingCluster),
-      null
+      requests
+        .filter((r) => !requestNotInSlack(r))
+        .filter(notForDrivingCluster),
+      null,
     ];
   } catch (e) {
     return [[], `Error while looking up open requests: ${e}`];
@@ -96,36 +99,36 @@ exports.findDeliveryNeededRequests = async () => {
 exports.findOpenRequestsForSlack = async () => {
   const requestOpenStates = [
     fields.status_options.dispatchStarted,
-    fields.status_options.deliveryNeeded
+    fields.status_options.deliveryNeeded,
   ];
   const statusConstraints = requestOpenStates.map(
-    s => `{${fields.status}} = '${s}'`
+    (s) => `{${fields.status}} = '${s}'`
   );
   const formula = `OR(${statusConstraints.join(", ")})`;
   try {
     const requests = await requestsTable
       .select({
-        filterByFormula: formula
+        filterByFormula: formula,
       })
       .all();
 
     return [
       requests.filter(requestNotInSlack).filter(notForDrivingCluster),
-      null
+      null,
     ];
   } catch (e) {
     return [[], `Error while looking up open requests: ${e}`];
   }
 };
 
-exports.findRequestByCode = async code => {
+exports.findRequestByCode = async (code) => {
   if (code && code.length < 4) {
     return [null, `Request code must be at least 4 characters.`];
   }
   try {
     const records = await requestsTable
       .select({
-        filterByFormula: `(FIND('${code}', {${fields.code}}) > 0)`
+        filterByFormula: `(FIND('${code}', {${fields.code}}) > 0)`,
       })
       .firstPage();
     if (records.length === 0) {
@@ -138,13 +141,13 @@ exports.findRequestByCode = async code => {
   }
 };
 
-exports.findRequestByPhone = async phone => {
+exports.findRequestByPhone = async (phone) => {
   try {
     const records = await requestsTable
       .select({
         maxRecords: 1,
         fields: [fields.phone],
-        filterByFormula: `({${fields.phone}} = '${phone}')`
+        filterByFormula: `({${fields.phone}} = '${phone}')`,
       })
       .firstPage();
     if (records && records.length === 0) {
@@ -169,7 +172,7 @@ exports.updateRequestByCode = async (code, update) => {
   try {
     const records = await requestsTable
       .select({
-        filterByFormula: `(FIND('${code}', {${fields.code}}) > 0)`
+        filterByFormula: `(FIND('${code}', {${fields.code}}) > 0)`,
       })
       .firstPage();
     if (records.length === 0) {
@@ -185,7 +188,7 @@ exports.updateRequestByCode = async (code, update) => {
     const record = records[0];
     const airUpdate = {
       id: record.id,
-      fields: update
+      fields: update,
     };
     const updatedRecords = await requestsTable.update([airUpdate]);
     return [updatedRecords[0], null];
@@ -193,6 +196,39 @@ exports.updateRequestByCode = async (code, update) => {
     return [null, `Error while processing update: ${e}`];
   }
 };
+
+exports.unlinkSlackMessage = async (slackTs, slackChannel) => {
+  const tsFilter = `"slack_ts":"${slackTs}"`;
+  const channelFilter = `"slack_channel":"${slackChannel}"`;
+  const filter = `AND(SEARCH('${tsFilter}', {${fields.meta}}), SEARCH('${channelFilter}', {${fields.meta}}))`;
+  await requestsTable
+    .select({
+      filterByFormula: filter,
+    })
+    .eachPage((records, fetchNextPage) => {
+      records.forEach(async (record) => {
+        const meta = removeSlackMeta(record.get(fields.meta));
+
+        try {
+          await requestsTable.update([
+            { id: record.id, fields: { [fields.meta]: meta } },
+          ]);
+        } catch (e) {
+          console.error("Error updating Request %O %O", record.id, e);
+        }
+      });
+
+      fetchNextPage();
+    });
+};
+
+const removeSlackMeta = (meta) =>
+  _.chain(meta)
+    .thru(JSON.parse)
+    .omit("slack_ts")
+    .omit("slack_channel")
+    .thru(JSON.stringify)
+    .value();
 
 // ==================================================================
 // Schema
@@ -208,7 +244,7 @@ const fields = (exports.fields = {
     text: "text",
     voice: "voice",
     manyc: "manyc",
-    email: "email"
+    email: "email",
   },
   message: "Message",
   crossStreetFirst: "Cross Street #1",
@@ -220,7 +256,7 @@ const fields = (exports.fields = {
     nw: "NW",
     se: "SE",
     sw: "SW",
-    notCrownHeights: "Other - not Crown Heights"
+    notCrownHeights: "Other - not Crown Heights",
   },
   languages: "Languages",
   languages_options: {
@@ -239,7 +275,7 @@ const fields = (exports.fields = {
     polish: "Polish",
     asl: "ASL",
     english: "English",
-    eglish: "eglish"
+    eglish: "eglish",
   },
   supportType: "What type(s) of support are you seeking?",
   supportType_options: {
@@ -252,12 +288,12 @@ const fields = (exports.fields = {
       "Translation and interpretation into a language other than English",
     socialServices:
       "Social Services guidance (filing for medicare, unemployment, etc)",
-    other: "Other (please describe below)"
+    other: "Other (please describe below)",
   },
   financialSupportNeeded: "Financial Support Needed?",
   financialSupportNeeded_options: {
     yes: "yes - need donation",
-    no: "no donation need"
+    no: "no donation need",
   },
   intakeVolunteer: "Intake volunteer",
   deliveryVolunteer: "Delivery volunteer",
@@ -279,7 +315,7 @@ const fields = (exports.fields = {
     otherFollowup: "Other Followup",
     sentToAnotherGroup: "Sent to Another Group",
     needsPosting: "Needs Posting!",
-    brownsville: "Brownsville/East NY"
+    brownsville: "Brownsville/East NY",
   },
   externalId: "External Id",
   deliverySlackId: "Delivery slackId",
@@ -290,11 +326,11 @@ const fields = (exports.fields = {
   triggerBackfill: "Trigger Backfill",
   neighborhood: "Neighborhood MA-NYC",
   householdSize: "Household Size",
-  forDrivingClusters: "For Driving Clusters"
+  forDrivingClusters: "For Driving Clusters",
 });
 exports.SENSITIVE_FIELDS = [
   fields.phone,
   fields.email,
   fields.message,
-  fields.intakeNotes
+  fields.intakeNotes,
 ];

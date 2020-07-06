@@ -1,14 +1,14 @@
 const {
   updateRequestByCode,
   findRequestByCode,
-  fields: requestFields
+  fields: requestFields,
 } = require("~airtable/tables/requests");
 
 exports.neighborhoodFinderUpdateRequestHandler = async (req, res) => {
   const { requestCode, neighborhoodData } = req.body;
   if (!requestCode || !neighborhoodData) {
     return res.status(400).send({
-      message: "Expected `requestCode` and `neighborhoodData` in payload"
+      message: "Expected `requestCode` and `neighborhoodData` in payload",
     });
   }
 
@@ -23,7 +23,7 @@ exports.neighborhoodFinderUpdateRequestHandler = async (req, res) => {
   const {
     /* eslint-disable-next-line */
     intersection: { street_1, street_2 },
-    quadrant
+    quadrant,
   } = neighborhoodData;
 
   const [_updated, updateErr] = await updateRequestByCode(requestCode, {
@@ -33,13 +33,13 @@ exports.neighborhoodFinderUpdateRequestHandler = async (req, res) => {
       requestFields.neighborhoodArea_options
     ).includes(quadrant)
       ? quadrant
-      : requestFields.neighborhoodArea_options.notCrownHeights
+      : requestFields.neighborhoodArea_options.notCrownHeights,
   });
 
   if (updateErr) {
     return res.send({
       success: false,
-      error: `Failed to update record: ${updateErr}`
+      error: `Failed to update record: ${updateErr}`,
     });
   }
 

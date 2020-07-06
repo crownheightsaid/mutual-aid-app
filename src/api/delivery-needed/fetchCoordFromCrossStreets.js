@@ -7,11 +7,11 @@ let cache;
 // cache lookups for 1 day (miliseconds)
 const CACHE_AGE = 1 * 24 * 60 * 60 * 1000;
 
-const makeCacheKey = address => {
+const makeCacheKey = (address) => {
   return `geoCache-${address}`;
 };
 
-exports.fetchCoordFromCrossStreets = async address => {
+exports.fetchCoordFromCrossStreets = async (address) => {
   googleGeoClient = googleGeoClient || new Client({});
   cache = cache || makeCache({ maxAge: CACHE_AGE });
 
@@ -29,11 +29,11 @@ exports.fetchCoordFromCrossStreets = async address => {
         region: "us",
         components: {
           locality: "New York City",
-          sublocality: "Brooklyn"
+          sublocality: "Brooklyn",
         },
-        key: process.env.GOOGLE_MAPS_API_KEY
+        key: process.env.GOOGLE_MAPS_API_KEY,
       },
-      timeout: 1000 // milliseconds
+      timeout: 1000, // milliseconds
     });
 
     cache.set(cacheKey, geoResult);
@@ -41,8 +41,12 @@ exports.fetchCoordFromCrossStreets = async address => {
 
   // use first result
   const [first, ..._rest] = geoResult.data.results;
+  if (!first) {
+    return null;
+  }
+
   const {
-    geometry: { location }
+    geometry: { location },
   } = first;
   return location;
 };

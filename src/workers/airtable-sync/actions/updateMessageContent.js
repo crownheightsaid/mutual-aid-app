@@ -11,7 +11,7 @@ const mappings = {
   [requestFields.status_options.requestComplete]: str(
     "slackapp:requestBotPost.post.statusPrefix.completed",
     ":heavy_check_mark:  REQUEST COMPLETED\n"
-  )
+  ),
 };
 
 /**
@@ -54,7 +54,7 @@ module.exports = async function updateMessageContent(record) {
   ) {
     newContent += str("slackapp:requestBotPost.post.deliveryCongrats", {
       defaultValue: `:tada: Shout out to {{- deliveryVolunteer}} for volunteering to help! :tada:\n`,
-      deliveryVolunteer: `<@${deliveryVolunteer}>`
+      deliveryVolunteer: `<@${deliveryVolunteer}>`,
     });
   }
 
@@ -63,10 +63,15 @@ module.exports = async function updateMessageContent(record) {
       requestFields.status
     )} => ${statusBadge}`
   );
+
+  if (deliveryAssigned(record)) {
+    newContent = removeMapLink(newContent);
+  }
+
   await slackapi.chat.update({
     channel: meta["slack_channel"],
     ts: meta["slack_ts"],
-    text: newContent
+    text: newContent,
   });
 };
 
@@ -79,4 +84,34 @@ function getStatusBadge(record) {
     "slackapp:requestBotPost.post.statusPrefix.default",
     ":red_circle:"
   );
+}
+
+function deliveryAssigned(request) {
+  return (
+    request.get(requestFields.status) ===
+    requestFields.status_options.deliveryAssigned
+  );
+}
+
+function removeMapLink(messageText) {
+  const streetsLineHeading = `*${str(
+    "slackapp:requestBotPost.post.fields.streets.name",
+    "Cross Streets"
+  )}*`;
+  const linkRegex = /<http.*\|(.+)>/;
+
+  return messageText
+    .split("\n")
+    .map((line) => {
+      if (line.startsWith(streetsLineHeading)) {
+        if (line.match(linkRegex)) {
+          return line.replace(linkRegex, "$1");
+        }
+        return null;
+      }
+
+      return line;
+    })
+    .filter((line) => line !== null)
+    .join("\n");
 }

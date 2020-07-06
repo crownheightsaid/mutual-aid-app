@@ -27,11 +27,11 @@ exports.VOLUNTEER_INTERESTS_TO_SLACK_CHANNELS = {
   [waysToHelp.artsDesignFilm]: [exports.ARTS_CHANNEL],
   [waysToHelp.bikeDelivery]: [
     exports.CARS_AND_BIKES_CHANNEL,
-    exports.DELIVERY_CHANNEL
+    exports.DELIVERY_CHANNEL,
   ],
   [waysToHelp.carDelivery]: [
     exports.CARS_AND_BIKES_CHANNEL,
-    exports.DELIVERY_CHANNEL
+    exports.DELIVERY_CHANNEL,
   ],
   [waysToHelp.onFootDelivery]: [exports.DELIVERY_CHANNEL],
   [waysToHelp.childCare]: [],
@@ -39,7 +39,7 @@ exports.VOLUNTEER_INTERESTS_TO_SLACK_CHANNELS = {
   [waysToHelp.phoningNeighborsInNeed]: [],
   [waysToHelp.techAdminSupport]: [exports.TECH_CHANNEL],
   [waysToHelp.flyering]: [exports.FLYERS_CHANNEL],
-  [waysToHelp.iHaveAPrinter]: [exports.FLYERS_CHANNEL]
+  [waysToHelp.iHaveAPrinter]: [exports.FLYERS_CHANNEL],
 };
 
 exports.VOLUNTEER_INTERESTS_TO_USERGROUPS = {
@@ -52,5 +52,5 @@ exports.VOLUNTEER_INTERESTS_TO_USERGROUPS = {
   [waysToHelp.phoningNeighborsInNeed]: [],
   [waysToHelp.techAdminSupport]: [],
   [waysToHelp.flyering]: [],
-  [waysToHelp.iHaveAPrinter]: []
+  [waysToHelp.iHaveAPrinter]: [],
 };
