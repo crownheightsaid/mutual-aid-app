@@ -18,7 +18,7 @@ module.exports.allChannels = async () => {
     /* eslint-disable-next-line no-await-in-loop */
     const response = await slackapi.conversations.list({
       types: "public_channel,private_channel",
-      cursor
+      cursor,
     });
     cursor = response.response_metadata.next_cursor;
     channels.push(...response.channels);
@@ -30,19 +30,19 @@ module.exports.allChannels = async () => {
 /**
  * Finds a channel by its #name. Returns undefined if no element matches
  */
-module.exports.findChannelByName = async name => {
+module.exports.findChannelByName = async (name) => {
   const bareName = name.replace(/^#/, "");
-  return find(await this.allChannels(), c => c.name === bareName);
+  return find(await this.allChannels(), (c) => c.name === bareName);
 };
 
 /**
  * Adds the current bot to the given channel
  */
-module.exports.addBotToChannel = async channelId => {
+module.exports.addBotToChannel = async (channelId) => {
   try {
     const result = await slackapi.conversations.join({
       token: process.env.SLACK_BOT_TOKEN,
-      channel: channelId
+      channel: channelId,
     });
     if (!result.ok) {
       throw new Error(result.error);
@@ -59,13 +59,13 @@ module.exports.isUserInChannel = async (userId, channelName) => {
       token: process.env.SLACK_BOT_TOKEN,
       user: userId,
       types: "public_channel,private_channel",
-      exclude_archived: true
+      exclude_archived: true,
     });
     return [
-      !!convoResult.channels.filter(channel =>
+      !!convoResult.channels.filter((channel) =>
         channel.name.includes(channelName.replace("#", ""))
       ).length,
-      null
+      null,
     ];
   } catch (e) {
     return [null, e];
@@ -75,7 +75,7 @@ module.exports.isUserInChannel = async (userId, channelName) => {
 /**
  * Returns the user ids of the members of the given channel
  */
-module.exports.listMembers = async channelId => {
+module.exports.listMembers = async (channelId) => {
   let cursor = null;
   const members = [];
   try {
@@ -83,7 +83,7 @@ module.exports.listMembers = async channelId => {
       /* eslint-disable-next-line no-await-in-loop */
       const response = await slackapi.conversations.members({
         channel: channelId,
-        cursor
+        cursor,
       });
       cursor = response.response_metadata.next_cursor;
       members.push(...response.members);
@@ -99,7 +99,7 @@ module.exports.getExistingMessage = async (ts, channel) => {
     channel,
     latest: ts,
     limit: 1,
-    inclusive: true
+    inclusive: true,
   });
   if (!message.messages[0]) {
     return null;
