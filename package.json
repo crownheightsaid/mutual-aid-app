@@ -103,15 +103,10 @@
     "eslint-plugin-react-hooks": "^2.3.0",
     "i18next-scanner": "2.11.0",
     "ngrok": "3.2.7",
-<<<<<<< HEAD
-    "prettier": "^1.18.2",
-    "release-it": "^13.6.2",
     "twilio-run": "^2.7.0",
-    "typescript": "^3.9.6"
-=======
+    "typescript": "^3.9.6",
     "prettier": "^2.0.5",
     "release-it": "^13.6.4"
->>>>>>> upstream/master
   },
   "private": true,
   "browserslist": {
