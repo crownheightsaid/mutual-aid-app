@@ -7,21 +7,19 @@ import React, { useState, useEffect } from "react";
 import { Layer, MapContext } from "react-mapbox-gl";
 import RequestPopup from "./RequestPopup";
 
-const handleClusterOnClick = (map, e) => {
+const handleClusterOnClick = (map, e, layerId, sourceId) => {
   const features = map.queryRenderedFeatures(e.point, {
-    layers: ["clusters"]
+    layers: [layerId]
   });
   const clusterId = features[0].properties.cluster_id;
-  map
-    .getSource("clusterSource")
-    .getClusterExpansionZoom(clusterId, (err, zoom) => {
-      if (err) return;
+  map.getSource(sourceId).getClusterExpansionZoom(clusterId, (err, zoom) => {
+    if (err) return;
 
-      map.easeTo({
-        center: features[0].geometry.coordinates,
-        zoom
-      });
+    map.easeTo({
+      center: features[0].geometry.coordinates,
+      zoom
     });
+  });
 };
 
 const makePopupData = (features, lngLat) => {
@@ -36,7 +34,7 @@ const makePopupData = (features, lngLat) => {
   });
 };
 
-const ClusterMapLayers = ({ geoJsonData, paramRequest }) => {
+const ClusterMapLayers = ({ geoJsonData, paramRequest, sourceId, color }) => {
   const [popup, setPopup] = useState();
 
   const setCursorPointer = e => e.target.getCanvas().style.cursor = 'pointer';
@@ -45,29 +43,33 @@ const ClusterMapLayers = ({ geoJsonData, paramRequest }) => {
   // display popup if request code is present in URL search param
   useEffect(() => {
     if (paramRequest) {
-      const { geometry: { coordinates }} = paramRequest;
+      const {
+        geometry: { coordinates }
+      } = paramRequest;
       setPopup(makePopupData([paramRequest], coordinates));
     }
   }, []);
+
+  const layerId = `${sourceId}-clusters`;
 
   return (
     <MapContext.Consumer>
       {map => (
         <>
           <Layer
-            sourceId="clusterSource"
+            sourceId={sourceId}
             type="circle"
-            id="clusters"
+            id={layerId}
             filter={["has", "point_count"]}
             paint={{
               "circle-color": [
                 "step",
                 ["get", "point_count"],
-                "orangered",
+                color,
                 5,
-                "#d03800",
+                color,
                 10,
-                "#a22b00"
+                color
               ],
               "circle-radius": [
                 "step",
@@ -79,15 +81,15 @@ const ClusterMapLayers = ({ geoJsonData, paramRequest }) => {
                 40
               ]
             }}
-            onClick={e => handleClusterOnClick(map, e)}
+            onClick={e => handleClusterOnClick(map, e, layerId, sourceId)}
             onMouseEnter={setCursorPointer}
             onMouseLeave={setCursorGrab}
           />
 
           <Layer
-            id="cluster-count"
+            id={`${sourceId}-cluster-count`}
             type="symbol"
-            sourceId="clusterSource"
+            sourceId={sourceId}
             filter={["has", "point_count"]}
             layout={{
               "text-field": "{point_count_abbreviated}",
@@ -100,15 +102,13 @@ const ClusterMapLayers = ({ geoJsonData, paramRequest }) => {
           />
 
           <Layer
-            id="unclustered-point"
+            id={`${sourceId}-unclustered-point`}
             type="circle"
-            sourceId="clusterSource"
+            sourceId={sourceId}
             filter={["!", ["has", "point_count"]]}
             paint={{
-              "circle-color": "orangered",
-              "circle-radius": 6,
-              "circle-stroke-width": 1,
-              "circle-stroke-color": "#e73e00"
+              "circle-color": color,
+              "circle-radius": 6
             }}
             onClick={e => {
               setPopup(makePopupData(e.features, e.lngLat));
