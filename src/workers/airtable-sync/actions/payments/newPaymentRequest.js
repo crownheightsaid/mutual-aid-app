@@ -9,6 +9,7 @@ const {
   paymentRequestsFields,
   paymentRequestsTable,
   findPaymentRequestInSlack,
+  deletePaymentRequest,
 } = require("~airtable/tables/paymentRequests");
 const {
   fields: requestFields,
@@ -200,6 +201,8 @@ const handleExistingPaymentRequest = async (
 
 const handleNoRequestFound = async (newRecord, code, reimbursementChannel) => {
   console.log(`Handling no request found for code: ${code}`);
+
+  deletePaymentRequest(newRecord);
 
   const slackMessage = newRecord.get(paymentRequestsFields.slackMessage);
   const firstName = newRecord.get(paymentRequestsFields.firstName);
