@@ -22,14 +22,14 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
   },
   root: {
-    position: "relative"
+    position: "relative",
   },
   chipRow: {
     "& > *": {
-      marginRight: theme.spacing(0.5)
+      marginRight: theme.spacing(0.5),
     },
-    marginTop: theme.spacing(2)
-  }
+    marginTop: theme.spacing(2),
+  },
 }));
 
 const RequestPopup = ({ requests, closePopup }) => {
@@ -74,7 +74,7 @@ const RequestPopup = ({ requests, closePopup }) => {
 
           <Typography variant="body2">
             {str("webapp:deliveryNeeded.popup.requestCode", {
-              defaultValue: `Request code:`
+              defaultValue: `Request code:`,
             })}
             {meta.Code}
           </Typography>

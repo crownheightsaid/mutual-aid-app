@@ -9,4 +9,4 @@ const getRequestParam = () => {
     }, "");
 };
 
-export { getRequestParam };
+export default getRequestParam;

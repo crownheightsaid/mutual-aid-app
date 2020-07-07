@@ -12,7 +12,7 @@ import BasicMap from "./BasicMap";
 import { QuadrantsLayers } from "./QuadrantMap";
 import ClusterMapLayers from "./ClusterMapLayers";
 import { RequestNotFoundAlert, NoRequestsAlert } from "./MapAlerts";
-import { getRequestParam } from "../helpers/request-params";
+import getRequestParam from "../helpers/getRequestParam";
 
 const makeBounds = (features) => {
   const lnglats = features.map((f) => {
@@ -30,7 +30,7 @@ const makeBounds = (features) => {
 
 const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
   const requestCode = getRequestParam();
-  const [showDrivingClusters, setShowDrivingClusters] = useState(true);
+  const [showDrivingClusters, setShowDrivingClusters] = useState(false);
 
   let paramRequest;
   const { requests, drivingClusterRequests } = geoJsonData;
@@ -64,12 +64,12 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
       {noRequestsFound && <NoRequestsAlert />}
 
       <FormControlLabel
-        control={(
+        control={
           <Checkbox
             checked={showDrivingClusters}
             onClick={() => setShowDrivingClusters(!showDrivingClusters)}
           />
-        )}
+        }
         label="Show driving clusters"
       />
       <BasicMap

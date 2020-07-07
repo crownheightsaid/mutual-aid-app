@@ -84,7 +84,7 @@ exports.findDeliveryNeededRequests = async () => {
       })
       .all();
 
-    return [requests.filter(r => !requestNotInSlack(r)), null];
+    return [requests.filter((r) => !requestNotInSlack(r)), null];
   } catch (e) {
     return [[], `Error while looking up open requests: ${e}`];
   }
