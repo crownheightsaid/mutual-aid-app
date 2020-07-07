@@ -8,7 +8,8 @@
   "save": "Save",
   "links": {
     "reimbursementForm": "https://airtable.com/shrnf6M0YLn8IwJ71",
-    "deliveryGuide": "https://docs.google.com/document/d/1gLQsC3QUylavyzEYXWa7MVuk-H0DOnVtQtFm2fBXDQg/preview"
+    "deliveryGuide": "https://docs.google.com/document/d/1gLQsC3QUylavyzEYXWa7MVuk-H0DOnVtQtFm2fBXDQg/preview",
+    "groceryFlyers": "https://drive.google.com/drive/folders/1kxPgZbTW0LkpzhAwEzfuQgZ5l93Vw1EA"
   },
   "webapp": {
     "deliveryNeeded": {
