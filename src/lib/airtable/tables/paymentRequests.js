@@ -99,6 +99,14 @@ exports.findReimbursablePaymentRequests = async () => {
   }
 };
 
+exports.deletePaymentRequest = async (record) => {
+  try {
+    await paymentRequestsTable.destroy(record.id);
+  } catch (e) {
+    console.error(`Error while deleting payment request ${e}`);
+  }
+};
+
 // ==================================================================
 // Schema
 // ==================================================================
