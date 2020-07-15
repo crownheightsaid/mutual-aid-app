@@ -1,20 +1,20 @@
 import React from "react";
 import Chip from "@material-ui/core/Chip";
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   recent: {
-    backgroundColor: "green"
+    backgroundColor: "green",
   },
   moderate: {
-    backgroundColor: "orange"
+    backgroundColor: "orange",
   },
   urgent: {
-    backgroundColor: "red"
-  }
-})
+    backgroundColor: "red",
+  },
+});
 
-export const DaysOpenChip = props => {
+const DaysOpenChip = (props) => {
   const classes = useStyles();
 
   let chipColor;
@@ -33,8 +33,10 @@ export const DaysOpenChip = props => {
       color="primary"
       size="small"
       classes={{
-        colorPrimary: chipColor
+        colorPrimary: chipColor,
       }}
     />
   );
-}
+};
+
+export default DaysOpenChip;

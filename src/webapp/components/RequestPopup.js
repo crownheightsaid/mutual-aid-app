@@ -13,11 +13,12 @@ import Chip from "@material-ui/core/Chip";
 import Tooltip from "@material-ui/core/Tooltip";
 import { DaysOpenChip } from "./DaysOpenChip";
 import { differenceInDays, fromUnixTime } from "date-fns";
+import DaysOpenChip from "./DaysOpenChip";
 
-const daysSinceSlackMessage = slackTs => {
-  const datePosted = fromUnixTime(Number(slackTs))
-  return differenceInDays(new Date(), datePosted)
-}
+const daysSinceSlackMessage = (slackTs) => {
+  const datePosted = fromUnixTime(Number(slackTs));
+  return differenceInDays(new Date(), datePosted);
+};
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -110,7 +111,7 @@ const RequestPopup = ({ requests, closePopup }) => {
             )}
           </Box>
 
-          {meta.slackPermalink ?  (
+          {meta.slackPermalink ? (
             <DaysOpenChip daysOpen={daysSinceSlackMessage(meta.slackTs)} />
           ) : (
             <Typography variant="body2" color="error">
