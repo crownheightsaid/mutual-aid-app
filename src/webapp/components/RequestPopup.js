@@ -11,6 +11,13 @@ import GroupIcon from "@material-ui/icons/Group";
 import DriveEtaIcon from "@material-ui/icons/DriveEta";
 import Chip from "@material-ui/core/Chip";
 import Tooltip from "@material-ui/core/Tooltip";
+import { DaysOpenChip } from "./DaysOpenChip";
+import { differenceInDays, fromUnixTime } from "date-fns";
+
+const daysSinceSlackMessage = slackTs => {
+  const datePosted = fromUnixTime(Number(slackTs))
+  return differenceInDays(new Date(), datePosted)
+}
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -103,7 +110,9 @@ const RequestPopup = ({ requests, closePopup }) => {
             )}
           </Box>
 
-          {!meta.slackPermalink && (
+          {meta.slackPermalink ?  (
+            <DaysOpenChip daysOpen={daysSinceSlackMessage(meta.slackTs)} />
+          ) : (
             <Typography variant="body2" color="error">
               {str(
                 "webapp:deliveryNeeded.popup.cantFindSlack",

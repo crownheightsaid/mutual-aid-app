@@ -29,7 +29,7 @@ export const DaysOpenChip = props => {
 
   return (
     <Chip
-      label={`open for ${props.daysOpen} days`}
+      label={`open for ${props.daysOpen} day(s)`}
       color="primary"
       size="small"
       classes={{
