@@ -10,12 +10,13 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   container: {
-    maxHeight: 440
-  }
+    maxHeight: 440,
+  },
 });
 
 const DeliveryTable = ({ rows }) => {
   const classes = useStyles();
+  const sortedRows = rows.sort((rowA, rowB) => rowB.timestamp - rowA.timestamp);
 
   return (
     <TableContainer className={classes.container} component={Paper}>
@@ -27,10 +28,11 @@ const DeliveryTable = ({ rows }) => {
             <TableCell align="right">Cross Street #2</TableCell>
             <TableCell align="right">First Name</TableCell>
             <TableCell align="right">Slack Link</TableCell>
+            <TableCell align="right">Timestamp</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
+          {sortedRows.map((row) => (
             <TableRow key={row.Code}>
               <TableCell component="th" scope="row">
                 {row.Code}
@@ -47,6 +49,7 @@ const DeliveryTable = ({ rows }) => {
                   Slack
                 </a>
               </TableCell>
+              <TableCell align="right">{row.timestamp}</TableCell>
             </TableRow>
           ))}
         </TableBody>
