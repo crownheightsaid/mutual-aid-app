@@ -8,10 +8,6 @@ You can see the app at `localhost:3000`. Some pages will likely require the API.
 
 It's easy to run the app, but some features require additional configuration.
 
-### Mapbox API Key
+## Environment
 
-Set the env variable before running the command:
-
-`REACT_APP_MAPBOX_ACCESS_TOKEN={your-free-trial-mapbox-token} npm run local:react`
-
-If you don't want to get a trial token, someone in #tech might have one.
+Starting the app requires a few environment variables. Folks can reach out for access to those variables in #wg_tech.

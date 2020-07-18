@@ -29,7 +29,11 @@
       "crossStreetSecond": "Cross Street #2",
       "neighborhoodLabel": "Neighborhood",
       "neighborhoodError": "If both this and zone are unavailable, double check the map: https://bit.ly/2UrZPkA",
-      "zone": "{{neighborhood}} Volunteer Zone"
+      "zone": "{{neighborhood}} Volunteer Zone",
+      "firstName": "First Name",
+      "slackLink": "Slack Link",
+      "timestamp": "Timestamp",
+      "code": "Code"
     },
     "geoError": {
       "message": "Error loading. Please try again. If it fails again, let us know in"

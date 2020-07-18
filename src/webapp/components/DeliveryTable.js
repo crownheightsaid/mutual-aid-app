@@ -7,6 +7,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles({
   container: {
@@ -15,6 +16,7 @@ const useStyles = makeStyles({
 });
 
 const DeliveryTable = ({ rows }) => {
+  const { t: str } = useTranslation();
   const classes = useStyles();
 
   // sort happens in-place
@@ -35,12 +37,22 @@ const DeliveryTable = ({ rows }) => {
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Code</TableCell>
-            <TableCell align="right">Cross Street #1</TableCell>
-            <TableCell align="right">Cross Street #2</TableCell>
-            <TableCell align="right">First Name</TableCell>
-            <TableCell align="right">Slack Link</TableCell>
-            <TableCell align="right">Timestamp</TableCell>
+            <TableCell>{str("webapp:zoneFinder.label.code")}</TableCell>
+            <TableCell align="right">
+              {str("webapp:zoneFinder.label.crossStreetFirst")}
+            </TableCell>
+            <TableCell align="right">
+              {str("webapp:zoneFinder.label.crossStreetSecond")}
+            </TableCell>
+            <TableCell align="right">
+              {str("webapp:zoneFinder.label.firstName")}
+            </TableCell>
+            <TableCell align="right">
+              {str("webapp:zoneFinder.label.slackLink")}
+            </TableCell>
+            <TableCell align="right">
+              {str("webapp:zoneFinder.label.timestamp")}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
