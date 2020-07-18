@@ -16,7 +16,19 @@ const useStyles = makeStyles({
 
 const DeliveryTable = ({ rows }) => {
   const classes = useStyles();
-  const sortedRows = rows.sort((rowA, rowB) => rowB.timestamp - rowA.timestamp);
+
+  // sort happens in-place
+  rows.sort((rowA, rowB) => rowB.timestamp - rowA.timestamp);
+
+  // format data for presentation
+  const formattedRows = rows.map((row) => {
+    const timestamp = new Date(row.timestamp * 1000);
+
+    return {
+      ...row,
+      timestamp: `${timestamp.toLocaleDateString()}: ${timestamp.toLocaleTimeString()}`,
+    };
+  });
 
   return (
     <TableContainer className={classes.container} component={Paper}>
@@ -32,7 +44,7 @@ const DeliveryTable = ({ rows }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortedRows.map((row) => (
+          {formattedRows.map((row) => (
             <TableRow key={row.Code}>
               <TableCell component="th" scope="row">
                 {row.Code}
