@@ -1,5 +1,5 @@
 import { LngLat, LngLatBounds } from "mapbox-gl";
-import quadrantsGeoJSON from "../../lib/assets/crownheights.json";
+import quadrantsGeoJSON from "lib/assets/crownheights.json";
 import { findBounds } from "./mapbox-coordinates";
 
 // get all coords in quadrantsGeoJSON to find bounds

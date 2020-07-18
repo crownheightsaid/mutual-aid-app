@@ -4,7 +4,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import NeighborhoodFinder from "./pages/NeighborhoodFinder";
 import "./style/globals.css";
-import "../lib/strings/i18nextInit";
+import "lib/strings/i18nextInit";
 import DeliveryNeeded from "./pages/DeliveryNeeded";
 
 function App() {

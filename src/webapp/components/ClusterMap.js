@@ -3,7 +3,8 @@ import { Source } from "react-mapbox-gl";
 import { LngLat } from "mapbox-gl";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { findBounds } from "../helpers/mapbox-coordinates";
+import { findBounds } from "webapp/helpers/mapbox-coordinates";
+
 import {
   CROWN_HEIGHTS_BOUNDS,
   CROWN_HEIGHTS_CENTER_COORD,
