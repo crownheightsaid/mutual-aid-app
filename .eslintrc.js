@@ -25,6 +25,7 @@ module.exports = {
     "react/static-property-placement": ["error", "static public field"],
     "react/forbid-prop-types": ["off"],
     "react/jsx-filename-extension": ["off"],
+    "react/jsx-wrap-multilines": ["off"],
     "react/destructuring-assignment": ["off"],
     "react-hooks/rules-of-hooks": ["error"],
     "radix": ["off"] //fixed in ES5
