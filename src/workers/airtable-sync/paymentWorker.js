@@ -16,7 +16,7 @@ const updateReimbursementMessage = require("./actions/payments/updateReimburseme
 
 const defaultInterval = 10000;
 
-const errFunc = (error) => {
+const errFunc = async (error) => {
   sendErrorNotification(error);
 };
 

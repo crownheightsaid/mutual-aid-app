@@ -10,8 +10,8 @@ const notifyManyc = require("./actions/notifyManyc");
 
 const defaultInterval = 10000;
 
-const errFunc = (error) => {
-  sendErrorNotification(error);
+const errFunc = async (error) => {
+  await sendErrorNotification(error);
 };
 
 function startWorker(interval) {
