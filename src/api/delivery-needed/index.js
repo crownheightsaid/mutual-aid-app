@@ -3,6 +3,77 @@ const { fields } = require("~airtable/tables/requests");
 const { fetchCoordFromCrossStreets } = require("./fetchCoordFromCrossStreets");
 const slackapi = require("~slack/webApi");
 
+const {
+  code,
+  crossStreetFirst,
+  crossStreetSecond,
+  meta,
+  neighborhoodAreaSeeMap,
+  firstName,
+  forDrivingClusters,
+  householdSize,
+} = fields;
+
+const makeFeature = async (r) => {
+  let metaJSON = {};
+  let slackPermalink = {};
+  const location = await fetchCoordFromCrossStreets(
+    `
+      ${r.fields[crossStreetFirst]},
+      ${r.fields[crossStreetSecond]},
+      Brooklyn
+      `
+  );
+
+  if (!location) {
+    console.error(`[deliveryNeededRequestHandler] could not fetch address location 
+      for requestCode: ${r.fields[code]}`);
+    return null;
+  }
+
+  try {
+    metaJSON = JSON.parse(r.fields[meta]);
+  } catch {
+    console.error(
+      "[deliveryNeededRequestHandler] could not parse meta",
+      r.fields.meta
+    );
+  }
+
+  try {
+    const channel = metaJSON.slack_channel;
+    const timestamp = metaJSON.slack_ts;
+    slackPermalink = await slackapi.chat.getPermalink({
+      channel,
+      message_ts: timestamp,
+    });
+  } catch {
+    console.error(`[deliveryNeededRequestHandler] could not fetch slack URL
+        for requestCode: ${r.fields[code]} channel: ${metaJSON.slack_channel} and timestamp: ${metaJSON.slack_ts}`);
+  }
+
+  return {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [location.lng, location.lat],
+    },
+    properties: {
+      title: r.fields[code],
+      meta: {
+        [code]: r.fields[code],
+        [crossStreetFirst]: r.fields[crossStreetFirst],
+        [crossStreetSecond]: r.fields[crossStreetSecond],
+        [neighborhoodAreaSeeMap]: r.fields[neighborhoodAreaSeeMap],
+        [firstName]: r.fields[firstName],
+        [forDrivingClusters]: Boolean(r.fields[forDrivingClusters]),
+        [householdSize]: r.fields[householdSize],
+        slackPermalink: slackPermalink.ok ? slackPermalink.permalink : "",
+      },
+    },
+  };
+};
+
 exports.deliveryNeededRequestHandler = async (req, res) => {
   const [requestObj, requestErr] = await findDeliveryNeededRequests();
 
@@ -12,76 +83,25 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
       .send({ message: `Error fetching requests: ${requestErr}` });
   }
 
-  const {
-    code,
-    crossStreetFirst,
-    crossStreetSecond,
-    meta,
-    neighborhoodAreaSeeMap,
-    firstName
-  } = fields;
+  const regularRequestsPromises = requestObj
+    .filter((r) => !r.fields[forDrivingClusters])
+    .map(makeFeature);
 
-  const requestsWithCoordsPromises = requestObj.map(async r => {
-    let metaJSON = {};
-    let slackPermalink = {};
-    const location = await fetchCoordFromCrossStreets(
-      `
-      ${r.fields[crossStreetFirst]},
-      ${r.fields[crossStreetSecond]},
-      Brooklyn
-      `
-    );
+  const clusterRequestsPromises = requestObj
+    .filter((r) => Boolean(r.fields[forDrivingClusters]))
+    .map(makeFeature);
 
-    if (!location) {
-      console.error(`[deliveryNeededRequestHandler] could not fetch address location 
-        for requestCode: ${r.fields[code]}`);
-      return null;
-    }
+  const regularRequests = await Promise.all(regularRequestsPromises);
+  const clusterRequests = await Promise.all(clusterRequestsPromises);
 
-    try {
-      metaJSON = JSON.parse(r.fields[meta]);
-    } catch {
-      console.error(
-        "[deliveryNeededRequestHandler] could not parse meta",
-        r.fields.meta
-      );
-    }
-
-    try {
-      const channel = metaJSON.slack_channel;
-      const timestamp = metaJSON.slack_ts;
-      slackPermalink = await slackapi.chat.getPermalink({
-        channel,
-        message_ts: timestamp
-      });
-    } catch {
-      console.error(`[deliveryNeededRequestHandler] could not fetch slack URL
-        for requestCode: ${r.fields[code]} channel: ${metaJSON.slack_channel} and timestamp: ${metaJSON.slack_ts}`);
-    }
-
-    return {
-      type: "Feature",
-      geometry: {
-        type: "Point",
-        coordinates: [location.lng, location.lat]
-      },
-      properties: {
-        title: r.fields[code],
-        meta: {
-          [code]: r.fields[code],
-          [crossStreetFirst]: r.fields[crossStreetFirst],
-          [crossStreetSecond]: r.fields[crossStreetSecond],
-          [neighborhoodAreaSeeMap]: r.fields[neighborhoodAreaSeeMap],
-          [firstName]: r.fields[firstName],
-          slackPermalink: slackPermalink.ok ? slackPermalink.permalink : ""
-        }
-      }
-    };
-  });
-
-  const requestsClean = await Promise.all(requestsWithCoordsPromises);
   return res.send({
-    type: "FeatureCollection",
-    features: requestsClean.filter(request => !!request)
+    requests: {
+      type: "FeatureCollection",
+      features: regularRequests.filter((request) => !!request),
+    },
+    drivingClusterRequests: {
+      type: "FeatureCollection",
+      features: clusterRequests.filter((request) => !!request),
+    },
   });
 };

@@ -1,19 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Source } from "react-mapbox-gl";
 import { LngLat } from "mapbox-gl";
-import Alert from "@material-ui/lab/Alert";
-import { useTranslation } from "react-i18next";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { findBounds } from "webapp/helpers/mapbox-coordinates";
+
 import {
   CROWN_HEIGHTS_BOUNDS,
-  CROWN_HEIGHTS_CENTER_COORD
+  CROWN_HEIGHTS_CENTER_COORD,
 } from "../helpers/map-constants";
 import BasicMap from "./BasicMap";
 import { QuadrantsLayers } from "./QuadrantMap";
 import ClusterMapLayers from "./ClusterMapLayers";
+import { RequestNotFoundAlert, NoRequestsAlert } from "./MapAlerts";
+import getRequestParam from "../helpers/getRequestParam";
 
-const makeBounds = geoJsonData => {
-  const lnglats = geoJsonData.features.map(f => {
+const makeBounds = (features) => {
+  const lnglats = features.map((f) => {
     const [lng, lat] = f.geometry.coordinates;
     return new LngLat(lng, lat);
   });
@@ -26,78 +29,33 @@ const makeBounds = geoJsonData => {
   return bounds;
 };
 
-const getRequestParam = () => {
-  const searchStr = window.location && window.location.search;
-  return searchStr
-    .slice(1)
-    .split("&")
-    .reduce((acc, token) => {
-      const matches = token.match(/request=(.*)/);
-      return matches ? matches[1] : acc;
-    }, "");
-};
-
-// Alert to show when a request from URL param does not exist
-const RequestNotFoundAlert = ({ requestCode }) => {
-  const { t: str } = useTranslation();
-  return (
-    <Alert severity="warning">
-      {`${str("webapp:deliveryNeeded.requestNotFound.message", {
-        defaultValue: `Request with code {{requestCode}} is not found. This means that the request is no longer in 'Delivery Needed' status.`,
-        requestCode
-      })} `}
-      <a
-        href={str("webapp:deliveryNeeded.requestNotFound.redirectLink", {
-          defaultValue: "/delivery-needed"
-        })}
-      >
-        {str("webapp:deliveryNeeded.requestNotFound.redirectMessage", {
-          defaultValue: `See all requests instead.`
-        })}
-      </a>
-    </Alert>
-  );
-};
-
-const NoRequestsAlert = () => {
-  const { t: str } = useTranslation();
-  return (
-    <Alert severity="warning">
-      {str("webapp:deliveryNeeded.noRequests.message", {
-        defaultValue:
-          "No requests found. Some requests may not have been posted in Slack yet or be marked for driving clusters."
-      })}
-    </Alert>
-  );
-};
-
 const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
   const requestCode = getRequestParam();
+  const [showDrivingClusters, setShowDrivingClusters] = useState(false);
 
   let paramRequest;
+  const { requests, drivingClusterRequests } = geoJsonData;
+  const { features: reqFeatures } = requests;
+  const { features: clusterFeatures } = drivingClusterRequests;
+  const allRequests = showDrivingClusters
+    ? [...reqFeatures, ...clusterFeatures]
+    : reqFeatures;
 
-  if (requestCode && geoJsonData && geoJsonData.features) {
+  if (requestCode) {
     // find first feature with code match to be passed
     // into ClusterMapLayers
-    const { features } = geoJsonData;
-    [paramRequest] = features.filter(
+    [paramRequest] = allRequests.filter(
       ({
         properties: {
-          meta: { Code }
-        }
+          meta: { Code },
+        },
       }) => Code === requestCode
     );
   }
 
-  if (!geoJsonData) {
-    return null;
-  }
-
   // there is a requestCode but the request object does not exist
   const paramRequestNotFound = requestCode && !paramRequest;
-
-  const noRequestsFound = geoJsonData.features.length === 0;
-
+  const noRequestsFound = allRequests.length === 0;
   return (
     <>
       {paramRequestNotFound && (
@@ -106,23 +64,53 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
 
       {noRequestsFound && <NoRequestsAlert />}
 
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={showDrivingClusters}
+            onClick={() => setShowDrivingClusters(!showDrivingClusters)}
+          />
+        }
+        label="Show driving clusters"
+      />
       <BasicMap
         center={CROWN_HEIGHTS_CENTER_COORD}
-        bounds={makeBounds(geoJsonData)}
+        bounds={makeBounds(allRequests)}
         containerStyle={containerStyle}
       >
         <QuadrantsLayers />
         <Source
-          id="clusterSource"
+          id="requestsSource"
           geoJsonSource={{
             type: "geojson",
-            data: geoJsonData,
+            data: requests,
             cluster: true,
             clusterMaxZoom: 14,
-            clusterRadius: 30
+            clusterRadius: 30,
           }}
         />
-        <ClusterMapLayers paramRequest={paramRequest} />
+        <Source
+          id="drivingClusterRequestsSource"
+          geoJsonSource={{
+            type: "geojson",
+            data: drivingClusterRequests,
+            cluster: true,
+            clusterMaxZoom: 14,
+            clusterRadius: 30,
+          }}
+        />
+        <ClusterMapLayers
+          sourceId="requestsSource"
+          paramRequest={paramRequest}
+          color="orangered"
+        />
+        {showDrivingClusters && (
+          <ClusterMapLayers
+            sourceId="drivingClusterRequestsSource"
+            paramRequest={paramRequest}
+            color="rebeccapurple"
+          />
+        )}
       </BasicMap>
     </>
   );

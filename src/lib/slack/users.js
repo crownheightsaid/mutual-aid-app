@@ -1,12 +1,12 @@
 const slackapi = require("~slack/webApi");
 
-module.exports.getSlackIdForEmail = async email => {
+module.exports.getSlackIdForEmail = async (email) => {
   if (!email) {
     return [null, "No email provided to getSlackIdForEmail."];
   }
   try {
     const result = await slackapi.users.lookupByEmail({
-      email
+      email,
     });
     if (!result.ok) {
       throw new Error(result.error);
