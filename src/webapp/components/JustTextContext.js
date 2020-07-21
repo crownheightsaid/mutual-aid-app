@@ -6,32 +6,32 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import { Link } from "@reach/router";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     marginTop: theme.spacing(3),
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: "55%",
-    },
+      width: "55%"
+    }
   },
   text: {
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(3)
   },
   link: {
     color: "black",
     "&:hover": {
-      textDecoration: "none",
-    },
-  },
+      textDecoration: "none"
+    }
+  }
 }));
 
 export default function JustTextContent({
   header,
   body,
   followupRoute,
-  followupText,
+  followupText
 }) {
   const classes = useStyles();
 

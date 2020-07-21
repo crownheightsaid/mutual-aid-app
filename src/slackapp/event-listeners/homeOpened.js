@@ -6,13 +6,13 @@ module.exports.register = function register(slackEvents) {
   slackEvents.on("app_home_opened", openHome);
 };
 
-const openHome = async (event) => {
+const openHome = async event => {
   try {
     const homeSections = ["base"];
     const user = await slackapi.users.info({
       token: process.env.SLACK_BOT_TOKEN,
       user: event.user,
-      include_locale: true,
+      include_locale: true
     });
     const [volunteer, err] = await findVolunteerByEmail(
       user.user.profile.email

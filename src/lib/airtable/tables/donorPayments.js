@@ -1,11 +1,11 @@
 const { paymentsAirbase } = require("~airtable/bases");
 
 // Expects mapping of fields
-exports.createDonorPayment = async (donorPaymentFields) => {
+exports.createDonorPayment = async donorPaymentFields => {
   console.debug("creating donor payments record");
   try {
     const record = await donorPaymentsTable.create([
-      { fields: donorPaymentFields },
+      { fields: donorPaymentFields }
     ]);
     return [record, null];
   } catch (e) {
@@ -14,17 +14,17 @@ exports.createDonorPayment = async (donorPaymentFields) => {
   }
 };
 
-exports.findDonorPaymentByCode = async (code) => {
+exports.findDonorPaymentByCode = async code => {
   try {
     const andConditions = [
       `{${fields.code}} = "${code}"`,
       `{${fields.status}} != "${fields.status_options.completed}"`,
       `{${fields.status}} != "${fields.status_options.failedNoAnswer}"`,
-      `{${fields.status}} != "${fields.status_options.failedDonorBackedOut}"`,
+      `{${fields.status}} != "${fields.status_options.failedDonorBackedOut}"`
     ];
     const record = await donorPaymentsTable
       .select({
-        filterByFormula: `And(${andConditions.join(",")})`,
+        filterByFormula: `And(${andConditions.join(",")})`
       })
       .firstPage();
     return record
@@ -55,13 +55,13 @@ const fields = (exports.donorPaymentsFields = {
   donorConfirmation_options: {
     pending: "Pending",
     confirmed: "Confirmed",
-    failed: "Failed",
+    failed: "Failed"
   },
   recipientConfirmation: "RecipientConfirmation",
   recipientConfirmation_options: {
     confirmed: "Confirmed",
     pending: "Pending",
-    failed: "Failed",
+    failed: "Failed"
   },
   status: "Status",
   status_options: {
@@ -74,7 +74,7 @@ const fields = (exports.donorPaymentsFields = {
     disputePendingResolution: "DisputePendingResolution",
     failedDonorBackedOut: "FailedDonorBackedOut",
     pendingRecipientMessaged: "PendingRecipientMessaged",
-    pendingDonorMessaged: "PendingDonorMessaged",
+    pendingDonorMessaged: "PendingDonorMessaged"
   },
   amountToCountAsPaid: "AmountToCountAsPaid",
   created: "Created",
@@ -83,6 +83,6 @@ const fields = (exports.donorPaymentsFields = {
   disputes: "Disputes",
   meta: "Meta",
   lastProcessed: "Last Processed",
-  donorMobile: "DonorMobile",
+  donorMobile: "DonorMobile"
 });
 exports.donorPaymentsSensitiveFields = [fields.donorMobile];

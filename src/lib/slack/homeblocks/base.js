@@ -5,8 +5,8 @@ module.exports = [
     type: "section",
     text: {
       type: "mrkdwn",
-      text: str("slackapp:home.base.welcome"),
-    },
+      text: str("slackapp:home.base.welcome")
+    }
   },
   {
     type: "actions",
@@ -15,11 +15,11 @@ module.exports = [
         type: "button",
         text: {
           type: "plain_text",
-          text: str("slackapp:home.base.welcomeDocButton.text"),
+          text: str("slackapp:home.base.welcomeDocButton.text")
         },
         url: str("slackapp:home.base.welcomeDocButton.url"),
-        action_id: "welcome-link",
-      },
-    ],
-  },
+        action_id: "welcome-link"
+      }
+    ]
+  }
 ];

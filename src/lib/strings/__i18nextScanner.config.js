@@ -6,7 +6,7 @@ module.exports = {
     debug: true,
     func: {
       list: ["t", "str"],
-      extensions: [".js", ".jsx"],
+      extensions: [".js", ".jsx"]
     },
     trans: false, // don't support react Trans component
     lngs: SUPPORTED_LANGS,
@@ -18,11 +18,11 @@ module.exports = {
       loadPath: "src/lib/strings/locales/{{lng}}/{{ns}}.json",
       savePath: "src/lib/strings/locales/{{lng}}/{{ns}}.json",
       jsonIndent: 2,
-      lineEnding: "\n",
+      lineEnding: "\n"
     },
     interpolation: {
       prefix: "{{",
-      suffix: "}}",
-    },
-  },
+      suffix: "}}"
+    }
+  }
 };

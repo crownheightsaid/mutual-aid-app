@@ -9,15 +9,15 @@ const { wait } = require("./utils");
 (async () => {
   const allResults = await airbase("Requests")
     .select({
-      fields: ["Trigger Backfill", "Code"],
+      fields: ["Trigger Backfill", "Code"]
     })
     .all();
   const updates = [];
-  allResults.forEach((r) => {
+  allResults.forEach(r => {
     const triggerCounter = r.get("Trigger Backfill") || 0;
     updates.push({
       id: r.id,
-      fields: { "Trigger Backfill": triggerCounter + 1 },
+      fields: { "Trigger Backfill": triggerCounter + 1 }
     });
   });
   console.log(updates);

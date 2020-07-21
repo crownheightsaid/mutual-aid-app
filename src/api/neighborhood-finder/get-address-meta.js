@@ -7,7 +7,7 @@ const googleGeoClient = new Client({});
 const geonamesClient = new Geonames({
   username: process.env.GEONAME_CLIENT_ID || "demo",
   lan: "en",
-  encoding: "JSON",
+  encoding: "JSON"
 });
 
 exports.addressHandler = async (req, res, next) => {
@@ -21,20 +21,20 @@ exports.addressHandler = async (req, res, next) => {
         address: req.body.address,
         region: "us",
         components: {
-          locality: "New York City",
+          locality: "New York City"
         },
-        key: process.env.GOOGLE_MAPS_API_KEY,
+        key: process.env.GOOGLE_MAPS_API_KEY
       },
-      timeout: 1000, // milliseconds
+      timeout: 1000 // milliseconds
     });
     const geoResults = geoResult.data.results;
 
     const locResult = geoResults[0];
     const {
-      geometry: { location },
+      geometry: { location }
     } = locResult;
 
-    const neighborhood = locResult.address_components.find((component) =>
+    const neighborhood = locResult.address_components.find(component =>
       component.types.includes("neighborhood")
     );
 
@@ -44,9 +44,9 @@ exports.addressHandler = async (req, res, next) => {
 
     const intersection = await geonamesClient.findNearestIntersection({
       lat: lt,
-      lng: long,
+      lng: long
     });
-    const userQuadrant = boundsJson.features.find((quadrant) =>
+    const userQuadrant = boundsJson.features.find(quadrant =>
       gju.pointInPolygon(
         { type: "Point", coordinates: [long, lt] },
         quadrant.geometry
@@ -60,9 +60,9 @@ exports.addressHandler = async (req, res, next) => {
         location,
         intersection: {
           street_1: intersection.intersection.street1,
-          street_2: intersection.intersection.street2,
+          street_2: intersection.intersection.street2
         },
-        quadrant: quadrantName,
+        quadrant: quadrantName
       })
     );
   } catch (err) {

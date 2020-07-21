@@ -6,7 +6,7 @@ const { getSlackIdForEmail } = require("~slack/users");
 const { VOLUNTEER_INTERESTS_TO_SLACK_CHANNELS } = require("~slack/constants");
 const {
   volunteersFields,
-  volunteersTable,
+  volunteersTable
 } = require("~airtable/tables/volunteers");
 const { wait } = require("./utils");
 
@@ -17,8 +17,8 @@ const { wait } = require("./utils");
       fields: [
         volunteersFields.waysToHelp,
         volunteersFields.slackId,
-        volunteersFields.email,
-      ],
+        volunteersFields.email
+      ]
     })
     .all();
   const channelsToUsers = {};
@@ -34,9 +34,9 @@ const { wait } = require("./utils");
       continue;
     }
     const waysToHelp = volunteerRecord.get(volunteersFields.waysToHelp) || [];
-    waysToHelp.forEach((interest) => {
+    waysToHelp.forEach(interest => {
       const relevantChannels = VOLUNTEER_INTERESTS_TO_SLACK_CHANNELS[interest];
-      relevantChannels.forEach((channel) => {
+      relevantChannels.forEach(channel => {
         if (!channelsToUsers[channel]) {
           channelsToUsers[channel] = [];
         }
@@ -55,7 +55,7 @@ const { wait } = require("./utils");
     console.log(`Already users: ${alreadyUsers.length}`);
 
     const newUsers = users.filter(
-      (user) => !alreadyUsers.includes(user) && user.startsWith("U")
+      user => !alreadyUsers.includes(user) && user.startsWith("U")
     );
 
     console.log(`Newly Added: ${newUsers.length}`);
@@ -65,7 +65,7 @@ const { wait } = require("./utils");
       const inviteResult = await slackapi.conversations.invite({
         token: process.env.SLACK_BOT_TOKEN,
         channel: channelId,
-        users: newUsersBatch.join(","),
+        users: newUsersBatch.join(",")
       });
       console.log(`Invite success: ${inviteResult.ok}`);
     }

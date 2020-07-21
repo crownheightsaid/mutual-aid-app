@@ -6,14 +6,14 @@ import { useTranslation } from "react-i18next";
 import { findBounds } from "../helpers/mapbox-coordinates";
 import {
   CROWN_HEIGHTS_BOUNDS,
-  CROWN_HEIGHTS_CENTER_COORD,
+  CROWN_HEIGHTS_CENTER_COORD
 } from "../helpers/map-constants";
 import BasicMap from "./BasicMap";
 import { QuadrantsLayers } from "./QuadrantMap";
 import ClusterMapLayers from "./ClusterMapLayers";
 
-const makeBounds = (geoJsonData) => {
-  const lnglats = geoJsonData.features.map((f) => {
+const makeBounds = geoJsonData => {
+  const lnglats = geoJsonData.features.map(f => {
     const [lng, lat] = f.geometry.coordinates;
     return new LngLat(lng, lat);
   });
@@ -44,15 +44,15 @@ const RequestNotFoundAlert = ({ requestCode }) => {
     <Alert severity="warning">
       {`${str("webapp:deliveryNeeded.requestNotFound.message", {
         defaultValue: `Request with code {{requestCode}} is not found. This means that the request is no longer in 'Delivery Needed' status.`,
-        requestCode,
+        requestCode
       })} `}
       <a
         href={str("webapp:deliveryNeeded.requestNotFound.redirectLink", {
-          defaultValue: "/delivery-needed",
+          defaultValue: "/delivery-needed"
         })}
       >
         {str("webapp:deliveryNeeded.requestNotFound.redirectMessage", {
-          defaultValue: `See all requests instead.`,
+          defaultValue: `See all requests instead.`
         })}
       </a>
     </Alert>
@@ -65,7 +65,7 @@ const NoRequestsAlert = () => {
     <Alert severity="warning">
       {str("webapp:deliveryNeeded.noRequests.message", {
         defaultValue:
-          "No requests found. Some requests may not have been posted in Slack yet or be marked for driving clusters.",
+          "No requests found. Some requests may not have been posted in Slack yet or be marked for driving clusters."
       })}
     </Alert>
   );
@@ -83,8 +83,8 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
     [paramRequest] = features.filter(
       ({
         properties: {
-          meta: { Code },
-        },
+          meta: { Code }
+        }
       }) => Code === requestCode
     );
   }
@@ -119,7 +119,7 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
             data: geoJsonData,
             cluster: true,
             clusterMaxZoom: 14,
-            clusterRadius: 30,
+            clusterRadius: 30
           }}
         />
         <ClusterMapLayers paramRequest={paramRequest} />

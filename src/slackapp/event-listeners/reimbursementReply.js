@@ -3,18 +3,18 @@ const { findChannelByName } = require("~slack/channels");
 const { REIMBURSEMENT_CHANNEL } = require("~slack/constants");
 const {
   findPaymentRequestBySlackThreadId,
-  paymentRequestsFields,
+  paymentRequestsFields
 } = require("~airtable/tables/paymentRequests");
 const {
   createDonorPayment,
-  donorPaymentsFields,
+  donorPaymentsFields
 } = require("~airtable/tables/donorPayments");
 
 module.exports.register = function register(slackEvents) {
   slackEvents.on("message", filterAndReply);
 };
 
-const filterAndReply = async (event) => {
+const filterAndReply = async event => {
   if (event.bot_id) {
     return;
   }
@@ -45,7 +45,7 @@ const filterAndReply = async (event) => {
     [donorPaymentsFields.recipientConfirmation]:
       donorPaymentsFields.recipientConfirmation_options.pending,
     [donorPaymentsFields.donorConfirmation]:
-      donorPaymentsFields.donorConfirmation_options.confirmed,
+      donorPaymentsFields.donorConfirmation_options.confirmed
   });
   if (!record) {
     console.log("Couldn't add donor's payment");
@@ -63,11 +63,11 @@ const filterAndReply = async (event) => {
     channel: reimbursementChannel.id,
     thread_ts: event.thread_ts,
     text: `Thanks <@${event.user}>!
-They sent ${newDonationAmount.toFixed(2)}, ${message}`,
+They sent ${newDonationAmount.toFixed(2)}, ${message}`
   });
 };
 
-const findAmountsInString = (text) => {
+const findAmountsInString = text => {
   return text.replace(/<.{0,15}>/g, "").match(/\d+\.?\d*/g);
 };
 

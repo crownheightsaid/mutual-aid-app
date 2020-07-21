@@ -5,8 +5,8 @@ module.exports = [
     type: "section",
     text: {
       type: "mrkdwn",
-      text: str("slackapp:home.volunteerSignUp.message"),
-    },
+      text: str("slackapp:home.volunteerSignUp.message")
+    }
   },
   {
     type: "actions",
@@ -15,18 +15,18 @@ module.exports = [
         type: "button",
         text: {
           type: "plain_text",
-          text: str("slackapp:home.volunteerSignUp.formButton.text"),
+          text: str("slackapp:home.volunteerSignUp.formButton.text")
         },
         url: str("slackapp:home.volunteerSignUp.formButton.url"),
-        action_id: "volunteer-form",
-      },
-    ],
+        action_id: "volunteer-form"
+      }
+    ]
   },
   {
     type: "section",
     text: {
       type: "mrkdwn",
-      text: str("slackapp:home.volunteerSignUp.errorMessage"),
-    },
-  },
+      text: str("slackapp:home.volunteerSignUp.errorMessage")
+    }
+  }
 ];

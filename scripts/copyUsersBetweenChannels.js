@@ -7,9 +7,9 @@ const isUserInChannel = async (userId, channelId) => {
   const convoResult = await slackapi.users.conversations({
     token: process.env.SLACK_BOT_TOKEN,
     user: userId,
-    types: "public_channel,private_channel",
+    types: "public_channel,private_channel"
   });
-  return !!convoResult.channels.filter((channel) => channel.id === channelId)
+  return !!convoResult.channels.filter(channel => channel.id === channelId)
     .length;
 };
 
@@ -28,14 +28,14 @@ const isUserInChannel = async (userId, channelId) => {
         usersResult = await slackapi.conversations.members({
           token: process.env.SLACK_BOT_TOKEN,
           channel: channelFromId,
-          limit: 20,
+          limit: 20
         });
       } else {
         usersResult = await slackapi.conversations.members({
           token: process.env.SLACK_BOT_TOKEN,
           channel: channelFromId,
           limit: 20,
-          cursor,
+          cursor
         });
       }
       cursor = usersResult.response_metadata.next_cursor;
@@ -61,7 +61,7 @@ const isUserInChannel = async (userId, channelId) => {
         const inviteResult = await slackapi.conversations.invite({
           token: process.env.SLACK_BOT_TOKEN,
           channel: channelToId,
-          users: notAddedUserIds.join(","),
+          users: notAddedUserIds.join(",")
         });
 
         console.log("Invite result:");

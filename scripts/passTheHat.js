@@ -10,11 +10,11 @@ const { str } = require("~strings/i18nextWrappers");
 
 (async () => {
   try {
-    const hatHolders = process.env.HAT_HOLDERS.split(";").map((holder) => {
+    const hatHolders = process.env.HAT_HOLDERS.split(";").map(holder => {
       const holderInfo = holder.split(":");
       return {
         venmoHandle: holderInfo[0],
-        slackId: `<@${holderInfo[1]}>`,
+        slackId: `<@${holderInfo[1]}>`
       };
     });
     const bucketName = "mutual-aid-volunteer-slack.appspot.com";
@@ -27,8 +27,8 @@ const { str } = require("~strings/i18nextWrappers");
           process.env.GOOGLE_PRIVATE_KEY,
           new RegExp("\\\\n", "g"),
           "\n"
-        ),
-      },
+        )
+      }
     });
     const bucket = storage.bucket(bucketName);
     const file = bucket.file(passTheHatFilename);
@@ -61,9 +61,9 @@ const { str } = require("~strings/i18nextWrappers");
       `Day in cycle: ${dayInCycle}`,
       `Group size: ${groupSize}`,
       `Hat holder: ${hatHolder.slackId}`,
-      `Hat holder venmo: ${hatHolder.venmoHandle}`,
+      `Hat holder venmo: ${hatHolder.venmoHandle}`
     ];
-    infoLines.forEach((line) => console.log(line));
+    infoLines.forEach(line => console.log(line));
     await sendHatHolderMessage(infoLines.join("\n"));
     for (const user of usersToMessage) {
       try {
@@ -84,14 +84,14 @@ const { str } = require("~strings/i18nextWrappers");
   }
 })();
 
-const sendHatHolderMessage = async (message) => {
+const sendHatHolderMessage = async message => {
   try {
     const hatHolderChannel = await findChannelByName(HAT_CHANNEL);
 
     const hatMessage = await slackapi.chat.postMessage({
       channel: hatHolderChannel.id,
       unfurl_media: false,
-      text: message,
+      text: message
     });
     if (!hatMessage.ok) {
       console.log(`Couldn't post hat holder message`);
@@ -105,7 +105,7 @@ const sendHatHolderMessage = async (message) => {
 const sendMessage = async (userId, hatHolder) => {
   const dmResponse = await slackapi.conversations.open({
     token: process.env.SLACK_BOT_TOKEN,
-    users: `${userId}`,
+    users: `${userId}`
   });
   const dmLines = [
     `Some more details,`,
@@ -121,8 +121,8 @@ const sendMessage = async (userId, hatHolder) => {
       defaultValue:
         ":pie: It’s as easy as *venmoing {{- venmoHandle}}*. This Venmo account belongs to {{- venmoUser}} who will disburse the funds they collect to our delivery volunteers in need of reimbursements (receipts posted in #community_reimbursement). Use a :tophat: or :luckyhat: in the venmo comment, or just type in CHMA hat!",
       venmoUser: hatHolder.slackId,
-      venmoHandle: hatHolder.venmoHandle,
-    })}`,
+      venmoHandle: hatHolder.venmoHandle
+    })}`
   ];
   const messageId = dmResponse.channel.id;
   await slackapi.chat.postMessage({
@@ -137,8 +137,8 @@ const sendMessage = async (userId, hatHolder) => {
           text: str(
             "slackapp:passHat.dm.message.intro",
             ":luckyhat: CHMA Hat! :luckyhat:\nHi there! We’re passing the CHMA hat to you today!"
-          ),
-        },
+          )
+        }
       },
       {
         type: "section",
@@ -147,16 +147,16 @@ const sendMessage = async (userId, hatHolder) => {
           text: str("slackapp:passHat.dm.message.tldr", {
             defaultValue:
               "*tl;dr:* If able, please venmo *{{- venmoHandle}}* a small donation today. They will use all the funds to cover our grocery deliveries! :bike:",
-            venmoHandle: hatHolder.venmoHandle,
-          }),
-        },
+            venmoHandle: hatHolder.venmoHandle
+          })
+        }
       },
       {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: dmLines.join("\n"),
-        },
+          text: dmLines.join("\n")
+        }
       },
       {
         type: "section",
@@ -165,14 +165,14 @@ const sendMessage = async (userId, hatHolder) => {
           text: str(
             "slackapp:passHat.dm.message.outro",
             "Thank you for all you do in Crown Heights Mutual Aid! :fist:"
-          ),
-        },
-      },
-    ],
+          )
+        }
+      }
+    ]
   });
 };
 
-const daysSince = (startDate) => {
+const daysSince = startDate => {
   const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
   const today = new Date();
   today.setHours(8); // When the script runs in prod, used for testing.
