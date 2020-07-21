@@ -9,15 +9,15 @@ const RequestNotFoundAlert = ({ requestCode }) => {
     <Alert severity="warning">
       {`${str("webapp:deliveryNeeded.requestNotFound.message", {
         defaultValue: `Request with code {{requestCode}} is not found. This means that the request is no longer in 'Delivery Needed' status.`,
-        requestCode,
+        requestCode
       })} `}
       <a
         href={str("webapp:deliveryNeeded.requestNotFound.redirectLink", {
-          defaultValue: "/delivery-needed",
+          defaultValue: "/delivery-needed"
         })}
       >
         {str("webapp:deliveryNeeded.requestNotFound.redirectMessage", {
-          defaultValue: `See all requests instead.`,
+          defaultValue: `See all requests instead.`
         })}
       </a>
     </Alert>
@@ -30,7 +30,7 @@ const NoRequestsAlert = () => {
     <Alert severity="warning">
       {str("webapp:deliveryNeeded.noRequests.message", {
         defaultValue:
-          "No requests found. Some requests may not have been posted in Slack yet or be marked for driving clusters.",
+          "No requests found. Some requests may not have been posted in Slack yet or be marked for driving clusters."
       })}
     </Alert>
   );

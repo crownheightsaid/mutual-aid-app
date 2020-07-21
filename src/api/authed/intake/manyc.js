@@ -1,6 +1,6 @@
 const {
   createRequest,
-  findRequestByExternalId,
+  findRequestByExternalId
 } = require("~airtable/tables/requests");
 const { str } = require("~strings/i18nextWrappers");
 
@@ -44,7 +44,7 @@ exports.nycmaIntakeHandler = async (req, res, next) => {
       "airtable:manyc.request.message.neighborhoods",
       "Neighborhoods (please fill out manually for now):"
     )}\n`,
-    manyc.neighborhood || str("common:notAvailable"),
+    manyc.neighborhood || str("common:notAvailable")
   ];
   const nycmaRequest = {
     message: requestMessage.join(" "),
@@ -58,7 +58,7 @@ exports.nycmaIntakeHandler = async (req, res, next) => {
     email: manyc.email || "",
     urgency: manyc.urgency || "",
     crossStreets: manyc.crossStreet,
-    source: "manyc",
+    source: "manyc"
   };
   const [record, e] = await createRequest(nycmaRequest);
   if (e) {

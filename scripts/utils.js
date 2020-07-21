@@ -1,4 +1,4 @@
-exports.wait = (interval) => new Promise((r) => setTimeout(r, interval));
+exports.wait = interval => new Promise(r => setTimeout(r, interval));
 
 exports.schedule = (taskName, interval, f) => {
   let running = true;

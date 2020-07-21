@@ -11,7 +11,7 @@ exports.updatePaymentRequestByCode = async (code, update) => {
   try {
     const records = await paymentRequestsTable
       .select({
-        filterByFormula: `(FIND('${code}', {${fields.requestCode}}) > 0)`,
+        filterByFormula: `(FIND('${code}', {${fields.requestCode}}) > 0)`
       })
       .firstPage();
     if (records.length === 0) {
@@ -27,7 +27,7 @@ exports.updatePaymentRequestByCode = async (code, update) => {
     const record = records[0];
     const airUpdate = {
       id: record.id,
-      fields: update,
+      fields: update
     };
     const updatedRecords = await paymentRequestsTable.update([airUpdate]);
     return [updatedRecords[0], null];
@@ -36,14 +36,14 @@ exports.updatePaymentRequestByCode = async (code, update) => {
   }
 };
 
-exports.findPaymentRequestInSlack = async (code) => {
+exports.findPaymentRequestInSlack = async code => {
   if (!code || code.length < 4) {
     return [null, `Request code must be at least 4 characters.`];
   }
   try {
     const records = await paymentRequestsTable
       .select({
-        filterByFormula: `AND((FIND('${code}', {${fields.requestCode}}) > 0), {${fields.slackThreadId}})`,
+        filterByFormula: `AND((FIND('${code}', {${fields.requestCode}}) > 0), {${fields.slackThreadId}})`
       })
       .firstPage();
     if (records.length === 0) {
@@ -56,11 +56,11 @@ exports.findPaymentRequestInSlack = async (code) => {
   }
 };
 
-exports.findPaymentRequestBySlackThreadId = async (threadId) => {
+exports.findPaymentRequestBySlackThreadId = async threadId => {
   try {
     const record = await paymentRequestsTable
       .select({
-        filterByFormula: `({${fields.slackThreadId}} = '${threadId}')`,
+        filterByFormula: `({${fields.slackThreadId}} = '${threadId}')`
       })
       .firstPage();
     return record
@@ -72,7 +72,7 @@ exports.findPaymentRequestBySlackThreadId = async (threadId) => {
   }
 };
 
-exports.findPaymentRequestById = async (id) => {
+exports.findPaymentRequestById = async id => {
   try {
     return [await paymentRequestsTable.find(id), null];
   } catch (e) {
@@ -83,13 +83,13 @@ exports.findPaymentRequestById = async (id) => {
 exports.findReimbursablePaymentRequests = async () => {
   const andConditions = [
     `{${fields.approval}} = "${fields.approval_options.approved}"`,
-    `{${fields.paid}} = 0`,
+    `{${fields.paid}} = 0`
   ];
   try {
     const records = await paymentRequestsTable
       .select({
         filterByFormula: `And(${andConditions.join(",")})`,
-        sort: [{ field: fields.created, direction: "asc" }],
+        sort: [{ field: fields.created, direction: "asc" }]
       })
       .firstPage();
     return records ? [records, null] : [null, "No pending payment requests"];
@@ -99,7 +99,7 @@ exports.findReimbursablePaymentRequests = async () => {
   }
 };
 
-exports.deletePaymentRequest = async (record) => {
+exports.deletePaymentRequest = async record => {
   try {
     await paymentRequestsTable.destroy(record.id);
   } catch (e) {
@@ -140,7 +140,7 @@ const fields = (exports.paymentRequestsFields = {
   approval: "Approval",
   approval_options: {
     approved: "Approved",
-    denied: "Denied",
+    denied: "Denied"
   },
   paidAmount: "PaidAmount",
   meta: "Meta",
@@ -149,12 +149,12 @@ const fields = (exports.paymentRequestsFields = {
   type_options: {
     preimbursement: "Preimbursement",
     reimbursement: "Reimbursement",
-    directAid: "Direct Aid",
-  },
+    directAid: "Direct Aid"
+  }
 });
 exports.paymentRequestsSensitiveFields = [
   fields.phone,
   fields.venmoId,
   fields.paypalId,
-  fields.cashAppId,
+  fields.cashAppId
 ];

@@ -21,25 +21,25 @@
 
 /* eslint-disable no-undef */
 tableNameToGenerate = "Requests";
-camelCase = (s) =>
-  _.snakeCase(s).replace(/_\w/g, (m) => {
+camelCase = s =>
+  _.snakeCase(s).replace(/_\w/g, m => {
     return m[1].toUpperCase();
   });
 copy(
   Object.values(application.tablesById)
-    .filter((table) => table.name === tableNameToGenerate)
-    .map((table) =>
+    .filter(table => table.name === tableNameToGenerate)
+    .map(table =>
       Object.assign(
-        ...table.columns.map((col) => ({
+        ...table.columns.map(col => ({
           [camelCase(col.name)]: col.name,
           ...(col.typeOptions &&
             col.typeOptions.choices && {
               [`${camelCase(col.name)}_options`]: Object.assign(
-                ...Object.values(col.typeOptions.choices).map((choice) => ({
-                  [camelCase(choice.name)]: choice.name,
+                ...Object.values(col.typeOptions.choices).map(choice => ({
+                  [camelCase(choice.name)]: choice.name
                 }))
-              ),
-            }),
+              )
+            })
         }))
       )
     )[0] ||

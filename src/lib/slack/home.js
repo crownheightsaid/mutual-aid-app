@@ -12,25 +12,25 @@ const divider = require("./homeblocks/divider.js");
 
 const homeBlocks = {
   base: {
-    blocks: baseBlocks,
+    blocks: baseBlocks
   },
   volunteerSignUp: {
-    blocks: volunteerSignUpBlocks,
+    blocks: volunteerSignUpBlocks
   },
   newVolunteerInfo: {
-    blocks: newVolunteerInfo,
+    blocks: newVolunteerInfo
   },
   trainedVolunteerInfo: {
-    blocks: trainedVolunteerInfo,
+    blocks: trainedVolunteerInfo
   },
   divider: {
-    blocks: divider,
-  },
+    blocks: divider
+  }
 };
 
 exports.openHomeWithSections = async (userId, sectionNames) => {
   const loadedBlocks = [];
-  sectionNames.forEach((sectionName) => {
+  sectionNames.forEach(sectionName => {
     assert(homeBlocks[sectionName], "Home page section not registered.");
     loadedBlocks.push(...homeBlocks[sectionName].blocks);
   });
@@ -39,7 +39,7 @@ exports.openHomeWithSections = async (userId, sectionNames) => {
     user_id: userId,
     view: {
       type: "home",
-      blocks: loadedBlocks,
-    },
+      blocks: loadedBlocks
+    }
   });
 };

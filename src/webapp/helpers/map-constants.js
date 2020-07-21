@@ -6,7 +6,7 @@ import { findBounds } from "./mapbox-coordinates";
 const CROWN_HEIGHTS_BOUNDS = findBounds(
   quadrantsGeoJSON.features.reduce((acc, f) => {
     const lnglats = f.geometry.coordinates[0].map(
-      (coord) => new LngLat(coord[0], coord[1])
+      coord => new LngLat(coord[0], coord[1])
     );
     return acc.concat(lnglats);
   }, [])

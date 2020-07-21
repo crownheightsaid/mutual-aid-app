@@ -2,14 +2,14 @@ const mockDestroyFn = jest.fn();
 
 jest.mock("~airtable/bases", () => ({
   paymentsAirbase: () => ({
-    destroy: mockDestroyFn,
-  }),
+    destroy: mockDestroyFn
+  })
 }));
 
 const { Record } = require("airtable");
 const {
   deletePaymentRequest,
-  paymentRequestsTableName,
+  paymentRequestsTableName
 } = require("./paymentRequests");
 
 describe("deletePaymentRequest", () => {

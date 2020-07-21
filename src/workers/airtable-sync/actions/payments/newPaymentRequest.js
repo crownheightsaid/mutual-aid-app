@@ -3,18 +3,18 @@ const { findChannelByName, addBotToChannel } = require("~slack/channels");
 const { REIMBURSEMENT_CHANNEL } = require("~slack/constants");
 const {
   volunteersFields,
-  findVolunteerById,
+  findVolunteerById
 } = require("~airtable/tables/volunteers");
 const {
   paymentRequestsFields,
   paymentRequestsTable,
   findPaymentRequestInSlack,
-  deletePaymentRequest,
+  deletePaymentRequest
 } = require("~airtable/tables/paymentRequests");
 const {
   fields: requestFields,
   findRequestByCode,
-  updateRequestByCode,
+  updateRequestByCode
 } = require("~airtable/tables/requests");
 const { str } = require("~strings/i18nextWrappers");
 
@@ -54,7 +54,7 @@ module.exports = async function newPaymentRequest(record) {
   const deliveryMessage = await slackapi.chat.postMessage({
     channel: reimbursementChannel.id,
     unfurl_media: false,
-    text: messageText,
+    text: messageText
   });
   if (!deliveryMessage.ok) {
     console.debug(`Couldn't post payment request: ${code}`);
@@ -71,14 +71,14 @@ module.exports = async function newPaymentRequest(record) {
   await paymentRequestsTable.update([
     {
       id: record.getId(),
-      fields: { [paymentRequestsFields.slackThreadId]: deliveryMessage.ts },
-    },
+      fields: { [paymentRequestsFields.slackThreadId]: deliveryMessage.ts }
+    }
   ]);
 };
 
 async function markRequestComplete(code) {
   await updateRequestByCode(code, {
-    [requestFields.status]: requestFields.status_options.requestComplete,
+    [requestFields.status]: requestFields.status_options.requestComplete
   });
 }
 
@@ -88,7 +88,7 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
   const deliveryUser = delivererSlackId ? `<@${delivererSlackId}>` : null;
   const intro = str("slackapp:reimbursementBotPost.post.message.intro", {
     defaultValue: `Hey neighbors! {{- deliverer}} completed a delivery and could use reimbursement! :tada::tada:`,
-    deliverer: deliveryUser || firstName || "A neighbor",
+    deliverer: deliveryUser || firstName || "A neighbor"
   });
 
   const paymentMethods = [];
@@ -118,7 +118,7 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
   if (intakeVol && intakeVol.get(volunteersFields.slackId)) {
     intakeVolField.push([
       "Intake Volunteer",
-      `<@${intakeVol.get(volunteersFields.slackId)}>`,
+      `<@${intakeVol.get(volunteersFields.slackId)}>`
     ]);
   }
 
@@ -127,7 +127,7 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
   receipts.forEach((receipt, i) => {
     receiptFields.push([
       i ? `Receipt ${i + 1}` : "Receipt",
-      `<${receipt.url}|link>`,
+      `<${receipt.url}|link>`
     ]);
   });
 
@@ -139,26 +139,26 @@ async function makeMessageText(reimbursement, request, reimbursementCode) {
         str(
           "slackapp:reimbursementBotPost.post.fields.code.default",
           "@chma-admins this request is missing a code!"
-        ),
+        )
     ],
     [
       "Message",
-      slackMessage ? `-\n${slackMessage}` : str("common:notAvailable"),
+      slackMessage ? `-\n${slackMessage}` : str("common:notAvailable")
     ],
     [
       "Amount Needed",
       `$${reimbursement
         .get(paymentRequestsFields.reimbursementAmount)
-        .toFixed(2)}`,
+        .toFixed(2)}`
     ],
     ...paymentMethods,
     ...intakeVolField,
-    ...receiptFields,
+    ...receiptFields
   ];
   const status = str("slackapp:reimbursementBotPost.post.statusPrefix.default");
   const fieldRepresentation = extraFields
-    .filter((kv) => kv[1])
-    .map((kv) => `*${kv[0]}*: ${kv[1].trim()}`)
+    .filter(kv => kv[1])
+    .map(kv => `*${kv[0]}*: ${kv[1].trim()}`)
     .join("\n");
   // HACK: use non-breaking space as a delimiter between the status and the rest of the message: \u00A0
   return `${status}\u00A0${intro}:\n${fieldRepresentation}
@@ -177,7 +177,7 @@ const handleExistingPaymentRequest = async (
   );
   const existingThreadLink = await slackapi.chat.getPermalink({
     channel: reimbursementChannel.id,
-    message_ts: existingThreadId,
+    message_ts: existingThreadId
   });
   const existingMessage = str(
     "slackapp:reimbursementBotPost.duplicatePost.message",
@@ -185,14 +185,14 @@ const handleExistingPaymentRequest = async (
       defaultValue:
         "*Duplicate Code!*\nThere is already a reimbursement post in this channel for request code {{- code}}. Here is a link to the original post. If there's an issue, please tag @chma-admins!\n{{- threadLink}}",
       code,
-      threadLink: existingThreadLink.permalink,
+      threadLink: existingThreadLink.permalink
     }
   );
   const deliveryMessage = await slackapi.chat.postMessage({
     channel: reimbursementChannel.id,
     unfurl_media: false,
     unfurl_links: false,
-    text: existingMessage,
+    text: existingMessage
   });
   if (!deliveryMessage.ok) {
     console.debug(`Couldn't post duplicate payment request: ${code}`);
@@ -217,23 +217,23 @@ const handleNoRequestFound = async (newRecord, code, reimbursementChannel) => {
         str(
           "slackapp:reimbursementBotPost.requestNotFound.noCode",
           "PaymentRequest has no code :/"
-        ),
+        )
     ],
     ["Name", firstName ? `-\n${firstName}` : str("common:notAvailable")],
     [
       "Message",
-      slackMessage ? `-\n${slackMessage}` : str("common:notAvailable"),
-    ],
+      slackMessage ? `-\n${slackMessage}` : str("common:notAvailable")
+    ]
   ];
   const fieldRepresentation = extraFields
-    .filter((kv) => kv[1])
-    .map((kv) => `*${kv[0]}*: ${kv[1].trim()}`)
+    .filter(kv => kv[1])
+    .map(kv => `*${kv[0]}*: ${kv[1].trim()}`)
     .join("\n");
   const deliveryMessage = await slackapi.chat.postMessage({
     channel: reimbursementChannel.id,
     unfurl_media: false,
     unfurl_links: false,
-    text: `${notFoundIntro}\n\n${fieldRepresentation}`,
+    text: `${notFoundIntro}\n\n${fieldRepresentation}`
   });
   if (!deliveryMessage.ok) {
     console.debug(`Couldn't post not found payment request: ${code}`);

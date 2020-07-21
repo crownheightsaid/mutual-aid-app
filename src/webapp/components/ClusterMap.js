@@ -7,7 +7,7 @@ import { findBounds } from "webapp/helpers/mapbox-coordinates";
 
 import {
   CROWN_HEIGHTS_BOUNDS,
-  CROWN_HEIGHTS_CENTER_COORD,
+  CROWN_HEIGHTS_CENTER_COORD
 } from "../helpers/map-constants";
 import BasicMap from "./BasicMap";
 import { QuadrantsLayers } from "./QuadrantMap";
@@ -15,8 +15,8 @@ import ClusterMapLayers from "./ClusterMapLayers";
 import { RequestNotFoundAlert, NoRequestsAlert } from "./MapAlerts";
 import getRequestParam from "../helpers/getRequestParam";
 
-const makeBounds = (features) => {
-  const lnglats = features.map((f) => {
+const makeBounds = features => {
+  const lnglats = features.map(f => {
     const [lng, lat] = f.geometry.coordinates;
     return new LngLat(lng, lat);
   });
@@ -47,8 +47,8 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
     [paramRequest] = allRequests.filter(
       ({
         properties: {
-          meta: { Code },
-        },
+          meta: { Code }
+        }
       }) => Code === requestCode
     );
   }
@@ -86,7 +86,7 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
             data: requests,
             cluster: true,
             clusterMaxZoom: 14,
-            clusterRadius: 30,
+            clusterRadius: 30
           }}
         />
         <Source
@@ -96,7 +96,7 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
             data: drivingClusterRequests,
             cluster: true,
             clusterMaxZoom: 14,
-            clusterRadius: 30,
+            clusterRadius: 30
           }}
         />
         <ClusterMapLayers

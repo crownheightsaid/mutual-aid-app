@@ -6,71 +6,71 @@ const { str } = require("~strings/i18nextWrappers");
 exports.messageErrorResponse = (blockId, msg) => {
   const response = {
     response_action: "errors",
-    errors: {},
+    errors: {}
   };
   response.errors[blockId] = msg;
   return response;
 };
 
-const errorView = (msg) => {
+const errorView = msg => {
   return {
     type: "modal",
     title: {
       type: "plain_text",
-      text: str("slackapp:modal.error.title"),
+      text: str("slackapp:modal.error.title")
     },
     close: {
       type: "plain_text",
       text: str("common:close"),
-      emoji: true,
+      emoji: true
     },
     blocks: [
       {
         type: "section",
         text: {
           type: "plain_text",
-          text: msg,
-        },
-      },
-    ],
+          text: msg
+        }
+      }
+    ]
   };
 };
 
-const successView = (msg) => {
+const successView = msg => {
   return {
     type: "modal",
     title: {
       type: "plain_text",
-      text: str("slackapp:modal.success.title"),
+      text: str("slackapp:modal.success.title")
     },
     close: {
       type: "plain_text",
       text: str("common:close"),
-      emoji: true,
+      emoji: true
     },
     blocks: [
       {
         type: "section",
         text: {
           type: "plain_text",
-          text: msg,
-        },
-      },
-    ],
+          text: msg
+        }
+      }
+    ]
   };
 };
 
-exports.errorResponse = (msg) => {
+exports.errorResponse = msg => {
   return {
     response_action: "update",
-    view: errorView(msg),
+    view: errorView(msg)
   };
 };
 
-exports.successResponse = (msg) => {
+exports.successResponse = msg => {
   return {
     response_action: "update",
-    view: successView(msg),
+    view: successView(msg)
   };
 };
 exports.errorView = errorView;

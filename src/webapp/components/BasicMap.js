@@ -8,7 +8,7 @@ const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 const MapboxMap = MAPBOX_TOKEN
   ? ReactMapboxGl({
-      accessToken: MAPBOX_TOKEN,
+      accessToken: MAPBOX_TOKEN
     })
   : MissingMap;
 
@@ -19,7 +19,7 @@ const BasicMap = ({ center, bounds, containerStyle, children }) => (
     containerStyle={{
       height: "350px",
       width: "100%",
-      ...containerStyle,
+      ...containerStyle
     }}
     fitBounds={bounds}
     fitBoundsOptions={{
@@ -27,8 +27,8 @@ const BasicMap = ({ center, bounds, containerStyle, children }) => (
         top: 24,
         right: 24,
         bottom: 24,
-        left: 24,
-      },
+        left: 24
+      }
     }}
   >
     <ZoomControl />

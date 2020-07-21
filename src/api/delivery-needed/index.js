@@ -11,10 +11,10 @@ const {
   neighborhoodAreaSeeMap,
   firstName,
   forDrivingClusters,
-  householdSize,
+  householdSize
 } = fields;
 
-const makeFeature = async (r) => {
+const makeFeature = async r => {
   let metaJSON = {};
   let slackPermalink = {};
   const location = await fetchCoordFromCrossStreets(
@@ -45,7 +45,7 @@ const makeFeature = async (r) => {
     const timestamp = metaJSON.slack_ts;
     slackPermalink = await slackapi.chat.getPermalink({
       channel,
-      message_ts: timestamp,
+      message_ts: timestamp
     });
   } catch {
     console.error(`[deliveryNeededRequestHandler] could not fetch slack URL
@@ -56,7 +56,7 @@ const makeFeature = async (r) => {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [location.lng, location.lat],
+      coordinates: [location.lng, location.lat]
     },
     properties: {
       title: r.fields[code],
@@ -68,9 +68,9 @@ const makeFeature = async (r) => {
         [firstName]: r.fields[firstName],
         [forDrivingClusters]: Boolean(r.fields[forDrivingClusters]),
         [householdSize]: r.fields[householdSize],
-        slackPermalink: slackPermalink.ok ? slackPermalink.permalink : "",
-      },
-    },
+        slackPermalink: slackPermalink.ok ? slackPermalink.permalink : ""
+      }
+    }
   };
 };
 
@@ -84,11 +84,11 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
   }
 
   const regularRequestsPromises = requestObj
-    .filter((r) => !r.fields[forDrivingClusters])
+    .filter(r => !r.fields[forDrivingClusters])
     .map(makeFeature);
 
   const clusterRequestsPromises = requestObj
-    .filter((r) => Boolean(r.fields[forDrivingClusters]))
+    .filter(r => Boolean(r.fields[forDrivingClusters]))
     .map(makeFeature);
 
   const regularRequests = await Promise.all(regularRequestsPromises);
@@ -97,11 +97,11 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
   return res.send({
     requests: {
       type: "FeatureCollection",
-      features: regularRequests.filter((request) => !!request),
+      features: regularRequests.filter(request => !!request)
     },
     drivingClusterRequests: {
       type: "FeatureCollection",
-      features: clusterRequests.filter((request) => !!request),
-    },
+      features: clusterRequests.filter(request => !!request)
+    }
   });
 };

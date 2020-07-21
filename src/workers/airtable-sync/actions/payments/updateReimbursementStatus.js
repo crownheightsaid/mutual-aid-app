@@ -38,7 +38,7 @@ module.exports = async function updateMessage(paymentRequest) {
   await slackapi.chat.update({
     channel: reimbursementChannel.id,
     ts: slackThreadId,
-    text: newContent,
+    text: newContent
   });
 };
 
