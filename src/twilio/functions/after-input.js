@@ -4,6 +4,7 @@ exports.handler = function recordRequest(context, event, callback) {
   const twilioSid = event.CallSid;
   const phone = event.From;
   const neighborhood = event.area;
+  let recordingUrl = event.RecordingUrl;
   let status = "";
   let manyc = "";
   let carcluster = "";
@@ -16,24 +17,27 @@ exports.handler = function recordRequest(context, event, callback) {
 
   const base = Airtable.base("apppK7mrvMPcwtv6d");
 
-  if (neighborhood === "flatbush") {
+  if (neighborhood === "ch") {
+    status = "Dispatch Needed";
+    manyc = "Crown Heights";
+    carcluster = "";
+  } else if (neighborhood === "flatbush") {
     status = "Beyond Crown Heights";
     manyc = "Brooklyn: Flatbush";
     carcluster = "yes";
-  }
-  if (neighborhood === "brownsville") {
+    recordingUrl = "";
+  } else if (neighborhood === "brownsville") {
     status = "Brownsville/East NY";
     manyc = "Brooklyn: Brownsville";
     carcluster = "yes";
-  }
-  if (neighborhood === "eny") {
+    recordingUrl = "";
+  } else if (neighborhood === "eny") {
     status = "Brownsville/East NY";
     manyc = "Brooklyn: East New York";
     carcluster = "yes";
+    recordingUrl = "";
   }
 
-  console.log("now looking at Airtable...");
-  console.log(neighborhood);
   base("Requests")
     .select({
       maxRecords: 1,
@@ -61,7 +65,7 @@ exports.handler = function recordRequest(context, event, callback) {
   function createRecord() {
   base('Requests').create({ // eslint-disable-line
         "Neighborhood MA-NYC": manyc,
-        Message: "",
+        Message: recordingUrl,
         Phone: phone,
         "Text or Voice?": "voice",
         "Twilio Call Sid": twilioSid,
@@ -73,8 +77,10 @@ exports.handler = function recordRequest(context, event, callback) {
           console.error(err);
           return;
         }
-        console.log(`created record: ${record.getId()}`); // each record has a unique Airtable ID
-        callback(null);
+        console.log(`created record: ${record.getId()}`);
+        const response = new Twilio.twiml.VoiceResponse(); // eslint-disable-line no-undef
+        response.say({ voice: "alice", language: "en-US" }, "Thank you.");
+        callback(null, response);
       }
     );
   } // end of createRecord
