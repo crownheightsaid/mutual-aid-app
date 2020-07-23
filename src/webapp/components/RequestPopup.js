@@ -10,6 +10,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import GroupIcon from "@material-ui/icons/Group";
 import DriveEtaIcon from "@material-ui/icons/DriveEta";
 import Chip from "@material-ui/core/Chip";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -80,12 +81,17 @@ const RequestPopup = ({ requests, closePopup }) => {
           </Typography>
 
           <Box className={classes.chipRow}>
-            <Chip
-              label={`${meta["Household Size"] || "n/a"}`}
-              icon={<GroupIcon />}
-              color="secondary"
-              size="small"
-            />
+            <Tooltip
+              title="Household size"
+              classes={{ tooltip: classes.noMaxWidth }}
+            >
+              <Chip
+                label={`${meta["Household Size"] || "n/a"}`}
+                icon={<GroupIcon />}
+                color="secondary"
+                size="small"
+              />
+            </Tooltip>
 
             {meta["For Driving Clusters"] && (
               <Chip
