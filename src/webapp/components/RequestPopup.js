@@ -11,7 +11,6 @@ import GroupIcon from "@material-ui/icons/Group";
 import DriveEtaIcon from "@material-ui/icons/DriveEta";
 import Chip from "@material-ui/core/Chip";
 import Tooltip from "@material-ui/core/Tooltip";
-import { DaysOpenChip } from "./DaysOpenChip";
 import { differenceInDays, fromUnixTime } from "date-fns";
 import DaysOpenChip from "./DaysOpenChip";
 
