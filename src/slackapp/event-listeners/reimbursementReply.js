@@ -1,11 +1,15 @@
 const slackapi = require("~slack/webApi");
 const { findChannelByName } = require("~slack/channels");
 const { REIMBURSEMENT_CHANNEL } = require("~slack/constants");
-const { findPaymentRequestBySlackThreadId } = require("~airtable/tables/paymentRequests");
-const { paymentRequestsFields } = require("~airtable/tables/paymentRequestsSchema");
+const {
+  findPaymentRequestBySlackThreadId,
+} = require("~airtable/tables/paymentRequests");
+const {
+  paymentRequestsFields,
+} = require("~airtable/tables/paymentRequestsSchema");
 const { createDonorPayment } = require("~airtable/tables/donorPayments");
 
-const { donorPaymentsFields } = require("~airtable/tables/donorPaymentsSchema")
+const { donorPaymentsFields } = require("~airtable/tables/donorPaymentsSchema");
 
 module.exports.register = function register(slackEvents) {
   slackEvents.on("message", filterAndReply);
@@ -28,7 +32,7 @@ const filterAndReply = async (event) => {
     return;
   }
 
-  let paymentRequest
+  let paymentRequest;
   try {
     [paymentRequest] = await findPaymentRequestBySlackThreadId(event.thread_ts);
     if (!paymentRequest) {
@@ -55,9 +59,9 @@ const filterAndReply = async (event) => {
       [donorPaymentsFields.status]: donorPaymentsFields.status_options.pending,
       [donorPaymentsFields.donorSlackId]: event.user,
       [donorPaymentsFields.recipientConfirmation]:
-      donorPaymentsFields.recipientConfirmation_options.pending,
+        donorPaymentsFields.recipientConfirmation_options.pending,
       [donorPaymentsFields.donorConfirmation]:
-      donorPaymentsFields.donorConfirmation_options.confirmed,
+        donorPaymentsFields.donorConfirmation_options.confirmed,
     });
 
     if (!record) {
@@ -75,7 +79,7 @@ const filterAndReply = async (event) => {
     newBalance <= 0
       ? "reimbursement is complete!!"
       : `just ${newBalance.toFixed(2)} to go!`;
-  
+
   try {
     await slackapi.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,
@@ -86,10 +90,9 @@ const filterAndReply = async (event) => {
     });
   } catch (e) {
     console.error("Error posting reimbursement message", e);
-    return;
   }
 };
-  
+
 const findAmountsInString = (text) => {
   return text.replace(/<.{0,15}>/g, "").match(/\d+\.?\d*/g);
 };

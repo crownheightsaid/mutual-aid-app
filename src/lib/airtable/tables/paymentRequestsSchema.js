@@ -1,6 +1,7 @@
 const { paymentsAirbase } = require("~airtable/bases");
 
-const paymentRequestsTableName = (exports.paymentRequestsTableName = "PaymentRequests");
+const paymentRequestsTableName = (exports.paymentRequestsTableName =
+  "PaymentRequests");
 exports.paymentRequestsTable = paymentsAirbase(paymentRequestsTableName);
 const fields = (exports.paymentRequestsFields = {
   id: "ID",
