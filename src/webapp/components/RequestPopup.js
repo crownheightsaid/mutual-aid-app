@@ -96,7 +96,7 @@ const RequestPopup = ({ requests, closePopup }) => {
               <Chip
                 label={`${meta["Household Size"] || "n/a"}`}
                 icon={<GroupIcon />}
-                color="info"
+                color="default"
                 size="small"
               />
             </Tooltip>
