@@ -8,6 +8,8 @@ const {
 const {
   paymentRequestsFields,
   paymentRequestsTable,
+} = require("~airtable/tables/paymentRequestsSchema");
+const {
   findPaymentRequestInSlack,
   deletePaymentRequest,
 } = require("~airtable/tables/paymentRequests");

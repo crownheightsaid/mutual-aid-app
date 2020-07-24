@@ -1,6 +1,6 @@
 const slackapi = require("~slack/webApi");
 const { findChannelByName, getExistingMessage } = require("~slack/channels");
-const { paymentRequestsFields } = require("~airtable/tables/paymentRequests");
+const { paymentRequestsFields } = require("~airtable/tables/paymentRequestsSchema");
 const { REIMBURSEMENT_CHANNEL } = require("~slack/constants");
 const { str } = require("~strings/i18nextWrappers");
 

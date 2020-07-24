@@ -3,12 +3,12 @@ const {
   donorPaymentsTable,
   donorPaymentsFields,
   donorPaymentsSensitiveFields,
-} = require("~airtable/tables/donorPayments");
+} = require("~airtable/tables/donorPaymentsSchema");
 const {
   paymentRequestsTable,
   paymentRequestsFields,
   paymentRequestsSensitiveFields,
-} = require("~airtable/tables/paymentRequests");
+} = require("~airtable/tables/paymentRequestsSchema");
 const sendErrorNotification = require("~slack/errorNotification");
 const newExternalDonorPayment = require("./actions/payments/newExternalDonorPayment");
 const newPaymentRequest = require("./actions/payments/newPaymentRequest");
