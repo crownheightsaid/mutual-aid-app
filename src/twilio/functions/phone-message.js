@@ -5,7 +5,7 @@ exports.handler = function voiceMessage(context, event, callback) {
       response.play("ch_message1.mp3");
       response.record({
         action: "/after-input?area=ch",
-        timeout: "5",
+        timeout: "5"
       });
       console.log("redirecting to crown heights");
       break;
@@ -23,7 +23,7 @@ exports.handler = function voiceMessage(context, event, callback) {
       break;
     default:
       response.pause({
-        length: 1,
+        length: 1
       });
       response
         .gather({ numDigits: 1, timeout: 60, actionOnEmptyResult: "true" })

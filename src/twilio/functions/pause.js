@@ -10,7 +10,7 @@ exports.handler = function voicePause(context, event, callback) {
       break;
     default:
       response.pause({
-        length: 2,
+        length: 2
       });
       response
         .gather({ numDigits: 1, timeout: 30, actionOnEmptyResult: "true" })
