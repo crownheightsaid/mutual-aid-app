@@ -12,7 +12,7 @@ exports.handler = function recordRequest(context, event, callback) {
   const Airtable = require('airtable'); // eslint-disable-line
   Airtable.configure({
     endpointUrl: "https://api.airtable.com",
-    apiKey: context.AIRTABLE_API_KEY, // set in our environment variables
+    apiKey: context.AIRTABLE_API_KEY // eslint-disable-line
   });
 
   const base = Airtable.base("apppK7mrvMPcwtv6d");
