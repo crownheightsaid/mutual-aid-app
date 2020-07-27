@@ -11,25 +11,25 @@ import GroupIcon from "@material-ui/icons/Group";
 import DriveEtaIcon from "@material-ui/icons/DriveEta";
 import Chip from "@material-ui/core/Chip";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   divider: {
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
   },
   closeIcon: {
     position: "absolute",
     right: 0,
-    top: 0
+    top: 0,
   },
   root: {
-    position: "relative"
+    position: "relative",
   },
   chipRow: {
     "& > *": {
-      marginRight: theme.spacing(0.5)
+      marginRight: theme.spacing(0.5),
     },
-    marginTop: theme.spacing(2)
-  }
+    marginTop: theme.spacing(2),
+  },
 }));
 
 const RequestPopup = ({ requests, closePopup }) => {
@@ -42,7 +42,7 @@ const RequestPopup = ({ requests, closePopup }) => {
       offset={{
         "bottom-left": [6, -19],
         bottom: [0, -19],
-        "bottom-right": [-6, -19]
+        "bottom-right": [-6, -19],
       }}
     >
       {requests.map(({ meta }, i) => (
@@ -74,7 +74,7 @@ const RequestPopup = ({ requests, closePopup }) => {
 
           <Typography variant="body2">
             {str("webapp:deliveryNeeded.popup.requestCode", {
-              defaultValue: `Request code:`
+              defaultValue: `Request code:`,
             })}
             {meta.Code}
           </Typography>

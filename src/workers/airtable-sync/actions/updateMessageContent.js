@@ -11,7 +11,7 @@ const mappings = {
   [requestFields.status_options.requestComplete]: str(
     "slackapp:requestBotPost.post.statusPrefix.completed",
     ":heavy_check_mark:  REQUEST COMPLETED\n"
-  )
+  ),
 };
 
 /**
@@ -54,7 +54,7 @@ module.exports = async function updateMessageContent(record) {
   ) {
     newContent += str("slackapp:requestBotPost.post.deliveryCongrats", {
       defaultValue: `:tada: Shout out to {{- deliveryVolunteer}} for volunteering to help! :tada:\n`,
-      deliveryVolunteer: `<@${deliveryVolunteer}>`
+      deliveryVolunteer: `<@${deliveryVolunteer}>`,
     });
   }
 
@@ -71,7 +71,7 @@ module.exports = async function updateMessageContent(record) {
   await slackapi.chat.update({
     channel: meta["slack_channel"],
     ts: meta["slack_ts"],
-    text: newContent
+    text: newContent,
   });
 };
 
@@ -102,7 +102,7 @@ function removeMapLink(messageText) {
 
   return messageText
     .split("\n")
-    .map(line => {
+    .map((line) => {
       if (line.startsWith(streetsLineHeading)) {
         if (line.match(linkRegex)) {
           return line.replace(linkRegex, "$1");
@@ -112,6 +112,6 @@ function removeMapLink(messageText) {
 
       return line;
     })
-    .filter(line => line !== null)
+    .filter((line) => line !== null)
     .join("\n");
 }

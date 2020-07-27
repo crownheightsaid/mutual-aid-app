@@ -1,30 +1,30 @@
-const sharedStylesFn = theme => ({
+const sharedStylesFn = (theme) => ({
   root: {
     paddingTop: theme.spacing(3),
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      display: "flex"
-    }
+      display: "flex",
+    },
   },
   field: {
     marginTop: theme.spacing(2),
-    width: "85%"
+    width: "85%",
   },
   link: {
     color: "inherit",
     textDecoration: "none",
     "&:hover": {
-      textDecoration: "none"
-    }
+      textDecoration: "none",
+    },
   },
   divider: {
     marginBottom: theme.spacing(3),
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
   },
   text: {
-    marginBottom: theme.spacing(1)
-  }
+    marginBottom: theme.spacing(1),
+  },
 });
 export default sharedStylesFn;

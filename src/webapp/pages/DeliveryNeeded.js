@@ -10,18 +10,18 @@ import { useTranslation } from "react-i18next";
 import sharedStylesFn from "webapp/style/sharedStyles";
 import ClusterMap from "webapp/components/ClusterMap";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
   root: {
     "flex-direction": "row",
-    margin: theme.spacing(4)
+    margin: theme.spacing(4),
   },
   description: {
-    marginTop: theme.spacing(4)
+    marginTop: theme.spacing(4),
   },
   mapRoot: {
-    marginTop: theme.spacing(4)
-  }
+    marginTop: theme.spacing(4),
+  },
 }));
 
 export default function DeliveryNeeded() {
@@ -29,7 +29,7 @@ export default function DeliveryNeeded() {
   const { t: str } = useTranslation();
   const [{ data, loading, error }] = useAxios({
     url: `/api/delivery-needed/requests.json`,
-    method: "get"
+    method: "get",
   });
 
   if (loading) {
@@ -45,7 +45,7 @@ export default function DeliveryNeeded() {
         <Typography variant="h4">
           {str("webapp:deliveryNeeded.title", {
             defaultValue: "{{neighborhood}} Delivery Needed",
-            neighborhood: str("common:neighborhood")
+            neighborhood: str("common:neighborhood"),
           })}
         </Typography>
       </Box>
@@ -59,7 +59,7 @@ export default function DeliveryNeeded() {
         <Typography variant="body1">
           {str("webapp:deliveryNeeded.mapDesc", {
             defaultValue:
-              'Above is a map of all open requests marked "Delivery Needed"'
+              'Above is a map of all open requests marked "Delivery Needed"',
           })}
         </Typography>
         <List>
@@ -67,30 +67,30 @@ export default function DeliveryNeeded() {
             {str("webapp:deliveryNeeded.description.dot", {
               defaultValue: `Each dot represents a location with one or more requests. This
             location is only representative of the cross street data. We do not
-            store full addresses.`
+            store full addresses.`,
             })}
           </ListItem>
           <ListItem>
             {str("webapp:deliveryNeeded.description.clickDot", {
               defaultValue: `Click on each cluster (large circle with a number) to zoom into
-            individual request.`
+            individual request.`,
             })}
           </ListItem>
           <ListItem>
             {str("webapp:deliveryNeeded.description.popUp", {
               defaultValue: `Click on a dot to pop up details. There is a link to the Slack post
-            for more details, where you can also claim the delivery.`
+            for more details, where you can also claim the delivery.`,
             })}
           </ListItem>
           <ListItem>
             {str("webapp:deliveryNeeded.description.multipleRequests", {
               defaultValue: `Some dots may represent multiple requests at the same cross-streets.
-            Clicking on them will display all of the requests.`
+            Clicking on them will display all of the requests.`,
             })}
           </ListItem>
           <ListItem>
             {str("webapp:deliveryNeeded.description.questions", {
-              defaultValue: `Questions or concerns? Please let us know in`
+              defaultValue: `Questions or concerns? Please let us know in`,
             })}
             <a href={str("webapp:slack.techChannelUrl")}>
               {str("webapp:slack.techChannel")}

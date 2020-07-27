@@ -7,7 +7,7 @@ exports.handler = function incomingSms(context, event, callback) {
   var Airtable = require('airtable'); // eslint-disable-line
   Airtable.configure({
     endpointUrl: "https://api.airtable.com",
-    apiKey: context.AIRTABLE_API_KEY
+    apiKey: context.AIRTABLE_API_KEY,
   });
 
   const base = Airtable.base("apppK7mrvMPcwtv6d");
@@ -17,7 +17,7 @@ exports.handler = function incomingSms(context, event, callback) {
     .select({
       maxRecords: 1,
       fields: ["Phone"],
-      filterByFormula: `({Phone} = '${phone}')`
+      filterByFormula: `({Phone} = '${phone}')`,
     })
     .firstPage(function checkDuplicate(err, records) {
       if (err) {
@@ -44,7 +44,7 @@ exports.handler = function incomingSms(context, event, callback) {
         Phone: phone,
         "Twilio Call Sid": twilioSid,
         "Text or Voice?": "text",
-        Status: status
+        Status: status,
       },
       function responseTxt(err, record) {
         if (err) {
