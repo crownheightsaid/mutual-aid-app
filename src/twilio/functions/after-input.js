@@ -12,7 +12,7 @@ exports.handler = function recordRequest(context, event, callback) {
   const Airtable = require('airtable'); // eslint-disable-line
   Airtable.configure({
     endpointUrl: "https://api.airtable.com",
-    apiKey: context.AIRTABLE_API_KEY // set in our environment variables
+    apiKey: context.AIRTABLE_API_KEY, // set in our environment variables
   });
 
   const base = Airtable.base("apppK7mrvMPcwtv6d");
@@ -29,7 +29,7 @@ exports.handler = function recordRequest(context, event, callback) {
       view: "Recent Requests",
       fields: ["Phone", "Time", "Status"],
       sort: [{ field: "Time", direction: "asc" }],
-      filterByFormula: `({Phone} = '${phone}')`
+      filterByFormula: `({Phone} = '${phone}')`,
     })
     .firstPage(function checkDuplicate(err, records) {
       if (err) {
@@ -55,7 +55,7 @@ exports.handler = function recordRequest(context, event, callback) {
         "Text or Voice?": "voice",
         "Twilio Call Sid": twilioSid,
         "For Driving Clusters": carcluster,
-        Status: status
+        Status: status,
       },
       function endRecord(err, record) {
         if (err) {
