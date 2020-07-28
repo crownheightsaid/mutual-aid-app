@@ -69,6 +69,7 @@ const makeFeature = async (r) => {
         [forDrivingClusters]: Boolean(r.fields[forDrivingClusters]),
         [householdSize]: r.fields[householdSize],
         slackPermalink: slackPermalink.ok ? slackPermalink.permalink : "",
+        slackTs: metaJSON.slack_ts || "",
       },
     },
   };
