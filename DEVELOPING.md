@@ -7,7 +7,7 @@ This project is a monorepo. The different components are:
 - `src/api`
   - HTTP api that this app provides
 - `src/twilio`
-  - Barebones twilio callbacks for recording a voicemail and creating a new airtable record 
+  - twilio serverless js functions for voice + sms, connecting to airtable; deployed separately  
 - `src/webapp`
   - Frontend for the app, built with React. Built to `/public` in project root
 - `src/workers`

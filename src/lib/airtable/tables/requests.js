@@ -84,10 +84,14 @@ exports.findDeliveryNeededRequests = async () => {
       })
       .all();
 
+<<<<<<< HEAD
     return [
       requests.filter(r => !requestNotInSlack(r)).filter(notForDrivingCluster),
       null
     ];
+=======
+    return [requests.filter((r) => !requestNotInSlack(r)), null];
+>>>>>>> mab-open-phones-functions
   } catch (e) {
     return [[], `Error while looking up open requests: ${e}`];
   }

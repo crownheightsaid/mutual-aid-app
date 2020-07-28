@@ -9,11 +9,16 @@ const {
   paymentRequestsFields,
   paymentRequestsSensitiveFields
 } = require("~airtable/tables/paymentRequests");
+const sendErrorNotification = require("~slack/errorNotification");
 const newExternalDonorPayment = require("./actions/payments/newExternalDonorPayment");
 const newPaymentRequest = require("./actions/payments/newPaymentRequest");
 const updateReimbursementMessage = require("./actions/payments/updateReimbursementStatus");
 
 const defaultInterval = 10000;
+
+const errFunc = async (error) => {
+  sendErrorNotification(error);
+};
 
 function startWorker(interval) {
   let pollInterval = interval;
@@ -50,7 +55,8 @@ function startWorker(interval) {
         }
       });
       return Promise.all(promises);
-    }
+    },
+    errFunc
   );
 
   const donorSignupChanges = new ChangeDetector(donorPaymentsTable, {
@@ -82,7 +88,8 @@ function startWorker(interval) {
         }
       });
       return Promise.all(promises);
-    }
+    },
+    errFunc
   );
 }
 

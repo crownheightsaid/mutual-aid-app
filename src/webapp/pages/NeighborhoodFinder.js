@@ -11,9 +11,9 @@ import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import { useTranslation } from "react-i18next";
 import queryString from "query-string";
-import QuadrantMap from "../components/QuadrantMap";
-import SaveNeighborhoodDataInput from "../components/SaveNeighborhoodDataInput";
-import sharedStylesFn from "../style/sharedStyles";
+import QuadrantMap from "webapp/components/QuadrantMap";
+import SaveNeighborhoodDataInput from "webapp/components/SaveNeighborhoodDataInput";
+import sharedStylesFn from "webapp/style/sharedStyles";
 
 const useStyles = makeStyles(theme => ({
   ...sharedStylesFn(theme),

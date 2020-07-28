@@ -5,28 +5,25 @@ exports.handler = function voiceMessage(context, event, callback) {
       response.play("ch_message1.mp3");
       response.record({
         action: "/after-input?area=ch",
-        timeout: "5"
+        timeout: "5",
       });
       console.log("redirecting to crown heights");
       break;
     case "2": // Flatbush
       response.play("flatbush_message.mp3");
-      console.log("redirecting to beyond crown heights");
-      response.redirect("/after-input?area=flatbush");
+      console.log("playing flatbush message");
       break;
     case "3": // Brownsville or Ocean Hill
       response.play("brownsville_message.mp3");
-      console.log("redirecting to beyond crown heights");
-      response.redirect("/after-input?area=brownsville");
+      console.log("playing brownsville message");
       break;
     case "4": // East New York
       response.play("eny_message.mp3");
-      console.log("redirecting to beyond crown heights");
-      response.redirect("/after-input?area=eny");
+      console.log("playing east new york message");
       break;
     default:
       response.pause({
-        length: 1
+        length: 1,
       });
       response
         .gather({ numDigits: 1, timeout: 60, actionOnEmptyResult: "true" })

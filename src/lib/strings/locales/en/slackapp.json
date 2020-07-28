@@ -7,7 +7,7 @@
     "intakeVolunteers": "intake_volunteers",
     "deliveryVolunteers": "delivery_volunteers",
     "flyering": "flyer_squad",
-    "tech": "tech",
+    "tech": "wg_tech",
     "communityReimbursements": "community_reimbursement",
     "hatHolders": "hat_holders"
   },
@@ -77,7 +77,7 @@
       "message": {
         "default": "Delivery has been assigned!",
         "text": "Thanks to you both for volunteering. Here's some details on the request. Let's help some neighbors!",
-        "reminder": "_*Reminder:* When you make a delivery, drop the groceries at the door, step 6 feet away, and make sure that the recipient knows to wipe down all the groceries (or wash with soap and water)_",
+        "reminder": "_***UPDATED REMINDER***: When shopping, wear a mask, wear gloves or sanitize hands thoroughly before entering the store, and generally maintain good social distancing practices. When you make a delivery, drop the groceries at the door, step 6 feet away, and make sure that the recipient knows to wipe down all the groceries (or wash with soap and water). Here are some <{{- flyersUrl}}|safety flyers> if you are able to print them and slip into the bags._",
         "outro": "*Submit your receipt:* Afterwards, please fill out this handy <{{- reimbursementUrl}}|reimbursement form>, it will automatically post to the #community_reimbursement channel!\n\nFor more info, please see the <{{- guideUrl}}|delivery guide>."
       },
       "householdSize": "Household Size"

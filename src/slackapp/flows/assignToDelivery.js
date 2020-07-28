@@ -143,8 +143,15 @@ exports.atdViewSubmission = async payload => {
             type: "section",
             text: {
               type: "mrkdwn",
+<<<<<<< HEAD
               text: str("slackapp:assignDelivery.dm.message.reminder")
             }
+=======
+              text: str("slackapp:assignDelivery.dm.message.reminder", {
+                flyersUrl: str("common:links.groceryFlyers"),
+              }),
+            },
+>>>>>>> mab-open-phones-functions
           },
           {
             type: "section",
