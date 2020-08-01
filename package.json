@@ -79,6 +79,7 @@
     "react-i18next": "11.3.5",
     "react-mapbox-gl": "^4.8.6",
     "react-scripts": "^3.4.1",
+    "ts-react-json-table": "^0.1.2",
     "twilio": "3.42.1"
   },
   "devDependencies": {

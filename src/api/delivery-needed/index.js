@@ -17,6 +17,8 @@ const {
 const makeFeature = async (r) => {
   let metaJSON = {};
   let slackPermalink = {};
+  let timestamp;
+
   const location = await fetchCoordFromCrossStreets(
     `
       ${r.fields[crossStreetFirst]},
@@ -42,7 +44,7 @@ const makeFeature = async (r) => {
 
   try {
     const channel = metaJSON.slack_channel;
-    const timestamp = metaJSON.slack_ts;
+    timestamp = metaJSON.slack_ts;
     slackPermalink = await slackapi.chat.getPermalink({
       channel,
       message_ts: timestamp,
@@ -69,6 +71,7 @@ const makeFeature = async (r) => {
         [forDrivingClusters]: Boolean(r.fields[forDrivingClusters]),
         [householdSize]: r.fields[householdSize],
         slackPermalink: slackPermalink.ok ? slackPermalink.permalink : "",
+        timestamp,
         slackTs: metaJSON.slack_ts || "",
       },
     },
