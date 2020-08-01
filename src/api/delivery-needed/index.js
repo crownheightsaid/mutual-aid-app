@@ -72,6 +72,7 @@ const makeFeature = async (r) => {
         [householdSize]: r.fields[householdSize],
         slackPermalink: slackPermalink.ok ? slackPermalink.permalink : "",
         timestamp,
+        slackTs: metaJSON.slack_ts || "",
       },
     },
   };

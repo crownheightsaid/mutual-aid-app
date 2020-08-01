@@ -10,6 +10,14 @@ import CloseIcon from "@material-ui/icons/Close";
 import GroupIcon from "@material-ui/icons/Group";
 import DriveEtaIcon from "@material-ui/icons/DriveEta";
 import Chip from "@material-ui/core/Chip";
+import Tooltip from "@material-ui/core/Tooltip";
+import { differenceInDays, fromUnixTime } from "date-fns";
+import DaysOpenChip from "./DaysOpenChip";
+
+const daysSinceSlackMessage = (slackTs) => {
+  const datePosted = fromUnixTime(Number(slackTs));
+  return differenceInDays(new Date(), datePosted);
+};
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -80,12 +88,17 @@ const RequestPopup = ({ requests, closePopup }) => {
           </Typography>
 
           <Box className={classes.chipRow}>
-            <Chip
-              label={`${meta["Household Size"] || "n/a"}`}
-              icon={<GroupIcon />}
-              color="secondary"
-              size="small"
-            />
+            <Tooltip
+              title="Household size"
+              classes={{ tooltip: classes.noMaxWidth }}
+            >
+              <Chip
+                label={`${meta["Household Size"] || "n/a"}`}
+                icon={<GroupIcon />}
+                color="default"
+                size="small"
+              />
+            </Tooltip>
 
             {meta["For Driving Clusters"] && (
               <Chip
@@ -97,7 +110,9 @@ const RequestPopup = ({ requests, closePopup }) => {
             )}
           </Box>
 
-          {!meta.slackPermalink && (
+          {meta.slackPermalink ? (
+            <DaysOpenChip daysOpen={daysSinceSlackMessage(meta.slackTs)} />
+          ) : (
             <Typography variant="body2" color="error">
               {str(
                 "webapp:deliveryNeeded.popup.cantFindSlack",
