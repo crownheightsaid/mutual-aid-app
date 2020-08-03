@@ -106,7 +106,7 @@ export default function DeliveryNeeded() {
         </Grid>
         <Grid item xs={6}>
           <Box>
-           {/*
+            {/*
             Commenting this out for now until https://github.com/crownheightsaid/mutual-aid-app/issues/125
             is done. This is because from a UI standpoint it can be confusing to have two identical data displays
             that aren't connected to one another.
@@ -114,7 +114,7 @@ export default function DeliveryNeeded() {
             Feel free to uncomment for dev work.
             <DeliveryTable
               rows={data.requests.features.map((f) => f.properties.meta)}
-            />*/}
+            /> */}
           </Box>
         </Grid>
       </Grid>
