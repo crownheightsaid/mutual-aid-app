@@ -14,22 +14,25 @@ const useStyles = makeStyles({
   },
 });
 
-const DaysOpenChip = (props) => {
+const DaysOpenChip = ({ daysOpen }) => {
   const classes = useStyles();
 
   let chipColor;
 
-  if (props.daysOpen < 3) {
+  if (daysOpen < 3) {
     chipColor = classes.recent;
-  } else if (props.daysOpen < 5) {
+  } else if (daysOpen < 5) {
     chipColor = classes.moderate;
   } else {
     chipColor = classes.urgent;
   }
 
+  const label =
+    daysOpen <= 0 ? `open for <1 day` : `open for ${daysOpen} day(s)`;
+
   return (
     <Chip
-      label={`open for ${props.daysOpen} day(s)`}
+      label={label}
       color="primary"
       size="small"
       classes={{

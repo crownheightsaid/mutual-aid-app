@@ -108,18 +108,18 @@ const RequestPopup = ({ requests, closePopup }) => {
                 size="small"
               />
             )}
-          </Box>
 
-          {meta.slackPermalink ? (
-            <DaysOpenChip daysOpen={daysSinceSlackMessage(meta.slackTs)} />
-          ) : (
-            <Typography variant="body2" color="error">
-              {str(
-                "webapp:deliveryNeeded.popup.cantFindSlack",
-                `Can't find Slack link, please search for request code in Slack.`
-              )}
-            </Typography>
-          )}
+            {meta.slackPermalink ? (
+              <DaysOpenChip daysOpen={daysSinceSlackMessage(meta.slackTs)} />
+            ) : (
+              <Typography variant="body2" color="error">
+                {str(
+                  "webapp:deliveryNeeded.popup.cantFindSlack",
+                  `Can't find Slack link, please search for request code in Slack.`
+                )}
+              </Typography>
+            )}
+          </Box>
 
           {i !== requests.length - 1 && <Divider className={classes.divider} />}
         </Box>
