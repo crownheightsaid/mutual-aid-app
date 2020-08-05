@@ -15,7 +15,7 @@ This project is a monorepo. The different components are:
 - `scripts/`
   - One-off scripts for things like backfill. Can also be useful for bulk adding users to slack channels
 
-Each component has it's own DEVELOPING.md for developing locally. You can learn most of it from reading the scripts in `package.json`.
+Each component has its own DEVELOPING.md for developing locally. You can learn most of it from reading the scripts in `package.json`.
 
 
 The rest of this file is for app-wide setup for contributing, as well as deploying to non-local environments.
