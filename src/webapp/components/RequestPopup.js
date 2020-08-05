@@ -32,9 +32,15 @@ const useStyles = makeStyles((theme) => ({
     },
     marginTop: theme.spacing(2),
   },
+  ctaTooltipButton: {
+    backgroundColor: "dodgerblue",
+    color: "white",
+    justifySelf: "right",
+  },
 }));
 
-const RequestPopup = ({ requests, closePopup }) => {
+const RequestPopup = ({ requests, closePopup, handleClaimDelivery }) => {
+  const deliveryContext = useContext(DeliveryContext);
   const classes = useStyles();
   const { t: str } = useTranslation();
   const { _focusedRequestId, setFocusedRequestId } = useContext(
@@ -86,7 +92,7 @@ const RequestPopup = ({ requests, closePopup }) => {
           <Typography variant="body2">
             {str("webapp:deliveryNeeded.popup.requestCode", {
               defaultValue: `Request code:`,
-            })}
+            })}{" "}{/* eslint-disable-line */}
             {meta.Code}
           </Typography>
 
@@ -94,6 +100,19 @@ const RequestPopup = ({ requests, closePopup }) => {
             <HouseholdSizeChip size={meta["Household Size"]} />
 
             {meta["For Driving Clusters"] && <DrivingClusterChip />}
+
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => deliveryContext.handleOpenClaimDialog(meta.Code)}
+              className={classes.ctaTooltipButton}
+            >
+              <Typography variant="button">
+                {str("webapp:deliveryNeeded.popup.claimDelivery", {
+                  defaultValue: "Claim delivery",
+                })}
+              </Typography>
+            </Button>
 
             {meta.slackPermalink ? (
               <DaysOpenChip daysOpen={daysSinceSlackMessage(meta.slackTs)} />
