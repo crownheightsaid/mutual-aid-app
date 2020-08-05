@@ -18,11 +18,9 @@ const useStyles = makeStyles((theme) => ({
     "flex-direction": "row",
     margin: theme.spacing(4),
   },
-  description: {
-    marginTop: theme.spacing(4),
-  },
   mapRoot: {
     marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(4),
   },
 }));
 
@@ -58,8 +56,15 @@ export default function DeliveryNeeded() {
           geoJsonData={data}
         />
       </Box>
-      <Grid container spacing={3}>
-        <Grid item xs={6}>
+      <Grid container spacing={3} direction="row-reverse">
+        <Grid item xs={12} md={6}>
+          <Box>
+            <DeliveryTable
+              rows={data.requests.features.map((f) => f.properties.meta)}
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={6}>
           <Box className={classes.description}>
             <Typography variant="body1">
               {str("webapp:deliveryNeeded.mapDesc", {
@@ -97,18 +102,12 @@ export default function DeliveryNeeded() {
                 {str("webapp:deliveryNeeded.description.questions", {
                   defaultValue: `Questions or concerns? Please let us know in`,
                 })}
+                <span>&nbsp;</span>
                 <a href={str("webapp:slack.techChannelUrl")}>
                   {str("webapp:slack.techChannel")}
                 </a>
               </ListItem>
             </List>
-          </Box>
-        </Grid>
-        <Grid item xs={6}>
-          <Box>
-            <DeliveryTable
-              rows={data.requests.features.map((f) => f.properties.meta)}
-            />
           </Box>
         </Grid>
       </Grid>
