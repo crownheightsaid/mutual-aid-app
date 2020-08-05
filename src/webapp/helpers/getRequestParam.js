@@ -1,12 +1,7 @@
 const getRequestParam = () => {
-  const searchStr = window.location && window.location.search;
-  return searchStr
-    .slice(1)
-    .split("&")
-    .reduce((acc, token) => {
-      const matches = token.match(/request=(.*)/);
-      return matches ? matches[1] : acc;
-    }, "");
+  const searchStr = window?.location?.search?.split("?")?.[1] ?? "";
+  const params = new URLSearchParams(searchStr);
+  return params.get("request") ?? "";
 };
 
 export default getRequestParam;
