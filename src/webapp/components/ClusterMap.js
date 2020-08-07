@@ -9,6 +9,9 @@ import {
 } from "../helpers/map-constants";
 import BasicMap from "./BasicMap";
 import { QuadrantsLayers } from "./QuadrantMap";
+// Disable import/no-cycle for now since RequestPopup needs DeliveryContext;
+// should probably refactor out of DeliveryNeeded
+// eslint-disable-next-line import/no-cycle
 import ClusterMapLayers from "./ClusterMapLayers";
 import { RequestNotFoundAlert, NoRequestsAlert } from "./MapAlerts";
 import getRequestParam from "../helpers/getRequestParam";

@@ -5,6 +5,7 @@
    */
 import React, { useState, useEffect, useContext } from "react";
 import { Layer, MapContext } from "react-mapbox-gl";
+// eslint-disable-next-line import/no-cycle
 import RequestPopup from "./RequestPopup";
 import ClusterMapContext from "../context/ClusterMapContext";
 
