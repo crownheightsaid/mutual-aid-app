@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
   bodyContainer: {
     padding: theme.spacing(2, 3),
-    transition: "all 5s",
+    display: "flex",
+    flexDirection: "column",
   },
   closeIcon: {
     cursor: "pointer",
@@ -30,10 +31,19 @@ const useStyles = makeStyles((theme) => ({
   formsContainer: {
     marginBottom: theme.spacing(3),
   },
-  buttonsContainer: {
+  formButtonsContainer: {
+    display: "flex",
+  },
+  infoButtonsContainer: {
     display: "flex",
     justifyContent: "space-around",
     marginTop: theme.spacing(3),
+  },
+  backButton: {
+    backgroundColor: "lightgray",
+  },
+  moreInfoButtons: {
+    paddingTop: theme.spacing(2),
   },
   finishStep: {
     display: "flex",
@@ -59,7 +69,7 @@ const InfoStep = ({ handleAccept, handleGetMoreInfo, requestCode }) => {
           {requestCode}
           {"\nIf you agree, please provide your phone number etc"}
         </Typography>
-        <div className={classes.buttonsContainer}>
+        <div className={classes.infoButtonsContainer}>
           <a href="#todo" onClick={handleGetMoreInfo}>
             <Typography variant="body2">
               {str("webapp:deliveryNeeded.dialog", {
@@ -113,7 +123,7 @@ const FormStep = ({ handleFinish }) => {
   );
 };
 
-const MoreInfoStep = () => {
+const MoreInfoStep = ({ handleGoBack }) => {
   const classes = useStyles();
   const { t: str } = useTranslation();
   return (
@@ -123,7 +133,20 @@ const MoreInfoStep = () => {
           defaultValue: "What it means to do a delivery",
         })}
       </DialogTitle>
-      <div className={classes.bodyContainer}>lorum ipsumthin</div>
+      <div className={classes.bodyContainer}>
+        <Typography variant="body2">
+          {str("webapp:deliveryNeeded.dialog.description", {
+            defaultValue: "lorum ipsumthin todo",
+          })}
+        </Typography>
+        <span className={classes.moreInfoButtons}>
+          <Button onClick={handleGoBack} className={classes.backButton}>
+            {str("webapp:deliveryNeeded.dialog.backButton", {
+              defaultValue: "Back",
+            })}
+          </Button>
+        </span>
+      </div>
     </>
   );
 };
