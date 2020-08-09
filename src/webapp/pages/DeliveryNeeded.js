@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import sharedStylesFn from "webapp/style/sharedStyles";
 import ClusterMap from "webapp/components/ClusterMap";
 import Grid from "@material-ui/core/Grid";
-import DeliveryTable from "../components/DeliveryTable";
+// import DeliveryTable from "../components/DeliveryTable";
 
 const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
@@ -59,7 +59,7 @@ export default function DeliveryNeeded() {
       <Grid container spacing={3} direction="row-reverse">
         <Grid item xs={12} md={6}>
           <Box>
-           {/*
+            {/*
             Commenting this out for now until https://github.com/crownheightsaid/mutual-aid-app/issues/125
             is done. This is because from a UI standpoint it can be confusing to have two identical data displays
             that aren't connected to one another.
