@@ -12,15 +12,10 @@ import { useTranslation } from "react-i18next";
 import sharedStylesFn from "webapp/style/sharedStyles";
 import ClusterMap from "webapp/components/ClusterMap";
 import Grid from "@material-ui/core/Grid";
-<<<<<<< HEAD
+import DeliveryDialog from "webapp/components/DeliveryDialog";
+import DeliveryContext from "webapp/context/DeliveryContext";
 import DeliveryTable from "../components/DeliveryTable";
 import ClusterMapContext from "../context/ClusterMapContext";
-import ClaimDeliveryDialog from "../components/ClaimDeliveryDialog";
-=======
-// import DeliveryTable from "../components/DeliveryTable";
-import DeliveryContext from "webapp/context/DeliveryContext";
-import ClaimDeliveryDialog from "webapp/components/ClaimDeliveryDialog";
->>>>>>> cleanup delivery context-related code
 
 const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
@@ -86,7 +81,7 @@ export default function DeliveryNeeded() {
 
   return (
     <DeliveryContext.Provider value={store}>
-      <ClaimDeliveryDialog open={isDialogOpen} onClose={() => setOpen(false)} />
+      <DeliveryDialog open={isDialogOpen} onClose={() => setOpen(false)} />
       <Box className={classes.root}>
         <Box className={classes.heading}>
           <Typography variant="h4">
