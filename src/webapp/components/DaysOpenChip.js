@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   },
 });
 
-const DaysOpenChip = ({ daysOpen }) => {
+const DaysOpenChip = ({ daysOpen, timeOnly }) => {
   const classes = useStyles();
 
   let chipColor;
@@ -27,8 +27,9 @@ const DaysOpenChip = ({ daysOpen }) => {
     chipColor = classes.urgent;
   }
 
-  const label =
-    daysOpen <= 0 ? `open for <1 day` : `open for ${daysOpen} day(s)`;
+  const time =
+    daysOpen <= 0 ? `<1 day` : `${daysOpen} day(s)`;
+  const label = timeOnly ? time : `open for ${time}`
 
   return (
     <Chip

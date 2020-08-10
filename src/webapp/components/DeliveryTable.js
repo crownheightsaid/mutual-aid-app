@@ -8,10 +8,12 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
+import DaysOpenChip from "./DaysOpenChip";
+import { daysSinceSlackMessage } from '../helpers/time';
 
 const useStyles = makeStyles({
   container: {
-    maxHeight: 440,
+    maxHeight: '90vh',
   },
 });
 
@@ -20,17 +22,9 @@ const DeliveryTable = ({ rows }) => {
   const classes = useStyles();
 
   // sort happens in-place
-  rows.sort((rowA, rowB) => rowB.timestamp - rowA.timestamp);
+  rows.sort((rowA, rowB) => rowA.timestamp - rowB.timestamp);
 
-  // format data for presentation
-  const formattedRows = rows.map((row) => {
-    const timestamp = new Date(row.timestamp * 1000);
-
-    return {
-      ...row,
-      timestamp: `${timestamp.toLocaleDateString()}: ${timestamp.toLocaleTimeString()}`,
-    };
-  });
+  const formattedRows = rows;
 
   return (
     <TableContainer className={classes.container} component={Paper}>
@@ -38,20 +32,17 @@ const DeliveryTable = ({ rows }) => {
         <TableHead>
           <TableRow>
             <TableCell>{str("webapp:zoneFinder.label.code")}</TableCell>
-            <TableCell align="right">
-              {str("webapp:zoneFinder.label.crossStreetFirst")}
+            <TableCell>
+              {str("webapp:deliveryNeeded.table.headers.crossStreets", { defaultValue: "Cross streets"})}
             </TableCell>
-            <TableCell align="right">
-              {str("webapp:zoneFinder.label.crossStreetSecond")}
-            </TableCell>
-            <TableCell align="right">
+            <TableCell>
               {str("webapp:zoneFinder.label.firstName")}
             </TableCell>
-            <TableCell align="right">
+            <TableCell>
               {str("webapp:zoneFinder.label.slackLink")}
             </TableCell>
-            <TableCell align="right">
-              {str("webapp:zoneFinder.label.timestamp")}
+            <TableCell>
+              {str("webapp:deliveryNeeded.table.headers.daysOpen", { defaultValue: "Days open"})}
             </TableCell>
           </TableRow>
         </TableHead>
@@ -61,10 +52,9 @@ const DeliveryTable = ({ rows }) => {
               <TableCell component="th" scope="row">
                 {row.Code}
               </TableCell>
-              <TableCell align="right">{row["Cross Street #1"]}</TableCell>
-              <TableCell align="right">{row["Cross Street #2"]}</TableCell>
-              <TableCell align="right">{row["First Name"]}</TableCell>
-              <TableCell align="right">
+              <TableCell>{`${row["Cross Street #1"]} and ${row["Cross Street #2"]}`}</TableCell>
+              <TableCell>{row["First Name"]}</TableCell>
+              <TableCell>
                 <a
                   href={row.slackPermalink}
                   target="_blank"
@@ -73,7 +63,7 @@ const DeliveryTable = ({ rows }) => {
                   Slack
                 </a>
               </TableCell>
-              <TableCell align="right">{row.timestamp}</TableCell>
+              <TableCell><DaysOpenChip timeOnly={true} daysOpen={daysSinceSlackMessage(row.slackTs)} /></TableCell>
             </TableRow>
           ))}
         </TableBody>

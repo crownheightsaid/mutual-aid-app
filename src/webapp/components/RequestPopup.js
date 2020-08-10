@@ -11,13 +11,8 @@ import GroupIcon from "@material-ui/icons/Group";
 import DriveEtaIcon from "@material-ui/icons/DriveEta";
 import Chip from "@material-ui/core/Chip";
 import Tooltip from "@material-ui/core/Tooltip";
-import { differenceInDays, fromUnixTime } from "date-fns";
 import DaysOpenChip from "./DaysOpenChip";
-
-const daysSinceSlackMessage = (slackTs) => {
-  const datePosted = fromUnixTime(Number(slackTs));
-  return differenceInDays(new Date(), datePosted);
-};
+import { daysSinceSlackMessage } from '../helpers/time';
 
 const useStyles = makeStyles((theme) => ({
   divider: {
