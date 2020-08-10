@@ -7,11 +7,10 @@ import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";
-import GroupIcon from "@material-ui/icons/Group";
-import DriveEtaIcon from "@material-ui/icons/DriveEta";
 import Chip from "@material-ui/core/Chip";
-import Tooltip from "@material-ui/core/Tooltip";
+import DriveEtaIcon from "@material-ui/icons/DriveEta";
 import DaysOpenChip from "./DaysOpenChip";
+import HouseholdSizeChip from "./HouseholdSizeChip";
 import { daysSinceSlackMessage } from '../helpers/time';
 
 const useStyles = makeStyles((theme) => ({
@@ -83,17 +82,7 @@ const RequestPopup = ({ requests, closePopup }) => {
           </Typography>
 
           <Box className={classes.chipRow}>
-            <Tooltip
-              title="Household size"
-              classes={{ tooltip: classes.noMaxWidth }}
-            >
-              <Chip
-                label={`${meta["Household Size"] || "n/a"}`}
-                icon={<GroupIcon />}
-                color="default"
-                size="small"
-              />
-            </Tooltip>
+            <HouseholdSizeChip size={meta["Household Size"]} />
 
             {meta["For Driving Clusters"] && (
               <Chip

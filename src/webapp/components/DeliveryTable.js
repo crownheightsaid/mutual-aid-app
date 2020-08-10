@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import DaysOpenChip from "./DaysOpenChip";
 import { daysSinceSlackMessage } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
+import HouseholdSizeChip from "./HouseholdSizeChip";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -64,14 +65,13 @@ const DeliveryTable = ({ rows }) => {
                 defaultValue: "Days open",
               })}
             </TableCell>
+            <TableCell>{str("webapp:zoneFinder.label.firstName")}</TableCell>
             <TableCell>{str("webapp:zoneFinder.label.code")}</TableCell>
             <TableCell>
               {str("webapp:deliveryNeeded.table.headers.crossStreets", {
                 defaultValue: "Cross streets",
               })}
             </TableCell>
-            <TableCell>{str("webapp:zoneFinder.label.firstName")}</TableCell>
-            <TableCell>{str("webapp:zoneFinder.label.slackLink")}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -88,20 +88,19 @@ const DeliveryTable = ({ rows }) => {
                   daysOpen={daysSinceSlackMessage(row.slackTs)}
                 />
               </TableCell>
-              <TableCell component="th" scope="row">
-                {row.Code}
-              </TableCell>
-              <TableCell>{`${row["Cross Street #1"]} and ${row["Cross Street #2"]}`}</TableCell>
-              <TableCell>{row["First Name"]}</TableCell>
               <TableCell>
+                {row["First Name"]}
+                <br/>
+                <HouseholdSizeChip size={row["Household Size"]} />
+              </TableCell>
+              <TableCell component="th" scope="row">
                 <a
                   href={row.slackPermalink}
                   target="_blank"
                   rel="noopener noreferrer"
-                >
-                  Slack
-                </a>
+                  >{row.Code}</a>
               </TableCell>
+              <TableCell>{`${row["Cross Street #1"]} and ${row["Cross Street #2"]}`}</TableCell>
             </TableRow>
           ))}
         </TableBody>
