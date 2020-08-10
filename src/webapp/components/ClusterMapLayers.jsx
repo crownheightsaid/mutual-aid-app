@@ -5,7 +5,6 @@
    */
 import React, { useState, useEffect, useContext } from "react";
 import { Layer, MapContext } from "react-mapbox-gl";
-import RequestPopup from "./RequestPopup";
 import ClusterMapContext from "../context/ClusterMapContext";
 
 const handleClusterOnClick = (map, e, layerId, sourceId) => {
@@ -24,37 +23,16 @@ const handleClusterOnClick = (map, e, layerId, sourceId) => {
   });
 };
 
-const makePopupData = (features, lngLat) => {
-  return features.map((feat) => {
-    const metaSrc = feat.properties.meta;
-    const meta =
-      typeof metaSrc == "string" ? JSON.parse(feat.properties.meta) : metaSrc;
-    return {
-      lngLat,
-      meta,
-    };
-  });
-};
 
-const ClusterMapLayers = ({ geoJsonData, paramRequest, sourceId, color }) => {
-  const [popup, setPopup] = useState();
+const ClusterMapLayers = ({ data, paramRequest, sourceId, color, setPopup, makePopupData }) => {
   const { focusedRequestId, setFocusedRequestId } = useContext(
     ClusterMapContext
   );
 
   const setCursorPointer = (e) =>
     (e.target.getCanvas().style.cursor = "pointer");
-  const setCursorGrab = (e) => (e.target.getCanvas().style.cursor = "grab");
 
-  // display popup if request code is present in URL search param
-  useEffect(() => {
-    if (paramRequest) {
-      const {
-        geometry: { coordinates },
-      } = paramRequest;
-      setPopup(makePopupData([paramRequest], coordinates));
-    }
-  }, []);
+  const setCursorGrab = (e) => (e.target.getCanvas().style.cursor = "grab");
 
   const layerId = `${sourceId}-clusters`;
 
@@ -128,9 +106,6 @@ const ClusterMapLayers = ({ geoJsonData, paramRequest, sourceId, color }) => {
             onMouseEnter={setCursorPointer}
             onMouseLeave={setCursorGrab}
           />
-          {popup && (
-            <RequestPopup closePopup={() => setPopup()} requests={popup} />
-          )}
         </>
       )}
     </MapContext.Consumer>

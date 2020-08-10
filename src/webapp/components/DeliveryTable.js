@@ -34,6 +34,7 @@ const DeliveryTable = ({ rows }) => {
     const table = document.getElementById('table-wrapper');
 
     if(row){
+      //todo: dont scroll if already in view
       table.scrollTop = row.offsetTop;
     }
   })
@@ -50,9 +51,12 @@ const DeliveryTable = ({ rows }) => {
     };
   });
 
+  const handleRowClick = (id) => {
+    setFocusedRequestId(id)
+  }
+
   return (
     <TableContainer id="table-wrapper" className={classes.container} component={Paper}>
-      curr request is{' '}{focusedRequestId}
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -77,6 +81,7 @@ const DeliveryTable = ({ rows }) => {
               id={row.Code}
               key={row.Code}
               className={row.isFocused && classes.focused}
+              onClick={() => handleRowClick(row.Code)}
             >
               <TableCell component="th" scope="row">
                 {row.Code}
