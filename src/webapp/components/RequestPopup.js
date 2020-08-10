@@ -9,10 +9,19 @@ import { useTranslation } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";
 import sharedStylesFn from "webapp/style/sharedStyles";
 import DaysOpenChip from "./DaysOpenChip";
+<<<<<<< HEAD
 import HouseholdSizeChip from "./HouseholdSizeChip";
 import DrivingClusterChip from "./DrivingClusterChip";
 import { daysSinceSlackMessage } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
+=======
+import getParam from "../helpers/utils";
+
+const daysSinceSlackMessage = (slackTs) => {
+  const datePosted = fromUnixTime(Number(slackTs));
+  return differenceInDays(new Date(), datePosted);
+};
+>>>>>>> hide claim delivery ui behind URL param
 
 const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
@@ -46,9 +55,13 @@ const RequestPopup = ({ requests, closePopup }) => {
   const deliveryContext = useContext(DeliveryContext);
   const classes = useStyles();
   const { t: str } = useTranslation();
+<<<<<<< HEAD
   const { _focusedRequestId, setFocusedRequestId } = useContext(
     ClusterMapContext
   );
+=======
+  const showSmsPickup = getParam("sms_pickup") === "true";
+>>>>>>> hide claim delivery ui behind URL param
 
   return (
     <Popup
@@ -105,18 +118,20 @@ const RequestPopup = ({ requests, closePopup }) => {
 
             {meta["For Driving Clusters"] && <DrivingClusterChip />}
 
-            <Button
-              variant="contained"
-              size="small"
-              onClick={() => deliveryContext.handleOpenClaimDialog(meta.Code)}
-              className={classes.ctaTooltipButton}
-            >
-              <Typography variant="button">
-                {str("webapp:deliveryNeeded.popup.claimDelivery", {
-                  defaultValue: "Claim delivery",
-                })}
-              </Typography>
-            </Button>
+            {showSmsPickup && (
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() => deliveryContext.handleOpenClaimDialog(meta.Code)}
+                className={classes.ctaTooltipButton}
+              >
+                <Typography variant="button">
+                  {str("webapp:deliveryNeeded.popup.claimDelivery", {
+                    defaultValue: "Claim delivery",
+                  })}
+                </Typography>
+              </Button>
+            )}
 
             {meta.slackPermalink ? (
               <DaysOpenChip daysOpen={daysSinceSlackMessage(meta.slackTs)} />

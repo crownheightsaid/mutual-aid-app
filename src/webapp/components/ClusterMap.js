@@ -11,7 +11,7 @@ import BasicMap from "./BasicMap";
 import { QuadrantsLayers } from "./QuadrantMap";
 import ClusterMapLayers from "./ClusterMapLayers";
 import { RequestNotFoundAlert, NoRequestsAlert } from "./MapAlerts";
-import getRequestParam from "../helpers/getRequestParam";
+import getParam from "../helpers/utils";
 
 const makeBounds = (features) => {
   const lnglats = features.map((f) => {
@@ -33,7 +33,7 @@ const ClusterMap = ({
   geoJsonData,
   containerStyle = {},
 }) => {
-  const requestCode = getRequestParam();
+  const requestCode = getParam("request");
 
   let paramRequest;
   const { requests, drivingClusterRequests } = geoJsonData;
