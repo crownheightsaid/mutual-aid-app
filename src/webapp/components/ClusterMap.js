@@ -90,12 +90,14 @@ const ClusterMap = ({ showDrivingClusters, geoJsonData, containerStyle = {} }) =
           sourceId="requestsSource"
           paramRequest={paramRequest}
           color="orangered"
+          data={reqFeatures}
         />
         {showDrivingClusters && (
           <ClusterMapLayers
             sourceId="drivingClusterRequestsSource"
             paramRequest={paramRequest}
             color="rebeccapurple"
+            data={clusterFeatures}
           />
         )}
       </BasicMap>

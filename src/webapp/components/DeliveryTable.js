@@ -76,7 +76,8 @@ const DeliveryTable = ({ rows }) => {
             <TableRow
               id={row.Code}
               key={row.Code}
-              className={row.isFocused && classes.focused}
+              className={row.isFocused ? classes.focused : ""}
+              onClick={() => setFocusedRequestId(row.Code)}
             >
               <TableCell component="th" scope="row">
                 {row.Code}
