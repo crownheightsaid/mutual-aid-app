@@ -11,7 +11,7 @@ import sharedStylesFn from "webapp/style/sharedStyles";
 import ClusterMap from "webapp/components/ClusterMap";
 import Grid from "@material-ui/core/Grid";
 import DeliveryTable from "../components/DeliveryTable";
-import ClusterMapContext from "../contexts/ClusterMapContext";
+import ClusterMapContext from "../context/ClusterMapContext";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 const useStyles = makeStyles((theme) => ({

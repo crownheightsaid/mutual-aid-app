@@ -10,7 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import DaysOpenChip from "./DaysOpenChip";
 import { daysSinceSlackMessage } from '../helpers/time';
-import ClusterMapContext from "../contexts/ClusterMapContext";
+import ClusterMapContext from "../context/ClusterMapContext";
 
 const useStyles = makeStyles({
   container: {

@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Layer, MapContext } from "react-mapbox-gl";
 import RequestPopup from "./RequestPopup";
-import ClusterMapContext from "../contexts/ClusterMapContext";
+import ClusterMapContext from "../context/ClusterMapContext";
 
 const handleClusterOnClick = (map, e, layerId, sourceId) => {
   const features = map.queryRenderedFeatures(e.point, {
