@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import { Source } from "react-mapbox-gl";
 import { LngLat } from "mapbox-gl";
 import { findBounds } from "webapp/helpers/mapbox-coordinates";
@@ -12,8 +12,6 @@ import { QuadrantsLayers } from "./QuadrantMap";
 import ClusterMapLayers from "./ClusterMapLayers";
 import { RequestNotFoundAlert, NoRequestsAlert } from "./MapAlerts";
 import getRequestParam from "../helpers/getRequestParam";
-import ClusterMapContext from "../context/ClusterMapContext";
-import RequestPopup from "./RequestPopup";
 
 const makeBounds = (features) => {
   const lnglats = features.map((f) => {
@@ -29,39 +27,17 @@ const makeBounds = (features) => {
   return bounds;
 };
 
-
-const makePopupData = (features, lngLat) => {
-  return features.map((feat) => {
-    const metaSrc = feat.properties.meta;
-    const meta =
-      typeof metaSrc == "string" ? JSON.parse(feat.properties.meta) : metaSrc;
-    return {
-      lngLat,
-      meta,
-    };
-  });
-};
-
 const ClusterMap = ({ showDrivingClusters, geoJsonData, containerStyle = {} }) => {
-  const [popup, setPopup] = useState();
-
   const requestCode = getRequestParam();
   let paramRequest;
   const { requests, drivingClusterRequests } = geoJsonData;
   const { features: reqFeatures } = requests;
   const { features: clusterFeatures } = drivingClusterRequests;
-  const { focusedRequestId, setFocusedRequestId } = useContext(
-    ClusterMapContext
-  );
-
   const allRequests = showDrivingClusters
     ? [...reqFeatures, ...clusterFeatures]
     : reqFeatures;
 
-  // current focused request can be from param or context
-  const currRequestCode = requestCode || focusedRequestId;
-
-  if (currRequestCode) {
+  if (requestCode) {
     // find first feature with code match to be passed
     // into ClusterMapLayers
     [paramRequest] = allRequests.filter(
@@ -69,27 +45,17 @@ const ClusterMap = ({ showDrivingClusters, geoJsonData, containerStyle = {} }) =
         properties: {
           meta: { Code },
         },
-      }) => Code === currRequestCode
+      }) => Code === requestCode
     );
   }
 
-  useEffect(() => {
-    if(paramRequest){
-      const {
-        geometry: { coordinates },
-      } = paramRequest;
-      setPopup(makePopupData([paramRequest], coordinates));
-    }
-  }, []);
-
-
   // there is a requestCode but the request object does not exist
-  const paramRequestNotFound = currRequestCode && !paramRequest;
+  const paramRequestNotFound = requestCode && !paramRequest;
   const noRequestsFound = allRequests.length === 0;
   return (
     <>
       {paramRequestNotFound && (
-        <RequestNotFoundAlert requestCode={currRequestCode} />
+        <RequestNotFoundAlert requestCode={requestCode} />
       )}
 
       {noRequestsFound && <NoRequestsAlert />}
@@ -122,26 +88,16 @@ const ClusterMap = ({ showDrivingClusters, geoJsonData, containerStyle = {} }) =
         />
         <ClusterMapLayers
           sourceId="requestsSource"
-          data={reqFeatures}
           paramRequest={paramRequest}
           color="orangered"
-          setPopup={setPopup}
-          makePopupData={makePopupData}
         />
         {showDrivingClusters && (
           <ClusterMapLayers
-            data={clusterFeatures}
             sourceId="drivingClusterRequestsSource"
             paramRequest={paramRequest}
             color="rebeccapurple"
-            setPopup={setPopup}
-            makePopupData={makePopupData}
           />
         )}
-
-         {popup && (
-            <RequestPopup closePopup={() => setPopup()} requests={popup} />
-          )}
       </BasicMap>
     </>
   );
