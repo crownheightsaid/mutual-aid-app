@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import DaysOpenChip from "./DaysOpenChip";
 import { daysSinceSlackMessage } from '../helpers/time';
+import ClusterMapContext from "../contexts/ClusterMapContext";
 
 const useStyles = makeStyles({
   container: {
@@ -20,6 +21,7 @@ const useStyles = makeStyles({
 const DeliveryTable = ({ rows }) => {
   const { t: str } = useTranslation();
   const classes = useStyles();
+  const { focusedRequestId, setFocusedRequestId } = useContext(ClusterMapContext);
 
   // sort happens in-place
   rows.sort((rowA, rowB) => rowA.timestamp - rowB.timestamp);
@@ -28,6 +30,7 @@ const DeliveryTable = ({ rows }) => {
 
   return (
     <TableContainer className={classes.container} component={Paper}>
+    curr request is {focusedRequestId}
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>

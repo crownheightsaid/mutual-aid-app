@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,7 +11,9 @@ import sharedStylesFn from "webapp/style/sharedStyles";
 import ClusterMap from "webapp/components/ClusterMap";
 import Grid from "@material-ui/core/Grid";
 import DeliveryTable from "../components/DeliveryTable";
-
+import ClusterMapContext from "../contexts/ClusterMapContext";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
   root: {
@@ -35,6 +37,10 @@ export default function DeliveryNeeded() {
     method: "get",
   });
 
+  const [showDrivingClusters, setShowDrivingClusters] = useState(false);
+  const [focusedRequestId, setFocusedRequestId] = useState(null);
+
+
   if (loading) {
     return <CircularProgress />;
   }
@@ -53,23 +59,39 @@ export default function DeliveryNeeded() {
           })}
         </Typography>
       </Box>
-      <Grid container spacing={3} direction="row-reverse" className={classes.wrapper}>
-        <Grid item xs={12} md={6}>
-          <Box className={classes.mapRoot}>
-            <ClusterMap
-              containerStyle={{ height: "550px", width: "100%" }}
-              geoJsonData={data}
-            />
-          </Box>
+
+      <ClusterMapContext.Provider value={{focusedRequestId, setFocusedRequestId}}>
+        <Grid container spacing={3} direction="row-reverse" className={classes.wrapper}>
+          <Grid item xs={12} md={6}>
+            <Box className={classes.mapRoot}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={showDrivingClusters}
+                    onClick={() => setShowDrivingClusters(!showDrivingClusters)}
+                  />
+                }
+                label="Show driving clusters"
+              />
+              <ClusterMap
+                showDrivingClusters={showDrivingClusters}
+                containerStyle={{ height: "550px", width: "100%" }}
+                geoJsonData={data}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Box className={classes.tableRoot}>
+              <DeliveryTable
+                showDrivingClusters={showDrivingClusters}
+                data={data}
+                rows={data.requests.features.map((f) => f.properties.meta)}
+              />
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Box className={classes.tableRoot}>
-            <DeliveryTable
-              rows={data.requests.features.map((f) => f.properties.meta)}
-            />
-          </Box>
-        </Grid>
-      </Grid>
+      </ClusterMapContext.Provider>
+
       <Grid item xs={12} md={6}>
         <Box className={classes.description}>
           <Typography variant="body1">
