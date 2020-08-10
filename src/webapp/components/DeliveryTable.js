@@ -34,7 +34,11 @@ const DeliveryTable = ({ rows }) => {
     const table = document.getElementById('table-wrapper');
 
     if(row){
-      table.scrollTop = row.offsetTop;
+      const rowRect = row.getBoundingClientRect()
+      // only scroll if row is not in view yet
+      if(rowRect.top < 0 || rowRect.bottom > window.innerHeight){
+        table.scrollTop = row.offsetTop;
+      }
     }
   })
 
@@ -52,10 +56,14 @@ const DeliveryTable = ({ rows }) => {
 
   return (
     <TableContainer id="table-wrapper" className={classes.container} component={Paper}>
-      curr request is{' '}{focusedRequestId}
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
+            <TableCell>
+              {str("webapp:deliveryNeeded.table.headers.daysOpen", {
+                defaultValue: "Days open",
+              })}
+            </TableCell>
             <TableCell>{str("webapp:zoneFinder.label.code")}</TableCell>
             <TableCell>
               {str("webapp:deliveryNeeded.table.headers.crossStreets", {
@@ -64,11 +72,6 @@ const DeliveryTable = ({ rows }) => {
             </TableCell>
             <TableCell>{str("webapp:zoneFinder.label.firstName")}</TableCell>
             <TableCell>{str("webapp:zoneFinder.label.slackLink")}</TableCell>
-            <TableCell>
-              {str("webapp:deliveryNeeded.table.headers.daysOpen", {
-                defaultValue: "Days open",
-              })}
-            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -79,6 +82,12 @@ const DeliveryTable = ({ rows }) => {
               className={row.isFocused ? classes.focused : ""}
               onClick={() => setFocusedRequestId(row.Code)}
             >
+              <TableCell>
+                <DaysOpenChip
+                  timeOnly
+                  daysOpen={daysSinceSlackMessage(row.slackTs)}
+                />
+              </TableCell>
               <TableCell component="th" scope="row">
                 {row.Code}
               </TableCell>
@@ -92,12 +101,6 @@ const DeliveryTable = ({ rows }) => {
                 >
                   Slack
                 </a>
-              </TableCell>
-              <TableCell>
-                <DaysOpenChip
-                  timeOnly
-                  daysOpen={daysSinceSlackMessage(row.slackTs)}
-                />
               </TableCell>
             </TableRow>
           ))}
