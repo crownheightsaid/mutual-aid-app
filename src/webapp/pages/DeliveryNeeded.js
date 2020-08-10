@@ -16,13 +16,13 @@ const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
   root: {
     "flex-direction": "row",
-    margin: theme.spacing(4),
+    margin: theme.spacing(2),
+    marginTop: theme.spacing(3),
   },
-  tableRoot: {
-    marginTop: theme.spacing(4),
+  wrapper: {
+    marginTop: theme.spacing(2),
   },
   mapRoot: {
-    marginTop: theme.spacing(4),
     marginBottom: theme.spacing(4),
   },
 }));
@@ -53,7 +53,7 @@ export default function DeliveryNeeded() {
           })}
         </Typography>
       </Box>
-      <Grid container spacing={3} direction="row-reverse">
+      <Grid container spacing={3} direction="row-reverse" className={classes.wrapper}>
         <Grid item xs={12} md={6}>
           <Box className={classes.mapRoot}>
             <ClusterMap
