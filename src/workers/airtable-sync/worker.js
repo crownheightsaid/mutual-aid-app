@@ -4,15 +4,10 @@ const {
   fields: requestFields,
   SENSITIVE_FIELDS: sensitiveRequestFields,
 } = require("~airtable/tables/requests");
-const sendErrorNotification = require("~slack/errorNotification");
 const updateMessageContent = require("./actions/updateMessageContent");
 const notifyManyc = require("./actions/notifyManyc");
 
 const defaultInterval = 10000;
-
-const errFunc = async (error) => {
-  await sendErrorNotification(error);
-};
 
 function startWorker(interval) {
   let pollInterval = interval;
@@ -62,8 +57,7 @@ function startWorker(interval) {
         }
       });
       return Promise.all(promises);
-    },
-    errFunc
+    }
   );
 }
 
