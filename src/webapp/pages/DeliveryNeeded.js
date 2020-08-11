@@ -49,6 +49,11 @@ export default function DeliveryNeeded() {
     return <Box>{`${error}`}</Box>;
   }
 
+  const tableRowsFeatures = showDrivingClusters
+    ? [...data.requests.features, ...data.drivingClusterRequests.features]
+    : data.requests.features;
+  const tableRowsMeta = tableRowsFeatures.map((f) => f.properties.meta);
+
   return (
     <Box className={classes.root}>
       <Box className={classes.heading}>
@@ -92,7 +97,7 @@ export default function DeliveryNeeded() {
               <DeliveryTable
                 showDrivingClusters={showDrivingClusters}
                 data={data}
-                rows={data.requests.features.map((f) => f.properties.meta)}
+                rows={tableRowsMeta}
               />
             </Box>
           </Grid>
