@@ -27,9 +27,8 @@ const DaysOpenChip = ({ daysOpen, timeOnly }) => {
     chipColor = classes.urgent;
   }
 
-  const time =
-    daysOpen <= 0 ? `<1 day` : `${daysOpen} day(s)`;
-  const label = timeOnly ? time : `open for ${time}`
+  const time = daysOpen <= 0 ? `<1 day` : `${daysOpen} day(s)`;
+  const label = timeOnly ? time : `open for ${time}`;
 
   return (
     <Chip

@@ -31,17 +31,17 @@ const DeliveryTable = ({ rows }) => {
 
   useEffect(() => {
     // scroll to focused row
-    const row = document.getElementById(focusedRequestId)
-    const table = document.getElementById('table-wrapper');
+    const row = document.getElementById(focusedRequestId);
+    const table = document.getElementById("table-wrapper");
 
-    if(row){
-      const rowRect = row.getBoundingClientRect()
+    if (row) {
+      const rowRect = row.getBoundingClientRect();
       // only scroll if row is not in view yet
-      if(rowRect.top < 0 || rowRect.bottom > window.innerHeight){
+      if (rowRect.top < 0 || rowRect.bottom > window.innerHeight) {
         table.scrollTop = row.offsetTop;
       }
     }
-  })
+  });
 
   // sort happens in-place
   rows.sort((rowA, rowB) => rowA.timestamp - rowB.timestamp);
@@ -56,7 +56,11 @@ const DeliveryTable = ({ rows }) => {
   });
 
   return (
-    <TableContainer id="table-wrapper" className={classes.container} component={Paper}>
+    <TableContainer
+      id="table-wrapper"
+      className={classes.container}
+      component={Paper}
+    >
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -90,7 +94,7 @@ const DeliveryTable = ({ rows }) => {
               </TableCell>
               <TableCell>
                 {row["First Name"]}
-                <br/>
+                <br />
                 <HouseholdSizeChip size={row["Household Size"]} />
               </TableCell>
               <TableCell component="th" scope="row">
@@ -98,7 +102,9 @@ const DeliveryTable = ({ rows }) => {
                   href={row.slackPermalink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  >{row.Code}</a>
+                >
+                  {row.Code}
+                </a>
               </TableCell>
               <TableCell>{`${row["Cross Street #1"]} and ${row["Cross Street #2"]}`}</TableCell>
             </TableRow>

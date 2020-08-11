@@ -1,5 +1,7 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Typography from "@material-ui/core/Typography";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
 import useAxios from "axios-hooks";
@@ -12,8 +14,7 @@ import ClusterMap from "webapp/components/ClusterMap";
 import Grid from "@material-ui/core/Grid";
 import DeliveryTable from "../components/DeliveryTable";
 import ClusterMapContext from "../context/ClusterMapContext";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+
 const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
   root: {
@@ -40,7 +41,6 @@ export default function DeliveryNeeded() {
   const [showDrivingClusters, setShowDrivingClusters] = useState(false);
   const [focusedRequestId, setFocusedRequestId] = useState(null);
 
-
   if (loading) {
     return <CircularProgress />;
   }
@@ -60,8 +60,15 @@ export default function DeliveryNeeded() {
         </Typography>
       </Box>
 
-      <ClusterMapContext.Provider value={{focusedRequestId, setFocusedRequestId}}>
-        <Grid container spacing={3} direction="row-reverse" className={classes.wrapper}>
+      <ClusterMapContext.Provider
+        value={{ focusedRequestId, setFocusedRequestId }}
+      >
+        <Grid
+          container
+          spacing={3}
+          direction="row-reverse"
+          className={classes.wrapper}
+        >
           <Grid item xs={12} md={6}>
             <Box className={classes.mapRoot}>
               <FormControlLabel

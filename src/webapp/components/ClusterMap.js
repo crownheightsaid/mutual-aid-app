@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Source } from "react-mapbox-gl";
 import { LngLat } from "mapbox-gl";
 import { findBounds } from "webapp/helpers/mapbox-coordinates";
@@ -27,7 +27,11 @@ const makeBounds = (features) => {
   return bounds;
 };
 
-const ClusterMap = ({ showDrivingClusters, geoJsonData, containerStyle = {} }) => {
+const ClusterMap = ({
+  showDrivingClusters,
+  geoJsonData,
+  containerStyle = {},
+}) => {
   const requestCode = getRequestParam();
   let paramRequest;
   const { requests, drivingClusterRequests } = geoJsonData;

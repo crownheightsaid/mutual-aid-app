@@ -27,7 +27,8 @@ module.exports = {
     "react/jsx-wrap-multilines": ["off"],
     "react/destructuring-assignment": ["off"],
     "react-hooks/rules-of-hooks": ["error"],
-    "radix": ["off"] //fixed in ES5
+    "radix": ["off"], //fixed in ES5
+    "import/prefer-default-export": ["off"]
   },
   settings: {
     "import/resolver": {

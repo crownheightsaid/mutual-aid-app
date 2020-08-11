@@ -11,7 +11,7 @@ import Chip from "@material-ui/core/Chip";
 import DriveEtaIcon from "@material-ui/icons/DriveEta";
 import DaysOpenChip from "./DaysOpenChip";
 import HouseholdSizeChip from "./HouseholdSizeChip";
-import { daysSinceSlackMessage } from '../helpers/time';
+import { daysSinceSlackMessage } from "../helpers/time";
 
 const useStyles = makeStyles((theme) => ({
   divider: {

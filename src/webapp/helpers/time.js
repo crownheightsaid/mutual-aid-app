@@ -5,6 +5,4 @@ const daysSinceSlackMessage = (slackTs) => {
   return differenceInDays(new Date(), datePosted);
 };
 
-export {
-  daysSinceSlackMessage,
-};
+export { daysSinceSlackMessage };
