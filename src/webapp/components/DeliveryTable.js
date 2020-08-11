@@ -7,6 +7,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
+import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import DaysOpenChip from "./DaysOpenChip";
@@ -105,20 +106,19 @@ const DeliveryTable = ({ rows }) => {
               <TableCell>
                 {row["First Name"]}
                 <Box className={classes.chipRow}>
-                  {row["For Driving Clusters"] && (
-                    <DrivingClusterChip />
-                  )}
+                  {row["For Driving Clusters"] && <DrivingClusterChip />}
                   <HouseholdSizeChip size={row["Household Size"]} />
                 </Box>
               </TableCell>
               <TableCell component="th" scope="row">
-                <a
+                <Link
                   href={row.slackPermalink}
                   target="_blank"
+                  underline="always"
                   rel="noopener noreferrer"
                 >
                   {row.Code}
-                </a>
+                </Link>
               </TableCell>
               <TableCell>{`${row["Cross Street #1"]} and ${row["Cross Street #2"]}`}</TableCell>
             </TableRow>
