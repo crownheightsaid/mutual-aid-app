@@ -6,12 +6,14 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import DaysOpenChip from "./DaysOpenChip";
 import { daysSinceSlackMessage } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
 import HouseholdSizeChip from "./HouseholdSizeChip";
+import DrivingClusterChip from "./DrivingClusterChip";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -19,6 +21,14 @@ const useStyles = makeStyles((theme) => ({
   },
   focused: {
     background: theme.palette.grey[100],
+  },
+  chipRow: {
+    display: "block",
+    marginTop: theme.spacing(2),
+    "& > *": {
+      marginRight: theme.spacing(0.5),
+      marginBottom: theme.spacing(0.5),
+    },
   },
 }));
 
@@ -94,8 +104,12 @@ const DeliveryTable = ({ rows }) => {
               </TableCell>
               <TableCell>
                 {row["First Name"]}
-                <br />
-                <HouseholdSizeChip size={row["Household Size"]} />
+                <Box className={classes.chipRow}>
+                  {row["For Driving Clusters"] && (
+                    <DrivingClusterChip />
+                  )}
+                  <HouseholdSizeChip size={row["Household Size"]} />
+                </Box>
               </TableCell>
               <TableCell component="th" scope="row">
                 <a

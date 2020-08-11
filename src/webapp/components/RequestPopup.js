@@ -7,10 +7,9 @@ import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";
-import Chip from "@material-ui/core/Chip";
-import DriveEtaIcon from "@material-ui/icons/DriveEta";
 import DaysOpenChip from "./DaysOpenChip";
 import HouseholdSizeChip from "./HouseholdSizeChip";
+import DrivingClusterChip from "./DrivingClusterChip";
 import { daysSinceSlackMessage } from "../helpers/time";
 
 const useStyles = makeStyles((theme) => ({
@@ -84,14 +83,7 @@ const RequestPopup = ({ requests, closePopup }) => {
           <Box className={classes.chipRow}>
             <HouseholdSizeChip size={meta["Household Size"]} />
 
-            {meta["For Driving Clusters"] && (
-              <Chip
-                label="Driving Cluster"
-                icon={<DriveEtaIcon />}
-                color="primary"
-                size="small"
-              />
-            )}
+            {meta["For Driving Clusters"] && <DrivingClusterChip />}
 
             {meta.slackPermalink ? (
               <DaysOpenChip daysOpen={daysSinceSlackMessage(meta.slackTs)} />
