@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
-import CloseIcon from "@material-ui/icons/Close";
 import Dialog from "@material-ui/core/Dialog";
 import { InfoStep, FormStep, MoreInfoStep, FinishStep } from "./DialogScreens";
 
@@ -16,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ClaimDeliveryDialog = ({ open, onClose, requestCode }) => {
-  const classes = useStyles();
   const { t: str } = useTranslation();
   const [activeStep, setStep] = useState("info");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -25,7 +23,7 @@ const ClaimDeliveryDialog = ({ open, onClose, requestCode }) => {
     // mock api request
 
     // if success:
-    setStep("finish")
+    setStep("finish");
   };
 
   const steps = {
