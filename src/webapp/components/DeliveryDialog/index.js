@@ -1,18 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { makeStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import { InfoStep, FormStep, MoreInfoStep, FinishStep } from "./DialogScreens";
-
-const useStyles = makeStyles((theme) => ({
-  closeIcon: {
-    cursor: "pointer",
-    position: "absolute",
-    right: 0,
-    top: 0,
-    margin: theme.spacing(1),
-  },
-}));
 
 const ClaimDeliveryDialog = ({ open, onClose, requestCode }) => {
   const { t: str } = useTranslation();

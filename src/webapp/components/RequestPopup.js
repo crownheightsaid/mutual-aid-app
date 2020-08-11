@@ -41,8 +41,8 @@ const useStyles = makeStyles((theme) => ({
   chipRow: {
     "& > *": {
       marginRight: theme.spacing(0.5),
+      marginTop: theme.spacing(2),
     },
-    marginTop: theme.spacing(2),
   },
   ctaTooltipButton: {
     backgroundColor: "dodgerblue",
