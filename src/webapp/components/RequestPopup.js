@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { Popup } from "react-mapbox-gl";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 const RequestPopup = ({ requests, closePopup }) => {
   const classes = useStyles();
   const { t: str } = useTranslation();
-  const { focusedRequestId, setFocusedRequestId } = useContext(
+  const { _focusedRequestId, setFocusedRequestId } = useContext(
     ClusterMapContext
   );
 
@@ -51,9 +51,13 @@ const RequestPopup = ({ requests, closePopup }) => {
       }}
     >
       {requests.map(({ meta }, i) => (
-        <Box key={meta.Code} className={classes.root} onClick={() => {
-            setFocusedRequestId(meta.Code)
-        }}>
+        <Box
+          key={meta.Code}
+          className={classes.root}
+          onClick={() => {
+            setFocusedRequestId(meta.Code);
+          }}
+        >
           <CloseIcon
             onClick={closePopup}
             fontSize="small"
