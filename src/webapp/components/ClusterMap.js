@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Source } from "react-mapbox-gl";
 import { LngLat } from "mapbox-gl";
 import { findBounds } from "webapp/helpers/mapbox-coordinates";
@@ -28,18 +28,26 @@ const makeBounds = (features) => {
 };
 
 const ClusterMap = ({
-  showDrivingClusters,
+  showDrivingRequests,
+  showRegularRequests,
   geoJsonData,
   containerStyle = {},
 }) => {
   const requestCode = getRequestParam();
+
   let paramRequest;
   const { requests, drivingClusterRequests } = geoJsonData;
   const { features: reqFeatures } = requests;
   const { features: clusterFeatures } = drivingClusterRequests;
-  const allRequests = showDrivingClusters
-    ? [...reqFeatures, ...clusterFeatures]
-    : reqFeatures;
+
+  let allRequests = [];
+
+  if (showDrivingRequests) {
+    allRequests = [...allRequests, ...clusterFeatures];
+  }
+  if (showRegularRequests) {
+    allRequests = [...allRequests, ...reqFeatures];
+  }
 
   if (requestCode) {
     // find first feature with code match to be passed
@@ -90,13 +98,15 @@ const ClusterMap = ({
             clusterRadius: 30,
           }}
         />
-        <ClusterMapLayers
-          sourceId="requestsSource"
-          paramRequest={paramRequest}
-          color="orangered"
-          data={reqFeatures}
-        />
-        {showDrivingClusters && (
+        {showRegularRequests && (
+          <ClusterMapLayers
+            sourceId="requestsSource"
+            paramRequest={paramRequest}
+            color="orangered"
+            data={reqFeatures}
+          />
+        )}
+        {showDrivingRequests && (
           <ClusterMapLayers
             sourceId="drivingClusterRequestsSource"
             paramRequest={paramRequest}

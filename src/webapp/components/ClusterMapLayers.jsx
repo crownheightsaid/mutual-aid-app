@@ -47,25 +47,28 @@ const ClusterMapLayers = ({ data, paramRequest, sourceId, color }) => {
     (e.target.getCanvas().style.cursor = "pointer");
   const setCursorGrab = (e) => (e.target.getCanvas().style.cursor = "grab");
 
-
   useEffect(() => {
     // display popup if request code is present in URL search param
     // but only on first render
     if (paramRequest && initialRender) {
-      setPopup(makePopupData([paramRequest], paramRequest.geometry.coordinates));
-      setInitialRender(false)
+      setPopup(
+        makePopupData([paramRequest], paramRequest.geometry.coordinates)
+      );
+      setInitialRender(false);
     }
 
-    //find focused request and display popup
+    // find focused request and display popup
     const [focusedRequest] = data.filter(
-        ({
-          properties: {
-            meta: { Code },
-          },
-        }) => Code === focusedRequestId
+      ({
+        properties: {
+          meta: { Code },
+        },
+      }) => Code === focusedRequestId
+    );
+    if (focusedRequest) {
+      setPopup(
+        makePopupData([focusedRequest], focusedRequest.geometry.coordinates)
       );
-    if(focusedRequest){
-      setPopup(makePopupData([focusedRequest], focusedRequest.geometry.coordinates))
     }
   }, [focusedRequestId]);
 
@@ -142,7 +145,11 @@ const ClusterMapLayers = ({ data, paramRequest, sourceId, color }) => {
             onMouseLeave={setCursorGrab}
           />
           {popup && (
-            <RequestPopup closePopup={() => setPopup()} focusedRequestId={focusedRequestId} requests={popup} />
+            <RequestPopup
+              closePopup={() => setPopup()}
+              focusedRequestId={focusedRequestId}
+              requests={popup}
+            />
           )}
         </>
       )}

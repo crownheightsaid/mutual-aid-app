@@ -38,7 +38,9 @@ export default function DeliveryNeeded() {
     method: "get",
   });
 
-  const [showDrivingClusters, setShowDrivingClusters] = useState(false);
+  const [showDrivingRequests, setShowDrivingRequests] = useState(true);
+  const [showRegularRequests, setShowRegularRequests] = useState(true);
+
   const [focusedRequestId, setFocusedRequestId] = useState(null);
 
   if (loading) {
@@ -49,9 +51,19 @@ export default function DeliveryNeeded() {
     return <Box>{`${error}`}</Box>;
   }
 
-  const tableRowsFeatures = showDrivingClusters
-    ? [...data.requests.features, ...data.drivingClusterRequests.features]
-    : data.requests.features;
+  let tableRowsFeatures = [];
+
+  if (showDrivingRequests) {
+    tableRowsFeatures = [
+      ...tableRowsFeatures,
+      ...data.drivingClusterRequests.features,
+    ];
+  }
+
+  if (showRegularRequests) {
+    tableRowsFeatures = [...tableRowsFeatures, ...data.requests.features];
+  }
+
   const tableRowsMeta = tableRowsFeatures.map((f) => f.properties.meta);
 
   return (
@@ -79,14 +91,24 @@ export default function DeliveryNeeded() {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={showDrivingClusters}
-                    onClick={() => setShowDrivingClusters(!showDrivingClusters)}
+                    checked={showRegularRequests}
+                    onClick={() => setShowRegularRequests(!showRegularRequests)}
                   />
                 }
-                label="Show driving clusters"
+                label="Regular requests"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={showDrivingRequests}
+                    onClick={() => setShowDrivingRequests(!showDrivingRequests)}
+                  />
+                }
+                label="Driving cluster requests"
               />
               <ClusterMap
-                showDrivingClusters={showDrivingClusters}
+                showRegularRequests={showRegularRequests}
+                showDrivingRequests={showDrivingRequests}
                 containerStyle={{ height: "550px", width: "100%" }}
                 geoJsonData={data}
               />
@@ -95,7 +117,8 @@ export default function DeliveryNeeded() {
           <Grid item xs={12} md={6}>
             <Box className={classes.tableRoot}>
               <DeliveryTable
-                showDrivingClusters={showDrivingClusters}
+                showRegularRequests={showRegularRequests}
+                showDrivingClusters={setShowDrivingRequests}
                 data={data}
                 rows={tableRowsMeta}
               />
