@@ -1,0 +1,110 @@
+[
+  {
+    "typename": "subtitle1",
+    "content": "1. Reach out to the person requesting aid"
+  },
+  {
+    "typename": "p",
+    "content": "After receiving the person’s phone number, you should give them a call (with your own number or with a burner) and set up a time to make the delivery. Introduce yourself as someone from Crown Heights Mutual Aid, and give your name to establish a familiar connection."
+  },
+  {
+    "typename": "p",
+    "content": "While you have them on the phone, verify:"
+  },
+  {
+    "typename": "ul",
+    "content": [
+      {
+        "typename": "li",
+        "content": "Time of delivery"
+      },
+      {
+        "typename": "li",
+        "content": "Address, apartment number, how to reach them once you arrive (call, buzzer, etc.)"
+      },
+      {
+        "typename": "ul",
+        "content": [
+          {
+            "typename": "li",
+            "variant": "caption",
+            "content": "e.g., Brownstone 1213 Bergen between NY and without the driveway"
+          }
+        ]
+      },
+      {
+        "typename": "li",
+        "content": "List of requested items (groceries, supplies, money, etc)"
+      },
+      {
+        "typename": "li",
+        "content": "Confirm household size"
+      },
+      {
+        "typename": "li",
+        "content": "If you are doing low-contact deliveries involving disinfecting goods, ask about chemical sensitivity to your disinfectant, glove material, etc."
+      }
+    ]
+  },
+  {
+    "typename": "p",
+    "content": "Have a printer? Print out a copy of our delivery slip to include with your drop-off."
+  },
+  {
+    "typename": "p",
+    "content": "Don’t have a printer? Ask in #general!"
+  },
+  {
+    "typename": "subtitle1",
+    "content": "2. Gather your requested items"
+  },
+  {
+    "typename": "p",
+    "content": "Now that you have all the information needed to fulfill your delivery you can start shopping! QueerCare has an article on practices for delivery, but in general remember to:"
+  },
+  {
+    "typename": "ul",
+    "content": [
+      {
+        "typename": "li",
+        "content": "Wear a mask and gloves. If you do not have gloves, please thoroughly wash or sanitize your hands before heading into the store."
+      },
+      {
+        "typename": "li",
+        "content": "Shop at stores that give plastic bags if possible. Put produce in individual plastic bags!"
+      },
+      {
+        "typename": "li",
+        "content": "Disinfect (or minimize contact with) high-touch surfaces (basket handles, credit card readers, doors)."
+      },
+      {
+        "typename": "li",
+        "content": "Hold on to the receipt!!"
+      }
+    ]
+  },
+  {
+    "typename": "p",
+    "content": "Try your best to get everything on your list but don’t sweat it if you can’t find certain items. If you can’t find an item that’s needed urgently (toilet paper, diapers, etc.), communicate with your person to figure out an alternative. Bodegas and smaller stores are often better stocked with paper items and disinfecting spray, so if you pass any on the way to the supermarket it might be worth checking those first."
+  },
+  {
+    "typename": "p",
+    "content": "***Please note: We don’t want financial obstacles to prevent anyone from making deliveries! If you need money before you head to the grocery store, you can post in the #preimbursement channel to get some funds prior to heading out. If you don’t need upfront funds, just cover the groceries yourself and you will get reimbursed by CHMA members within 1-2 days (more on this process below)."
+  },
+  {
+    "typename": "subtitle1",
+    "content": "3. Make your delivery"
+  },
+  {
+    "typename": "p",
+    "content": "Upon arrival, make contact with the person you’re delivering to. While it is important to minimize physical contact, remember that some folks may need assistance bringing groceries inside their residence whereas others will be fine with you leaving things outside their door. Be empathetic, use your best judgment, and ask the person what they need. Before you leave, make sure they have CHMA’s number and encourage them to reach out if they need further assistance. Share your own number as well if you feel comfortable doing so, as it is important to build strong community relationships."
+  },
+  {
+    "typename": "subtitle1",
+    "content": "4. Submit your receipt"
+  },
+  {
+    "typename": "p",
+    "content": "Now that you’ve finished the delivery, text or call your intake volunteer to let them know that you have completed the request. The form will automatically post to #community_reimbursement and the bot will keep track of how much has been contributed. We are keeping a record of expenditures, so please use this form even if you are covering the receipt yourself or have been reimbursed in advance—just indicate this on the form. You should be reimbursed within 24-36 hours and a member of the reimbursements team will monitor your request to make sure this happens!"
+  }
+]

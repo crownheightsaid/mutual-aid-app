@@ -26,9 +26,6 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: theme.spacing(2),
     },
   },
-  backButton: {
-    backgroundColor: "lightgray",
-  },
   centeredContent: {
     display: "flex",
     flexDirection: "column",
@@ -44,7 +41,7 @@ export const InfoStep = ({ handleAccept, handleGetMoreInfo, requestCode }) => {
     <>
       <DialogTitle>
         {str("webapp:deliveryNeeded.dialog.title", {
-          defaultValue: "What it means to do a delivery",
+          defaultValue: "How to make a delivery",
         })}
       </DialogTitle>
       <DialogContent>
@@ -133,35 +130,6 @@ export const FormStep = ({ phoneNumber, setPhoneNumber, onSubmit }) => {
               defaultValue: "Submit",
             })}
           </Typography>
-        </Button>
-      </DialogActions>
-    </>
-  );
-};
-
-export const MoreInfoStep = ({ handleGoBack }) => {
-  const classes = useStyles();
-  const { t: str } = useTranslation();
-
-  return (
-    <>
-      <DialogTitle>
-        {str("webapp:deliveryNeeded.dialog.title", {
-          defaultValue: "What it means to do a delivery",
-        })}
-      </DialogTitle>
-      <DialogContent>
-        <Typography variant="body2">
-          {str("webapp:deliveryNeeded.dialog.description", {
-            defaultValue: "lorum ipsumthin todo",
-          })}
-        </Typography>
-      </DialogContent>
-      <DialogActions className={classes.moreInfoActionsContainer}>
-        <Button onClick={handleGoBack} className={classes.backButton}>
-          {str("webapp:deliveryNeeded.dialog.backButton", {
-            defaultValue: "Back",
-          })}
         </Button>
       </DialogActions>
     </>

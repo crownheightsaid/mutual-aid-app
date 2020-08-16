@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Dialog from "@material-ui/core/Dialog";
-import { InfoStep, FormStep, MoreInfoStep, FinishStep } from "./DialogScreens";
+import { InfoStep, FormStep, FinishStep } from "./DialogScreens";
+import InstructionsStep from "./InstructionsScreen";
 
 const ClaimDeliveryDialog = ({ open, onClose, requestCode }) => {
   const { t: str } = useTranslation();
@@ -30,7 +31,7 @@ const ClaimDeliveryDialog = ({ open, onClose, requestCode }) => {
         onSubmit={onSubmit}
       />
     ),
-    moreInfo: <MoreInfoStep handleGoBack={() => setStep("info")} />,
+    moreInfo: <InstructionsStep handleGoBack={() => setStep("info")} />,
     finish: <FinishStep />,
   };
 
