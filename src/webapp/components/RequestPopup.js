@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Popup } from "react-mapbox-gl";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
@@ -11,6 +11,7 @@ import DaysOpenChip from "./DaysOpenChip";
 import HouseholdSizeChip from "./HouseholdSizeChip";
 import DrivingClusterChip from "./DrivingClusterChip";
 import { daysSinceSlackMessage } from "../helpers/time";
+import ClusterMapContext from "../context/ClusterMapContext";
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -36,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
 const RequestPopup = ({ requests, closePopup }) => {
   const classes = useStyles();
   const { t: str } = useTranslation();
+  const { focusedRequestId, setFocusedRequestId } = useContext(
+    ClusterMapContext
+  );
 
   return (
     <Popup
@@ -47,7 +51,9 @@ const RequestPopup = ({ requests, closePopup }) => {
       }}
     >
       {requests.map(({ meta }, i) => (
-        <Box key={meta.Code} className={classes.root}>
+        <Box key={meta.Code} className={classes.root} onClick={() => {
+            setFocusedRequestId(meta.Code)
+        }}>
           <CloseIcon
             onClick={closePopup}
             fontSize="small"

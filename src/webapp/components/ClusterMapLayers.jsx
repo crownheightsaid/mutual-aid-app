@@ -43,9 +43,12 @@ const ClusterMapLayers = ({ data, paramRequest, sourceId, color }) => {
     ClusterMapContext
   );
 
-  const setCursorPointer = (e) =>
-    (e.target.getCanvas().style.cursor = "pointer");
-  const setCursorGrab = (e) => (e.target.getCanvas().style.cursor = "grab");
+  const setCursorPointer = (e) => {
+    e.target.getCanvas().style.cursor = "pointer";
+  };
+  const setCursorGrab = (e) => {
+    e.target.getCanvas().style.cursor = "grab";
+  };
 
   useEffect(() => {
     // display popup if request code is present in URL search param
@@ -136,9 +139,11 @@ const ClusterMapLayers = ({ data, paramRequest, sourceId, color }) => {
               setPopup(makePopupData(e.features, e.lngLat));
 
               // only support setting context for one focused request for now
-              const request = e.features[0];
-              if (request) {
-                setFocusedRequestId(request.properties.title);
+              if (e.features.length === 1) {
+                const request = e.features[0];
+                if (request) {
+                  setFocusedRequestId(request.properties.title);
+                }
               }
             }}
             onMouseEnter={setCursorPointer}
