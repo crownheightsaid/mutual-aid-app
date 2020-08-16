@@ -76,6 +76,7 @@ const ClusterMap = ({
         center={CROWN_HEIGHTS_CENTER_COORD}
         bounds={makeBounds(allRequests)}
         containerStyle={containerStyle}
+        lockZoomUnlessBoundsChange
       >
         <QuadrantsLayers />
         <Source
