@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Source } from "react-mapbox-gl";
 import { LngLat } from "mapbox-gl";
 import { findBounds } from "webapp/helpers/mapbox-coordinates";
