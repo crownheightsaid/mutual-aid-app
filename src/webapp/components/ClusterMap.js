@@ -31,13 +31,14 @@ const makeBounds = (features) => {
 
 const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
   const requestCode = getRequestParam();
-  const [showDrivingClusters, setShowDrivingClusters] = useState(false);
+  const [showDrivingRequests, setShowDrivingRequests] = useState(true);
+  const [showRegularRequests, setShowRegularRequests] = useState(true);
 
   let paramRequest;
   const { requests, drivingClusterRequests } = geoJsonData;
   const { features: reqFeatures } = requests;
   const { features: clusterFeatures } = drivingClusterRequests;
-  const allRequests = showDrivingClusters
+  const allRequests = showDrivingRequests
     ? [...reqFeatures, ...clusterFeatures]
     : reqFeatures;
 
@@ -67,11 +68,20 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
       <FormControlLabel
         control={
           <Checkbox
-            checked={showDrivingClusters}
-            onClick={() => setShowDrivingClusters(!showDrivingClusters)}
+            checked={showRegularRequests}
+            onClick={() => setShowRegularRequests(!showRegularRequests)}
           />
         }
-        label="Show driving clusters"
+        label="Regular requests"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={showDrivingRequests}
+            onClick={() => setShowDrivingRequests(!showDrivingRequests)}
+          />
+        }
+        label="Driving cluster requests"
       />
       <BasicMap
         center={CROWN_HEIGHTS_CENTER_COORD}
@@ -99,12 +109,14 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
             clusterRadius: 30,
           }}
         />
-        <ClusterMapLayers
-          sourceId="requestsSource"
-          paramRequest={paramRequest}
-          color="orangered"
-        />
-        {showDrivingClusters && (
+        {showRegularRequests && (
+          <ClusterMapLayers
+            sourceId="requestsSource"
+            paramRequest={paramRequest}
+            color="orangered"
+          />
+        )}
+        {showDrivingRequests && (
           <ClusterMapLayers
             sourceId="drivingClusterRequestsSource"
             paramRequest={paramRequest}
