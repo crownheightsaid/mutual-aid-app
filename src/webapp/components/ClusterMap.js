@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Source } from "react-mapbox-gl";
 import { LngLat } from "mapbox-gl";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { findBounds } from "webapp/helpers/mapbox-coordinates";
 
 import {
@@ -29,18 +27,27 @@ const makeBounds = (features) => {
   return bounds;
 };
 
-const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
+const ClusterMap = ({
+  showDrivingRequests,
+  showRegularRequests,
+  geoJsonData,
+  containerStyle = {},
+}) => {
   const requestCode = getRequestParam();
-  const [showDrivingRequests, setShowDrivingRequests] = useState(true);
-  const [showRegularRequests, setShowRegularRequests] = useState(true);
 
   let paramRequest;
   const { requests, drivingClusterRequests } = geoJsonData;
   const { features: reqFeatures } = requests;
   const { features: clusterFeatures } = drivingClusterRequests;
-  const allRequests = showDrivingRequests
-    ? [...reqFeatures, ...clusterFeatures]
-    : reqFeatures;
+
+  let allRequests = [];
+
+  if (showDrivingRequests) {
+    allRequests = [...allRequests, ...clusterFeatures];
+  }
+  if (showRegularRequests) {
+    allRequests = [...allRequests, ...reqFeatures];
+  }
 
   if (requestCode) {
     // find first feature with code match to be passed
@@ -65,28 +72,11 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
 
       {noRequestsFound && <NoRequestsAlert />}
 
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={showRegularRequests}
-            onClick={() => setShowRegularRequests(!showRegularRequests)}
-          />
-        }
-        label="Regular requests"
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={showDrivingRequests}
-            onClick={() => setShowDrivingRequests(!showDrivingRequests)}
-          />
-        }
-        label="Driving cluster requests"
-      />
       <BasicMap
         center={CROWN_HEIGHTS_CENTER_COORD}
         bounds={makeBounds(allRequests)}
         containerStyle={containerStyle}
+        lockZoomUnlessBoundsChange
       >
         <QuadrantsLayers />
         <Source
@@ -114,6 +104,7 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
             sourceId="requestsSource"
             paramRequest={paramRequest}
             color="orangered"
+            data={reqFeatures}
           />
         )}
         {showDrivingRequests && (
@@ -121,6 +112,7 @@ const ClusterMap = ({ geoJsonData, containerStyle = {} }) => {
             sourceId="drivingClusterRequestsSource"
             paramRequest={paramRequest}
             color="rebeccapurple"
+            data={clusterFeatures}
           />
         )}
       </BasicMap>
