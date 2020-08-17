@@ -69,6 +69,13 @@
       "message": "Request with code {{requestCode}} is not found. This means that the request is no longer in 'Delivery Needed' status.",
       "redirectLink": "/delivery-needed",
       "redirectMessage": "See all requests instead."
+    },
+    "table": {
+      "headers": {
+        "daysOpen": "Days open",
+        "neighbor": "Neighbor",
+        "crossStreets": "Cross streets"
+      }
     }
   }
 }

@@ -80,7 +80,11 @@ const DeliveryTable = ({ rows }) => {
                 defaultValue: "Days open",
               })}
             </TableCell>
-            <TableCell>{str("webapp:zoneFinder.label.firstName")}</TableCell>
+            <TableCell>
+              {str("webapp:deliveryNeeded.table.headers.neighbor", {
+                defaultValue: "Neighbor",
+              })}
+            </TableCell>
             <TableCell>{str("webapp:zoneFinder.label.code")}</TableCell>
             <TableCell>
               {str("webapp:deliveryNeeded.table.headers.crossStreets", {
