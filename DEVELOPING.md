@@ -2,14 +2,14 @@
 If you are new to contributing, please start here. This guide will cover setting up for any of our apps and should be read before delving into the specifics of each app.
 
 ## Table of contents
-- [Before you start](#Before you start)
-- [Directory structure](#Directory structure)
+- [Before you start](#Before-you-start)
+- [Directory structure](#Directory-structure)
 - [Environments](#Environments)
-- [Set up environment variables](#Set up environment variables)
-- [Managing Node.js versions](#Managing Node.js versions)
+- [Set up environment variables](#Set-up-environment-variables)
+- [Managing Node.js versions](#Managing-Node.js-versions)
 - [Linting](#Linting)
 - [Testing](#Testing)
-- [Submitting your contributions](#Submitting your contributions)
+- [Submitting your contributions](#Submitting-your-contributions)
 - [Deploying](#Deploying)
 
 ## Before you start
