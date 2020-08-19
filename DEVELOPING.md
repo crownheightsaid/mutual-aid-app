@@ -23,6 +23,11 @@ To avoid getting blocked, please request the following to [#wg_tech](https://cro
 > Can I get permissions for Github, staging Heroku and Airtable?
 > My github username is <username> and my email address is <email>
 
+You should get invites for three things:
+- This Github repo
+- CHMA staging heroku instance
+- Dtaging airtable
+
 One of our working group leads will get you set up. Please make sure to accept invitations within 24 hours to prevent them from expiring.
 
 ## Directory structure
