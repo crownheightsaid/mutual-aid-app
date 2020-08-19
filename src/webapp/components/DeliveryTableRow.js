@@ -99,7 +99,9 @@ const DeliveryTableRow = (props) => {
           <Collapse in={row.isFocused} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="subtitle1" gutterBottom component="div">
-                Description
+                {str("webapp:deliveryNeeded.table.headers.description", {
+                    defaultValue: "Description",
+                })}
               </Typography>
               <div className={classes.description}> {row["Description"]} </div>
             </Box>
