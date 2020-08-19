@@ -31,21 +31,23 @@ This project is a monorepo. The different apps and directories are:
   - Common functionality that is very low level (constants, minimal Slack API, minimal airtable API, etc)
   - Subpackages can be referenced with a tilde: `require(~airtable/bases)`
 - `src/slackapp`
-  - Contains HTTP webhooks that Slack will call in response to user action
+  - Contains HTTP webhooks that Slack will call in response to user action 
 - `src/api`
   - HTTP api that this app provides
 - `src/twilio`
-  - twilio serverless js functions for voice + sms, connecting to airtable; deployed separately
+  - twilio serverless js functions for voice + sms, connecting to airtable; deployed separately  
 - `src/webapp`
   - Frontend for the app, built with React. Built to `/public` in project root
 - `src/workers`
-  - Logic that runs on a schedule (polling airtable etc)
+  - Logic that runs on a schedule (polling airtable etc) 
 - `scripts/`
   - One-off scripts for things like backfill. Can also be useful for bulk adding users to slack channels
 
 Each directory has it's own `DEVELOPING.md` for developing locally. You can also look at `scripts` in `package.json` to get an idea of how to run each app.
 
-## Environments
+
+The rest of this file is for app-wide setup for contributing, as well as deploying to non-local environments.
+_____________
 
 We have three types of environments:
 
@@ -56,8 +58,8 @@ We have three types of environments:
   - Running on heroku, but with different 3rd party API keys than `prod`
   - No paid APIs should be connected
 - `prod`
-  - Running on heroku, with API keys that grant access to user data and paid services
-
+  - Running on heroku, with API keys that grant access to user data and paid services 
+_____________
 
 ## Set up environment variables
 
@@ -76,6 +78,7 @@ If you don't already have a version manager, we recommend nvm, a tool that lets 
 
 ### Installing NVM
 
+If you haven't installed nvm, you can just run these commands:
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
@@ -89,8 +92,7 @@ nvm install 12.16.1
 # Use the version
 nvm use 12.16.1
 ```
-
-## Install Node.js dependencies
+_____________
 
 After you install the correct version of node, install dependencies:
 
@@ -151,13 +153,12 @@ npm run fix
 
 This whole repo is severely untested as we prioritized getting to production early in CHMA's existence.
 
-But to run the few tests we have:
+When you're ready to submit a pull request, make sure there are no lint errors:
 
-```
-npm run tests
-```
+Attempt autofix: `npm run fix`
 
-## Submitting your contributions
+See errors that couldn't be fixed: `npm run lint`
+______________
 
 ### Picking up an issue
 You can see our open issues at https://github.com/crownheightsaid/mutual-aid-app/issues. Good first issues will be tagged as such. If you are unsure what to work on, please reach out in [#wg_tech](https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD)  and we will help you prioritize issues.
@@ -199,6 +200,7 @@ git push staging <branch-name>:master
 # See here for more information:
 # https://devcenter.heroku.com/articles/multiple-environments#advanced-linking-local-branches-to-remote-apps
 ```
+This slack workspace is by default configured to use the staging env. Try it out!
 
 To test Slack integrations on staging, we have a [workspace](testcovidslackapp.slack.com
 ) configured to use the staging env. Please ask in #wg_tech for an invitation to that Slack.
