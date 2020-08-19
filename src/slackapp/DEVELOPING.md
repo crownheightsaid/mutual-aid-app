@@ -1,14 +1,14 @@
 # Developing Slack App
 
 ## Set up a development Slack instance
-If this is the first time you are developing on the Slack app, please see watch the [technical walkthrough video](https://www.youtube.com/watch?v=b1QW5YNtBaM&t=1400s) section on `Running locally: Slack handlers (+ ngrok intro)`.
+If this is the first time you are developing on the Slack bot, please see watch the [technical walkthrough video](https://www.youtube.com/watch?v=b1QW5YNtBaM&t=1400s) section on `Running locally: Slack handlers (+ ngrok intro)`.
 
 The whole process is a bit time consuming, so set aside about an hour for setup. On the bright side, you only have to do it once.
 Basically, you need to do three things:
 
 1. set up a test Slack workspace
-2. run a Slack app server (see below)
-3. set up a test app that points to your Slack app server.
+2. run a Slack bot server (see below)
+3. set up a test app that points to your Slack bot server.
 
 ## Run
 Start ngrok which will give you a public URL that will forward traffic to your localhost.

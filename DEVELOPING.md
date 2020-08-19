@@ -102,7 +102,7 @@ npm install
 We use Airtable as our main data source. If you set up your environment variables right, your apps should automatically start pulling data from our [staging Airtable](https://airtable.com/tblwLlM3yRmIxCYDB/viwbYLZKipJno7jqs), which you should also have access to if you requested it in the [first step](#before-you-start). Feel free to add test data to that Airtable instance.
 
 ## Running apps
-All the instructions so far are for general setup for any of the apps in this repo. More likely than not, you will be working on one or two apps only. To run each app, here's a quick start for our apps.
+All the instructions so far are for general setup for any of the apps in this repo. More likely than not, you will be working on one or two apps only.
 
 If you run into any issues, it is usually due to missing environment variables, so please check those.
 
@@ -115,8 +115,8 @@ npm run local:express
 
 The server is up when you see `Mutual Aid app listening on 5000!`
 
-### Slack app
-Setting up development for the Slack app is more involved. Please see [./src/slackapp/DEVELOPING.md](./src/slackapp/DEVELOPING.md)
+### Slack bot
+Setting up development for the Slack bot is more involved. Please see [./src/slackapp/DEVELOPING.md](./src/slackapp/DEVELOPING.md)
 
 ### Web app
 
@@ -131,7 +131,7 @@ Visiting [http://localhost:3000/delivery-needed](http://localhost:3000/delivery-
 More details in [./src/webapp/DEVELOPING.md](./src/webapp/DEVELOPING.md)
 
 ### Twilio
-Please see [./src/twilio/DEVELOPING.md](./src/twilio/DEVELOPING.md)
+Please see [./src/twilio/README.md](./src/twilio/README.md)
 
 ## Linting
 
@@ -160,12 +160,15 @@ npm run tests
 ## Submitting your contributions
 
 ### Picking up an issue
-You can see our open issues at https://github.com/crownheightsaid/mutual-aid-app/issues. Good first issues will be tagged as such. If you are unsure what to work on, please reach out in #wg_tech and we will help you prioritize issues.
+You can see our open issues at https://github.com/crownheightsaid/mutual-aid-app/issues. Good first issues will be tagged as such. If you are unsure what to work on, please reach out in [#wg_tech](https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD)  and we will help you prioritize issues.
 
-Once you have collaborator permissions on Github, please assign yourself to any issues you are picking up! This is important to prevent overlapping work and so that you can subscribe to any updates to an issue.
+Once you have collaborator permissions on Github, **please assign yourself to any issues you are picking up**! This is important to prevent overlapping work and so that you can subscribe to any updates to an issue.
+
+### Branching
+Once you have collaborator permissions on Github, you should be able to create and push branches from this repo. This approach is preferred over forking the repo. Please use descriptive branch names.
 
 ### Opening a Pull Request
-Once your PR is ready, open a Pull Request against master and post it in #wg_tech for reviews. Once it is approved, one of the tech leads will merge it to master and deploy at the next opportunity.
+Once your PR is ready, open a Pull Request against master and post it in [#wg_tech](https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD)  for reviews. Once it is approved, one of the tech leads will merge it to master and deploy at the next opportunity.
 Please link the issue it will close and include a detailed description of changes.
 
 ## Deploying
