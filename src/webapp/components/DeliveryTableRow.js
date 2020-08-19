@@ -15,6 +15,7 @@ import { daysSinceSlackMessage } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
 import HouseholdSizeChip from "./HouseholdSizeChip";
 import DrivingClusterChip from "./DrivingClusterChip";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   focused: {
@@ -39,6 +40,7 @@ const DeliveryTableRow = (props) => {
   const { focusedRequestId, setFocusedRequestId } = useContext(
     ClusterMapContext
   );
+  const { t: str } = useTranslation();  
 
   const handleRowClick = row => {
     if (focusedRequestId !== row.Code) {
