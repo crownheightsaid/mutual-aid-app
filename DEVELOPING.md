@@ -7,6 +7,8 @@ If you are new to contributing, please start here. This guide will cover setting
 - [Environments](#Environments)
 - [Set up environment variables](#Set-up-environment-variables)
 - [Managing Node.js versions](#Managing-Node.js-versions)
+- [Mock data](#Mock-data)
+- [Running apps](#Running-apps)
 - [Linting](#Linting)
 - [Testing](#Testing)
 - [Submitting your contributions](#Submitting-your-contributions)
@@ -51,7 +53,7 @@ We have three types of environments:
   - Running entirely on your machine (except for 3rd party APIs)
   - If 3rd party APIs are hooked up, they are the same as in `staging`
 - `staging`
-  - Running on heroku, but with different 3p API keys than `prod`
+  - Running on heroku, but with different 3rd party API keys than `prod`
   - No paid APIs should be connected
 - `prod`
   - Running on heroku, with API keys that grant access to user data and paid services
@@ -96,8 +98,40 @@ After you install the correct version of node, install dependencies:
 npm install
 ```
 
-## Run
-To run 
+## Mock data
+We use Airtable as our main data source. If you set up your environment variables right, your apps should automatically start pulling data from our [staging Airtable](https://airtable.com/tblwLlM3yRmIxCYDB/viwbYLZKipJno7jqs), which you should also have access to if you requested it in the [first step](#before-you-start). Feel free to add test data to that Airtable instance.
+
+## Running apps
+All the instructions so far are for general setup for any of the apps in this repo. More likely than not, you will be working on one or two apps only. To run each app, here's a quick start for our apps.
+
+If you run into any issues, it is usually due to missing environment variables, so please check those.
+
+### API
+More details in [./src/api/DEVELOPING.md](./src/api/DEVELOPING.md)
+
+```
+npm run local:express
+```
+
+The server is up when you see `Mutual Aid app listening on 5000!`
+
+### Slack app
+Setting up development for the Slack app is more involved. Please see [./src/slackapp/DEVELOPING.md](./src/slackapp/DEVELOPING.md)
+
+### Web app
+
+To run the webapp, you will also need to run the API server
+```
+npm run local:react
+npm run local:express
+```
+
+Visiting [http://localhost:3000/delivery-needed](http://localhost:3000/delivery-needed) should show you a delivery requests map.
+
+More details in [./src/webapp/DEVELOPING.md](./src/webapp/DEVELOPING.md)
+
+### Twilio
+Please see [./src/twilio/DEVELOPING.md](./src/twilio/DEVELOPING.md)
 
 ## Linting
 
@@ -168,3 +202,6 @@ To test Slack integrations on staging, we have a [workspace](testcovidslackapp.s
 
 ### Production
 To deploy to production, you will need access to the production Heroku account. Deployment is the same as staging, but the Heroku app name is `crownheightsma` instead of `crownheightsma-staging`
+
+## Help
+If you run into any issues, please post it in [#wg_tech](https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD) on Slack and we will do our best to help you out. Please include screenshots and any error messages for a quicker response.

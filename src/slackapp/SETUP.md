@@ -7,6 +7,7 @@ This guide can also be used to set up a development Slack and app instance.
 1. Create a [Slack workspace](https://slack.com/create#email)
 1. [Create your app](https://api.slack.com/apps)
 1. Click the deploy button below and follow the instructions (you can skip pipeline part)
+     - Run this step if you are deploying to prod/staging only. For local development, please see [DEVELOPING.md](./DEVELOPING.md)
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/crownheightsaid/slack-app)
 
@@ -18,7 +19,7 @@ Get your heroku app URL for slack:
 Finish setting up your slack app
 1. Go your slack app page (`https://api.slack.com/apps/your-app-id`)
 1. Make "App Home" tab like this: https://imgur.com/VSnO7iw
-1. Go to "Interativity & Shortcuts"
+1. Go to "Interactivity & Shortcuts"
      - Turn on.
      - Add your full `/slack/interactivity` heroku URL to "Request URL"
      - Add the following under Shortcuts:

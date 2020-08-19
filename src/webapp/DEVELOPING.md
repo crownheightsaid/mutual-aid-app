@@ -28,5 +28,3 @@ You will also want to run the API, or most features will not be available. To do
 ```
 npm run local:express
 ```
-
-Or see `/src/api/DEVELOPING.md` for more details.
