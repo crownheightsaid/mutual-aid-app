@@ -6,6 +6,7 @@ import Link from "@material-ui/core/Link";
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { makeStyles } from "@material-ui/core/styles";
@@ -56,9 +57,11 @@ const DeliveryTableRow = (props) => {
         onClick={() => handleRowClick(row)}
       >
         <TableCell>
+          <Tooltip title={row.isFocused ? "Hide Description" : "Show Description"} placement="top">
           <IconButton aria-label="expand row" size="small">
             {row.isFocused ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
+          </Tooltip>
         </TableCell>
         <TableCell>
           <DaysOpenChip
