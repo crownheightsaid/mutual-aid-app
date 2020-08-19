@@ -69,6 +69,91 @@ const DeliveryTable = ({ rows }) => {
     };
   });
 
+  const renderTableHeadRow = () => {
+    return (
+      <TableRow>
+        <TableCell>
+          {str("webapp:deliveryNeeded.table.headers.daysOpen", {
+            defaultValue: "Days open",
+          })}
+        </TableCell>
+        <TableCell>
+          {str("webapp:deliveryNeeded.table.headers.timeline", {
+            defaultValue: "Requested Delivery Time",
+          })}
+        </TableCell>
+        <TableCell>
+          {str("webapp:deliveryNeeded.table.headers.neighbor", {
+            defaultValue: "Neighbor",
+          })}
+        </TableCell>
+        <TableCell>
+          {str("webapp:deliveryNeeded.table.headers.need", {
+            defaultValue: "Need",
+          })}
+        </TableCell>
+        <TableCell>{str("webapp:zoneFinder.label.code")}</TableCell>
+        <TableCell>
+          {str("webapp:deliveryNeeded.table.headers.crossStreets", {
+            defaultValue: "Cross streets",
+          })}
+        </TableCell>
+        <TableCell>
+          {str("webapp:deliveryNeeded.table.headers.description", {
+            defaultValue: "Description",
+          })}
+        </TableCell>
+      </TableRow>
+    );
+  }
+
+  const renderTableBody = () => {
+    return formattedRows.map((row) => (
+      <TableRow
+        id={row.Code}
+        key={row.Code}
+        className={row.isFocused ? classes.focused : ""}
+        onClick={() => setFocusedRequestId(row.Code)}
+      >
+        <TableCell>
+          <DaysOpenChip
+            timeOnly
+            daysOpen={daysSinceSlackMessage(row.slackTs)}
+          />
+        </TableCell>
+        <TableCell>
+          {row["Timeline"]}
+        </TableCell>
+        <TableCell>
+          {row["First Name"]}
+          <Box className={classes.chipRow}>
+            {row["For Driving Clusters"] && <DrivingClusterChip />}
+            <HouseholdSizeChip size={row["Household Size"]} />
+          </Box>
+        </TableCell>
+        <TableCell>
+          {row["Need"]}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          <Link
+            href={row.slackPermalink}
+            target="_blank"
+            underline="always"
+            rel="noopener noreferrer"
+          >
+            {row.Code}
+          </Link>
+        </TableCell>
+        <TableCell>{`${row["Cross Street #1"]} and ${row["Cross Street #2"]}`}</TableCell>
+        <TableCell>
+          <Button variant="outlined" color="primary" startIcon={<LaunchIcon />}>
+            Open
+          </Button>
+        </TableCell>
+      </TableRow>
+    ));
+  }
+
   return (
     <TableContainer
       id="table-wrapper"
@@ -77,85 +162,10 @@ const DeliveryTable = ({ rows }) => {
     >
       <Table aria-label="simple table">
         <TableHead>
-          <TableRow>
-            <TableCell>
-              {str("webapp:deliveryNeeded.table.headers.daysOpen", {
-                defaultValue: "Days open",
-              })}
-            </TableCell>
-            <TableCell>
-              {str("webapp:deliveryNeeded.table.headers.timeline", {
-                defaultValue: "Requested Delivery Time",
-              })}
-            </TableCell>
-            <TableCell>
-              {str("webapp:deliveryNeeded.table.headers.neighbor", {
-                defaultValue: "Neighbor",
-              })}
-            </TableCell>
-            <TableCell>
-              {str("webapp:deliveryNeeded.table.headers.need", {
-                defaultValue: "Need",
-              })}
-            </TableCell>
-            <TableCell>{str("webapp:zoneFinder.label.code")}</TableCell>
-            <TableCell>
-              {str("webapp:deliveryNeeded.table.headers.crossStreets", {
-                defaultValue: "Cross streets",
-              })}
-            </TableCell>
-            <TableCell>
-              {str("webapp:deliveryNeeded.table.headers.description", {
-                defaultValue: "Description",
-              })}
-            </TableCell>
-          </TableRow>
+          {renderTableHeadRow()}
         </TableHead>
         <TableBody>
-          {formattedRows.map((row) => (
-            <TableRow
-              id={row.Code}
-              key={row.Code}
-              className={row.isFocused ? classes.focused : ""}
-              onClick={() => setFocusedRequestId(row.Code)}
-            >
-              <TableCell>
-                <DaysOpenChip
-                  timeOnly
-                  daysOpen={daysSinceSlackMessage(row.slackTs)}
-                />
-              </TableCell>
-              <TableCell>
-                {row["Timeline"]}
-              </TableCell>
-              <TableCell>
-                {row["First Name"]}
-                <Box className={classes.chipRow}>
-                  {row["For Driving Clusters"] && <DrivingClusterChip />}
-                  <HouseholdSizeChip size={row["Household Size"]} />
-                </Box>
-              </TableCell>
-              <TableCell>
-                {row["Need"]}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                <Link
-                  href={row.slackPermalink}
-                  target="_blank"
-                  underline="always"
-                  rel="noopener noreferrer"
-                >
-                  {row.Code}
-                </Link>
-              </TableCell>
-              <TableCell>{`${row["Cross Street #1"]} and ${row["Cross Street #2"]}`}</TableCell>
-              <TableCell>
-                <Button variant="outlined" color="primary" startIcon={<LaunchIcon />}>
-                  Open
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
+          {renderTableBody()}
         </TableBody>
       </Table>
     </TableContainer>
