@@ -1,48 +1,25 @@
-# Developing
-If you are new to contributing, please start here. This guide will cover setting up for any of our apps and should be read before delving into the specifics of each app.
-
-## Table of contents
-- [#Directory structure](Directory structure)
-- [#Environments](Environments)
-- [#Set up environment variables](Set up environment variables)
-- [#Managing Node.js versions](Managing Node.js versions)
-- [#Linting](Linting)
-- [#Testing](Testing)
-- [#Submitting your contributions](Submitting your contributions)
-- [#Deploying](Deploying)
-
-## Before you start
-**IMPORTANT: In order to set up local dev, you will need certain permissions.**
-
-To avoid getting blocked, please request the following to [#wg_tech](https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD) on Slack:
-
-```
-Hi, I am setting up the mutual-aid-app for local development. Can I get permissions for Github, staging Heroku and Airtable? My github username is <username> and my email address is <email>
-```
-
-One of our working group leads will get you set up. Please make sure to accept invitations within 24 hours to prevent them from expiring.
-
-## Directory structure
-This project is a monorepo. The different apps and directories are:
+This project is a monorepo. The different components are:
 - `src/lib`
   - Common functionality that is very low level (constants, minimal Slack API, minimal airtable API, etc)
   - Subpackages can be referenced with a tilde: `require(~airtable/bases)`
 - `src/slackapp`
-  - Contains HTTP webhooks that Slack will call in response to user action
+  - Contains HTTP webhooks that Slack will call in response to user action 
 - `src/api`
   - HTTP api that this app provides
 - `src/twilio`
-  - twilio serverless js functions for voice + sms, connecting to airtable; deployed separately
+  - twilio serverless js functions for voice + sms, connecting to airtable; deployed separately  
 - `src/webapp`
   - Frontend for the app, built with React. Built to `/public` in project root
 - `src/workers`
-  - Logic that runs on a schedule (polling airtable etc)
+  - Logic that runs on a schedule (polling airtable etc) 
 - `scripts/`
   - One-off scripts for things like backfill. Can also be useful for bulk adding users to slack channels
 
-Each directory has it's own DEVELOPING.md for developing locally. You can learn most of it from reading the scripts in `package.json`.
+Each component has it's own DEVELOPING.md for developing locally. You can learn most of it from reading the scripts in `package.json`.
 
-## Environments
+
+The rest of this file is for app-wide setup for contributing, as well as deploying to non-local environments.
+_____________
 
 Quick overview of what we call our environments:
 
@@ -50,28 +27,16 @@ Quick overview of what we call our environments:
   - Running entirely on your machine (except for 3rd party APIs)
   - If 3rd party APIs are hooked up, they are the same as in `staging`
 - `staging`
-  - Running on heroku, but with different 3p API keys than `prod`
-  - No paid APIs should be connected
+  - Running on heroku, but with different 3p API keys than `prod` 
+  - No paid APIs should be connected 
 - `prod`
-  - Running on heroku, with API keys that grant access to user data and paid services
+  - Running on heroku, with API keys that grant access to user data and paid services 
+_____________
 
+Heroku uses a specific version of node (`12.16.*`). NVM is a tool that lets you easily switch node versions.
+We need this since we want our `local` environment to match `staging` and `prod`
 
-## Set up environment variables
-
-Before you can start running any of the apps locally, you will need to set up environment variables. You can find them on the [staging Heroku](https://dashboard.heroku.com/apps/crownheightsma-staging/settings) under 'Config Vars'.
-
-Add them in a file named `.env` in the root directory. You can copy it from `.env.example`.
-
-See `app.json` for the definition of each environment variable. You may not need all variables to get started, depending on which part of the app you are working on, but starting with the ones in `.env.example` is a good start.
-
-## Managing Node.js versions
-
-When developing, we want the version of Node.js in our `local` environment to match `staging` and `prod`, which is `12.16.*` as per Heroku's setup.
-NVM is a tool that lets you easily switch Node.js versions, which is what we recommend.
-
-
-### Installing NVM
-
+If you haven't installed nvm, you can just run these commands:
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 # Verify with:
@@ -82,56 +47,25 @@ nvm install 12.16.1
 # Use the version
 nvm use 12.16.1
 ```
-
-## Install Node.js dependencies
+_____________
 
 After you install the correct version of node, install dependencies:
 
-```
-npm install
-```
+`npm install`
+_____________
 
-## Linting
+When you're ready to submit a pull request, make sure there are no lint errors:
 
-When you're ready to submit a pull request, make sure there are no lint errors buy running
+Attempt autofix: `npm run fix`
 
-```
-npm run lint
-```
+See errors that couldn't be fixed: `npm run lint`
+______________
 
-To autofix errors that can be autofixed, you can run
+## Deploying (staging)
 
-```
-npm run fix
-```
-
-## Testing
-
-This whole repo is severely untested as we prioritized getting to production early in CHMA's existence.
-
-But to run the few tests we have:
-
-```
-npm run tests
-```
-
-## Submitting your contributions
-
-### Picking up an issue
-Once you have collaborator permissions on Github, please assign yourself to any issues you are picking up! This is important to prevent overlapping work and so that you can subscribe to any updates to an issue.
-
-### Opening a Pull Request
-Once your PR is ready, open a Pull Request against master and post it in #wg_tech for reviews. Once it is approved, one of the tech leads will merge it to master and deploy at the next opportunity.
-Please link the issue it will close and include a detailed description of changes.
-
-## Deploying
-
-### Staging
-Deploying to staging is not always necessary for shipping to prod, but can be helpful to verify integration. We only have one staging environment,
-so please post in #wg_tech if you are planning to use it. We also deploy to staging before production for testing.
-
-If you are using Crown Heights' credentials and have been added as a collaborator to staging or prod, you can follow these instructions to deploy to the
-existing heroku instance. This example is with our staging app named `crownheightsma-staging`:
+You can of course follow [SETUP.md](SETUP.md) to run your own instance. If you are using Crown Heights' credentials
+and have been added as a collaborator to staging or prod, you can follow these instructions to deploy to the
+existing heroku instance. This example is with the staging app:
 
 ```bash
 # Clone the app to your machine (if you haven't already)
@@ -152,9 +86,6 @@ git push staging <branch-name>:master
 # See here for more information:
 # https://devcenter.heroku.com/articles/multiple-environments#advanced-linking-local-branches-to-remote-apps
 ```
+This slack workspace is by default configured to use the staging env. Try it out!
 
-To test Slack integrations on staging, we have a [workspace](testcovidslackapp.slack.com
-) configured to use the staging env. Please ask in #wg_tech for an invitation to that Slack.
-
-### Production
-To deploy to production, you will need access to the production Heroku account. Deployment is the same as staging, but the Heroku app name is `crownheightsma` instead of `crownheightsma-staging`
+testcovidslackapp.slack.com
