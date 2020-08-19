@@ -76,7 +76,8 @@
         "timeline": "Requested Delivery Time",
         "neighbor": "Neighbor",
         "need": "Need",
-        "crossStreets": "Cross streets"
+        "crossStreets": "Cross streets",
+        "description": "Description"
       }
     }
   }
