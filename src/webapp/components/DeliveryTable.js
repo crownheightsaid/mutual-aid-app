@@ -81,6 +81,11 @@ const DeliveryTable = ({ rows }) => {
               })}
             </TableCell>
             <TableCell>
+              {str("webapp:deliveryNeeded.table.headers.timeline", {
+                defaultValue: "Requested Delivery Time",
+              })}
+            </TableCell>
+            <TableCell>
               {str("webapp:deliveryNeeded.table.headers.neighbor", {
                 defaultValue: "Neighbor",
               })}
@@ -106,6 +111,9 @@ const DeliveryTable = ({ rows }) => {
                   timeOnly
                   daysOpen={daysSinceSlackMessage(row.slackTs)}
                 />
+              </TableCell>
+              <TableCell>
+                {row["Timeline"]}
               </TableCell>
               <TableCell>
                 {row["First Name"]}
