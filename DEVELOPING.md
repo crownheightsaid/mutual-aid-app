@@ -204,7 +204,7 @@ To test Slack integrations on staging, we have a [workspace](testcovidslackapp.s
 ) configured to use the staging env. Please ask in #wg_tech for an invitation to that Slack.
 
 ### Production
-To deploy to production, you will need access to the production Heroku account. Deployment is the same as staging, but the Heroku app name is `crownheightsma` instead of `crownheightsma-staging`
+To deploy to production, you will need access to the production Heroku account. Deployment is the same as staging, but the Heroku app name is `crownheightsma` instead of `crownheightsma-staging`. Currently, deploying to prod takes the app down for a few minutes, so please avoid deploying during peak hours 10am-6pm.
 
 ## Help
 If you run into any issues, please post it in [#wg_tech](https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD) on Slack and we will do our best to help you out. Please include screenshots and any error messages for a quicker response.
