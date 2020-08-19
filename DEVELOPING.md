@@ -26,7 +26,7 @@ To avoid getting blocked, please request the following to [#wg_tech](https://cro
 You should get invites for three things:
 - This Github repo
 - CHMA staging heroku instance
-- Dtaging airtable
+- Staging airtable
 
 One of our working group leads will get you set up. Please make sure to accept invitations within 24 hours to prevent them from expiring.
 
@@ -65,6 +65,14 @@ We have three types of environments:
 - `prod`
   - Running on heroku, with API keys that grant access to user data and paid services 
 _____________
+
+## Clone this repo
+First, you will want a copy of this repo on your computer.
+
+```
+git clone https://github.com/crownheightsaid/mutual-aid-app.git
+cd mutual-aid-app
+```
 
 ## Set up environment variables
 
@@ -172,6 +180,14 @@ Once you have collaborator permissions on Github, **please assign yourself to an
 
 ### Branching
 Once you have collaborator permissions on Github, you should be able to create and push branches from this repo. This approach is preferred over forking the repo. Please use descriptive branch names.
+
+```
+## make a new branch
+git checkout -b new_feature
+
+## push branch to this repo
+git push origin new_feature
+```
 
 ### Opening a Pull Request
 Once your PR is ready, open a Pull Request against master and post it in [#wg_tech](https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD)  for reviews. Once it is approved, one of the tech leads will merge it to master and deploy at the next opportunity.
