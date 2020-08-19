@@ -75,6 +75,7 @@
         "daysOpen": "Days open",
         "timeline": "Requested Delivery Time",
         "neighbor": "Neighbor",
+        "need": "Need",
         "crossStreets": "Cross streets"
       }
     }

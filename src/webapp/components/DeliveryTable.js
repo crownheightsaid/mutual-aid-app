@@ -90,6 +90,11 @@ const DeliveryTable = ({ rows }) => {
                 defaultValue: "Neighbor",
               })}
             </TableCell>
+            <TableCell>
+              {str("webapp:deliveryNeeded.table.headers.need", {
+                defaultValue: "Need",
+              })}
+            </TableCell>
             <TableCell>{str("webapp:zoneFinder.label.code")}</TableCell>
             <TableCell>
               {str("webapp:deliveryNeeded.table.headers.crossStreets", {
@@ -121,6 +126,9 @@ const DeliveryTable = ({ rows }) => {
                   {row["For Driving Clusters"] && <DrivingClusterChip />}
                   <HouseholdSizeChip size={row["Household Size"]} />
                 </Box>
+              </TableCell>
+              <TableCell>
+                {row["Need"]}
               </TableCell>
               <TableCell component="th" scope="row">
                 <Link
