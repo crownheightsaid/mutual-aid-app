@@ -322,6 +322,9 @@ const fields = (exports.fields = {
   neighborhood: "Neighborhood MA-NYC",
   householdSize: "Household Size",
   forDrivingClusters: "For Driving Clusters",
+  timeline: "Timeline",
+  description: "Description",
+  need: "Need",
 });
 exports.SENSITIVE_FIELDS = [
   fields.phone,

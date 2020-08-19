@@ -12,6 +12,9 @@ const {
   firstName,
   forDrivingClusters,
   householdSize,
+  timeline,
+  description,
+  need
 } = fields;
 
 const makeFeature = async (r) => {
@@ -70,6 +73,9 @@ const makeFeature = async (r) => {
         [firstName]: r.fields[firstName],
         [forDrivingClusters]: Boolean(r.fields[forDrivingClusters]),
         [householdSize]: r.fields[householdSize],
+        [timeline]: r.fields["Timeline"],
+        [need]: r.fields["Need"],
+        [description]: r.fields["Description"],
         slackPermalink: slackPermalink.ok ? slackPermalink.permalink : "",
         timestamp,
         slackTs: metaJSON.slack_ts || "",
