@@ -2,23 +2,24 @@
 If you are new to contributing, please start here. This guide will cover setting up for any of our apps and should be read before delving into the specifics of each app.
 
 ## Table of contents
-- [#Directory structure](Directory structure)
-- [#Environments](Environments)
-- [#Set up environment variables](Set up environment variables)
-- [#Managing Node.js versions](Managing Node.js versions)
-- [#Linting](Linting)
-- [#Testing](Testing)
-- [#Submitting your contributions](Submitting your contributions)
-- [#Deploying](Deploying)
+- [Before you start](#Before you start)
+- [Directory structure](#Directory structure)
+- [Environments](#Environments)
+- [Set up environment variables](#Set up environment variables)
+- [Managing Node.js versions](#Managing Node.js versions)
+- [Linting](#Linting)
+- [Testing](#Testing)
+- [Submitting your contributions](#Submitting your contributions)
+- [Deploying](#Deploying)
 
 ## Before you start
-**IMPORTANT: In order to set up local dev, you will need certain permissions.**
+**IMPORTANT: Do not skip this step.**
 
 To avoid getting blocked, please request the following to [#wg_tech](https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD) on Slack:
 
-```
-Hi, I am setting up the mutual-aid-app for local development. Can I get permissions for Github, staging Heroku and Airtable? My github username is <username> and my email address is <email>
-```
+> Hi, I am setting up the mutual-aid-app for local development.
+> Can I get permissions for Github, staging Heroku and Airtable?
+> My github username is <username> and my email address is <email>
 
 One of our working group leads will get you set up. Please make sure to accept invitations within 24 hours to prevent them from expiring.
 
@@ -40,11 +41,11 @@ This project is a monorepo. The different apps and directories are:
 - `scripts/`
   - One-off scripts for things like backfill. Can also be useful for bulk adding users to slack channels
 
-Each directory has it's own DEVELOPING.md for developing locally. You can learn most of it from reading the scripts in `package.json`.
+Each directory has it's own `DEVELOPING.md` for developing locally. You can also look at `scripts` in `package.json` to get an idea of how to run each app.
 
 ## Environments
 
-Quick overview of what we call our environments:
+We have three types of environments:
 
 - `local`
   - Running entirely on your machine (except for 3rd party APIs)
@@ -67,18 +68,22 @@ See `app.json` for the definition of each environment variable. You may not need
 ## Managing Node.js versions
 
 When developing, we want the version of Node.js in our `local` environment to match `staging` and `prod`, which is `12.16.*` as per Heroku's setup.
-NVM is a tool that lets you easily switch Node.js versions, which is what we recommend.
+
+If you don't already have a version manager, we recommend nvm, a tool that lets you easily switch Node.js versions.
 
 
 ### Installing NVM
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+
 # Verify with:
 command -v nvm
+
 # If you see a number, nvm is now installed!
 # Now install heroku's node version
 nvm install 12.16.1
+
 # Use the version
 nvm use 12.16.1
 ```
@@ -90,6 +95,9 @@ After you install the correct version of node, install dependencies:
 ```
 npm install
 ```
+
+## Run
+To run 
 
 ## Linting
 
@@ -118,6 +126,8 @@ npm run tests
 ## Submitting your contributions
 
 ### Picking up an issue
+You can see our open issues at https://github.com/crownheightsaid/mutual-aid-app/issues. Good first issues will be tagged as such. If you are unsure what to work on, please reach out in #wg_tech and we will help you prioritize issues.
+
 Once you have collaborator permissions on Github, please assign yourself to any issues you are picking up! This is important to prevent overlapping work and so that you can subscribe to any updates to an issue.
 
 ### Opening a Pull Request

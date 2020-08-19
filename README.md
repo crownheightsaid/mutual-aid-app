@@ -26,9 +26,9 @@ ________________________________________________________________________________
 ## Development
 
 To contribute to this project, please first register as a volunteer for CHMA [here](https://crownheightsmutualaid.com/volunteer/).
-Make sure to check `Technology` under **Working Groups** so we can get in touch with you.
+Make sure to check **Technology** under **Working Groups** so we can get in touch with you.
 
-Once you have access to the CHMA Slack, please see [developing](DEVELOPING.md) to start contributing!
+Once you have access to the CHMA Slack, please see [DEVELOPING.md](DEVELOPING.md) to start contributing!
 
 _____________________________________________________________________________________________________
 
