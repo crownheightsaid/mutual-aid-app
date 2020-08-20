@@ -9,6 +9,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import Instructions from "./Instructions";
 
 const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
@@ -18,8 +19,11 @@ const useStyles = makeStyles((theme) => ({
   errorMsg: {
     color: theme.status.danger,
   },
-  moreInfoActionsContainer: {
+  instructionsActionsContainer: {
     justifyContent: "flex-start",
+  },
+  backButton: {
+    backgroundColor: "lightgray",
   },
   formContent: {
     "& > *": {
@@ -65,6 +69,31 @@ export const InfoStep = ({ handleAccept, handleGetMoreInfo, requestCode }) => {
               defaultValue: "Yes, I accept.",
             })}
           </Typography>
+        </Button>
+      </DialogActions>
+    </>
+  );
+};
+
+export const InstructionsStep = ({ handleGoBack }) => {
+  const classes = useStyles();
+  const { t: str } = useTranslation();
+
+  return (
+    <>
+      <DialogTitle>
+        {str("webapp:deliveryNeeded.dialog.title", {
+          defaultValue: "How to make a delivery",
+        })}
+      </DialogTitle>
+      <DialogContent>
+        <Instructions />
+      </DialogContent>
+      <DialogActions className={classes.instructionsActionsContainer}>
+        <Button onClick={handleGoBack} className={classes.backButton}>
+          {str("webapp:deliveryNeeded.dialog.backButton", {
+            defaultValue: "Back",
+          })}
         </Button>
       </DialogActions>
     </>

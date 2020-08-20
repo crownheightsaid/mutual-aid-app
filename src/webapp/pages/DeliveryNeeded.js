@@ -107,6 +107,8 @@ export default function DeliveryNeeded() {
                   control={
                     <Checkbox
                       checked={showRegularRequests}
+                      // disabling because the linter was contradicting itself
+                      // eslint-disable-next-line
                       onClick={() => setShowRegularRequests(!showRegularRequests)}
                     />
                   }
@@ -116,6 +118,7 @@ export default function DeliveryNeeded() {
                   control={
                     <Checkbox
                       checked={showDrivingRequests}
+                      // eslint-disable-next-line
                       onClick={() => setShowDrivingRequests(!showDrivingRequests)}
                     />
                   }

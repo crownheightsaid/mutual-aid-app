@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Dialog from "@material-ui/core/Dialog";
-import { InfoStep, FormStep, FinishStep } from "./DialogScreens";
-import InstructionsStep from "./InstructionsScreen";
+import {
+  InfoStep,
+  InstructionsStep,
+  FormStep,
+  FinishStep,
+} from "./DialogScreens";
 
 const ClaimDeliveryDialog = ({ open, onClose, requestCode }) => {
   const { t: str } = useTranslation();
