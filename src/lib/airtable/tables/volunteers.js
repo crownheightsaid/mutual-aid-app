@@ -26,6 +26,34 @@ exports.findVolunteerById = async (id) => {
   }
 };
 
+exports.findVolunteerByPhone = async (phone) => {
+  try {
+    // get the area code, prefix, and line number
+    let strippedPhone = phone.replace(/[+|a-zA-Z|\s|(|)|-]/g, "");
+    strippedPhone =
+      strippedPhone.length === 11 ? strippedPhone.slice(1) : strippedPhone;
+
+    const records = await volunteersTable
+      .select({
+        filterByFormula: `FIND("${strippedPhone}", ${fields.phone}) > 0`,
+      })
+      .firstPage();
+    const record = records && records.length ? records[0] : null;
+
+    if (!record) {
+      return [null, `404: No volunteer signed up with phone number ${phone}`];
+    }
+
+    // do this so the record includes the volunteer name.
+    // including fields.name in a `fields` array in select() doesn't work for some reason
+    record.get(fields.name);
+
+    return [record, null];
+  } catch (e) {
+    return [null, `Errors looking up volunteer by phone number ${phone}: ${e}`];
+  }
+};
+
 // ==================================================================
 // Schema
 // ==================================================================

@@ -12,13 +12,14 @@ const airtablePaymentsWorker = require("./src/workers/airtable-sync/paymentWorke
 const { nycmaIntakeHandler } = require("./src/api/authed/intake/manyc.js");
 const { nycmaOuttakeHandler } = require("./src/api/authed/outtake/manyc.js");
 const {
-  addressHandler
+  addressHandler,
 } = require("./src/api/neighborhood-finder/get-address-meta.js");
 const {
-  neighborhoodFinderUpdateRequestHandler
+  neighborhoodFinderUpdateRequestHandler,
 } = require("./src/api/neighborhood-finder/update-request.js");
 const {
-  deliveryNeededRequestHandler
+  deliveryNeededRequestHandler,
+  assignDeliveryHandler,
 } = require("./src/api/delivery-needed/index.js");
 
 /* eslint-disable global-require  */
@@ -70,6 +71,8 @@ app.post(
 );
 
 app.get("/api/delivery-needed/requests.json", deliveryNeededRequestHandler);
+
+app.post("/api/delivery-needed/assign", assignDeliveryHandler);
 
 // ==================================================================
 // API Routes (w/ Basic Auth)

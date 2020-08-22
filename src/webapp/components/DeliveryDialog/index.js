@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import axios from "axios";
 import { useTranslation } from "react-i18next";
 import Dialog from "@material-ui/core/Dialog";
+import DeliveryContext from "../../context/DeliveryContext";
 import {
   InfoStep,
   InstructionsStep,
@@ -8,13 +10,25 @@ import {
   FinishStep,
 } from "./DialogScreens";
 
-const ClaimDeliveryDialog = ({ open, onClose, requestCode }) => {
+const ClaimDeliveryDialog = ({ open, onClose }) => {
+  const { requestCode } = useContext(DeliveryContext);
   const { t: str } = useTranslation();
   const [activeStep, setStep] = useState("info");
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const onSubmit = () => {
     // mock api request
+    axios
+      .post(`/api/delivery-needed/assign`, {
+        requestCode,
+        phoneNumber,
+      })
+      .then((resp) => {
+        console.log('SUCCESS', resp);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
 
     // if success:
     setStep("finish");

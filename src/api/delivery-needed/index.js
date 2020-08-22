@@ -1,4 +1,9 @@
-const { findDeliveryNeededRequests } = require("~airtable/tables/requests");
+const axios = require("axios");
+const {
+  findDeliveryNeededRequests,
+  findRequestByCode,
+} = require("~airtable/tables/requests");
+const { findVolunteerByPhone } = require("~airtable/tables/volunteers");
 const { fields } = require("~airtable/tables/requests");
 const { fetchCoordFromCrossStreets } = require("./fetchCoordFromCrossStreets");
 const slackapi = require("~slack/webApi");
@@ -108,4 +113,76 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
       features: clusterRequests.filter((request) => !!request),
     },
   });
+};
+
+/*
+ * This handler takes a delivery request code and the phone number of a delivery volunteer
+ * and assigns the delivery request to that volunteer. It also pings our Twilio service which then
+ * texts the delivery volunteer and intake volunteer with relevant information to initiate a
+ * delivery.
+ */
+exports.assignDeliveryHandler = async (req, res) => {
+  const { requestCode, phoneNumber } = req.body;
+  if (!requestCode || !phoneNumber) {
+    return res.status(400).send({
+      message: "Expected `requestCode` and `phoneNumber` in payload.",
+    });
+  }
+  let request;
+  let volunteer;
+  let error;
+
+  // validate request
+  try {
+    [request, error] = await findRequestByCode(requestCode);
+    if (error) {
+      return res.status(400).send({
+        message: "Expected valid `requestCode`",
+      });
+    }
+
+    if (request.fields.Status !== fields.status_options.deliveryNeeded) {
+      return res.status(400).send({
+        message: `Cannot claim delivery ${requestCode} with status ${request.fields.Status}.`,
+      });
+    }
+  } catch (e) {
+    return res.status(400).send({ message: e });
+  }
+
+  // find volunteer record in volunteer table
+  try {
+    [volunteer, error] = await findVolunteerByPhone(phoneNumber);
+
+    // TODO: on not found error, send volunteer form
+    if (!volunteer || error.includes("404"))
+      return res.status(404).send({
+        message: error,
+        notFound: "volunteer",
+      });
+  } catch (e) {
+    return res.status(400).send({
+      message: `Something went wrong while looking for volunteer record.`,
+    });
+  }
+  
+  // assign delivery to volunteer in airtable
+
+
+  // TODO: ping Twilio webhook to text intake & delivery volunteers
+  // try {
+  //   await axios.post("http://mutual-aid-4526-dev.twil.io/delivery-sms", {
+  //     requestCode,
+  //     volunteer: {
+  //       phoneNumber: volunteer.phoneNumber,
+  //       name: volunteer.name,
+  //     },
+  //   });
+  // } catch (e) {
+  //   return res.status(400).send({
+  //     message: `Something went wrong while posting to Twilio: ${e}`,
+  //   });
+  // }
+
+  return res.sendStatus(200);
 };
