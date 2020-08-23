@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: theme.spacing(0.5),
     },
   },
-  description: {
+  expandableRow: {
     marginBottom: theme.spacing(2),
   }
 }));
@@ -98,11 +98,18 @@ const DeliveryTableRow = (props) => {
           <Collapse in={row.isFocused} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="subtitle1" gutterBottom component="div">
+                {str("webapp:deliveryNeeded.table.headers.need", {
+                    defaultValue: "Need",
+                })}
+              </Typography>
+              <div className={classes.expandableRow}> {row["need"] || "Not Stated"} </div>
+
+              <Typography variant="subtitle1" gutterBottom component="div">
                 {str("webapp:deliveryNeeded.table.headers.description", {
                     defaultValue: "Description",
                 })}
               </Typography>
-              <div className={classes.description}> {row["Intake General Notes"] || "N/A"} </div>
+              <div className={classes.expandableRow}> {row["Intake General Notes"] || "N/A"} </div>
             </Box>
           </Collapse>
         </TableCell>

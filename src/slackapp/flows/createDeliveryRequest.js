@@ -13,6 +13,8 @@ const {
 } = require("~airtable/tables/requests");
 const { str } = require("~strings/i18nextWrappers");
 
+const getDeliveryRequestNeedFormatted = require("~airtable/deliveryrequests/getDeliveryRequestNeedFormatted");
+
 const modalTitle = str(
   "slackapp:requestBotPost.modal.title",
   "Create Delivery Request"
@@ -393,12 +395,7 @@ function suggestedTemplate(payload, request) {
   let firstName = request.get(requestsFields.firstName);
   firstName = firstName ? ` ${firstName}` : "";
 
-  const services = request.get(requestsFields.supportType) || [];
-  let needs = services.join(", ");
-  if (isEqual(services, [requestsFields.supportType_options.delivery])) {
-    // eslint-disable-line
-    needs = "Groceries / Shopping";
-  }
+  let needs = getDeliveryRequestNeedFormatted(request.get(requestsFields.supportType));
 
   const extraFields = [
     [

@@ -2,6 +2,7 @@ const { findDeliveryNeededRequests } = require("~airtable/tables/requests");
 const { fields } = require("~airtable/tables/requests");
 const { fetchCoordFromCrossStreets } = require("./fetchCoordFromCrossStreets");
 const slackapi = require("~slack/webApi");
+const { getDeliveryRequestNeedFormatted } = require("~airtable/deliveryrequests/getDeliveryRequestNeedFormatted");
 
 const {
   code,
@@ -14,6 +15,7 @@ const {
   householdSize,
   timeSensitivity,
   intakeNotes,
+  supportType,
 } = fields;
 
 const makeFeature = async (r) => {
@@ -56,6 +58,8 @@ const makeFeature = async (r) => {
         for requestCode: ${r.fields[code]} channel: ${metaJSON.slack_channel} and timestamp: ${metaJSON.slack_ts}`);
   }
 
+  const need = getDeliveryRequestNeedFormatted(r.fields[supportType], r.fields);
+
   return {
     type: "Feature",
     geometry: {
@@ -74,6 +78,7 @@ const makeFeature = async (r) => {
         [householdSize]: r.fields[householdSize],
         [timeSensitivity]: r.fields[timeSensitivity],
         [intakeNotes]: r.fields[intakeNotes],
+        need,
         slackPermalink: slackPermalink.ok ? slackPermalink.permalink : "",
         timestamp,
         slackTs: metaJSON.slack_ts || "",

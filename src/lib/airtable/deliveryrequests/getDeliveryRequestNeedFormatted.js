@@ -1,0 +1,18 @@
+/**
+ * This helper function is shared to synthesize the
+ * need / service type for delivery requests.
+ */
+
+const { fields } = require("~airtable/tables/requests");
+
+exports.getDeliveryRequestNeedFormatted = (services) => {
+  if (services === undefined) {
+    return "Not stated";
+  }
+  const servicesString = services.join(", ");
+  if (servicesString === fields.supportType_options.delivery) {
+    // eslint-disable-line
+    return "Groceries / Shopping";
+  }
+  return servicesString;
+};
