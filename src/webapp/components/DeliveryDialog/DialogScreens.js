@@ -25,12 +25,10 @@ const useStyles = makeStyles((theme) => ({
   backButton: {
     backgroundColor: "lightgray",
   },
-  formContent: {
+  centeredContent: {
     "& > *": {
       marginBottom: theme.spacing(2),
     },
-  },
-  centeredContent: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -123,9 +121,7 @@ export const FormStep = ({ phoneNumber, setPhoneNumber, onSubmit }) => {
           defaultValue: "Contact information",
         })}
       </DialogTitle>
-      <DialogContent
-        className={`${classes.centeredContent} ${classes.formContent}`}
-      >
+      <DialogContent className={classes.centeredContent}>
         <Typography variant="body2">
           {str("webapp:deliveryNeeded.dialog.form", {
             defaultValue:
@@ -165,6 +161,30 @@ export const FormStep = ({ phoneNumber, setPhoneNumber, onSubmit }) => {
   );
 };
 
+export const ErrorMessage = ({ message }) => {
+  const classes = useStyles();
+  const { t: str } = useTranslation();
+
+  return (
+    <>
+      <DialogTitle>
+        {str("webapp:deliveryNeeded.dialog.errorTitle", {
+          defaultValue: "Something went wrong!",
+        })}
+      </DialogTitle>
+      <DialogContent classes={classes.centeredContent}>
+        <Typography variant="body2">
+          <p>
+            {str("webapp:deliveryNeeded.dialog.errorBody", {
+              defaultValue: message,
+            })}
+          </p>
+        </Typography>
+      </DialogContent>
+    </>
+  );
+};
+
 export const FinishStep = () => {
   const classes = useStyles();
   const { t: str } = useTranslation();
@@ -177,6 +197,12 @@ export const FinishStep = () => {
         })}
       </DialogTitle>
       <DialogContent className={classes.centeredContent}>
+        <Typography variant="body2">
+          {str("webapp:deliveryNeeded.dialog.finish", {
+            defaultValue:
+            "You will receive a text message with further instructions in a few moments.",
+          })}
+        </Typography>
         <CheckCircleIcon fontSize="large" color="primary" />
       </DialogContent>
     </>

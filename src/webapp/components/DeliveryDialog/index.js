@@ -8,6 +8,7 @@ import {
   InstructionsStep,
   FormStep,
   FinishStep,
+  ErrorMessage,
 } from "./DialogScreens";
 
 const ClaimDeliveryDialog = ({ open, onClose }) => {
@@ -15,23 +16,26 @@ const ClaimDeliveryDialog = ({ open, onClose }) => {
   const { t: str } = useTranslation();
   const [activeStep, setStep] = useState("info");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [error, setError] = useState();
 
-  const onSubmit = () => {
-    // mock api request
-    axios
-      .post(`/api/delivery-needed/assign`, {
+  const onSubmit = async () => {
+    try {
+      await axios.post(`/api/delivery-needed/assign`, {
         requestCode,
         phoneNumber,
-      })
-      .then((resp) => {
-        console.log('SUCCESS', resp);
-      })
-      .catch((e) => {
-        console.log(e);
       });
+      setStep("finish");
+    } catch ({ message }) {
+      setError(
+        `We're sorry! Something went wrong while processing your request. Please contact #tech_support and include the delivery request code and phone number you provided in your message.`
+      );
+      setStep("error");
+    }
+  };
 
-    // if success:
-    setStep("finish");
+  const handleClose = () => {
+    setPhoneNumber("");
+    onClose();
   };
 
   const steps = {
@@ -51,12 +55,13 @@ const ClaimDeliveryDialog = ({ open, onClose }) => {
     ),
     moreInfo: <InstructionsStep handleGoBack={() => setStep("info")} />,
     finish: <FinishStep />,
+    error: <ErrorMessage message={error} />,
   };
 
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       onExited={() => setStep("info")}
       aria-labelledby={str("webapp:deliveryNeeded.dialog.description", {
         defaultValue: "Claim a delivery",

@@ -35,6 +35,7 @@ exports.findVolunteerByPhone = async (phone) => {
 
     const records = await volunteersTable
       .select({
+        maxRecords: 1,
         filterByFormula: `FIND("${strippedPhone}", ${fields.phone}) > 0`,
       })
       .firstPage();
@@ -43,10 +44,6 @@ exports.findVolunteerByPhone = async (phone) => {
     if (!record) {
       return [null, `404: No volunteer signed up with phone number ${phone}`];
     }
-
-    // do this so the record includes the volunteer name.
-    // including fields.name in a `fields` array in select() doesn't work for some reason
-    record.get(fields.name);
 
     return [record, null];
   } catch (e) {
