@@ -10,7 +10,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import ClusterMapContext from "../context/ClusterMapContext";
 import DeliveryTableRow from "./DeliveryTableRow";
-import uuid from 'uuid';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -95,10 +94,13 @@ const DeliveryTable = ({ rows }) => {
         <TableHead>
           {renderTableHeadRow()}
         </TableHead>
-        <TableBody>
-          {formattedRows.map((row) => (
-            <DeliveryTableRow row={row} key={row.code + uuid()} />
-          ))}
+        <TableBody> 
+          {formattedRows.map((row) => {
+          
+          console.log(row);
+          return (<DeliveryTableRow row={row} key={row.code} />
+          );})
+        }
         </TableBody>
       </Table>
     </TableContainer>

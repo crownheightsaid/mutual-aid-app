@@ -72,7 +72,7 @@ const DeliveryTableRow = (props) => {
           />
         </TableCell>
         <TableCell>
-          {row["Timeline"]}
+          {row["Time Sensitivity"] || "Not Stated"}
         </TableCell>
         <TableCell>
           {row["First Name"]}
@@ -105,7 +105,7 @@ const DeliveryTableRow = (props) => {
                     defaultValue: "Description",
                 })}
               </Typography>
-              <div className={classes.description}> {row["Description"]} </div>
+              <div className={classes.description}> {row["Intake General Notes"] || "N/A"} </div>
             </Box>
           </Collapse>
         </TableCell>
