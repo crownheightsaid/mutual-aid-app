@@ -60,18 +60,13 @@ const DeliveryTable = ({ rows }) => {
           })}
         </TableCell>
         <TableCell>
-          {str("webapp:deliveryNeeded.table.headers.timeline", {
-            defaultValue: "Requested Delivery Time",
+          {str("webapp:deliveryNeeded.table.headers.timeSensitivity", {
+            defaultValue: "Time Sensitivity",
           })}
         </TableCell>
         <TableCell>
           {str("webapp:deliveryNeeded.table.headers.neighbor", {
             defaultValue: "Neighbor",
-          })}
-        </TableCell>
-        <TableCell>
-          {str("webapp:deliveryNeeded.table.headers.need", {
-            defaultValue: "Need",
           })}
         </TableCell>
         <TableCell>{str("webapp:zoneFinder.label.code")}</TableCell>
@@ -95,12 +90,10 @@ const DeliveryTable = ({ rows }) => {
           {renderTableHeadRow()}
         </TableHead>
         <TableBody> 
-          {formattedRows.map((row) => {
-          
-          console.log(row);
-          return (<DeliveryTableRow row={row} key={row.code} />
-          );})
-        }
+          {
+            formattedRows.map((row) => 
+            (<DeliveryTableRow row={row} key={row.code} />))
+          }
         </TableBody>
       </Table>
     </TableContainer>
