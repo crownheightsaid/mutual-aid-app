@@ -1,3 +1,7 @@
+## Setup
+Please start at [DEVELOPING.md](/DEVELOPING.md) in the root of this repo for installation and setup.
+
+## Running
 Running `npm run local:slack`
 will start ngrok which will give you a public URL that
 will forward traffic to your localhost.

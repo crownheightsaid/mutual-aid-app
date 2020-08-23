@@ -60,9 +60,11 @@ We have three types of environments:
   - Running entirely on your machine (except for 3rd party APIs)
   - If 3rd party APIs are hooked up, they are the same as in `staging`
 - `staging`
+  - staging Airtable data
   - Running on heroku, but with different 3rd party API keys than `prod`
   - No paid APIs should be connected
 - `prod`
+  - live Airtable data
   - Running on heroku, with API keys that grant access to user data and paid services 
 _____________
 
@@ -131,7 +133,7 @@ npm run local:express
 The server is up when you see `Mutual Aid app listening on 5000!`
 
 ### Slack bot
-Setting up development for the Slack bot is more involved. Please see [./src/slackapp/DEVELOPING.md](./src/slackapp/DEVELOPING.md)
+Setting up development for the Slack bot is more involved because you have to set up a test Slack app. Please see [./src/slackapp/DEVELOPING.md](./src/slackapp/DEVELOPING.md)
 
 ### Web app
 
