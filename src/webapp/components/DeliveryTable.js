@@ -85,12 +85,6 @@ const DeliveryTable = ({ rows }) => {
     );
   }
 
-  const renderTableBody = () => {
-    return formattedRows.map((row) => (
-      <DeliveryTableRow row={row} key={row.code + uuid()} />
-    ));
-  }
-
   return (
     <TableContainer
       id="table-wrapper"
@@ -102,7 +96,9 @@ const DeliveryTable = ({ rows }) => {
           {renderTableHeadRow()}
         </TableHead>
         <TableBody>
-          {renderTableBody()}
+          {formattedRows.map((row) => (
+            <DeliveryTableRow row={row} key={row.code + uuid()} />
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
