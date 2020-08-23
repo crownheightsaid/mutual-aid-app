@@ -131,6 +131,7 @@ export const FormStep = ({ phoneNumber, setPhoneNumber, onSubmit }) => {
         <MuiPhoneNumber
           required
           defaultCountry="us"
+          onlyCountries={["us"]}
           onChange={(value) => setPhoneNumber(value)}
         />
         {error && (

@@ -26,16 +26,23 @@ const ClaimDeliveryDialog = ({ open, onClose }) => {
       });
       setStep("finish");
     } catch ({ message }) {
-      setError(
-        `We're sorry! Something went wrong while processing your request. Please contact #tech_support and include the delivery request code and phone number you provided in your message.`
-      );
+      if (message.includes("404"))
+        setError(
+          `We're sorry! Something went wrong while processing your request. Things that could have gone wrong include: we couldn't find the delivery request code, you haven't registered as a volunteer, or you entered the wrong phone number. Please contact #tech_support.`
+        );
+      else
+        setError(
+          `We're sorry! Something went wrong while processing your request. Please contact #tech_support and include the delivery request code and phone number you provided in your message.`
+        );
+
       setStep("error");
     }
   };
 
-  const handleClose = () => {
+  const handleExit = () => {
+    // reset state
     setPhoneNumber("");
-    onClose();
+    setStep("info");
   };
 
   const steps = {
@@ -61,8 +68,8 @@ const ClaimDeliveryDialog = ({ open, onClose }) => {
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
-      onExited={() => setStep("info")}
+      onClose={onClose}
+      onExited={handleExit}
       aria-labelledby={str("webapp:deliveryNeeded.dialog.description", {
         defaultValue: "Claim a delivery",
       })}

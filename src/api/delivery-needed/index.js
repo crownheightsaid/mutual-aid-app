@@ -142,11 +142,10 @@ exports.assignDeliveryHandler = async (req, res) => {
   // validate request
   try {
     [request, error] = await findRequestByCode(requestCode);
-    if (error) {
-      return res.status(400).send({
-        message: "Expected valid `requestCode`",
+    if (error)
+      return res.status(404).send({
+        message: `${requestCode} not found.`,
       });
-    }
 
     if (request.fields.Status !== status_options.deliveryNeeded)
       throw new Error(
