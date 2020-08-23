@@ -3,19 +3,19 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Box from "@material-ui/core/Box";
 import Link from "@material-ui/core/Link";
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import Collapse from "@material-ui/core/Collapse";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
 import DaysOpenChip from "./DaysOpenChip";
 import { daysSinceSlackMessage } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
 import HouseholdSizeChip from "./HouseholdSizeChip";
 import DrivingClusterChip from "./DrivingClusterChip";
-import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   focused: {
@@ -31,27 +31,27 @@ const useStyles = makeStyles((theme) => ({
   },
   expandableRow: {
     marginBottom: theme.spacing(2),
-  }
+  },
 }));
 
 const DeliveryTableRow = (props) => {
-  const row = props.row;
+  const { row } = props;
   const classes = useStyles();
   const { focusedRequestId, setFocusedRequestId } = useContext(
     ClusterMapContext
   );
-  const { t: str } = useTranslation();  
+  const { t: str } = useTranslation();
 
-  const handleRowClick = row => {
-    if (focusedRequestId !== row.Code) {
-      setFocusedRequestId(row.Code);
+  const handleRowClick = (clickedRow) => {
+    if (focusedRequestId !== clickedRow.Code) {
+      setFocusedRequestId(clickedRow.Code);
     } else {
       setFocusedRequestId("");
     }
-  }
+  };
 
   return (
-    <React.Fragment>
+    <>
       <TableRow
         id={row.Code}
         key={row.Code}
@@ -59,10 +59,17 @@ const DeliveryTableRow = (props) => {
         onClick={() => handleRowClick(row)}
       >
         <TableCell>
-          <Tooltip title={row.isFocused ? "Hide Description" : "Show Description"} placement="top">
-          <IconButton aria-label="expand row" size="small">
-            {row.isFocused ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
+          <Tooltip
+            title={row.isFocused ? "Hide Description" : "Show Description"}
+            placement="top"
+          >
+            <IconButton aria-label="expand row" size="small">
+              {row.isFocused ? (
+                <KeyboardArrowUpIcon />
+              ) : (
+                <KeyboardArrowDownIcon />
+              )}
+            </IconButton>
           </Tooltip>
         </TableCell>
         <TableCell>
@@ -71,9 +78,7 @@ const DeliveryTableRow = (props) => {
             daysOpen={daysSinceSlackMessage(row.slackTs)}
           />
         </TableCell>
-        <TableCell>
-          {row["Time Sensitivity"] || "Not Stated"}
-        </TableCell>
+        <TableCell>{row["Time Sensitivity"] || "Not Stated"}</TableCell>
         <TableCell>
           {row["First Name"]}
           <Box className={classes.chipRow}>
@@ -99,22 +104,26 @@ const DeliveryTableRow = (props) => {
             <Box margin={1}>
               <Typography variant="subtitle1" gutterBottom component="div">
                 {str("webapp:deliveryNeeded.table.headers.need", {
-                    defaultValue: "Need",
+                  defaultValue: "Need",
                 })}
               </Typography>
-              <div className={classes.expandableRow}> {row["need"] || "Not Stated"} </div>
+              <div className={classes.expandableRow}>
+                {row.need || "Not Stated"}
+              </div>
 
               <Typography variant="subtitle1" gutterBottom component="div">
                 {str("webapp:deliveryNeeded.table.headers.description", {
-                    defaultValue: "Description",
+                  defaultValue: "Description",
                 })}
               </Typography>
-              <div className={classes.expandableRow}> {row["Intake General Notes"] || "N/A"} </div>
+              <div className={classes.expandableRow}>
+                {row["Intake General Notes"] || "N/A"}
+              </div>
             </Box>
           </Collapse>
         </TableCell>
       </TableRow>
-    </React.Fragment>
+    </>
   );
 };
 

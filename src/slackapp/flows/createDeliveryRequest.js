@@ -1,4 +1,4 @@
-const { sortBy, isEqual } = require("lodash");
+const { sortBy } = require("lodash");
 const slackapi = require("~slack/webApi");
 const { findChannelByName, addBotToChannel } = require("~slack/channels");
 const { errorResponse, errorView } = require("~slack/views");
@@ -395,7 +395,9 @@ function suggestedTemplate(payload, request) {
   let firstName = request.get(requestsFields.firstName);
   firstName = firstName ? ` ${firstName}` : "";
 
-  let needs = getDeliveryRequestNeedFormatted(request.get(requestsFields.supportType));
+  const needs = getDeliveryRequestNeedFormatted(
+    request.get(requestsFields.supportType)
+  );
 
   const extraFields = [
     [

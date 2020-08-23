@@ -2,7 +2,9 @@ const { findDeliveryNeededRequests } = require("~airtable/tables/requests");
 const { fields } = require("~airtable/tables/requests");
 const { fetchCoordFromCrossStreets } = require("./fetchCoordFromCrossStreets");
 const slackapi = require("~slack/webApi");
-const { getDeliveryRequestNeedFormatted } = require("~airtable/deliveryrequests/getDeliveryRequestNeedFormatted");
+const {
+  getDeliveryRequestNeedFormatted,
+} = require("~airtable/deliveryrequests/getDeliveryRequestNeedFormatted");
 
 const {
   code,

@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import ClusterMapContext from "../context/ClusterMapContext";
 import DeliveryTableRow from "./DeliveryTableRow";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
     maxHeight: "90vh",
   },
@@ -20,9 +20,7 @@ const useStyles = makeStyles((theme) => ({
 const DeliveryTable = ({ rows }) => {
   const { t: str } = useTranslation();
   const classes = useStyles();
-  const { focusedRequestId, setFocusedRequestId } = useContext(
-    ClusterMapContext
-  );
+  const { focusedRequestId } = useContext(ClusterMapContext);
 
   useEffect(() => {
     // scroll to focused row
@@ -53,7 +51,7 @@ const DeliveryTable = ({ rows }) => {
   const renderTableHeadRow = () => {
     return (
       <TableRow>
-        <TableCell></TableCell>
+        <TableCell />
         <TableCell>
           {str("webapp:deliveryNeeded.table.headers.daysOpen", {
             defaultValue: "Days open",
@@ -77,7 +75,7 @@ const DeliveryTable = ({ rows }) => {
         </TableCell>
       </TableRow>
     );
-  }
+  };
 
   return (
     <TableContainer
@@ -86,14 +84,11 @@ const DeliveryTable = ({ rows }) => {
       component={Paper}
     >
       <Table aria-label="simple table">
-        <TableHead>
-          {renderTableHeadRow()}
-        </TableHead>
-        <TableBody> 
-          {
-            formattedRows.map((row) => 
-            (<DeliveryTableRow row={row} key={row.code} />))
-          }
+        <TableHead>{renderTableHeadRow()}</TableHead>
+        <TableBody>
+          {formattedRows.map((row) => (
+            <DeliveryTableRow row={row} key={row.code} />
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
