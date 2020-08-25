@@ -1,12 +1,16 @@
 const mockCreate = jest.fn()
+const mockSelect = jest.fn()
 
 jest.mock("~airtable/bases", () => ({
   paymentsAirbase: () => {
-    return {create: mockCreate}
+    return {
+      create: mockCreate,
+      select: mockSelect
+    }
   }
 }))
 
-const { createDonorPayment } = require("./donorPayments")
+const { createDonorPayment, findDonorPaymentByCode } = require("./donorPayments")
 const { donorPaymentsFields } = require("./donorPaymentsSchema");
 
 const { paymentsAirbase } = require('~airtable/bases')
@@ -42,6 +46,34 @@ describe('createDonorPayment', () => {
       
       expect(paymentsAirbase().create).toHaveBeenCalledWith([{fields: params}])
       expect(result).toEqual([null, 'error'])
+    })
+  })
+})
+
+describe("findDonorPaymentByCode", () => {
+  describe("given a code for an existing donor payment record", () => {
+    beforeEach(() => {
+      mockSelect.mockReturnValue({firstPage: () => ['some test record']})
+    })
+
+    it("returns that donor payment record", async () => {
+      const result = await findDonorPaymentByCode('some test code')
+
+      expect(mockSelect).toHaveBeenCalledWith({filterByFormula: expect.stringContaining(`{${donorPaymentsFields.code}} = "some test code"`)})
+      expect(result).toEqual(['some test record', null])
+    })
+  })
+
+  describe('given a code that does not correspond to an existing donor payment record', () => {
+    beforeEach(() => {
+      mockSelect.mockReturnValue({firstPage: () => undefined})
+    })
+
+    it('returns an error message', async () => {
+      const result = await findDonorPaymentByCode('some test code')
+
+      expect(mockSelect).toHaveBeenCalledWith({filterByFormula: expect.stringContaining(`{${donorPaymentsFields.code}} = "some test code"`)})
+      expect(result).toEqual([null, "Valid payment with that code not found"])
     })
   })
 })
