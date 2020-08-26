@@ -44,7 +44,7 @@ describe("createDonorPayment", () => {
       mockCreate.mockRejectedValue("error");
     });
 
-    test("it creates a donor payment record with the given fields", async () => {
+    test("it returns an error message", async () => {
       const result = await createDonorPayment(params);
 
       expect(paymentsAirbase().create).toHaveBeenCalledWith([
