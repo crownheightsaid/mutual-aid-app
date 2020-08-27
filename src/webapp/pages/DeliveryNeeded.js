@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 export default function DeliveryNeeded() {
   const classes = useStyles();
   const { t: str } = useTranslation();
-  const [{ data, loading, error }] = useAxios({
+  const [{ data, loading, error }, fetchData] = useAxios({
     url: `/api/delivery-needed/requests.json`,
     method: "get",
   });
@@ -81,7 +81,11 @@ export default function DeliveryNeeded() {
 
   return (
     <DeliveryContext.Provider value={store}>
-      <DeliveryDialog open={isDialogOpen} onClose={() => setOpen(false)} />
+      <DeliveryDialog
+        open={isDialogOpen}
+        onClose={() => setOpen(false)}
+        fetchData={fetchData}
+      />
       <Box className={classes.root}>
         <Box className={classes.heading}>
           <Typography variant="h4">

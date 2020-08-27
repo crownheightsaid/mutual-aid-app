@@ -31,7 +31,9 @@ exports.findVolunteerByPhone = async (phone) => {
     // get the area code, prefix, and line number
     let strippedPhone = phone.replace(/[+|a-zA-Z|\s|(|)|-]/g, "");
     strippedPhone =
-      strippedPhone.length === 11 ? strippedPhone.slice(1) : strippedPhone;
+      strippedPhone.length === 11 && strippedPhone.startsWith("1")
+        ? strippedPhone.slice(1)
+        : strippedPhone;
 
     const records = await volunteersTable
       .select({

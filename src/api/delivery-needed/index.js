@@ -1,4 +1,4 @@
-// const axios = require("axios");
+const axios = require("axios");
 const {
   findDeliveryNeededRequests,
   findRequestByCode,
@@ -133,7 +133,9 @@ exports.assignDeliveryHandler = async (req, res) => {
   const { requestCode, phoneNumber } = req.body;
 
   if (!requestCode || !phoneNumber)
-    throw new Error("Expected `requestCode` and `phoneNumber` in payload.");
+    return res.status(400).send({
+      message: "Expected `requestCode` and `phoneNumber` in payload.",
+    });
 
   let request;
   let volunteer;
@@ -148,9 +150,9 @@ exports.assignDeliveryHandler = async (req, res) => {
       });
 
     if (request.fields.Status !== status_options.deliveryNeeded)
-      throw new Error(
-        `Cannot claim delivery ${requestCode} with status ${request.fields.Status}.`
-      );
+      return res.status(400).send({
+        message: `Cannot claim delivery ${requestCode} with status ${request.fields.Status}.`,
+      });
   } catch (e) {
     return res.status(400).send({ message: e });
   }
@@ -163,7 +165,6 @@ exports.assignDeliveryHandler = async (req, res) => {
     if (!volunteer || (error && error.includes("404")))
       return res.status(404).send({
         message: error,
-        notFound: "volunteer",
       });
     if (error) throw new Error(error);
   } catch (e) {
@@ -171,6 +172,21 @@ exports.assignDeliveryHandler = async (req, res) => {
       message: `Something went wrong while looking for volunteer record: ${e}`,
     });
   }
+
+  // try {
+  //   const { [volunteersFields.phone]: volunteerPhone } = volunteer.fields;
+  //   await axios.post("http://mutual-aid-4526-dev.twil.io/delivery-sms", {
+  //     requestCode,
+  //     volunteer: {
+  //       phoneNumber: volunteerPhone,
+  //       name: request[deliveryVolunteer],
+  //     },
+  //   });
+  // } catch (e) {
+  //   return res.status(400).send({
+  //     message: `Something went wrong while posting to Twilio: ${e}`,
+  //   });
+  // }
 
   // assign delivery volunteer to request
   try {
@@ -195,22 +211,6 @@ exports.assignDeliveryHandler = async (req, res) => {
       message: `Something went wrong while updating the request record ${requestCode}: ${e}`,
     });
   }
-
-  // TODO: ping Twilio webhook to text intake & delivery volunteers
-  // try {
-  //   const { [volunteersFields.phone]: volunteerPhone } = volunteer.fields;
-  //   await axios.post("http://mutual-aid-4526-dev.twil.io/delivery-sms", {
-  //     requestCode,
-  //     volunteer: {
-  //       phoneNumber: volunteerPhone,
-  //       name: request[deliveryVolunteer],
-  //     },
-  //   });
-  // } catch (e) {
-  //   return res.status(400).send({
-  //     message: `Something went wrong while posting to Twilio: ${e}`,
-  //   });
-  // }
 
   return res.sendStatus(200);
 };

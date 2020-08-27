@@ -11,7 +11,7 @@ import {
   ErrorMessage,
 } from "./DialogScreens";
 
-const ClaimDeliveryDialog = ({ open, onClose }) => {
+const DeliveryDialog = ({ open, onClose, fetchData }) => {
   const { requestCode } = useContext(DeliveryContext);
   const { t: str } = useTranslation();
   const [activeStep, setStep] = useState("info");
@@ -40,9 +40,12 @@ const ClaimDeliveryDialog = ({ open, onClose }) => {
   };
 
   const handleExit = () => {
+    const dialogState = activeStep;
     // reset state
     setPhoneNumber("");
     setStep("info");
+    // refetch data to update the map if claim request was successful
+    if (dialogState === "finish") fetchData();
   };
 
   const steps = {
@@ -82,4 +85,4 @@ const ClaimDeliveryDialog = ({ open, onClose }) => {
   );
 };
 
-export default ClaimDeliveryDialog;
+export default DeliveryDialog;
