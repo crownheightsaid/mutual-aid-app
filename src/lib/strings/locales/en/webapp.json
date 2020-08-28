@@ -73,8 +73,11 @@
     "table": {
       "headers": {
         "daysOpen": "Days open",
+        "timeSensitivity": "Time Sensitivity",
         "neighbor": "Neighbor",
-        "crossStreets": "Cross streets"
+        "need": "Need",
+        "crossStreets": "Cross streets",
+        "description": "Description"
       }
     }
   }
