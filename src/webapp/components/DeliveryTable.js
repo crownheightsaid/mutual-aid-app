@@ -17,8 +17,37 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const DeliveryTable = ({ rows }) => {
+const TableHeadRow = () => {
   const { t: str } = useTranslation();
+  return (
+    <TableRow>
+      <TableCell />
+      <TableCell>
+        {str("webapp:deliveryNeeded.table.headers.daysOpen", {
+          defaultValue: "Days open",
+        })}
+      </TableCell>
+      <TableCell>
+        {str("webapp:deliveryNeeded.table.headers.timeSensitivity", {
+          defaultValue: "Time Sensitivity",
+        })}
+      </TableCell>
+      <TableCell>
+        {str("webapp:deliveryNeeded.table.headers.neighbor", {
+          defaultValue: "Neighbor",
+        })}
+      </TableCell>
+      <TableCell>{str("webapp:zoneFinder.label.code")}</TableCell>
+      <TableCell>
+        {str("webapp:deliveryNeeded.table.headers.crossStreets", {
+          defaultValue: "Cross streets",
+        })}
+      </TableCell>
+    </TableRow>
+  );
+};
+
+const DeliveryTable = ({ rows }) => {
   const classes = useStyles();
   const { focusedRequestId } = useContext(ClusterMapContext);
 
@@ -48,35 +77,6 @@ const DeliveryTable = ({ rows }) => {
     };
   });
 
-  const renderTableHeadRow = () => {
-    return (
-      <TableRow>
-        <TableCell />
-        <TableCell>
-          {str("webapp:deliveryNeeded.table.headers.daysOpen", {
-            defaultValue: "Days open",
-          })}
-        </TableCell>
-        <TableCell>
-          {str("webapp:deliveryNeeded.table.headers.timeSensitivity", {
-            defaultValue: "Time Sensitivity",
-          })}
-        </TableCell>
-        <TableCell>
-          {str("webapp:deliveryNeeded.table.headers.neighbor", {
-            defaultValue: "Neighbor",
-          })}
-        </TableCell>
-        <TableCell>{str("webapp:zoneFinder.label.code")}</TableCell>
-        <TableCell>
-          {str("webapp:deliveryNeeded.table.headers.crossStreets", {
-            defaultValue: "Cross streets",
-          })}
-        </TableCell>
-      </TableRow>
-    );
-  };
-
   return (
     <TableContainer
       id="table-wrapper"
@@ -84,7 +84,9 @@ const DeliveryTable = ({ rows }) => {
       component={Paper}
     >
       <Table aria-label="simple table">
-        <TableHead>{renderTableHeadRow()}</TableHead>
+        <TableHead>
+          <TableHeadRow />
+        </TableHead>
         <TableBody>
           {formattedRows.map((row) => (
             <DeliveryTableRow row={row} key={row.code} />

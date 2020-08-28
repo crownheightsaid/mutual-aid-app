@@ -11,7 +11,6 @@ exports.getDeliveryRequestNeedFormatted = (services) => {
   }
   const servicesString = services.join(", ");
   if (servicesString === fields.supportType_options.delivery) {
-    // eslint-disable-line
     return "Groceries / Shopping";
   }
   return servicesString;
