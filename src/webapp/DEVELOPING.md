@@ -18,10 +18,13 @@ Then, to run the webapp only
 npm run local:react
 ```
 
-You can see the app at `localhost:3000`. You will also want to run the API, or most features will not be available. To do so, run
+You can see the app at `localhost:3000`. You will see an empty page at first. Our webapps are at the following routes:
+
+- http://localhost:3000/delivery-needed
+- http://localhost:3000/neighborhood-finder
+
+You will also want to run the API, or most features will not be available. To do so, run
 
 ```
 npm run local:express
 ```
-
-Or see `/src/api/DEVELOPING.md` for more details.
