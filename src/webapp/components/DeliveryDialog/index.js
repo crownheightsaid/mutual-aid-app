@@ -25,14 +25,18 @@ const DeliveryDialog = ({ open, onClose, fetchData }) => {
         phoneNumber,
       });
       setStep("finish");
-    } catch ({ message }) {
-      if (message.includes("404"))
-        setError(
-          `We're sorry! Something went wrong while processing your request. Things that could have gone wrong include: we couldn't find the delivery request code, you haven't registered as a volunteer, or you entered the wrong phone number. Please contact #tech_support.`
-        );
+    } catch (err) {
+      const {
+        response: {
+          data: { message },
+        },
+      } = err;
+
+      if (message)
+        setError(`We're sorry! ${message} \n Please contact #tech_support.`);
       else
         setError(
-          `We're sorry! Something went wrong while processing your request. Please contact #tech_support and include the delivery request code and phone number you provided in your message.`
+          "We're sorry! Something went wrong while processing your request. Things that could have gone wrong include: we couldn't find the delivery request code, you haven't registered as a volunteer, or you entered the wrong phone number. Please contact #tech_support."
         );
 
       setStep("error");

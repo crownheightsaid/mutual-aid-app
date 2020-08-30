@@ -44,7 +44,7 @@ exports.findVolunteerByPhone = async (phone) => {
     const record = records && records.length ? records[0] : null;
 
     if (!record) {
-      return [null, `404: No volunteer signed up with phone number ${phone}`];
+      return [null, `404: No volunteer signed up with phone number ${phone}.`];
     }
 
     return [record, null];

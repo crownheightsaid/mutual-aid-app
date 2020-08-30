@@ -151,7 +151,7 @@ exports.assignDeliveryHandler = async (req, res) => {
 
     if (request.fields.Status !== status_options.deliveryNeeded)
       return res.status(400).send({
-        message: `Cannot claim delivery ${requestCode} with status ${request.fields.Status}.`,
+        message: `Cannot claim delivery ${requestCode} with status "${request.fields.Status}".`,
       });
   } catch (e) {
     return res.status(400).send({ message: e });
