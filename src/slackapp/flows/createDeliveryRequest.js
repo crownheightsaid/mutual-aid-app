@@ -13,7 +13,9 @@ const {
 } = require("~airtable/tables/requests");
 const { str } = require("~strings/i18nextWrappers");
 
-const { getDeliveryRequestNeedFormatted } = require("~airtable/deliveryrequests/getDeliveryRequestNeedFormatted");
+const {
+  getDeliveryRequestNeedFormatted,
+} = require("~airtable/deliveryrequests/getDeliveryRequestNeedFormatted");
 
 const modalTitle = str(
   "slackapp:requestBotPost.modal.title",
