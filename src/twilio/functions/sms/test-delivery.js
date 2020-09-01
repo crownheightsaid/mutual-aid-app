@@ -11,9 +11,6 @@ exports.handler = function codeSms(context, event, callback) { // eslint-disable
   const deliveryName = "MAB TEST"; // get real delivery vol name from request
   code = code.toUpperCase().trim();
 
-  // for this prototype, you text the code to a twilio number.
-  // in prod, the event will be a webhook from a front-end button
-
   console.log("incoming message received");
 
   // below: looks up code in request Airtable, gets all important values
@@ -63,15 +60,15 @@ exports.handler = function codeSms(context, event, callback) { // eslint-disable
 
           twilioClient.messages
             .create({
-              to: event.From, // need delivery volunteer phone number here
-              from: event.To, // will input twilio number here
+              to: deliveryPhone, // need delivery volunteer phone number here
+              from: '+19175403381', // twilio number here
               body: `Thanks for taking on this delivery for ${firstName}!\nCODE = ${code}.\n\nTheir phone is ${phone}, you will need to get in touch with them about the full address. Their cross streets are ${street1} & ${street2}.\n\n${firstName}'s grocery list is: ${list}\n\nThe intake volunteer for this request is ${intakename}. Their phone # is ${intakephone}, and they can help if you have any questions - they'll reach out to you to follow up and make sure the delivery goes well!`,
             })
             .then(function txtIntake() {
               twilioClient.messages.create(
                 {
                   to: intakephone,
-                  from: event.To, // will input twilio from number here
+                  from: '+19175403381', // twilio number here
                   body: `hey! The request with code ${code} for ${firstName} has been picked up by ${deliveryName}! please remember to check in with them, and make sure the request gets completed - their phone # is ${deliveryPhone}. thnx!`,
                 },
                 function finish() {
