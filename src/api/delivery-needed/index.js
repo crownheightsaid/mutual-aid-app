@@ -27,6 +27,9 @@ const {
   status_options,
 } = fields;
 
+const TWILIO_SMS_DELIVERY_ENDPOINT =
+  "https://mutual-aid-4526-dev.twil.io/sms/test-delivery";
+
 const makeFeature = async (r) => {
   let metaJSON = {};
   let slackPermalink = {};
@@ -173,20 +176,19 @@ exports.assignDeliveryHandler = async (req, res) => {
     });
   }
 
-  // try {
-  //   const { [volunteersFields.phone]: volunteerPhone } = volunteer.fields;
-  //   await axios.post("http://mutual-aid-4526-dev.twil.io/delivery-sms", {
-  //     requestCode,
-  //     volunteer: {
-  //       phoneNumber: volunteerPhone,
-  //       name: request[deliveryVolunteer],
-  //     },
-  //   });
-  // } catch (e) {
-  //   return res.status(400).send({
-  //     message: `Something went wrong while posting to Twilio: ${e}`,
-  //   });
-  // }
+  try {
+    const { [volunteersFields.phone]: volunteerPhone } = volunteer.fields;
+    await axios.post(TWILIO_SMS_DELIVERY_ENDPOINT, {
+      body: {
+        requestCode,
+        phoneNumber: volunteerPhone,
+      },
+    });
+  } catch (e) {
+    return res.status(400).send({
+      message: `Something went wrong while posting to Twilio: ${e}`,
+    });
+  }
 
   // assign delivery volunteer to request
   try {
