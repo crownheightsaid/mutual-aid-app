@@ -126,12 +126,14 @@ export default function NeighborhoodFinder() {
               )}
             </Typography>
             <Typography className={classes.text} variant="body1">
-              {str(
-                "webapp:zoneFinder.message.reminder",
-                `Reminder: the boundaries on this map show a defined delivery area, 
-                per our Delivery Area proposal that passed 7/25. CHMA cannot make 
-                any deliveries outside of this area, no exceptions.`
-              )}
+              <strong>
+                {str(
+                  "webapp:zoneFinder.message.reminder",
+                  `Reminder: the boundaries on this map show a defined delivery area, 
+                  per our Delivery Area proposal that passed 7/25. CHMA cannot make 
+                  any deliveries outside of this area, no exceptions.`
+                )}
+              </strong>
             </Typography>
           </Box>
         )}
