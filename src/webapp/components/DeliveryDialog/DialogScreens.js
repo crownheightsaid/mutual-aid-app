@@ -8,6 +8,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Instructions from "./Instructions";
 
@@ -43,15 +44,34 @@ export const InfoStep = ({ handleAccept, handleGetMoreInfo, requestCode }) => {
     <>
       <DialogTitle>
         {str("webapp:deliveryNeeded.dialog.title", {
-          defaultValue: "How to make a delivery",
+          defaultValue: "Do you agree to complete this delivery?",
         })}
       </DialogTitle>
       <DialogContent>
-        <Typography variant="body2">
-          {"\nLorem ipsum stuff\n"}
-          {requestCode}
-          {"\nIf you agree, please provide your phone number etc"}
-        </Typography>
+        <Box mb={2}>
+          <Typography variant="body2">
+            If you agree, you will be asked to provide your phone number where
+            we can text you details of the delivery.
+          </Typography>
+        </Box>
+        <Box mb={2}>
+          <Typography variant="body2">
+            <em>
+              {" "}
+              Reminder: Please don’t volunteer for delivery if you have any
+              COVID-19/cold/flu-like symptoms, or have come into contact with
+              someone that’s tested positive. If you have been in large crowds
+              or demonstrations, please self-isolate for 14 days or wait 5 days
+              to get a test, and resume deliveries after testing negative.
+            </em>
+          </Typography>
+        </Box>
+        <Box mb={2}>
+          <Typography variant="body2">
+            Delivery code:
+            {requestCode}
+          </Typography>
+        </Box>
       </DialogContent>
       <DialogActions className={classes.infoActionsContainer}>
         <a href="#todo" onClick={handleGetMoreInfo}>
@@ -125,7 +145,7 @@ export const FormStep = ({ phoneNumber, setPhoneNumber, onSubmit }) => {
         <Typography variant="body2">
           {str("webapp:deliveryNeeded.dialog.form", {
             defaultValue:
-              "Please provide your phone number so we can text you stuff.",
+              "Please provide your phone number so we can text you the details of the delivery. You must be registered as a delivery volunteer in our system.",
           })}
         </Typography>
         <MuiPhoneNumber
@@ -133,6 +153,12 @@ export const FormStep = ({ phoneNumber, setPhoneNumber, onSubmit }) => {
           defaultCountry="us"
           onlyCountries={["us"]}
           onChange={(value) => setPhoneNumber(value)}
+          onKeyDown={(e) => {
+            // if enter, submit
+            if (e.keyCode === 13) {
+              handleSubmit();
+            }
+          }}
         />
         {error && (
           <p className={classes.errorMsg}>
@@ -201,7 +227,7 @@ export const FinishStep = () => {
         <Typography variant="body2">
           {str("webapp:deliveryNeeded.dialog.finish", {
             defaultValue:
-            "You will receive a text message with further instructions in a few moments.",
+              "You will receive a text message with further instructions in a few moments.",
           })}
         </Typography>
         <CheckCircleIcon fontSize="large" color="primary" />
