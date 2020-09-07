@@ -1,6 +1,6 @@
 const { merge } = require("lodash");
 const _ = require("lodash");
-const { table } = require("./requestsSchema")
+const { table, fields } = require("./requestsSchema")
 
 const requestNotInSlack = (r) => {
   const meta = r.get(fields.meta);
