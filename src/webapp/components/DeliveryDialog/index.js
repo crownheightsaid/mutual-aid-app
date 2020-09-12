@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import Dialog from "@material-ui/core/Dialog";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import DeliveryContext from "../../context/DeliveryContext";
 import {
   InfoStep,
@@ -17,9 +18,11 @@ const DeliveryDialog = ({ open, onClose, fetchData }) => {
   const [activeStep, setStep] = useState("info");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async () => {
     try {
+      setLoading(true);
       await axios.post(`/api/delivery-needed/assign`, {
         requestCode,
         phoneNumber,
@@ -41,6 +44,8 @@ const DeliveryDialog = ({ open, onClose, fetchData }) => {
 
       setStep("error");
     }
+
+    setLoading(false);
   };
 
   const handleExit = () => {
@@ -84,7 +89,8 @@ const DeliveryDialog = ({ open, onClose, fetchData }) => {
         defaultValue: "Consent dialog form for claiming this delivery.",
       })}
     >
-      {steps[activeStep]}
+      {loading && <CircularProgress />}
+      {!loading && steps[activeStep]}
     </Dialog>
   );
 };
