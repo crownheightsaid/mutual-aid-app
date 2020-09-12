@@ -4,7 +4,6 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Link from "@material-ui/core/Link";
 import Divider from "@material-ui/core/Divider";
-import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";
@@ -14,8 +13,7 @@ import HouseholdSizeChip from "./HouseholdSizeChip";
 import DrivingClusterChip from "./DrivingClusterChip";
 import { daysSinceSlackMessage } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
-import DeliveryContext from "../context/DeliveryContext";
-import getParam from "../helpers/utils";
+import ClaimDeliveryButton from "./ClaimDeliveryButton";
 
 const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
@@ -37,22 +35,15 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(0.5),
       marginTop: theme.spacing(2),
     },
-  },
-  ctaTooltipButton: {
-    backgroundColor: "dodgerblue",
-    color: "white",
-    justifySelf: "right",
-  },
+  }
 }));
 
 const RequestPopup = ({ requests, closePopup }) => {
-  const deliveryContext = useContext(DeliveryContext);
   const classes = useStyles();
   const { t: str } = useTranslation();
   const { _focusedRequestId, setFocusedRequestId } = useContext(
     ClusterMapContext
   );
-  const showSmsPickup = getParam("sms_pickup") === "true";
 
   return (
     <Popup
@@ -109,21 +100,6 @@ const RequestPopup = ({ requests, closePopup }) => {
 
             {meta["For Driving Clusters"] && <DrivingClusterChip />}
 
-            {showSmsPickup && (
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => deliveryContext.handleOpenClaimDialog(meta.Code)}
-                className={classes.ctaTooltipButton}
-              >
-                <Typography variant="button">
-                  {str("webapp:deliveryNeeded.popup.claimDelivery", {
-                    defaultValue: "Claim delivery",
-                  })}
-                </Typography>
-              </Button>
-            )}
-
             {meta.slackPermalink ? (
               <DaysOpenChip daysOpen={daysSinceSlackMessage(meta.slackTs)} />
             ) : (
@@ -134,6 +110,12 @@ const RequestPopup = ({ requests, closePopup }) => {
                 )}
               </Typography>
             )}
+          </Box>
+
+          <Box>
+            <ClaimDeliveryButton
+              requestCode={meta.Code}
+            />
           </Box>
 
           {i !== requests.length - 1 && <Divider className={classes.divider} />}
