@@ -5,7 +5,7 @@ const { airbase } = require("~airtable/bases");
 // ==================================================================
 
 const requestsTableName = (exports.tableName = "Requests");
-const requestsTable = (exports.table = airbase(requestsTableName));
+exports.table = airbase(requestsTableName);
 const fields = (exports.fields = {
   phone: "Phone",
   time: "Time",

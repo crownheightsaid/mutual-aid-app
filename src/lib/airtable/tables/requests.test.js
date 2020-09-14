@@ -3,7 +3,7 @@ const mockCreateFn = jest.fn();
 const mockSelectFn = jest.fn();
 
 jest.mock("~airtable/bases", () => ({
-  airbase: (_name) => ({
+  airbase: () => ({
     destroy: mockDestroyFn,
     create: mockCreateFn,
     select: mockSelectFn,
