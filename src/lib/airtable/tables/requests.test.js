@@ -14,6 +14,7 @@ const {
   deleteRequest,
   createRequest,
   findRequestByExternalId,
+  findDeliveryNeededRequests,
 } = require("./requests.js");
 const { fields } = require("./requestsSchema.js");
 
@@ -79,6 +80,10 @@ describe("createRequest", () => {
 });
 
 describe("findRequestByExternalId", () => {
+  afterEach(() => {
+    mockSelectFn.mockClear();
+  });
+
   test("it sends a query", async () => {
     const id = "test external ID";
     await findRequestByExternalId(id);
@@ -112,6 +117,19 @@ describe("findRequestByExternalId", () => {
 
       expect(result[0]).toEqual(null);
       expect(result[1]).toEqual("Request with that external ID not found");
+    });
+  });
+});
+
+describe("findDeliveryNeededRequests", () => {
+  afterEach(() => {
+    mockSelectFn.mockClear();
+  });
+
+  test("it sends a request with a query", async () => {
+    await findDeliveryNeededRequests();
+    expect(mockSelectFn).toHaveBeenCalledWith({
+      filterByFormula: `OR({${fields.status}} = '${fields.status_options.dispatchStarted}', {${fields.status}} = '${fields.status_options.deliveryNeeded}')`,
     });
   });
 });
