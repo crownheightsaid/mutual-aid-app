@@ -36,7 +36,7 @@ const DeliveryDialog = ({ open, onClose, fetchData }) => {
       } = err;
 
       if (message)
-        setError(`We're sorry! ${message} \n Please contact #tech_support.`);
+        setError(`We're sorry! Please contact #tech_support. ${message}`);
       else
         setError(
           "We're sorry! Something went wrong while processing your request. Things that could have gone wrong include: we couldn't find the delivery request code, you haven't registered as a volunteer, or you entered the wrong phone number. Please contact #tech_support."

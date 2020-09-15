@@ -7,6 +7,7 @@ const {
 const {
   findVolunteerByPhone,
   volunteersFields,
+  findVolunteerById,
 } = require("~airtable/tables/volunteers");
 const { fetchCoordFromCrossStreets } = require("./fetchCoordFromCrossStreets");
 const slackapi = require("~slack/webApi");
@@ -25,6 +26,7 @@ const {
   deliveryVolunteer,
   // eslint-disable-next-line camelcase
   status_options,
+  intakeVolunteer,
 } = fields;
 
 const TWILIO_SMS_DELIVERY_ENDPOINT =
@@ -137,11 +139,12 @@ exports.assignDeliveryHandler = async (req, res) => {
 
   if (!requestCode || !phoneNumber)
     return res.status(400).send({
-      message: "Expected `requestCode` and `phoneNumber` in payload.",
+      message: "Expected `requestCode` and `phoneNumber` in request body.",
     });
 
   let request;
-  let volunteer;
+  let deliveryVol;
+  let intakeVol;
   let error;
 
   // validate request
@@ -156,16 +159,39 @@ exports.assignDeliveryHandler = async (req, res) => {
       return res.status(400).send({
         message: `Cannot claim delivery ${requestCode} with status "${request.fields.Status}".`,
       });
+
+    if (
+      !request.fields[intakeVolunteer] ||
+      request.fields[intakeVolunteer].length === 0
+    )
+      return res.status(400).send({
+        message: `Cannot claim delivery ${requestCode} because there is no intake volunteer assigned. Please follow up with #intake_volunteers on Slack - we'll get it sorted out.`,
+      });
   } catch (e) {
     return res.status(400).send({ message: e });
   }
 
-  // find volunteer record in volunteer table
+  // find volunteer records in volunteer table
   try {
-    [volunteer, error] = await findVolunteerByPhone(phoneNumber);
+    // delivery volunteer
+    [deliveryVol, error] = await findVolunteerByPhone(phoneNumber);
 
     // TODO: on not found error, send volunteer form
-    if (!volunteer || (error && error.includes("404")))
+    if (!deliveryVol || (error && error.includes("404")))
+      return res.status(404).send({
+        message: error,
+      });
+    if (error) throw new Error(error);
+
+    // intake volunteer
+    [intakeVol, error] = await findVolunteerById(
+      request.fields[intakeVolunteer][0]
+    );
+
+    if (!intakeVol.fields[volunteersFields.phone])
+      error = `Cannot claim delivery ${requestCode} because the assigned intake volunteer has not provided their phone number. Please follow up with #intake_volunteers on Slack - we'll get it sorted out.`;
+
+    if (!intakeVol || (error && error.includes("404")))
       return res.status(404).send({
         message: error,
       });
@@ -177,11 +203,21 @@ exports.assignDeliveryHandler = async (req, res) => {
   }
 
   try {
-    const { [volunteersFields.phone]: volunteerPhone } = volunteer.fields;
+    const {
+      [volunteersFields.phone]: deliveryPhone,
+      [volunteersFields.name]: deliveryName,
+    } = deliveryVol.fields;
+    const {
+      [volunteersFields.phone]: intakePhone,
+      [volunteersFields.phone]: intakeName,
+    } = intakeVol.fields;
     await axios.post(TWILIO_SMS_DELIVERY_ENDPOINT, {
       body: {
         requestCode,
-        phoneNumber: volunteerPhone,
+        deliveryPhone,
+        deliveryName, // delivery volunteer name
+        intakePhone,
+        intakeName,
       },
     });
   } catch (e) {
@@ -197,7 +233,7 @@ exports.assignDeliveryHandler = async (req, res) => {
     const {
       [volunteersFields.name]: volunteerName,
       [volunteersFields.email]: volunteerEmail,
-    } = volunteer.fields;
+    } = deliveryVol.fields;
     const name =
       volunteerName || (volunteerEmail && volunteerEmail.split("@")[0]) || "";
 
