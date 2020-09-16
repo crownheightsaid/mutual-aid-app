@@ -16,7 +16,19 @@ const {
   findRequestByExternalId,
   findDeliveryNeededRequests,
 } = require("./requests.js");
-const { fields } = require("./requestsSchema.js");
+const { fields, tableName } = require("./requestsSchema.js");
+
+const { Record } = require("airtable");
+
+const buildRequestRecord = ({id, postedInSlack}) => {
+  const record = new Record(tableName, id);
+
+  if (postedInSlack) {
+    record.set(fields.meta, JSON.stringify({slack_ts: 'some-slack-ts'}));
+  }
+
+  return record;
+}
 
 describe("deleteRequest", () => {
   describe("given an existing ID", () => {
@@ -94,10 +106,14 @@ describe("findRequestByExternalId", () => {
   });
 
   describe("when the query returns a result", () => {
-    const record = "test record";
+    const record = buildRequestRecord({id: 'xyz', postedInSlack: false});
 
     beforeEach(() => {
       mockSelectFn.mockReturnValue({ firstPage: () => [record] });
+    });
+
+    afterEach(() => {
+      mockSelectFn.mockClear();
     });
 
     test("it returns that record and no error", async () => {
@@ -112,6 +128,10 @@ describe("findRequestByExternalId", () => {
       mockSelectFn.mockReturnValue({ firstPage: () => undefined });
     });
 
+    afterEach(() => {
+      mockSelectFn.mockClear();
+    });
+
     test("it returns an error message", async () => {
       const result = await findRequestByExternalId("some id");
 
@@ -122,14 +142,54 @@ describe("findRequestByExternalId", () => {
 });
 
 describe("findDeliveryNeededRequests", () => {
-  afterEach(() => {
-    mockSelectFn.mockClear();
+  describe("when all requests have been posted in Slack", () => {
+    let result, record;
+    
+    beforeAll(async () => {
+      record = buildRequestRecord({id: 'abc', postedInSlack: true});
+      
+      mockSelectFn.mockReturnValue({all: () => [record]});
+      
+      result = await findDeliveryNeededRequests();
+    });
+    
+    afterEach(() => {
+      mockSelectFn.mockClear();
+    });
+
+    test("it sends a request with a query", () => {
+      expect(mockSelectFn).toHaveBeenCalledWith({
+	filterByFormula: `OR({${fields.status}} = '${fields.status_options.dispatchStarted}', {${fields.status}} = '${fields.status_options.deliveryNeeded}')`,
+      });
+    });
+
+
+    test("it returns the results", () => {
+      expect(result[0]).toEqual([record]);
+      expect(result[1]).toEqual(null);
+    });
   });
 
-  test("it sends a request with a query", async () => {
-    await findDeliveryNeededRequests();
-    expect(mockSelectFn).toHaveBeenCalledWith({
-      filterByFormula: `OR({${fields.status}} = '${fields.status_options.dispatchStarted}', {${fields.status}} = '${fields.status_options.deliveryNeeded}')`,
+  describe("when there are requests not posted in Slack", () => {
+    let result, record;
+    
+    beforeAll(async () => {
+      record = buildRequestRecord({id: 1, postedInSlack: true});
+      const notInSlackRecord = buildRequestRecord({id: 2, postedInSlack: false});
+
+      mockSelectFn.mockReturnValue({all: () => [record, notInSlackRecord]});
+
+      result = await findDeliveryNeededRequests();
+    });
+
+    afterAll(() => {
+      mockSelectFn.mockClear();
+    });
+
+    test("it only returns records posted in Slack", () => {
+      expect(result[0]).toHaveLength(1);
+      expect(result[0]).toEqual([record]);
+      expect(result[1]).toEqual(null);
     });
   });
 });
