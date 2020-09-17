@@ -10,25 +10,31 @@ jest.mock("~airtable/bases", () => ({
   }),
 }));
 
+const { Record } = require("airtable");
 const {
   deleteRequest,
   createRequest,
   findRequestByExternalId,
   findDeliveryNeededRequests,
+  findOpenRequestsForSlack,
 } = require("./requests.js");
 const { fields, tableName } = require("./requestsSchema.js");
 
-const { Record } = require("airtable");
-
-const buildRequestRecord = ({id, postedInSlack}) => {
+const buildRequestRecord = ({
+  id,
+  postedInSlack = false,
+  drivingCluster = false,
+}) => {
   const record = new Record(tableName, id);
 
   if (postedInSlack) {
-    record.set(fields.meta, JSON.stringify({slack_ts: 'some-slack-ts'}));
+    record.set(fields.meta, JSON.stringify({ slack_ts: "some-slack-ts" }));
   }
 
+  record.set(fields.forDrivingClusters, drivingCluster);
+
   return record;
-}
+};
 
 describe("deleteRequest", () => {
   describe("given an existing ID", () => {
@@ -106,7 +112,7 @@ describe("findRequestByExternalId", () => {
   });
 
   describe("when the query returns a result", () => {
-    const record = buildRequestRecord({id: 'xyz', postedInSlack: false});
+    const record = buildRequestRecord({ id: "xyz", postedInSlack: false });
 
     beforeEach(() => {
       mockSelectFn.mockReturnValue({ firstPage: () => [record] });
@@ -143,26 +149,26 @@ describe("findRequestByExternalId", () => {
 
 describe("findDeliveryNeededRequests", () => {
   describe("when all requests have been posted in Slack", () => {
-    let result, record;
-    
+    let result;
+    let record;
+
     beforeAll(async () => {
-      record = buildRequestRecord({id: 'abc', postedInSlack: true});
-      
-      mockSelectFn.mockReturnValue({all: () => [record]});
-      
+      record = buildRequestRecord({ id: "abc", postedInSlack: true });
+
+      mockSelectFn.mockReturnValue({ all: () => [record] });
+
       result = await findDeliveryNeededRequests();
     });
-    
+
     afterEach(() => {
       mockSelectFn.mockClear();
     });
 
     test("it sends a request with a query", () => {
       expect(mockSelectFn).toHaveBeenCalledWith({
-	filterByFormula: `OR({${fields.status}} = '${fields.status_options.dispatchStarted}', {${fields.status}} = '${fields.status_options.deliveryNeeded}')`,
+        filterByFormula: `OR({${fields.status}} = '${fields.status_options.dispatchStarted}', {${fields.status}} = '${fields.status_options.deliveryNeeded}')`,
       });
     });
-
 
     test("it returns the results", () => {
       expect(result[0]).toEqual([record]);
@@ -171,13 +177,17 @@ describe("findDeliveryNeededRequests", () => {
   });
 
   describe("when there are requests not posted in Slack", () => {
-    let result, record;
-    
-    beforeAll(async () => {
-      record = buildRequestRecord({id: 1, postedInSlack: true});
-      const notInSlackRecord = buildRequestRecord({id: 2, postedInSlack: false});
+    let result;
+    let record;
 
-      mockSelectFn.mockReturnValue({all: () => [record, notInSlackRecord]});
+    beforeAll(async () => {
+      record = buildRequestRecord({ id: 1, postedInSlack: true });
+      const notInSlackRecord = buildRequestRecord({
+        id: 2,
+        postedInSlack: false,
+      });
+
+      mockSelectFn.mockReturnValue({ all: () => [record, notInSlackRecord] });
 
       result = await findDeliveryNeededRequests();
     });
@@ -189,6 +199,61 @@ describe("findDeliveryNeededRequests", () => {
     test("it only returns records posted in Slack", () => {
       expect(result[0]).toHaveLength(1);
       expect(result[0]).toEqual([record]);
+      expect(result[1]).toEqual(null);
+    });
+  });
+});
+
+describe("findOpenRequestsForSlack", () => {
+  describe("when there are requests not posted in Slack", () => {
+    let result;
+    let inSlackRecord;
+    let notInSlackRecord;
+
+    beforeAll(async () => {
+      inSlackRecord = buildRequestRecord({ id: 1, postedInSlack: true });
+      notInSlackRecord = buildRequestRecord({ id: 2, postedInSlack: false });
+
+      mockSelectFn.mockReturnValue({
+        all: () => [inSlackRecord, notInSlackRecord],
+      });
+
+      result = await findOpenRequestsForSlack();
+    });
+
+    afterAll(() => {
+      mockSelectFn.mockClear();
+    });
+
+    test("it only returns records NOT posted in Slack", () => {
+      expect(result[0]).toHaveLength(1);
+      expect(result[0]).toEqual([notInSlackRecord]);
+      expect(result[1]).toEqual(null);
+    });
+  });
+
+  describe("when there are requests for driving clusters", () => {
+    let result;
+    let regularRecord;
+    let drivingClusterRecord;
+
+    beforeAll(async () => {
+      regularRecord = buildRequestRecord({ id: 8, drivingCluster: false });
+      drivingClusterRecord = buildRequestRecord({
+        id: 12,
+        drivingCluster: true,
+      });
+
+      mockSelectFn.mockReturnValue({
+        all: () => [regularRecord, drivingClusterRecord],
+      });
+
+      result = await findOpenRequestsForSlack();
+    });
+
+    test("it filters out driving cluster requests", () => {
+      expect(result[0]).toHaveLength(1);
+      expect(result[0]).toEqual([regularRecord]);
       expect(result[1]).toEqual(null);
     });
   });
