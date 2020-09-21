@@ -29,8 +29,7 @@ const {
   intakeVolunteer,
 } = fields;
 
-const TWILIO_SMS_DELIVERY_ENDPOINT =
-  "https://mutual-aid-4526-dev.twil.io/sms/test-delivery";
+const TWILIO_SMS_DELIVERY_ENDPOINT = process.env.TWILIO_SMS_DELIVERY_ENDPOINT;
 
 const makeFeature = async (r) => {
   let metaJSON = {};

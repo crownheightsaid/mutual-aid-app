@@ -71,6 +71,11 @@ app.post(
 );
 
 app.get("/api/delivery-needed/requests.json", deliveryNeededRequestHandler);
+if (!process.env.TWILIO_SMS_DELIVERY_ENDPOINT) {
+  console.warn(
+    "TWILIO_SMS_DELIVERY_ENDPOINT env var missing. Assigning deliveries via SMS will not work."
+  );
+}
 
 app.post("/api/delivery-needed/assign", assignDeliveryHandler);
 
@@ -81,7 +86,7 @@ app.post("/api/delivery-needed/assign", assignDeliveryHandler);
 if (process.env.BASIC_AUTH_USERS) {
   const allUsers = {};
   const userPass = process.env.BASIC_AUTH_USERS.split(";");
-  userPass.forEach(pair => {
+  userPass.forEach((pair) => {
     const [user, pass] = pair.split(":");
     allUsers[user] = pass;
   });
@@ -89,7 +94,7 @@ if (process.env.BASIC_AUTH_USERS) {
   app.use(
     "/api/authed/*",
     basicAuth({
-      users: allUsers
+      users: allUsers,
     })
   );
   app.post("/api/authed/intake/nycma", nycmaIntakeHandler);
