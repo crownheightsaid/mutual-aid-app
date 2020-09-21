@@ -17,6 +17,7 @@ const {
   findRequestByExternalId,
   findDeliveryNeededRequests,
   findOpenRequestsForSlack,
+  findRequestByCode,
 } = require("./requests.js");
 const { fields, tableName } = require("./requestsSchema.js");
 
@@ -255,6 +256,67 @@ describe("findOpenRequestsForSlack", () => {
       expect(result[0]).toHaveLength(1);
       expect(result[0]).toEqual([regularRecord]);
       expect(result[1]).toEqual(null);
+    });
+  });
+});
+
+describe("findRequestByCode", () => {
+  describe("given a code of less than 4 characters", () => {
+    let result;
+
+    beforeAll(async () => {
+      result = await findRequestByCode("123");
+    });
+
+    test("it returns an error", () => {
+      expect(result[0]).toEqual(null);
+      expect(result[1]).toEqual("Request code must be at least 4 characters.");
+    });
+  });
+
+  describe("given a valid code", () => {
+    beforeAll(async () => {
+      await findRequestByCode("1234");
+    });
+
+    test("it sends a select request", () => {
+      expect(mockSelectFn).toHaveBeenCalledWith({
+        filterByFormula: `(FIND('1234', {${fields.code}}) > 0)`,
+      });
+    });
+
+    describe("when the code does not exist", () => {
+      let result;
+
+      beforeAll(async () => {
+        mockSelectFn.mockReturnValue({
+          firstPage: () => [],
+        });
+
+        result = await findRequestByCode("4567");
+      });
+
+      test("it returns an error message", () => {
+        expect(result[0]).toEqual(null);
+        expect(result[1]).toEqual("No requests found with that code.");
+      });
+    });
+
+    describe("when the code exists", () => {
+      let result;
+
+      beforeAll(async () => {
+        mockSelectFn.mockReturnValue({
+          firstPage: () => ["something"],
+        });
+
+        result = await findRequestByCode("7890");
+      });
+
+      test("it returns the record", () => {
+        expect(result[0]).toEqual("something");
+        expect(result[1]).toEqual(null);
+      });
     });
   });
 });
