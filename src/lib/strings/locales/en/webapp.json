@@ -22,14 +22,19 @@
     "message": {
       "info": "Enter an address and we will look up cross streets and the neighborhood.",
       "help": "For best results, enter street and town (Ex: 1550 dean st brooklyn)",
-      "privacy": "The address will not be stored or logged :)"
+      "privacy": "The address will not be stored or logged :)",
+      "reminder": "Reminder: the boundaries on this map show a defined delivery area, per our Delivery Area proposal that passed 7/25. CHMA cannot make any deliveries outside of this area, no exceptions."
     },
     "label": {
       "crossStreetFirst": "Cross Street #1",
       "crossStreetSecond": "Cross Street #2",
       "neighborhoodLabel": "Neighborhood",
       "neighborhoodError": "If both this and zone are unavailable, double check the map: https://bit.ly/2UrZPkA",
-      "zone": "{{neighborhood}} Volunteer Zone"
+      "zone": "{{neighborhood}} Volunteer Zone",
+      "firstName": "First Name",
+      "slackLink": "Slack Link",
+      "timestamp": "Timestamp",
+      "code": "Code"
     },
     "geoError": {
       "message": "Error loading. Please try again. If it fails again, let us know in"
@@ -65,6 +70,16 @@
       "message": "Request with code {{requestCode}} is not found. This means that the request is no longer in 'Delivery Needed' status.",
       "redirectLink": "/delivery-needed",
       "redirectMessage": "See all requests instead."
+    },
+    "table": {
+      "headers": {
+        "daysOpen": "Days open",
+        "timeSensitivity": "Time Sensitivity",
+        "neighbor": "Neighbor",
+        "need": "Need",
+        "crossStreets": "Cross streets",
+        "description": "Description"
+      }
     }
   }
 }

@@ -2,6 +2,7 @@ const ChangeDetector = require("airtable-change-detector");
 const {
   donorPaymentsTable,
   donorPaymentsFields,
+<<<<<<< HEAD
   donorPaymentsSensitiveFields
 } = require("~airtable/tables/donorPayments");
 const {
@@ -9,6 +10,15 @@ const {
   paymentRequestsFields,
   paymentRequestsSensitiveFields
 } = require("~airtable/tables/paymentRequests");
+=======
+  donorPaymentsSensitiveFields,
+} = require("~airtable/tables/donorPaymentsSchema");
+const {
+  paymentRequestsTable,
+  paymentRequestsFields,
+  paymentRequestsSensitiveFields,
+} = require("~airtable/tables/paymentRequestsSchema");
+>>>>>>> upstream/master
 const sendErrorNotification = require("~slack/errorNotification");
 const newExternalDonorPayment = require("./actions/payments/newExternalDonorPayment");
 const newPaymentRequest = require("./actions/payments/newPaymentRequest");

@@ -1,4 +1,4 @@
-const { paymentsAirbase } = require("~airtable/bases");
+const { donorPaymentsTable, fields } = require("./donorPaymentsSchema");
 
 // Expects mapping of fields
 exports.createDonorPayment = async donorPaymentFields => {
@@ -35,6 +35,7 @@ exports.findDonorPaymentByCode = async code => {
     return [null, e.message];
   }
 };
+<<<<<<< HEAD
 
 // ==================================================================
 // Schema
@@ -86,3 +87,5 @@ const fields = (exports.donorPaymentsFields = {
   donorMobile: "DonorMobile"
 });
 exports.donorPaymentsSensitiveFields = [fields.donorMobile];
+=======
+>>>>>>> upstream/master

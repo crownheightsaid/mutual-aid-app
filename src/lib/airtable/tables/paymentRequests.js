@@ -1,5 +1,5 @@
 const { merge } = require("lodash");
-const { paymentsAirbase } = require("~airtable/bases");
+const { paymentRequestsTable, fields } = require("./paymentRequestsSchema");
 
 // `update` should look like:
 // {
@@ -106,6 +106,7 @@ exports.deletePaymentRequest = async record => {
     console.error(`Error while deleting payment request ${e}`);
   }
 };
+<<<<<<< HEAD
 
 // ==================================================================
 // Schema
@@ -158,3 +159,5 @@ exports.paymentRequestsSensitiveFields = [
   fields.paypalId,
   fields.cashAppId
 ];
+=======
+>>>>>>> upstream/master

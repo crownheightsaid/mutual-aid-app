@@ -3,58 +3,83 @@
    If the state belongs to the same component as the Map/BasicMap, it re-renders
    the map on any state change, causing the viewport and zoom to be reset
    */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Layer, MapContext } from "react-mapbox-gl";
 import RequestPopup from "./RequestPopup";
+import ClusterMapContext from "../context/ClusterMapContext";
 
 const handleClusterOnClick = (map, e, layerId, sourceId) => {
   const features = map.queryRenderedFeatures(e.point, {
-    layers: [layerId]
+    layers: [layerId],
   });
   const clusterId = features[0].properties.cluster_id;
+
   map.getSource(sourceId).getClusterExpansionZoom(clusterId, (err, zoom) => {
     if (err) return;
 
     map.easeTo({
       center: features[0].geometry.coordinates,
-      zoom
+      zoom,
     });
   });
 };
 
 const makePopupData = (features, lngLat) => {
-  return features.map(feat => {
+  return features.map((feat) => {
     const metaSrc = feat.properties.meta;
     const meta =
       typeof metaSrc == "string" ? JSON.parse(feat.properties.meta) : metaSrc;
     return {
       lngLat,
-      meta
+      meta,
     };
   });
 };
 
-const ClusterMapLayers = ({ geoJsonData, paramRequest, sourceId, color }) => {
+const ClusterMapLayers = ({ data, paramRequest, sourceId, color }) => {
   const [popup, setPopup] = useState();
+  const [initialRender, setInitialRender] = useState(true);
+  const { focusedRequestId, setFocusedRequestId } = useContext(
+    ClusterMapContext
+  );
 
-  const setCursorPointer = e => e.target.getCanvas().style.cursor = 'pointer';
-  const setCursorGrab = e => e.target.getCanvas().style.cursor = 'grab';
+  const setCursorPointer = (e) => {
+    e.target.getCanvas().style.cursor = "pointer";
+  };
+  const setCursorGrab = (e) => {
+    e.target.getCanvas().style.cursor = "grab";
+  };
 
-  // display popup if request code is present in URL search param
   useEffect(() => {
-    if (paramRequest) {
-      const {
-        geometry: { coordinates }
-      } = paramRequest;
-      setPopup(makePopupData([paramRequest], coordinates));
+    // display popup if request code is present in URL search param
+    // but only on first render
+    if (paramRequest && initialRender) {
+      setPopup(
+        makePopupData([paramRequest], paramRequest.geometry.coordinates)
+      );
+      setInitialRender(false);
     }
-  }, []);
+
+    // find focused request and display popup
+    const [focusedRequest] = data.filter(
+      ({
+        properties: {
+          meta: { Code },
+        },
+      }) => Code === focusedRequestId
+    );
+    if (focusedRequest) {
+      setPopup(
+        makePopupData([focusedRequest], focusedRequest.geometry.coordinates)
+      );
+    }
+  }, [focusedRequestId]);
 
   const layerId = `${sourceId}-clusters`;
 
   return (
     <MapContext.Consumer>
-      {map => (
+      {(map) => (
         <>
           <Layer
             sourceId={sourceId}
@@ -69,7 +94,7 @@ const ClusterMapLayers = ({ geoJsonData, paramRequest, sourceId, color }) => {
                 5,
                 color,
                 10,
-                color
+                color,
               ],
               "circle-radius": [
                 "step",
@@ -78,10 +103,10 @@ const ClusterMapLayers = ({ geoJsonData, paramRequest, sourceId, color }) => {
                 5,
                 30,
                 20,
-                40
-              ]
+                40,
+              ],
             }}
-            onClick={e => handleClusterOnClick(map, e, layerId, sourceId)}
+            onClick={(e) => handleClusterOnClick(map, e, layerId, sourceId)}
             onMouseEnter={setCursorPointer}
             onMouseLeave={setCursorGrab}
           />
@@ -94,10 +119,10 @@ const ClusterMapLayers = ({ geoJsonData, paramRequest, sourceId, color }) => {
             layout={{
               "text-field": "{point_count_abbreviated}",
               "text-font": ["Arial Unicode MS Bold"],
-              "text-size": 14
+              "text-size": 14,
             }}
             paint={{
-              "text-color": "#ffffff"
+              "text-color": "#ffffff",
             }}
           />
 
@@ -108,16 +133,28 @@ const ClusterMapLayers = ({ geoJsonData, paramRequest, sourceId, color }) => {
             filter={["!", ["has", "point_count"]]}
             paint={{
               "circle-color": color,
-              "circle-radius": 6
+              "circle-radius": 6,
             }}
-            onClick={e => {
+            onClick={(e) => {
               setPopup(makePopupData(e.features, e.lngLat));
+
+              // only support setting context for one focused request for now
+              if (e.features.length === 1) {
+                const request = e.features[0];
+                if (request) {
+                  setFocusedRequestId(request.properties.title);
+                }
+              }
             }}
             onMouseEnter={setCursorPointer}
             onMouseLeave={setCursorGrab}
           />
           {popup && (
-            <RequestPopup closePopup={() => setPopup()} requests={popup} />
+            <RequestPopup
+              closePopup={() => setPopup()}
+              focusedRequestId={focusedRequestId}
+              requests={popup}
+            />
           )}
         </>
       )}
