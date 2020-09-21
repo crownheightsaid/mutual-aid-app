@@ -6,7 +6,7 @@ import { findBounds } from "webapp/helpers/mapbox-coordinates";
 import BasicMap from "./BasicMap";
 import {
   CROWN_HEIGHTS_BOUNDS,
-  CROWN_HEIGHTS_CENTER_COORD
+  CROWN_HEIGHTS_CENTER_COORD,
 } from "../helpers/map-constants";
 
 const QuadrantsLayers = () => {
@@ -17,7 +17,7 @@ const QuadrantsLayers = () => {
         id="quadrants_src"
         geoJsonSource={{
           type: "geojson",
-          data: quadrantsGeoJSON
+          data: quadrantsGeoJSON,
         }}
       />
 
@@ -28,9 +28,9 @@ const QuadrantsLayers = () => {
         paint={{
           "fill-color": {
             type: "identity",
-            property: "fill"
+            property: "fill",
           },
-          "fill-opacity": 0.25
+          "fill-opacity": 0.25,
         }}
       />
 
@@ -41,9 +41,9 @@ const QuadrantsLayers = () => {
         layout={{
           "text-field": {
             type: "identity",
-            property: "id"
+            property: "id",
           },
-          "text-size": 20
+          "text-size": 20,
         }}
       />
     </>
@@ -52,7 +52,7 @@ const QuadrantsLayers = () => {
 
 const QuadrantMap = ({ locations = [], containerStyle = {} }) => {
   const lnglats = locations.map(
-    location => new LngLat(location.lng, location.lat)
+    (location) => new LngLat(location.lng, location.lat)
   );
   const bounds =
     lnglats.length > 0

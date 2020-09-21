@@ -9,7 +9,7 @@ const {
   findOpenRequestsForSlack,
   findRequestByCode,
   updateRequestByCode,
-  fields: requestsFields
+  fields: requestsFields,
 } = require("~airtable/tables/requests");
 const { str } = require("~strings/i18nextWrappers");
 
@@ -44,7 +44,7 @@ module.exports.register = function register(slackInteractions) {
   // User hits "Post Open Request" shortcut and are presented with a choice of which Request to use.
   slackInteractions.callbacks.push([
     { callbackId: selectRequestForSending.id },
-    guard(selectRequestForSending)
+    guard(selectRequestForSending),
   ]);
   // User is shown a suggestion of the message to send and can edit it, as well as choose the destination channel.
   slackInteractions.viewSubmission(draftRequest.id, guard(draftRequest));
@@ -60,7 +60,7 @@ module.exports.register = function register(slackInteractions) {
 async function selectRequestForSending(payload) {
   const slackUserResponse = await slackapi.users.info({
     token: process.env.SLACK_BOT_TOKEN,
-    user: payload.user.id
+    user: payload.user.id,
   });
 
   const slackUserEmail = slackUserResponse.user.profile.email;
@@ -70,21 +70,21 @@ async function selectRequestForSending(payload) {
     view = errorView(
       str("slackapp:requestBotPost.modal.error.noVolunteer", {
         defaultValue: `No volunteer with email: {{- userEmail}}. Did you use your slack email to sign up?`,
-        userEmail: slackUserEmail
+        userEmail: slackUserEmail,
       })
     );
     await slackapi.views.open({
       trigger_id: payload.trigger_id,
-      view
+      view,
     });
     return;
   }
   let [requests, err] = await findOpenRequestsForSlack(); // eslint-disable-line
-  requests = requests.filter(r => {
+  requests = requests.filter((r) => {
     const vols = r.get(requestsFields.intakeVolunteer) || [];
     return vols.includes(volRecord.getId());
   });
-  requests = sortBy(requests, r =>
+  requests = sortBy(requests, (r) =>
     r.get(requestsFields.lastModified)
   ).reverse();
 
@@ -101,7 +101,7 @@ async function selectRequestForSending(payload) {
   }
   await slackapi.views.open({
     trigger_id: payload.trigger_id,
-    view
+    view,
   });
 }
 
@@ -123,7 +123,7 @@ async function draftRequest(payload) {
   const form = await makeRequestDraftView(payload, request);
   return {
     response_action: "update",
-    view: form
+    view: form,
   };
 }
 
@@ -145,7 +145,7 @@ async function draftConfirm(payload) {
   }
   return {
     response_action: "push",
-    view: makeConfirmationView(request, channel, content)
+    view: makeConfirmationView(request, channel, content),
   };
 }
 
@@ -163,7 +163,7 @@ async function sendMessage(payload) {
     text: context.content,
     // We don't want any unfurling of links in the message
     unfurl_media: false,
-    unfurl_links: false
+    unfurl_links: false,
   });
   if (!deliveryMessage.ok) {
     return errorResponse(
@@ -176,13 +176,13 @@ async function sendMessage(payload) {
     [requestsFields.status]: requestsFields.status_options.deliveryNeeded,
     [requestsFields.meta]: {
       slack_ts: deliveryMessage.ts,
-      slack_channel: deliveryMessage.channel
-    }
+      slack_channel: deliveryMessage.channel,
+    },
   });
 
   // Close the modal
   return {
-    response_action: "clear"
+    response_action: "clear",
   };
 }
 
@@ -190,15 +190,15 @@ async function sendMessage(payload) {
  * Modal view for selecting a requeest to use for the rest of the flow
  */
 async function makeRequestSelectionView(requests) {
-  const options = requests.map(r => {
+  const options = requests.map((r) => {
     return {
       text: {
         type: "mrkdwn",
-        text: `*${r.get(requestsFields.code)}* - ${r.get(
-          requestsFields.phone
-        ) || r.get(requestsFields.email)} _${r.get(requestsFields.status)}_`
+        text: `*${r.get(requestsFields.code)}* - ${
+          r.get(requestsFields.phone) || r.get(requestsFields.email)
+        } _${r.get(requestsFields.status)}_`,
       },
-      value: r.get(requestsFields.code)
+      value: r.get(requestsFields.code),
     };
   });
   const requestSelectionBlocks = {
@@ -208,17 +208,17 @@ async function makeRequestSelectionView(requests) {
     title: {
       type: "plain_text",
       text: modalTitle,
-      emoji: true
+      emoji: true,
     },
     submit: {
       type: "plain_text",
       text: str("slackapp:requestBotPost.modal.picker.submit"),
-      emoji: true
+      emoji: true,
     },
     close: {
       type: "plain_text",
       text: str("common:cancel"),
-      emoji: true
+      emoji: true,
     },
     blocks: [
       {
@@ -228,15 +228,15 @@ async function makeRequestSelectionView(requests) {
           action_id: "selected_request",
           type: "radio_buttons",
           initial_option: options[0],
-          options
+          options,
         },
         label: {
           type: "plain_text",
           text: str("slackapp:requestBotPost.modal.picker.message"),
-          emoji: true
-        }
-      }
-    ]
+          emoji: true,
+        },
+      },
+    ],
   };
   return requestSelectionBlocks;
 }
@@ -253,17 +253,17 @@ async function makeRequestDraftView(payload, request) {
     title: {
       type: "plain_text",
       text: modalTitle,
-      emoji: true
+      emoji: true,
     },
     submit: {
       type: "plain_text",
       text: str("slackapp:requestBotPost.modal.draft.submit"),
-      emoji: true
+      emoji: true,
     },
     close: {
       type: "plain_text",
       text: str("common:cancel"),
-      emoji: true
+      emoji: true,
     },
     blocks: [
       {
@@ -276,14 +276,14 @@ async function makeRequestDraftView(payload, request) {
           placeholder: {
             type: "plain_text",
             text: str("slackapp:requestBotPost.modal.draft.channelSelect"),
-            emoji: true
-          }
+            emoji: true,
+          },
         },
         label: {
           type: "plain_text",
           text: "Channel",
-          emoji: true
-        }
+          emoji: true,
+        },
       },
       {
         type: "input",
@@ -292,15 +292,15 @@ async function makeRequestDraftView(payload, request) {
           type: "plain_text_input",
           action_id: "draft_message",
           initial_value: suggestedTemplate(payload, request),
-          multiline: true
+          multiline: true,
         },
         label: {
           type: "plain_text",
           text: str("slackapp:requestBotPost.modal.draft.label"),
-          emoji: true
-        }
-      }
-    ]
+          emoji: true,
+        },
+      },
+    ],
   };
   return requestDraftBlocks;
 }
@@ -313,7 +313,7 @@ function makeConfirmationView(request, channelId, content) {
   const context = {
     code,
     channelId,
-    content
+    content,
   };
   return {
     type: "modal",
@@ -322,17 +322,17 @@ function makeConfirmationView(request, channelId, content) {
     title: {
       type: "plain_text",
       text: modalTitle,
-      emoji: true
+      emoji: true,
     },
     submit: {
       type: "plain_text",
       text: str("slackapp:requestBotPost.modal.confirm.submit"),
-      emoji: true
+      emoji: true,
     },
     close: {
       type: "plain_text",
       text: str("slackapp:requestBotPost.modal.confirm.edit"),
-      emoji: true
+      emoji: true,
     },
     blocks: [
       {
@@ -342,23 +342,23 @@ function makeConfirmationView(request, channelId, content) {
             type: "mrkdwn",
             text: `*Request*: ${request.get(
               requestsFields.code
-            )}\n*Channel*: <#${channelId}>`
-          }
-        ]
+            )}\n*Channel*: <#${channelId}>`,
+          },
+        ],
       },
       {
-        type: "divider"
+        type: "divider",
       },
       {
         type: "context",
         elements: [
           {
             type: "mrkdwn",
-            text: content
-          }
-        ]
-      }
-    ]
+            text: content,
+          },
+        ],
+      },
+    ],
   };
 }
 
@@ -369,14 +369,14 @@ function suggestedTemplate(payload, request) {
   const slackId = payload.user.id;
   const streets = [
     request.get(requestsFields.crossStreetFirst),
-    request.get(requestsFields.crossStreetSecond)
+    request.get(requestsFields.crossStreetSecond),
   ]
-    .filter(s => s !== undefined)
+    .filter((s) => s !== undefined)
     .join(" & ");
 
   const mapUrl = str("slackapp:requestBotPost.post.fields.streets.mapUrl", {
     defaultValue: `https://crownheightsma.herokuapp.com/delivery-needed?request={{requestCode}}`,
-    requestCode: request.get(requestsFields.code)
+    requestCode: request.get(requestsFields.code),
   });
 
   const streetsURL = str(
@@ -384,7 +384,7 @@ function suggestedTemplate(payload, request) {
     {
       defaultValue: `<{{- mapUrl}}|{{streets}}>`,
       mapUrl,
-      streets
+      streets,
     }
   );
 
@@ -408,51 +408,51 @@ function suggestedTemplate(payload, request) {
         str(
           "slackapp:requestBotPost.post.fields.timeline.default",
           "When convenient"
-        )
+        ),
     ],
     [
       str("slackapp:requestBotPost.post.fields.neighborhood.name"),
       quadrant ||
-        str("slackapp:requestBotPost.post.fields.neighborhood.default")
+        str("slackapp:requestBotPost.post.fields.neighborhood.default"),
     ],
     [
       str("slackapp:requestBotPost.post.fields.householdSize"),
-      request.get(requestsFields.householdSize) || str("common:notAvailable")
+      request.get(requestsFields.householdSize) || str("common:notAvailable"),
     ],
     [str("slackapp:requestBotPost.post.fields.needs.name"), needs],
     [str("slackapp:requestBotPost.post.fields.streets.name"), streetsURL],
     [
       str("slackapp:requestBotPost.post.fields.language.name"),
-      (request.get(requestsFields.languages) || []).join("/")
+      (request.get(requestsFields.languages) || []).join("/"),
     ],
     [
       str("slackapp:requestBotPost.post.fields.notes.name"),
       request.get(requestsFields.intakeNotes) ||
-        str("slackapp:requestBotPost.post.fields.notes.default")
+        str("slackapp:requestBotPost.post.fields.notes.default"),
     ],
-    ["Code", request.get(requestsFields.code)] // No str because we need to regex it after
+    ["Code", request.get(requestsFields.code)], // No str because we need to regex it after
   ];
   const status = str("slackapp:requestBotPost.post.statusPrefix.default");
   const fieldRepresentation = extraFields
-    .filter(kv => kv[1])
-    .map(kv => `*${kv[0]}*: ${kv[1].trim()}`)
+    .filter((kv) => kv[1])
+    .map((kv) => `*${kv[0]}*: ${kv[1].trim()}`)
     .join("\n");
   // HACK: use non-breaking space as a delimiter between the status and the rest of the message: \u00A0
   return `${status}\u00A0${str("slackapp:requestBotPost.post.message.intro", {
     defaultValue: `Hey <!channel> we have a new request from our neighbor {{firstName}} at {{streets}} in *{{quadrant}}*`,
     firstName,
     streets,
-    quadrant
+    quadrant,
   })}:
 ${fieldRepresentation}
 ${str("slackapp:requestBotPost.post.message.outro", {
   defaultValue: `*Want to volunteer to help our neighbor{{firstName}}?* Comment on this thread and {{- intakeSlackId}} will follow up with more details.
 _Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive._`,
   intakeSlackId: `<@${slackId}>`,
-  firstName
+  firstName,
 })}
 ${str("slackapp:requestBotPost.post.message.guide", {
   defaultValue: `For more information, please see the <{{- guideUrl}}|delivery guide>`,
-  guideUrl: str("common:links.deliveryGuide")
+  guideUrl: str("common:links.deliveryGuide"),
 })}`;
 }

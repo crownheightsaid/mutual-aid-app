@@ -1,10 +1,12 @@
 const { airbase } = require("~airtable/bases");
 
-exports.findVolunteerByEmail = async email => {
+exports.findVolunteerByEmail = async (email) => {
   try {
     const records = await volunteersTable
       .select({
-        filterByFormula: `(LOWER({${fields.email}}) = '${email.toLowerCase()}')`
+        filterByFormula: `(LOWER({${
+          fields.email
+        }}) = '${email.toLowerCase()}')`,
       })
       .firstPage();
     if (!records || records.length === 0) {
@@ -16,7 +18,7 @@ exports.findVolunteerByEmail = async email => {
   }
 };
 
-exports.findVolunteerById = async id => {
+exports.findVolunteerById = async (id) => {
   try {
     return [await volunteersTable.find(id), null];
   } catch (e) {
@@ -53,7 +55,7 @@ const fields = (exports.volunteersFields = {
     vietnamese: "Vietnamese",
     hindi: "Hindi",
     polski: "Polski",
-    portuguese: "Portuguese"
+    portuguese: "Portuguese",
   },
   waysToHelp: "volunteer_ways_to_help",
   waysToHelp_options: {
@@ -66,7 +68,7 @@ const fields = (exports.volunteersFields = {
     techAdminSupport: "Tech/admin support",
     flyering: "Flyering",
     iHaveAPrinter: "I have a printer!",
-    artsDesignFilm: "Arts/design/film"
+    artsDesignFilm: "Arts/design/film",
   },
   extraInfo: "volunteer_extra_info",
   slackId: "volunteer_slack_id",
@@ -78,10 +80,10 @@ const fields = (exports.volunteersFields = {
     southwest: "southwest",
     northeast: "northeast",
     southeast: "southeast",
-    iDontKnow: "i don't know"
+    iDontKnow: "i don't know",
   },
   name: "volunter_name",
   howFound: "volunteer_howfind",
   trained: "volunteer_trained",
-  createdTime: "Created Time"
+  createdTime: "Created Time",
 });

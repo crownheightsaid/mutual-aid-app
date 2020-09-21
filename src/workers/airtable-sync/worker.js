@@ -2,7 +2,7 @@ const ChangeDetector = require("airtable-change-detector");
 const {
   table: requestsTable,
   fields: requestFields,
-  SENSITIVE_FIELDS: sensitiveRequestFields
+  SENSITIVE_FIELDS: sensitiveRequestFields,
 } = require("~airtable/tables/requests");
 const sendErrorNotification = require("~slack/errorNotification");
 const updateMessageContent = require("./actions/updateMessageContent");
@@ -24,20 +24,20 @@ function startWorker(interval) {
   }
   const sharedDetectorOptions = {
     writeDelayMs: 100,
-    lastProcessedFieldName: "Last Processed"
+    lastProcessedFieldName: "Last Processed",
   };
 
   const requestChanges = new ChangeDetector(requestsTable, {
     senstiveFields: sensitiveRequestFields,
-    ...sharedDetectorOptions
+    ...sharedDetectorOptions,
   });
   requestChanges.pollWithInterval(
     "airtable-sync.requests",
     interval,
-    async recordsChanged => {
+    async (recordsChanged) => {
       console.info(`Found ${recordsChanged.length} changes in Requests`);
       const promises = [];
-      recordsChanged.forEach(record => {
+      recordsChanged.forEach((record) => {
         if (record.didChange(requestFields.status)) {
           const status = record.get(requestFields.status);
           const newStatus = record.getPrior(requestFields.status);

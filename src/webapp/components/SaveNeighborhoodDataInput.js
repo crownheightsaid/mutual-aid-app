@@ -9,17 +9,17 @@ import Typography from "@material-ui/core/Typography";
 import { useTranslation } from "react-i18next";
 import Box from "@material-ui/core/Box";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   successMessage: {
-    color: theme.palette.success.dark
+    color: theme.palette.success.dark,
   },
   field: {
     marginTop: theme.spacing(1),
-    width: "85%"
-  }
+    width: "85%",
+  },
 }));
 
-const forceInputUppercase = e => {
+const forceInputUppercase = (e) => {
   e.target.value = (e.target.value || "").toUpperCase();
 };
 
@@ -30,19 +30,19 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
   const [{ data, loading, error }, submit] = useAxios(
     {
       url: `/api/neighborhood-finder/update-request`,
-      method: "post"
+      method: "post",
     },
     { manual: true } // Don't send on render
   );
 
-  const handleAddToAirtable = event => {
+  const handleAddToAirtable = (event) => {
     event.preventDefault();
 
     submit({
       data: {
         requestCode: requestCode.toUpperCase(),
-        neighborhoodData
-      }
+        neighborhoodData,
+      },
     });
   };
 
@@ -63,7 +63,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
           margin="normal"
           variant="outlined"
           onKeyUp={forceInputUppercase}
-          onChange={e => setRequestCode(e.target.value)}
+          onChange={(e) => setRequestCode(e.target.value)}
           className={`${classes.field}`}
           error={Boolean(error)}
           helperText={error && error.response.data.message}
@@ -80,7 +80,7 @@ const SaveNeighborhoodDataInput = ({ neighborhoodData, className }) => {
                   {str("webapp:zoneFinder.airtableUpdate.submit")}
                 </Button>
               </InputAdornment>
-            )
+            ),
           }}
         />
       </form>
