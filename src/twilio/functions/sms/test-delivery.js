@@ -1,3 +1,6 @@
+// this endpoint version receives delivery/intake name + phone numbers from the React web app
+// used for testing; connects to staging base
+
 exports.handler = function codeSms(context, event, callback) { // eslint-disable-line
   const Airtable = require("airtable"); // eslint-disable-line
   Airtable.configure({
