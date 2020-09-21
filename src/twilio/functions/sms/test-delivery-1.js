@@ -1,3 +1,6 @@
+// an early version of the Twilio endpoint here, looks up all the values in Airtable (delivery volunteer name, intake volunteer phone, etc)
+// future versions uses React web app to look up Airtable values, and Twilio endpoint only to send texts
+
 exports.handler = function codeSms(context, event, callback) { // eslint-disable-line
   const Airtable = require("airtable"); // eslint-disable-line
   Airtable.configure({

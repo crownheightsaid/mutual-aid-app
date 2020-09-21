@@ -5,7 +5,7 @@ exports.handler = function codeSms(context, event, callback) { // eslint-disable
     apiKey: context.AIRTABLE_API_KEY // eslint-disable-line
   });
 
-  const base = Airtable.base("apppPfEXed7SRcKmB"); // staging base
+  const base = Airtable.base("apppK7mrvMPcwtv6d"); // intake + vols base
   let code = event.body.requestCode;
   const deliveryPhone = event.body.deliveryPhone; // eslint-disable-line
   let deliveryName = event.body.deliveryName; // eslint-disable-line
