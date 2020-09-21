@@ -5,8 +5,8 @@ module.exports = [
     type: "section",
     text: {
       type: "mrkdwn",
-      text: str("slackapp:home.trainedVolunteer.message")
-    }
+      text: str("slackapp:home.trainedVolunteer.message"),
+    },
   },
   {
     type: "actions",
@@ -15,12 +15,12 @@ module.exports = [
         type: "button",
         text: {
           type: "plain_text",
-          text: str("slackapp:home.trainedVolunteer.shiftSignUpButton.text")
+          text: str("slackapp:home.trainedVolunteer.shiftSignUpButton.text"),
         },
         url: str("slackapp:home.trainedVolunteer.shiftSignUpButton.url"),
-        action_id: "volunteer-shifts"
-      }
-    ]
+        action_id: "volunteer-shifts",
+      },
+    ],
   },
   {
     type: "actions",
@@ -29,11 +29,11 @@ module.exports = [
         type: "button",
         text: {
           type: "plain_text",
-          text: str("slackapp:home.trainedVolunteer.intakeGuideButton.text")
+          text: str("slackapp:home.trainedVolunteer.intakeGuideButton.text"),
         },
         url: str("slackapp:home.trainedVolunteer.intakeGuideButton.url"),
-        action_id: "volunteer-guide"
-      }
-    ]
-  }
+        action_id: "volunteer-guide",
+      },
+    ],
+  },
 ];

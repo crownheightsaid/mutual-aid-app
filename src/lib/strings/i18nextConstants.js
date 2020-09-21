@@ -5,7 +5,7 @@ module.exports.NAMESPACES_MAPPINGS = {
   webapp: "webapp",
   slackapp: "slackapp",
   airtable: "airtable",
-  twilio: "twilio"
+  twilio: "twilio",
 };
 
 module.exports.NAMESPACES = Object.values(module.exports.NAMESPACES_MAPPINGS);

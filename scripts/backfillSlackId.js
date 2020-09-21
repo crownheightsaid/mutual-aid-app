@@ -10,7 +10,7 @@ const { wait } = require("./utils");
   const updates = [];
   const records = await airbase("Volunteers")
     .select({
-      filterByFormula: "({volunteer_slack_id} = '')"
+      filterByFormula: "({volunteer_slack_id} = '')",
     })
     .firstPage();
 
@@ -18,7 +18,7 @@ const { wait } = require("./utils");
     console.log("Retrieved", record.id);
     try {
       const result = await slackapi.users.lookupByEmail({
-        email: record.get("volunteer_email").toLowerCase()
+        email: record.get("volunteer_email").toLowerCase(),
       });
       const slackId = result.user.id;
       console.log(`adding slack id: ${slackId}`);
@@ -26,8 +26,8 @@ const { wait } = require("./utils");
       updates.push({
         id: record.id,
         fields: {
-          volunteer_slack_id: slackId
-        }
+          volunteer_slack_id: slackId,
+        },
       });
     } catch (e) {
       console.log(`Error looking up user: ${e}`);
@@ -44,7 +44,7 @@ const { wait } = require("./utils");
       if (err) {
         console.error(`Error updating record: ${err}`);
       }
-      updatedRecords.forEach(record => {
+      updatedRecords.forEach((record) => {
         console.log(`Updated ${updated}: ${record.get("volunteer_email")}`);
         updated += 1;
       });
