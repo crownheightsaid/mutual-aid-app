@@ -1,3 +1,7 @@
+// SMS bot that lets pod members in CHMA create their own "intake" codes in Airtable
+// without needing to log into Airtable base; allows for delivery + reimbursement to
+// the same neighbors repeatedly
+
 exports.handler = function incomingSms(context, event, callback) {
   const twiml = new Twilio.twiml.MessagingResponse(); // eslint-disable-line
   const phone = event.From;
