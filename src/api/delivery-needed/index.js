@@ -205,11 +205,11 @@ exports.assignDeliveryHandler = async (req, res) => {
   try {
     const {
       [volunteersFields.phone]: deliveryPhone,
-      [volunteersFields.name]: deliveryName,
+      volunteer_name: deliveryName,
     } = deliveryVol.fields;
     const {
       [volunteersFields.phone]: intakePhone,
-      [volunteersFields.phone]: intakeName,
+      volunteer_name: intakeName,
     } = intakeVol.fields;
     await axios.post(TWILIO_SMS_DELIVERY_ENDPOINT, {
       body: {
