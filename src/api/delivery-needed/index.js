@@ -29,7 +29,7 @@ const {
   intakeVolunteer,
 } = fields;
 
-const TWILIO_SMS_DELIVERY_ENDPOINT = process.env.TWILIO_SMS_DELIVERY_ENDPOINT;
+const { TWILIO_SMS_DELIVERY_ENDPOINT } = process.env;
 
 const makeFeature = async (r) => {
   let metaJSON = {};
