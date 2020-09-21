@@ -7,15 +7,19 @@ exports.handler = function codeSms(context, event, callback) { // eslint-disable
 
   const base = Airtable.base("apppPfEXed7SRcKmB"); // staging base
   let code = event.body.requestCode;
-  const deliveryPhone = event.body.phoneNumber;
-  let deliveryName = "";
+  const deliveryPhone = event.body.deliveryPhone; // eslint-disable-line
+  let deliveryName = event.body.deliveryName; // eslint-disable-line
+  let intakePhone = event.body.intakePhone; // eslint-disable-line
+  let intakeName = event.body.intakeName; // eslint-disable-line
+  let body = JSON.stringify(event.body); // eslint-disable-line
   let missinginfo = false;
   let missingintake = false;
   code = code.toUpperCase().trim();
 
   console.log("incoming message received");
+  console.log(`delivery phone: ${deliveryPhone}`);
 
-  // below: looks up code in request Airtable, gets all important values
+  // below: looks up code in request Airtable, gets all important values about the requesting neighbor
   base("Requests")
     .select({
       view: "Grid view", // from staging base
@@ -26,6 +30,15 @@ exports.handler = function codeSms(context, event, callback) { // eslint-disable
       records.forEach(function getRecordInfo(record) {
         console.log("Retrieved", record.get("Code"));
         console.log("ID", record.id);
+        console.log(`request body: ${body}`);
+        console.log(`delivery phone: ${deliveryPhone}`);
+        console.log(`delivery name: ${deliveryName}`);
+        console.log(`intake phone: ${intakePhone}`);
+        console.log(`intake name: ${intakeName}`);
+        console.log(`missing info?: ${missinginfo}`);
+        console.log(`missing intake?: ${missingintake}`);
+        console.log(`code: ${code}`);
+
         const phone = record.get("Phone");
         let firstName = record.get("First Name");
         if (typeof firstName === "undefined") {
@@ -43,78 +56,48 @@ exports.handler = function codeSms(context, event, callback) { // eslint-disable
         if (typeof street2 === "undefined") {
           missinginfo = true;
         }
-        const volrecord = record.get("Intake volunteer");
+        if (intakePhone === " ") {
+          missingintake = true;
+        }
 
-        // looks for delivery volunteer name based on phone number
-        base("Volunteers")
-          .select({
-            view: "Grid view", // from staging base
-            maxRecords: 1,
-            filterByFormula: `({volunteer_phone} = '${deliveryPhone}')`,
+        if (intakeName === " ") {
+          intakeName = "ready to help";
+        }
+
+        let deliveryText = `Thanks for taking on this delivery for ${firstName}!\nCODE = ${code}.\n\nTheir phone is ${phone}, you will need to get in touch with them about the full address. Their cross streets are ${street1} & ${street2}.\n\n${firstName}'s grocery list is: ${list}\n\nThe intake volunteer for this request is ${intakeName}. Their phone # is ${intakePhone}, and they can help if you have any questions - they'll reach out to you to follow up and make sure the delivery goes well!`;
+
+        if (missinginfo === true) {
+          deliveryText = `Thanks for taking on this delivery for ${firstName}!\nCODE = ${code}.\n\nIt looks like some important info might be missing - please follow up with #wg_tech on Slack, or text your intake volunteer ${intakeName} at ${intakePhone} - we'll get it sorted out!`;
+        }
+
+        if (missingintake === true) {
+          deliveryText = `Thanks for taking on this delivery for ${firstName}!\nCODE = ${code}.\n\nIt looks like some important info might be missing - please follow up with #intake_volunteers on Slack - we'll get it sorted out`;
+        }
+
+        // sends SMS out to delivery volunteer
+        const twilioClient = context.getTwilioClient();
+
+        twilioClient.messages
+          .create({
+            to: deliveryPhone,
+            from: "+19175403381", // twilio number here
+            body: deliveryText,
           })
-          .firstPage(function deliveryNameSeek(derror, dnamerecords) {
-            dnamerecords.forEach(function getName(dnamerecord) {
-              console.log("Retrieved", dnamerecord.get("volunter_name"));
-              console.log("ID", dnamerecord.id);
-              deliveryName = dnamerecord.get("volunteer_name");
-              if (typeof deliveryName === "undefined") {
-                deliveryName = "a CHMA volunteer";
+          .then(function txtIntake() {
+            twilioClient.messages.create(
+              {
+                to: intakePhone,
+                from: "+19175403381", // twilio number here
+                body: `hey! The request with code ${code} for ${firstName} has been picked up by ${deliveryName}! please remember to check in with them, and make sure the request gets completed - their phone # is ${deliveryPhone}. thnx!`,
+              },
+              function finish() {
+                console.log("2 messages sent");
+                // Callback is placed inside the successful response of the 2nd message
+                callback();
               }
-            });
-          });
-
-        // below, uses linked 'Intake volunteer' record id to get phone number and name from Volunteers table
-        base("Volunteers").find(volrecord, function checkVolunteer(volerror, vrecord) { // eslint-disable-line
-          if (volerror) {
-            console.error(volerror);
-            return;
-          }
-          console.log("Retrieved", vrecord.id);
-          const intakephone = vrecord.get("volunteer_phone");
-          let intakename = vrecord.get("volunteer_name");
-
-          if (typeof intakephone === "undefined") {
-            missingintake = true;
-          }
-
-          if (typeof intakename === "undefined") {
-            intakename = "ready to help";
-          }
-
-          let deliveryText = `Thanks for taking on this delivery for ${firstName}!\nCODE = ${code}.\n\nTheir phone is ${phone}, you will need to get in touch with them about the full address. Their cross streets are ${street1} & ${street2}.\n\n${firstName}'s grocery list is: ${list}\n\nThe intake volunteer for this request is ${intakename}. Their phone # is ${intakephone}, and they can help if you have any questions - they'll reach out to you to follow up and make sure the delivery goes well!`;
-
-          if (missinginfo === true) {
-            deliveryText = `Thanks for taking on this delivery for ${firstName}!\nCODE = ${code}.\n\nIt looks like some important info might be missing - please follow up with #wg_tech on Slack, or text your intake volunteer ${intakename} at ${intakephone} - we'll get it sorted out!`;
-          }
-
-          if (missingintake === true) {
-            deliveryText = `Thanks for taking on this delivery for ${firstName}!\nCODE = ${code}.\n\nIt looks like some important info might be missing - please follow up with #intake_volunteers on Slack - we'll get it sorted out`;
-          }
-
-          // sends SMS out to delivery volunteer
-          const twilioClient = context.getTwilioClient();
-
-          twilioClient.messages
-            .create({
-              to: deliveryPhone,
-              from: "+19175403381", // twilio number here
-              body: deliveryText,
-            })
-            .then(function txtIntake() {
-              twilioClient.messages.create(
-                {
-                  to: intakephone,
-                  from: "+19175403381", // twilio number here
-                  body: `hey! The request with code ${code} for ${firstName} has been picked up by ${deliveryName}! please remember to check in with them, and make sure the request gets completed - their phone # is ${deliveryPhone}. thnx!`,
-                },
-                function finish() {
-                  console.log("2 messages sent");
-                  // Callback is placed inside the successful response of the 2nd message
-                  callback();
-                }
-              ); // end twilio create message
-            }); // end textIntake
-        }); // end checkVolunteer
+            ); // end twilio create message
+          }); // end textIntake
+        //  }); // end checkVolunteer
       }); // end getRecordInfo
     }); // end seekRecords
 };
