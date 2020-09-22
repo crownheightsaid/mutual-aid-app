@@ -1,6 +1,6 @@
 const { merge } = require("lodash");
 const _ = require("lodash");
-const { airbase } = require("~airtable/bases");
+const { airbase } = require("../bases");
 
 const requestNotInSlack = (r) => {
   const meta = r.get(fields.meta);
