@@ -125,7 +125,7 @@ const ClusterMapLayers = ({ data, paramRequest, sourceId, color }) => {
             filter={["!", ["has", "point_count"]]}
             paint={{
               "circle-color": ["step",
-                ["get", "meta.daysOpen"], // input value
+                ["get", "daysOpen"], // input value
                 "green", // output 0
                 3, "orange", // input 1, output 1
                 5, "red", // input 2, output 2

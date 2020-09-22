@@ -12,6 +12,7 @@ import { QuadrantsLayers } from "./QuadrantMap";
 import ClusterMapLayers from "./ClusterMapLayers";
 import { RequestNotFoundAlert, NoRequestsAlert } from "./MapAlerts";
 import getRequestParam from "../helpers/getRequestParam";
+import { daysSinceSlackMessage } from "../helpers/time"
 
 const makeBounds = (features) => {
   const lnglats = features.map((f) => {
@@ -27,6 +28,14 @@ const makeBounds = (features) => {
   return bounds;
 };
 
+const addDaysOpen = feature => ({
+  ...feature,
+  properties: {
+    ...feature.properties,
+    daysOpen: daysSinceSlackMessage(feature.properties.meta.timestamp)
+  }
+})
+
 const ClusterMap = ({
   showDrivingRequests,
   showRegularRequests,
@@ -37,6 +46,9 @@ const ClusterMap = ({
 
   let paramRequest;
   const { requests, drivingClusterRequests } = geoJsonData;
+  requests.features = requests.features.map(addDaysOpen) 
+  drivingClusterRequests.features = drivingClusterRequests.features.map(addDaysOpen) 
+
   const { features: reqFeatures } = requests;
   const { features: clusterFeatures } = drivingClusterRequests;
 
