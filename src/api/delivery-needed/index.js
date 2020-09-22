@@ -84,7 +84,6 @@ const makeFeature = async (r) => {
         slackPermalink: slackPermalink.ok ? slackPermalink.permalink : "",
         timestamp,
         slackTs: metaJSON.slack_ts || "",
-        daysOpen: 3, // Intend to use something like daysSinceSlackMessage(metaJ.slackTs || 0)
       },
     },
   };
