@@ -15,6 +15,7 @@ import { daysSinceSlackMessage } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
 import HouseholdSizeChip from "./HouseholdSizeChip";
 import DrivingClusterChip from "./DrivingClusterChip";
+import ClaimDeliveryButton from "./ClaimDeliveryButton";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -75,6 +76,7 @@ const DeliveryTable = ({ rows }) => {
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
+            <TableCell>{/* column for claim delivery btn */}</TableCell>
             <TableCell>
               {str("webapp:deliveryNeeded.table.headers.daysOpen", {
                 defaultValue: "Days open",
@@ -102,6 +104,9 @@ const DeliveryTable = ({ rows }) => {
               onClick={() => setFocusedRequestId(row.Code)}
             >
               <TableCell>
+                <ClaimDeliveryButton requestCode={row.Code} />
+              </TableCell>
+              <TableCell>
                 <DaysOpenChip
                   timeOnly
                   daysOpen={daysSinceSlackMessage(row.slackTs)}
@@ -115,13 +120,16 @@ const DeliveryTable = ({ rows }) => {
                 </Box>
               </TableCell>
               <TableCell component="th" scope="row">
+                {row.Code}
+                <br />
                 <Link
                   href={row.slackPermalink}
                   target="_blank"
                   underline="always"
                   rel="noopener noreferrer"
                 >
-                  {row.Code}
+                  {" "}
+                  Slack link
                 </Link>
               </TableCell>
               <TableCell>{`${row["Cross Street #1"]} and ${row["Cross Street #2"]}`}</TableCell>

@@ -12,13 +12,14 @@ const airtablePaymentsWorker = require("./src/workers/airtable-sync/paymentWorke
 const { nycmaIntakeHandler } = require("./src/api/authed/intake/manyc.js");
 const { nycmaOuttakeHandler } = require("./src/api/authed/outtake/manyc.js");
 const {
-  addressHandler
+  addressHandler,
 } = require("./src/api/neighborhood-finder/get-address-meta.js");
 const {
-  neighborhoodFinderUpdateRequestHandler
+  neighborhoodFinderUpdateRequestHandler,
 } = require("./src/api/neighborhood-finder/update-request.js");
 const {
-  deliveryNeededRequestHandler
+  deliveryNeededRequestHandler,
+  assignDeliveryHandler,
 } = require("./src/api/delivery-needed/index.js");
 
 /* eslint-disable global-require  */
@@ -70,6 +71,13 @@ app.post(
 );
 
 app.get("/api/delivery-needed/requests.json", deliveryNeededRequestHandler);
+if (!process.env.TWILIO_SMS_DELIVERY_ENDPOINT) {
+  console.warn(
+    "TWILIO_SMS_DELIVERY_ENDPOINT env var missing. Assigning deliveries via SMS will not work."
+  );
+}
+
+app.post("/api/delivery-needed/assign", assignDeliveryHandler);
 
 // ==================================================================
 // API Routes (w/ Basic Auth)
@@ -78,7 +86,7 @@ app.get("/api/delivery-needed/requests.json", deliveryNeededRequestHandler);
 if (process.env.BASIC_AUTH_USERS) {
   const allUsers = {};
   const userPass = process.env.BASIC_AUTH_USERS.split(";");
-  userPass.forEach(pair => {
+  userPass.forEach((pair) => {
     const [user, pass] = pair.split(":");
     allUsers[user] = pass;
   });
@@ -86,7 +94,7 @@ if (process.env.BASIC_AUTH_USERS) {
   app.use(
     "/api/authed/*",
     basicAuth({
-      users: allUsers
+      users: allUsers,
     })
   );
   app.post("/api/authed/intake/nycma", nycmaIntakeHandler);
