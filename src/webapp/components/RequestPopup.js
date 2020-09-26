@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(0.5),
       marginTop: theme.spacing(2),
     },
-  }
+  },
 }));
 
 const RequestPopup = ({ requests, closePopup }) => {
@@ -113,9 +113,7 @@ const RequestPopup = ({ requests, closePopup }) => {
           </Box>
 
           <Box>
-            <ClaimDeliveryButton
-              requestCode={meta.Code}
-            />
+            <ClaimDeliveryButton requestCode={meta.Code} />
           </Box>
 
           {i !== requests.length - 1 && <Divider className={classes.divider} />}
