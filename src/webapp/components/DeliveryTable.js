@@ -22,8 +22,6 @@ const TableHeadRow = () => {
   return (
     <TableRow>
       <TableCell />
-      {/* empty head cell for claim delivery button */}
-      <TableCell /> 
       <TableCell>
         {str("webapp:deliveryNeeded.table.headers.daysOpen", {
           defaultValue: "Days open",

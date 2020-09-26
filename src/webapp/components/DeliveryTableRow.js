@@ -60,9 +60,6 @@ const DeliveryTableRow = (props) => {
         onClick={() => handleRowClick(row)}
       >
         <TableCell>
-          <ClaimDeliveryButton requestCode={row.Code} />
-        </TableCell>
-        <TableCell>
           <Tooltip
             title={row.isFocused ? "Hide Description" : "Show Description"}
             placement="top"
@@ -123,6 +120,9 @@ const DeliveryTableRow = (props) => {
               <div className={classes.expandableRow}>
                 {row["Intake General Notes"] || "N/A"}
               </div>
+            </Box>
+            <Box margin={1} marginBottom={2}>
+              <ClaimDeliveryButton requestCode={row.Code} />
             </Box>
           </Collapse>
         </TableCell>

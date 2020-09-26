@@ -11,13 +11,10 @@ const {
 } = require("~airtable/tables/volunteers");
 const { fetchCoordFromCrossStreets } = require("./fetchCoordFromCrossStreets");
 const slackapi = require("~slack/webApi");
-<<<<<<< HEAD
 const { updateRequestByCode } = require("~airtable/tables/requests");
-=======
 const {
   getDeliveryRequestNeedFormatted,
 } = require("~airtable/deliveryrequests/getDeliveryRequestNeedFormatted");
->>>>>>> master
 
 const {
   code,
@@ -28,17 +25,14 @@ const {
   firstName,
   forDrivingClusters,
   householdSize,
-<<<<<<< HEAD
   status,
   deliveryVolunteer,
   // eslint-disable-next-line camelcase
   status_options,
   intakeVolunteer,
-=======
   timeSensitivity,
   intakeNotes,
   supportType,
->>>>>>> master
 } = fields;
 
 const { TWILIO_SMS_DELIVERY_ENDPOINT } = process.env;
