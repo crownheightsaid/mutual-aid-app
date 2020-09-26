@@ -6,40 +6,52 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
-import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
-import DaysOpenChip from "./DaysOpenChip";
-import { daysSinceSlackMessage } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
-import HouseholdSizeChip from "./HouseholdSizeChip";
-import DrivingClusterChip from "./DrivingClusterChip";
-import ClaimDeliveryButton from "./ClaimDeliveryButton";
+import DeliveryTableRow from "./DeliveryTableRow";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
     maxHeight: "90vh",
   },
-  focused: {
-    background: theme.palette.grey[100],
-  },
-  chipRow: {
-    display: "block",
-    marginTop: theme.spacing(2),
-    "& > *": {
-      marginRight: theme.spacing(0.5),
-      marginBottom: theme.spacing(0.5),
-    },
-  },
 }));
 
-const DeliveryTable = ({ rows }) => {
+const TableHeadRow = () => {
   const { t: str } = useTranslation();
-  const classes = useStyles();
-  const { focusedRequestId, setFocusedRequestId } = useContext(
-    ClusterMapContext
+  return (
+    <TableRow>
+      <TableCell />
+      {/* empty head cell for claim delivery button */}
+      <TableCell /> 
+      <TableCell>
+        {str("webapp:deliveryNeeded.table.headers.daysOpen", {
+          defaultValue: "Days open",
+        })}
+      </TableCell>
+      <TableCell>
+        {str("webapp:deliveryNeeded.table.headers.timeSensitivity", {
+          defaultValue: "Time Sensitivity",
+        })}
+      </TableCell>
+      <TableCell>
+        {str("webapp:deliveryNeeded.table.headers.neighbor", {
+          defaultValue: "Neighbor",
+        })}
+      </TableCell>
+      <TableCell>{str("webapp:zoneFinder.label.code")}</TableCell>
+      <TableCell>
+        {str("webapp:deliveryNeeded.table.headers.crossStreets", {
+          defaultValue: "Cross streets",
+        })}
+      </TableCell>
+    </TableRow>
   );
+};
+
+const DeliveryTable = ({ rows }) => {
+  const classes = useStyles();
+  const { focusedRequestId } = useContext(ClusterMapContext);
 
   useEffect(() => {
     // scroll to focused row
@@ -75,65 +87,11 @@ const DeliveryTable = ({ rows }) => {
     >
       <Table aria-label="simple table">
         <TableHead>
-          <TableRow>
-            <TableCell>{/* column for claim delivery btn */}</TableCell>
-            <TableCell>
-              {str("webapp:deliveryNeeded.table.headers.daysOpen", {
-                defaultValue: "Days open",
-              })}
-            </TableCell>
-            <TableCell>
-              {str("webapp:deliveryNeeded.table.headers.neighbor", {
-                defaultValue: "Neighbor",
-              })}
-            </TableCell>
-            <TableCell>{str("webapp:zoneFinder.label.code")}</TableCell>
-            <TableCell>
-              {str("webapp:deliveryNeeded.table.headers.crossStreets", {
-                defaultValue: "Cross streets",
-              })}
-            </TableCell>
-          </TableRow>
+          <TableHeadRow />
         </TableHead>
         <TableBody>
           {formattedRows.map((row) => (
-            <TableRow
-              id={row.Code}
-              key={row.Code}
-              className={row.isFocused ? classes.focused : ""}
-              onClick={() => setFocusedRequestId(row.Code)}
-            >
-              <TableCell>
-                <ClaimDeliveryButton requestCode={row.Code} />
-              </TableCell>
-              <TableCell>
-                <DaysOpenChip
-                  timeOnly
-                  daysOpen={daysSinceSlackMessage(row.slackTs)}
-                />
-              </TableCell>
-              <TableCell>
-                {row["First Name"]}
-                <Box className={classes.chipRow}>
-                  {row["For Driving Clusters"] && <DrivingClusterChip />}
-                  <HouseholdSizeChip size={row["Household Size"]} />
-                </Box>
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {row.Code}
-                <br />
-                <Link
-                  href={row.slackPermalink}
-                  target="_blank"
-                  underline="always"
-                  rel="noopener noreferrer"
-                >
-                  {" "}
-                  Slack link
-                </Link>
-              </TableCell>
-              <TableCell>{`${row["Cross Street #1"]} and ${row["Cross Street #2"]}`}</TableCell>
-            </TableRow>
+            <DeliveryTableRow row={row} key={row.code} />
           ))}
         </TableBody>
       </Table>

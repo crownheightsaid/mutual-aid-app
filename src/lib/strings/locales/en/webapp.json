@@ -22,7 +22,8 @@
     "message": {
       "info": "Enter an address and we will look up cross streets and the neighborhood.",
       "help": "For best results, enter street and town (Ex: 1550 dean st brooklyn)",
-      "privacy": "The address will not be stored or logged :)"
+      "privacy": "The address will not be stored or logged :)",
+      "reminder": "Reminder: the boundaries on this map show a defined delivery area, per our Delivery Area proposal that passed 7/25. CHMA cannot make any deliveries outside of this area, no exceptions."
     },
     "label": {
       "crossStreetFirst": "Cross Street #1",
@@ -73,8 +74,11 @@
     "table": {
       "headers": {
         "daysOpen": "Days open",
+        "timeSensitivity": "Time Sensitivity",
         "neighbor": "Neighbor",
-        "crossStreets": "Cross streets"
+        "need": "Need",
+        "crossStreets": "Cross streets",
+        "description": "Description"
       }
     }
   }

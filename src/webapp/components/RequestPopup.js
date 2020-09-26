@@ -74,7 +74,7 @@ const RequestPopup = ({ requests, closePopup }) => {
                 underline="always"
                 target="_blank"
               >
-                {meta["First Name"]}
+                {meta["First Name"] || ""}
               </Link>
             ) : (
               meta["First Name"]
