@@ -331,24 +331,26 @@ describe("findRequestByPhone", () => {
   beforeAll(async () => {
     await findRequestByPhone(phone);
   });
-  
+
   test("it sends a select request", () => {
     expect(mockSelectFn).toHaveBeenCalledWith({
       maxRecords: 1,
       fields: [fields.phone],
-      filterByFormula: `({${fields.phone}} = '${phone}')`
+      filterByFormula: `({${fields.phone}} = '${phone}')`,
     });
   });
 });
 
 describe("updateRequestByCode", () => {
-  let code, update, result;
-  
+  let code;
+  let update;
+  let result;
+
   describe("when the requested code is shorter than 4 characters", () => {
     beforeAll(async () => {
       code = "123";
       update = {};
-      
+
       result = await updateRequestByCode(code, update);
     });
 
@@ -363,7 +365,7 @@ describe("updateRequestByCode", () => {
       code = "1234";
       update = {};
 
-      mockSelectFn.mockReturnValue({firstPage: () => []});
+      mockSelectFn.mockReturnValue({ firstPage: () => [] });
 
       result = await updateRequestByCode(code, update);
     });
@@ -375,62 +377,67 @@ describe("updateRequestByCode", () => {
   });
 
   describe("when updating a normal field", () => {
-    const recordId = "15";
-   
+    let recordId;
+
     beforeAll(async () => {
+      recordId = 15;
       code = "1234";
-      update = {[fields.type]: [fields.type_options.text]}
+      update = { [fields.type]: [fields.type_options.text] };
 
       mockSelectFn.mockReturnValue({
-	firstPage: () => [new Record(tableName, recordId)]
+        firstPage: () => [new Record(tableName, recordId)],
       });
-      
+
       result = await updateRequestByCode(code, update);
     });
 
     test("it sends an update request", () => {
-      expect(mockUpdateFn).toHaveBeenCalledWith([{
-	id: recordId,
-	fields: update
-      }]);
+      expect(mockUpdateFn).toHaveBeenCalledWith([
+        {
+          id: recordId,
+          fields: update,
+        },
+      ]);
     });
 
     describe("when updating meta", () => {
-      const recordId = "16";
-
       beforeAll(async () => {
-	code = "5678";
-	update = {
-	  [fields.meta]: {
-	    key1: "value1",
-	    key2: "value2"
-	  }
-	};
+        recordId = "16";
+        code = "5678";
+        update = {
+          [fields.meta]: {
+            key1: "value1",
+            key2: "value2",
+          },
+        };
 
-	mockSelectFn.mockReturnValue({
-	  firstPage: () => [new Record(tableName, recordId, {
-	    fields: {
-	      [fields.meta]: JSON.stringify({
-		key0: "value0",
-		key1: "oldValue"
-	      })
-	    }
-	  })]
-	});
+        mockSelectFn.mockReturnValue({
+          firstPage: () => [
+            new Record(tableName, recordId, {
+              fields: {
+                [fields.meta]: JSON.stringify({
+                  key0: "value0",
+                  key1: "oldValue",
+                }),
+              },
+            }),
+          ],
+        });
 
-	mockUpdateFn.mockClear();
-	mockUpdateFn.mockReturnValue([new Record(tableName, recordId)]);
+        mockUpdateFn.mockClear();
+        mockUpdateFn.mockReturnValue([new Record(tableName, recordId)]);
 
-	result = await updateRequestByCode(code, update);
+        result = await updateRequestByCode(code, update);
       });
 
       test("it merges the meta object", () => {
+        const meta = JSON.parse(
+          mockUpdateFn.mock.calls[0][0][0].fields[fields.meta]
+        );
 
-	const meta = JSON.parse(mockUpdateFn.mock.calls[0][0][0].fields[fields.meta]);
-
-	expect(meta.key0).toEqual("value0");
-	expect(meta.key1).toEqual("value1");
-	expect(meta.key2).toEqual("value2");
+        expect(meta.key0).toEqual("value0");
+        expect(meta.key1).toEqual("value1");
+        expect(meta.key2).toEqual("value2");
       });
     });
   });
@@ -439,36 +446,38 @@ describe("updateRequestByCode", () => {
     const slackTs = "timestamp";
     const slackChannel = "channel";
     const recordId = "75";
-    
+
     beforeAll(async () => {
       const meta = JSON.stringify({
-	slack_ts: "timestamp",
-	slack_channel: "channel",
-	otherKey: "otherValue",
+        slack_ts: "timestamp",
+        slack_channel: "channel",
+        otherKey: "otherValue",
       });
-      
+
       const record = new Record(tableName, recordId, {
-	fields: {
-	  [fields.meta]: meta
-	}
+        fields: {
+          [fields.meta]: meta,
+        },
       });
-      
+
       mockSelectFn.mockReturnValue({
-	eachPage: (callback) => {
-	  callback([record], () => undefined)
-	}
+        eachPage: (callback) => {
+          callback([record], () => undefined);
+        },
       });
-	      
+
       await unlinkSlackMessage(slackTs, slackChannel);
     });
 
     test("it removes the slack timestamp and channel from the metadata", () => {
-      expect(mockUpdateFn).toHaveBeenCalledWith([{
-	id: recordId,
-	fields: {
-	  [fields.meta]: JSON.stringify({otherKey: "otherValue"})
-	}
-      }]);
+      expect(mockUpdateFn).toHaveBeenCalledWith([
+        {
+          id: recordId,
+          fields: {
+            [fields.meta]: JSON.stringify({ otherKey: "otherValue" }),
+          },
+        },
+      ]);
     });
   });
 });
