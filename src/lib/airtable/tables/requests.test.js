@@ -22,6 +22,7 @@ const {
   findRequestByCode,
   findRequestByPhone,
   updateRequestByCode,
+  unlinkSlackMessage,
 } = require("./requests.js");
 const { fields, tableName } = require("./requestsSchema.js");
 
@@ -431,6 +432,43 @@ describe("updateRequestByCode", () => {
 	expect(meta.key1).toEqual("value1");
 	expect(meta.key2).toEqual("value2");
       });
+    });
+  });
+
+  describe("unlinkSlackMessage", () => {
+    const slackTs = "timestamp";
+    const slackChannel = "channel";
+    const recordId = "75";
+    
+    beforeAll(async () => {
+      const meta = JSON.stringify({
+	slack_ts: "timestamp",
+	slack_channel: "channel",
+	otherKey: "otherValue",
+      });
+      
+      const record = new Record(tableName, recordId, {
+	fields: {
+	  [fields.meta]: meta
+	}
+      });
+      
+      mockSelectFn.mockReturnValue({
+	eachPage: (callback) => {
+	  callback([record], () => undefined)
+	}
+      });
+	      
+      await unlinkSlackMessage(slackTs, slackChannel);
+    });
+
+    test("it removes the slack timestamp and channel from the metadata", () => {
+      expect(mockUpdateFn).toHaveBeenCalledWith([{
+	id: recordId,
+	fields: {
+	  [fields.meta]: JSON.stringify({otherKey: "otherValue"})
+	}
+      }]);
     });
   });
 });
