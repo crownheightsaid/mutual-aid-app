@@ -1,12 +1,14 @@
 const mockDestroyFn = jest.fn();
 const mockCreateFn = jest.fn();
 const mockSelectFn = jest.fn();
+const mockUpdateFn = jest.fn();
 
 jest.mock("~airtable/bases", () => ({
   airbase: () => ({
     destroy: mockDestroyFn,
     create: mockCreateFn,
     select: mockSelectFn,
+    update: mockUpdateFn,
   }),
 }));
 
@@ -18,6 +20,8 @@ const {
   findDeliveryNeededRequests,
   findOpenRequestsForSlack,
   findRequestByCode,
+  findRequestByPhone,
+  updateRequestByCode,
 } = require("./requests.js");
 const { fields, tableName } = require("./requestsSchema.js");
 
@@ -316,6 +320,116 @@ describe("findRequestByCode", () => {
       test("it returns the record", () => {
         expect(result[0]).toEqual("something");
         expect(result[1]).toEqual(null);
+      });
+    });
+  });
+});
+
+describe("findRequestByPhone", () => {
+  const phone = "1235550987";
+  beforeAll(async () => {
+    await findRequestByPhone(phone);
+  });
+  
+  test("it sends a select request", () => {
+    expect(mockSelectFn).toHaveBeenCalledWith({
+      maxRecords: 1,
+      fields: [fields.phone],
+      filterByFormula: `({${fields.phone}} = '${phone}')`
+    });
+  });
+});
+
+describe("updateRequestByCode", () => {
+  let code, update, result;
+  
+  describe("when the requested code is shorter than 4 characters", () => {
+    beforeAll(async () => {
+      code = "123";
+      update = {};
+      
+      result = await updateRequestByCode(code, update);
+    });
+
+    test("it returns an error message", () => {
+      expect(result[0]).toEqual(null);
+      expect(result[1]).toEqual("Request code must be at least 4 characters.");
+    });
+  });
+
+  describe("when the requested code does not exist", () => {
+    beforeAll(async () => {
+      code = "1234";
+      update = {};
+
+      mockSelectFn.mockReturnValue({firstPage: () => []});
+
+      result = await updateRequestByCode(code, update);
+    });
+
+    test("it returns an error message", () => {
+      expect(result[0]).toEqual(null);
+      expect(result[1]).toEqual(`No requests found with code: ${code}`);
+    });
+  });
+
+  describe("when updating a normal field", () => {
+    const recordId = "15";
+   
+    beforeAll(async () => {
+      code = "1234";
+      update = {[fields.type]: [fields.type_options.text]}
+
+      mockSelectFn.mockReturnValue({
+	firstPage: () => [new Record(tableName, recordId)]
+      });
+      
+      result = await updateRequestByCode(code, update);
+    });
+
+    test("it sends an update request", () => {
+      expect(mockUpdateFn).toHaveBeenCalledWith([{
+	id: recordId,
+	fields: update
+      }]);
+    });
+
+    describe("when updating meta", () => {
+      const recordId = "16";
+
+      beforeAll(async () => {
+	code = "5678";
+	update = {
+	  [fields.meta]: {
+	    key1: "value1",
+	    key2: "value2"
+	  }
+	};
+
+	mockSelectFn.mockReturnValue({
+	  firstPage: () => [new Record(tableName, recordId, {
+	    fields: {
+	      [fields.meta]: JSON.stringify({
+		key0: "value0",
+		key1: "oldValue"
+	      })
+	    }
+	  })]
+	});
+
+	mockUpdateFn.mockClear();
+	mockUpdateFn.mockReturnValue([new Record(tableName, recordId)]);
+
+	result = await updateRequestByCode(code, update);
+      });
+
+      test("it merges the meta object", () => {
+
+	const meta = JSON.parse(mockUpdateFn.mock.calls[0][0][0].fields[fields.meta]);
+
+	expect(meta.key0).toEqual("value0");
+	expect(meta.key1).toEqual("value1");
+	expect(meta.key2).toEqual("value2");
       });
     });
   });
