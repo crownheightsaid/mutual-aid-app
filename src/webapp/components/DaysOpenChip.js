@@ -1,31 +1,15 @@
 import React from "react";
 import Chip from "@material-ui/core/Chip";
 import { makeStyles } from "@material-ui/core/styles";
+import { getUrgencyLevel, urgencyStyles } from "../helpers/map-urgency";
 
-const useStyles = makeStyles({
-  recent: {
-    backgroundColor: "green",
-  },
-  moderate: {
-    backgroundColor: "orange",
-  },
-  urgent: {
-    backgroundColor: "red",
-  },
-});
+const useStyles = makeStyles(urgencyStyles);
 
 const DaysOpenChip = ({ daysOpen, timeOnly }) => {
   const classes = useStyles();
 
-  let chipColor;
-
-  if (daysOpen < 3) {
-    chipColor = classes.recent;
-  } else if (daysOpen < 5) {
-    chipColor = classes.moderate;
-  } else {
-    chipColor = classes.urgent;
-  }
+  const urgencyLevel = getUrgencyLevel(daysOpen);
+  const chipColor = classes[urgencyLevel];
 
   const time = daysOpen <= 0 ? `<1 day` : `${daysOpen} day(s)`;
   const label = timeOnly ? time : `open for ${time}`;

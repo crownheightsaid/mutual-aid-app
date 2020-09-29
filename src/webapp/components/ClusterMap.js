@@ -3,6 +3,7 @@ import { Source } from "react-mapbox-gl";
 import { LngLat } from "mapbox-gl";
 import { findBounds } from "webapp/helpers/mapbox-coordinates";
 
+import { getUrgencyStyles } from "webapp/helpers/map-urgency";
 import {
   CROWN_HEIGHTS_BOUNDS,
   CROWN_HEIGHTS_CENTER_COORD,
@@ -28,13 +29,19 @@ const makeBounds = (features) => {
   return bounds;
 };
 
-const addDaysOpen = (feature) => ({
-  ...feature,
-  properties: {
-    ...feature.properties,
-    daysOpen: daysSinceSlackMessage(feature.properties.meta.timestamp),
-  },
-});
+const addDaysOpen = (feature) => {
+  const styles = getUrgencyStyles(
+    daysSinceSlackMessage(feature.properties.meta.timestamp)
+  );
+  const markerColor = styles.backgroundColor;
+  return {
+    ...feature,
+    properties: {
+      ...feature.properties,
+      markerColor,
+    },
+  };
+};
 
 const ClusterMap = ({
   showDrivingRequests,

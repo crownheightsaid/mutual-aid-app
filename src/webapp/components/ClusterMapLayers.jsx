@@ -123,14 +123,7 @@ const ClusterMapLayers = ({ data, paramRequest, sourceId, color }) => {
             type="circle"
             sourceId={sourceId}
             filter={["!", ["has", "point_count"]]}
-            paint={{
-              "circle-color": ["step",
-                ["get", "daysOpen"], // input value
-                "green", // output 0
-                3, "orange", // input 1, output 1
-                5, "red", // input 2, output 2
-              ],
-            }}
+            paint={{"circle-color": ["get", "markerColor"]}}
             onClick={(e) => {
               setPopup(makePopupData(e.features, e.lngLat));
 
