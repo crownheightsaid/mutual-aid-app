@@ -24,7 +24,7 @@ const mappings = {
 module.exports = async function updateMessageContent(record) {
   /* eslint dot-notation: ["error", { "allowPattern": "^[a-z]+(_[a-z]+)+$" }] */
   const meta = record.getMeta();
-  if (!meta["slack_ts"]) {
+  if (!requestFields.slackTimestamp) {
     return;
   }
   const existingMessage = await getExistingMessage(
@@ -69,8 +69,8 @@ module.exports = async function updateMessageContent(record) {
   }
 
   await slackapi.chat.update({
-    channel: meta["slack_channel"],
-    ts: meta["slack_ts"],
+    channel: requestFields.slackChannel,
+    ts: requestFields.slackTimestamp,
     text: newContent,
   });
 };

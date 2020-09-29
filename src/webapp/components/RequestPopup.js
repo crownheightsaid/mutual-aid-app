@@ -12,6 +12,7 @@ import HouseholdSizeChip from "./HouseholdSizeChip";
 import DrivingClusterChip from "./DrivingClusterChip";
 import { daysSinceSlackMessage } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
+import { fields } from "../../lib/airtable/tables/requests";
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -70,17 +71,17 @@ const RequestPopup = ({ requests, closePopup }) => {
                 underline="always"
                 target="_blank"
               >
-                {meta["First Name"] || ""}
+                {meta[fields.firstName] || ""}
               </Link>
             ) : (
-              meta["First Name"]
+              meta[fields.firstName]
             )}
           </Typography>
 
           <Typography variant="body1">
-            {meta["Cross Street #1"]}
+            {meta[fields.crossStreetFirst]}
             {" and "}
-            {meta["Cross Street #2"]}
+            {meta[fields.crossStreetSecond]}
           </Typography>
 
           <Typography variant="body2">
@@ -91,9 +92,9 @@ const RequestPopup = ({ requests, closePopup }) => {
           </Typography>
 
           <Box className={classes.chipRow}>
-            <HouseholdSizeChip size={meta["Household Size"]} />
+            <HouseholdSizeChip size={meta[fields.householdSize]} />
 
-            {meta["For Driving Clusters"] && <DrivingClusterChip />}
+            {meta[fields.forDrivingClusters] && <DrivingClusterChip />}
 
             {meta.slackPermalink ? (
               <DaysOpenChip daysOpen={daysSinceSlackMessage(meta.slackTs)} />

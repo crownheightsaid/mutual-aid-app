@@ -1,6 +1,6 @@
 const { merge } = require("lodash");
 const _ = require("lodash");
-const { airbase } = require("~airtable/bases");
+const { airbase } = require("../bases");
 
 const requestNotInSlack = (r) => {
   const meta = r.get(fields.meta);
@@ -322,6 +322,8 @@ const fields = (exports.fields = {
   neighborhood: "Neighborhood MA-NYC",
   householdSize: "Household Size",
   forDrivingClusters: "For Driving Clusters",
+  slackChannel: "slack_channel",
+  slackTimestamp: "slack_ts",
 });
 exports.SENSITIVE_FIELDS = [
   fields.phone,
