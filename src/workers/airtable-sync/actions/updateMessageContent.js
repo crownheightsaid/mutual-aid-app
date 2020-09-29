@@ -2,6 +2,7 @@ const slackapi = require("~slack/webApi");
 const { getExistingMessage } = require("~slack/channels");
 const { fields: requestFields } = require("~airtable/tables/requests");
 const { str } = require("~strings/i18nextWrappers");
+const { fields } = require("lib/airtable/tables/donorPaymentsSchema");
 
 const mappings = {
   [requestFields.status_options.deliveryAssigned]: str(
@@ -24,7 +25,7 @@ const mappings = {
 module.exports = async function updateMessageContent(record) {
   /* eslint dot-notation: ["error", { "allowPattern": "^[a-z]+(_[a-z]+)+$" }] */
   const meta = record.getMeta();
-  if (!meta["slack_ts"]) {
+  if (!requestFields.slackTimestamp) {
     return;
   }
   const existingMessage = await getExistingMessage(
@@ -69,8 +70,8 @@ module.exports = async function updateMessageContent(record) {
   }
 
   await slackapi.chat.update({
-    channel: meta["slack_channel"],
-    ts: meta["slack_ts"],
+    channel: requestFields.slackChannel,
+    ts: requestFields.slackTimestamp,
     text: newContent,
   });
 };

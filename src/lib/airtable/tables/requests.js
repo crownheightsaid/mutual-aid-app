@@ -322,6 +322,8 @@ const fields = (exports.fields = {
   neighborhood: "Neighborhood MA-NYC",
   householdSize: "Household Size",
   forDrivingClusters: "For Driving Clusters",
+  slackChannel: "slack_channel",
+  slackTimestamp: "slack_ts",
 });
 exports.SENSITIVE_FIELDS = [
   fields.phone,
