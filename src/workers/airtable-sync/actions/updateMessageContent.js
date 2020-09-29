@@ -2,7 +2,6 @@ const slackapi = require("~slack/webApi");
 const { getExistingMessage } = require("~slack/channels");
 const { fields: requestFields } = require("~airtable/tables/requests");
 const { str } = require("~strings/i18nextWrappers");
-const { fields } = require("lib/airtable/tables/donorPaymentsSchema");
 
 const mappings = {
   [requestFields.status_options.deliveryAssigned]: str(
