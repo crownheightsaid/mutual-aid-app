@@ -112,7 +112,7 @@ const RequestPopup = ({ requests, closePopup }) => {
             )}
           </Box>
 
-          <Box>
+          <Box mt={1}>
             <ClaimDeliveryButton requestCode={meta.Code} />
           </Box>
 
