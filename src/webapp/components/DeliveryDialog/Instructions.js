@@ -9,7 +9,7 @@ const Subtitle = ({ content }) => (
 
 const Paragraph = ({ content }) => (
   <Typography variant="body2">
-    <p>{content}</p>
+    <p dangerouslySetInnerHTML={{ __html: content }} />
   </Typography>
 );
 
