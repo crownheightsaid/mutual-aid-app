@@ -9,6 +9,10 @@ const Subtitle = ({ content }) => (
 
 const Paragraph = ({ content }) => (
   <Typography variant="body2">
+    {/* We need to allow this so we can render link components. 
+      The content here will only come from within this repo and not user-entered 
+      or external sources, so we should be safe */}
+    {/* eslint-disable-next-line react/no-danger */}
     <p dangerouslySetInnerHTML={{ __html: content }} />
   </Typography>
 );
