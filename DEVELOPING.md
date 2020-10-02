@@ -50,7 +50,6 @@ This project is a monorepo. The different apps and directories are:
 
 Each directory has it's own `DEVELOPING.md` for developing locally. You can also look at `scripts` in `package.json` to get an idea of how to run each app.
 
-
 The rest of this file is for app-wide setup for contributing, as well as deploying to non-local environments.
 _____________
 

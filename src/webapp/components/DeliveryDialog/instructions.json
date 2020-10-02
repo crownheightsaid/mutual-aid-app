@@ -1,0 +1,96 @@
+[
+  {
+    "typename": "subtitle1",
+    "content": "1. Reach out to the person requesting aid"
+  },
+  {
+    "typename": "p",
+    "content": "After you confirm that you’re taking on a delivery, we’ll send you a text with all the details about your neighbor’s request.  This will include their phone number, and you should start by  giving them a call (with your own phone or with something like <a target=\"_blank\" href=\"https://www.burnerapp.com\">Burner App</a> or <a target=\"_blank\" href=\"https://voice.google.com/u/0/about\">Google Voice</a>) to set up a time to make the delivery, usually in the next 1-2 days. Introduce yourself with your name and tell them you are with Crown Heights Mutual Aid."
+  },
+  {
+    "typename": "p",
+    "content": "While you have them on the phone, make sure to double-check:"
+  },
+  {
+    "typename": "ul",
+    "content": [
+      {
+        "typename": "li",
+        "content": "When is a good delivery time?"
+      },
+      {
+        "typename": "li",
+        "content": "What is their specific address, apartment number, and what’s a good way to reach them once you arrive (call, ring the bell, etc.)?"
+      },
+      {
+        "typename": "li",
+        "content": "Confirm that the grocery list sounds right, ask for clarification if there’s something not specified (what kind of milk? what kind of rice?) - and double check that the number of people in the household is correct."
+      }
+    ]
+  },
+  {
+    "typename": "p",
+    "content": "Have a printer? Print out a copy of our <a href=\"https://drive.google.com/drive/folders/1kxPgZbTW0LkpzhAwEzfuQgZ5l93Vw1EA\" target=\"_blank\">delivery slip</a> to include with your drop-off, if you can!"
+  },
+  {
+    "typename": "p",
+    "content": "Don’t have a printer? Ask in #general!"
+  },
+  {
+    "typename": "subtitle1",
+    "content": "2. Go shopping for your neighbor!"
+  },
+  {
+    "typename": "p",
+    "content": "Remember, we’re still in a pandemic!"
+  },
+  {
+    "typename": "ul",
+    "content": [
+      {
+        "typename": "li",
+        "content": "Wear a mask and gloves. If you do not have gloves, please thoroughly wash or sanitize your hands before heading into the store."
+      },
+      {
+        "typename": "li",
+        "content": "Disinfect (or minimize contact with) high-touch surfaces (basket handles, credit card readers, doors)."
+      },
+      {
+        "typename": "li",
+        "content": "If you can’t find an item that’s needed urgently (toilet paper, diapers, etc.), communicate with your person to figure out an alternative."
+      },
+      {
+        "typename": "li",
+        "content": "Make sure to hold onto the receipt so you can get reimbursed by CHMA!"
+      }
+    ]
+  },
+  {
+    "typename": "p",
+    "content": "***Do you need cash before you go shopping instead of a reimbursement? Drop an ask in the #preimbursement channel on Slack"
+  },
+  {
+    "typename": "subtitle1",
+    "content": "3. Make your delivery"
+  },
+  {
+    "typename": "p",
+    "content": "Head to your neighbor’s address, and make contact with the person you’re delivering to. While it is important to minimize physical contact, remember that some folks may need assistance bringing groceries inside their residence whereas others will be fine with you leaving things outside their door. Use your best judgment, and ask the person what they need."
+  },
+  {
+    "typename": "p",
+    "content": "Before you leave, make sure they have CHMA’s number and encourage them to reach out if they need further assistance. Share your own number as well if you feel comfortable doing so, as it helps build strong community relationships."
+  },
+  {
+    "typename": "subtitle1",
+    "content": "4. Submit your receipt"
+  },
+  {
+    "typename": "p",
+    "content": "When you finish the delivery, text or call our intake volunteer to let them know that you have completed the request. Their info will be given to you via text message also. They can help you fill out the reimbursement form to make sure you are reimbursed by the CHMA community, via the #community_reimbursement channel in Slack."
+  },
+  {
+    "typename": "p",
+    "content": "As always, you can find full details and reminders in the full <a href=\"https://docs.google.com/document/d/1gLQsC3QUylavyzEYXWa7MVuk-H0DOnVtQtFm2fBXDQg/preview\" target=\"_blank\">Delivery Guide</a>."
+  }
+]
