@@ -50,19 +50,23 @@ export const InfoStep = ({ handleAccept, handleGetMoreInfo, requestCode }) => {
       <DialogContent>
         <Box mb={2}>
           <Typography variant="body2">
-            If you agree, you will be asked to provide your phone number where
-            we can text you details of the delivery.
+            {str("webapp:deliveryNeeded.dialog.condition", {
+              defaultValue: `If you agree, we will ask for your phone number so we can text you the
+            details for the delivery You should aim to follow up with your neighbor
+            and complete the delivery in the next day or two.`,
+            })}
           </Typography>
         </Box>
         <Box mb={2}>
           <Typography variant="body2">
             <em>
-              {" "}
-              Reminder: Please don’t volunteer for delivery if you have any
+              {str("webapp:deliveryNeeded.dialog.reminder", {
+                defaultValue: `Reminder: Please don’t volunteer for delivery if you have any
               COVID-19/cold/flu-like symptoms, or have come into contact with
               someone that’s tested positive. If you have been in large crowds
               or demonstrations, please self-isolate for 14 days or wait 5 days
-              to get a test, and resume deliveries after testing negative.
+              to get a test, and resume deliveries after testing negative.`,
+              })}
             </em>
           </Typography>
         </Box>
@@ -73,22 +77,24 @@ export const InfoStep = ({ handleAccept, handleGetMoreInfo, requestCode }) => {
           </Typography>
         </Box>
       </DialogContent>
-      <DialogActions className={classes.infoActionsContainer}>
-        <a href="#todo" onClick={handleGetMoreInfo}>
-          <Typography variant="body2">
-            {str("webapp:deliveryNeeded.dialog", {
-              defaultValue: "No, I need more information.",
-            })}
-          </Typography>
-        </a>
-        <Button color="primary" variant="contained" onClick={handleAccept}>
-          <Typography variant="button">
-            {str("webapp:deliveryNeeded.dialog", {
-              defaultValue: "Yes, I accept.",
-            })}
-          </Typography>
-        </Button>
-      </DialogActions>
+      <Box mb={2}>
+        <DialogActions className={classes.infoActionsContainer}>
+          <a href="#todo" onClick={handleGetMoreInfo}>
+            <Typography variant="body2">
+              {str("webapp:deliveryNeeded.dialog.more_info_btn", {
+                defaultValue: "Wait, I need more information.",
+              })}
+            </Typography>
+          </a>
+          <Button color="primary" variant="contained" onClick={handleAccept}>
+            <Typography variant="button">
+              {str("webapp:deliveryNeeded.dialog.accept_btn", {
+                defaultValue: "YES, I will take on this delivery.",
+              })}
+            </Typography>
+          </Button>
+        </DialogActions>
+      </Box>
     </>
   );
 };
