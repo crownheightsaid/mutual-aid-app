@@ -3,7 +3,7 @@ const {
   table: requestsTable,
   fields: requestFields,
   SENSITIVE_FIELDS: sensitiveRequestFields,
-} = require("~airtable/tables/requests");
+} = require("~airtable/tables/requestsSchema");
 const sendErrorNotification = require("~slack/errorNotification");
 const updateMessageContent = require("./actions/updateMessageContent");
 const notifyManyc = require("./actions/notifyManyc");

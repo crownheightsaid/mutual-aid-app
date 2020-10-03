@@ -2,13 +2,13 @@ const axios = require("axios");
 const {
   findDeliveryNeededRequests,
   findRequestByCode,
-  fields,
 } = require("~airtable/tables/requests");
 const {
   findVolunteerByPhone,
   volunteersFields,
   findVolunteerById,
 } = require("~airtable/tables/volunteers");
+const { fields } = require("~airtable/tables/requestsSchema");
 const { fetchCoordFromCrossStreets } = require("./fetchCoordFromCrossStreets");
 const slackapi = require("~slack/webApi");
 const { updateRequestByCode } = require("~airtable/tables/requests");

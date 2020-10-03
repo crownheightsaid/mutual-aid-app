@@ -3,7 +3,7 @@
  * need / service type for delivery requests.
  */
 
-const { fields } = require("~airtable/tables/requests");
+const { fields } = require("~airtable/tables/requestsSchema");
 
 exports.getDeliveryRequestNeedFormatted = (services) => {
   if (services === undefined) {
