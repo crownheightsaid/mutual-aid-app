@@ -23,8 +23,8 @@ const {
   findRequestByPhone,
   updateRequestByCode,
   unlinkSlackMessage,
-} = require("./requests.js");
-const { fields, tableName } = require("./requestsSchema.js");
+} = require("../requests.js");
+const { fields, tableName } = require("../requestsSchema.js");
 
 const buildRequestRecord = ({
   id,
