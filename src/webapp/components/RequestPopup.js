@@ -11,7 +11,7 @@ import sharedStylesFn from "webapp/style/sharedStyles";
 import DaysOpenChip from "./DaysOpenChip";
 import HouseholdSizeChip from "./HouseholdSizeChip";
 import DrivingClusterChip from "./DrivingClusterChip";
-import { daysSinceSlackMessage } from "../helpers/time";
+import { getDaysSinceIsoTimestamp } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
 import ClaimDeliveryButton from "./ClaimDeliveryButton";
 
@@ -101,7 +101,11 @@ const RequestPopup = ({ requests, closePopup }) => {
             {meta["For Driving Clusters"] && <DrivingClusterChip />}
 
             {meta.slackPermalink ? (
-              <DaysOpenChip daysOpen={daysSinceSlackMessage(meta.slackTs)} />
+              <DaysOpenChip
+                daysOpen={getDaysSinceIsoTimestamp(
+                  meta.dateChangedToDeliveryNeeded
+                )}
+              />
             ) : (
               <Typography variant="body2" color="error">
                 {str(

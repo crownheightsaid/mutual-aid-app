@@ -33,6 +33,7 @@ const {
   timeSensitivity,
   intakeNotes,
   supportType,
+  dateChangedToDeliveryNeeded,
 } = fields;
 
 const { TWILIO_SMS_DELIVERY_ENDPOINT } = process.env;
@@ -100,7 +101,7 @@ const makeFeature = async (r) => {
         need,
         slackPermalink: slackPermalink.ok ? slackPermalink.permalink : "",
         timestamp,
-        slackTs: metaJSON.slack_ts || "",
+        dateChangedToDeliveryNeeded: r.fields[dateChangedToDeliveryNeeded],
       },
     },
   };

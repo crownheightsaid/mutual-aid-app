@@ -5,13 +5,24 @@ import { getUrgencyLevel, urgencyStyles } from "../helpers/map-urgency";
 
 const useStyles = makeStyles(urgencyStyles);
 
+function getTime(daysOpen) {
+  if (daysOpen < 0) {
+    return "invalid";
+  }
+  if (daysOpen === 0) {
+    return "<1 day";
+  }
+
+  return `${daysOpen} day(s)`;
+}
+
 const DaysOpenChip = ({ daysOpen, timeOnly }) => {
   const classes = useStyles();
 
   const urgencyLevel = getUrgencyLevel(daysOpen);
   const chipColor = classes[urgencyLevel];
 
-  const time = daysOpen <= 0 ? `<1 day` : `${daysOpen} day(s)`;
+  const time = getTime(daysOpen);
   const label = timeOnly ? time : `open for ${time}`;
 
   return (
