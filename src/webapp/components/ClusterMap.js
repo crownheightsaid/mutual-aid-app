@@ -3,6 +3,7 @@ import { Source } from "react-mapbox-gl";
 import { LngLat } from "mapbox-gl";
 import { findBounds } from "webapp/helpers/mapbox-coordinates";
 
+import { getUrgencyStyles } from "webapp/helpers/map-urgency";
 import {
   CROWN_HEIGHTS_BOUNDS,
   CROWN_HEIGHTS_CENTER_COORD,
@@ -11,6 +12,7 @@ import BasicMap from "./BasicMap";
 import { QuadrantsLayers } from "./QuadrantMap";
 import ClusterMapLayers from "./ClusterMapLayers";
 import { RequestNotFoundAlert, NoRequestsAlert } from "./MapAlerts";
+import { daysSinceSlackMessage } from "../helpers/time";
 import getParam from "../helpers/utils";
 
 const makeBounds = (features) => {
@@ -27,6 +29,20 @@ const makeBounds = (features) => {
   return bounds;
 };
 
+const addDaysOpen = (feature) => {
+  const styles = getUrgencyStyles(
+    daysSinceSlackMessage(feature.properties.meta.timestamp)
+  );
+  const markerColor = styles.backgroundColor;
+  return {
+    ...feature,
+    properties: {
+      ...feature.properties,
+      markerColor,
+    },
+  };
+};
+
 const ClusterMap = ({
   showDrivingRequests,
   showRegularRequests,
@@ -37,6 +53,11 @@ const ClusterMap = ({
 
   let paramRequest;
   const { requests, drivingClusterRequests } = geoJsonData;
+  requests.features = requests.features.map(addDaysOpen);
+  drivingClusterRequests.features = drivingClusterRequests.features.map(
+    addDaysOpen
+  );
+
   const { features: reqFeatures } = requests;
   const { features: clusterFeatures } = drivingClusterRequests;
 
