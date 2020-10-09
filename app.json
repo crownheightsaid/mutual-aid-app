@@ -65,6 +65,10 @@
     "MANYC_WEBHOOK_URL": {
       "description": "URL for sending updates to Manyc. Provided by Mutual Aid NYC.",
       "required": false
+    },
+    "TWILIO_SMS_DELIVERY_ENDPOINT": {
+      "description": "Twilio endpoint to send SMS for assigning delivery requests via the delivery needed app",
+      "required": false
     }
   }
 }

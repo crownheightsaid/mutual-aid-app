@@ -7,18 +7,22 @@ import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";
+import sharedStylesFn from "webapp/style/sharedStyles";
 import DaysOpenChip from "./DaysOpenChip";
 import HouseholdSizeChip from "./HouseholdSizeChip";
 import DrivingClusterChip from "./DrivingClusterChip";
 import { daysSinceSlackMessage } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
+import ClaimDeliveryButton from "./ClaimDeliveryButton";
 
 const useStyles = makeStyles((theme) => ({
+  ...sharedStylesFn(theme),
   divider: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
   closeIcon: {
+    cursor: "pointer",
     position: "absolute",
     right: 0,
     top: 0,
@@ -29,8 +33,8 @@ const useStyles = makeStyles((theme) => ({
   chipRow: {
     "& > *": {
       marginRight: theme.spacing(0.5),
+      marginTop: theme.spacing(2),
     },
-    marginTop: theme.spacing(2),
   },
 }));
 
@@ -86,7 +90,8 @@ const RequestPopup = ({ requests, closePopup }) => {
           <Typography variant="body2">
             {str("webapp:deliveryNeeded.popup.requestCode", {
               defaultValue: `Request code:`,
-            })}
+              // eslint-disable-next-line react/jsx-one-expression-per-line
+            })}{" "}
             {meta.Code}
           </Typography>
 
@@ -105,6 +110,10 @@ const RequestPopup = ({ requests, closePopup }) => {
                 )}
               </Typography>
             )}
+          </Box>
+
+          <Box mt={1}>
+            <ClaimDeliveryButton requestCode={meta.Code} />
           </Box>
 
           {i !== requests.length - 1 && <Divider className={classes.divider} />}

@@ -16,6 +16,7 @@ import { daysSinceSlackMessage } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
 import HouseholdSizeChip from "./HouseholdSizeChip";
 import DrivingClusterChip from "./DrivingClusterChip";
+import ClaimDeliveryButton from "./ClaimDeliveryButton";
 
 const useStyles = makeStyles((theme) => ({
   focused: {
@@ -119,6 +120,9 @@ const DeliveryTableRow = (props) => {
               <div className={classes.expandableRow}>
                 {row["Intake General Notes"] || "N/A"}
               </div>
+            </Box>
+            <Box margin={1} marginBottom={2}>
+              <ClaimDeliveryButton requestCode={row.Code} />
             </Box>
           </Collapse>
         </TableCell>
