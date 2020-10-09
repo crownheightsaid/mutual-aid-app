@@ -1,4 +1,9 @@
-Go to [developing](DEVELOPING.md) if you want to contribute! Most folders contain a DEVELOPING guide as well.
+## Development
+
+To contribute to this project, please first register as a volunteer for CHMA [here](https://crownheightsmutualaid.com/volunteer/).
+Make sure to check **Technology** under **Working Groups** so we can get in touch with you.
+
+**Once you have access to the CHMA Slack, please see [DEVELOPING.md](DEVELOPING.md) to start contributing!**
 _________________________________________________________________________
 
 ## Overview 
@@ -22,15 +27,6 @@ The app can provide the following (all optional):
     1. A map that shows open requests
     1. A tool for looking up cross streets + neighborhood zone (not provided) for an address
 1. **Reimbursment system** - Separate Airtable base that is used to track reimbursements
-
-_____________________________________________________________________________________________________
-
-## Development
-
-To contribute to this project, please first register as a volunteer for CHMA [here](https://crownheightsmutualaid.com/volunteer/).
-Make sure to check **Technology** under **Working Groups** so we can get in touch with you.
-
-**Once you have access to the CHMA Slack, please see [DEVELOPING.md](DEVELOPING.md) to start contributing!**
 
 _____________________________________________________________________________________________________
 
