@@ -1,8 +1,8 @@
 const {
   updateRequestByCode,
   findRequestByCode,
-  fields: requestFields,
 } = require("~airtable/tables/requests");
+const { fields: requestFields } = require("~airtable/tables/requestsSchema");
 
 exports.neighborhoodFinderUpdateRequestHandler = async (req, res) => {
   const { requestCode, neighborhoodData } = req.body;

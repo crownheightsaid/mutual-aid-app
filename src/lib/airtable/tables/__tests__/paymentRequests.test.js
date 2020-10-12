@@ -10,7 +10,7 @@ const { Record } = require("airtable");
 const {
   deletePaymentRequest,
   paymentRequestsTableName,
-} = require("./paymentRequests");
+} = require("../paymentRequests");
 
 describe("deletePaymentRequest", () => {
   let paymentRequestRecord;

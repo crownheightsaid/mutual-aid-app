@@ -1,6 +1,6 @@
 const slackapi = require("~slack/webApi");
 const { getExistingMessage } = require("~slack/channels");
-const { fields: requestFields } = require("~airtable/tables/requests");
+const { fields: requestFields } = require("~airtable/tables/requestsSchema");
 const { str } = require("~strings/i18nextWrappers");
 
 const mappings = {

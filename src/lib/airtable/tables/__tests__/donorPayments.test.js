@@ -13,8 +13,8 @@ jest.mock("~airtable/bases", () => ({
 const {
   createDonorPayment,
   findDonorPaymentByCode,
-} = require("./donorPayments");
-const { donorPaymentsFields } = require("./donorPaymentsSchema");
+} = require("../donorPayments");
+const { donorPaymentsFields } = require("../donorPaymentsSchema");
 
 const { paymentsAirbase } = require("~airtable/bases");
 

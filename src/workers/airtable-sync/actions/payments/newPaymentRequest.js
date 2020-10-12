@@ -14,10 +14,10 @@ const {
   deletePaymentRequest,
 } = require("~airtable/tables/paymentRequests");
 const {
-  fields: requestFields,
   findRequestByCode,
   updateRequestByCode,
 } = require("~airtable/tables/requests");
+const { fields: requestFields } = require("~airtable/tables/requestsSchema");
 const { str } = require("~strings/i18nextWrappers");
 
 module.exports = async function newPaymentRequest(record) {
