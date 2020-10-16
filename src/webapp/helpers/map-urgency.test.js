@@ -1,6 +1,14 @@
 const { getUrgencyStyles } = require("./map-urgency");
 
 describe("Urgency styles", () => {
+  test("it should return the styles for 'n/a' requests", () => {
+    const daysOpen = -1;
+    const styles = getUrgencyStyles(daysOpen);
+    expect(styles).toStrictEqual({
+      backgroundColor: "grey",
+    });
+  });
+
   test("it should return the styles for 'recent' requests", () => {
     const daysOpen = 1;
     const styles = getUrgencyStyles(daysOpen);

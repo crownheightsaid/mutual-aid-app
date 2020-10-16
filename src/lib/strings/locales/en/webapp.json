@@ -61,7 +61,9 @@
     "popup": {
       "slackLink": "See details on Slack",
       "requestCode": "Request code:",
-      "cantFindSlack": "Can't find Slack link, please search for request code in Slack."
+      "cantFindSlack": "Can't find Slack link, please search for request code in Slack.",
+      "daysOpenNotAvailable": "This information is not available for some reason. Please reach out to #tech_support on Slack",
+      "claimDelivery": "Claim delivery"
     },
     "noRequests": {
       "message": "No requests found. Some requests may not have been posted in Slack yet or be marked for driving clusters."

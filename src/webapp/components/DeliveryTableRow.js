@@ -12,7 +12,6 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import DaysOpenChip from "./DaysOpenChip";
-import { daysSinceSlackMessage } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
 import HouseholdSizeChip from "./HouseholdSizeChip";
 import DrivingClusterChip from "./DrivingClusterChip";
@@ -74,10 +73,7 @@ const DeliveryTableRow = (props) => {
           </Tooltip>
         </TableCell>
         <TableCell>
-          <DaysOpenChip
-            timeOnly
-            daysOpen={daysSinceSlackMessage(row.slackTs)}
-          />
+          <DaysOpenChip timeOnly daysOpen={row.daysOpen} />
         </TableCell>
         <TableCell>{row["Time Sensitivity"] || "Not Stated"}</TableCell>
         <TableCell>

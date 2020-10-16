@@ -3,6 +3,9 @@
  * usable by Material UI.
  */
 export const urgencyStyles = {
+  invalid: {
+    backgroundColor: "grey",
+  },
   recent: {
     backgroundColor: "green",
   },
@@ -21,6 +24,9 @@ export const urgencyStyles = {
  * @param {number} daysOpen
  */
 export const getUrgencyLevel = (daysOpen) => {
+  if (daysOpen < 0) {
+    return "invalid";
+  }
   if (daysOpen < 3) {
     return "recent";
   }

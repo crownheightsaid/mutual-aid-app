@@ -1,8 +1,15 @@
-import { differenceInDays, fromUnixTime } from "date-fns";
+import { differenceInDays, parseISO } from "date-fns";
 
-const daysSinceSlackMessage = (slackTs) => {
-  const datePosted = fromUnixTime(Number(slackTs));
+/**
+ * @param {string} isoTimestamp - ISO timestamp, eg "2020-10-09T18:38:28.000Z"
+ * @returns {number} - difference in days since provided ISO timestamp
+ */
+const getDaysSinceIsoTimestamp = (isoTimestamp) => {
+  if (!isoTimestamp || typeof isoTimestamp !== "string") {
+    return -1;
+  }
+  const datePosted = parseISO(isoTimestamp);
   return differenceInDays(new Date(), datePosted);
 };
 
-export { daysSinceSlackMessage };
+export { getDaysSinceIsoTimestamp };
