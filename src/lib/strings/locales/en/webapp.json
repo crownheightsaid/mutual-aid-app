@@ -73,7 +73,10 @@
     },
     "table": {
       "headers": {
-        "daysOpen": "Days open",
+        "daysOpen": {
+          "header": "Days open",
+          "tooltip": "Number of days since a request has been in \"Delivery Needed\" status. \nIf it says \"n/a\", the information is not available for some reason and you should reach out to #tech_support on Slack"
+        },
         "timeSensitivity": "Time Sensitivity",
         "neighbor": "Neighbor",
         "need": "Need",

@@ -7,7 +7,7 @@ const useStyles = makeStyles(urgencyStyles);
 
 function getTime(daysOpen) {
   if (daysOpen < 0) {
-    return "invalid";
+    return "n/a";
   }
   if (daysOpen === 0) {
     return "<1 day";

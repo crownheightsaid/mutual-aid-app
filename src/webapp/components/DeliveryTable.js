@@ -5,28 +5,40 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Tooltip from "@material-ui/core/Tooltip";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import ClusterMapContext from "../context/ClusterMapContext";
 import DeliveryTableRow from "./DeliveryTableRow";
+import { getDaysSinceIsoTimestamp } from "../helpers/time";
 
 const useStyles = makeStyles(() => ({
   container: {
     maxHeight: "90vh",
   },
+  headerTooltip: {
+    fontSize: "0.8rem",
+  },
 }));
 
 const TableHeadRow = () => {
+  const classes = useStyles();
   const { t: str } = useTranslation();
   return (
     <TableRow>
       <TableCell />
-      <TableCell>
-        {str("webapp:deliveryNeeded.table.headers.daysOpen", {
-          defaultValue: "Days open",
-        })}
-      </TableCell>
+      <Tooltip
+        title={str("webapp:deliveryNeeded.table.headers.daysOpen.tooltip")}
+        classes={{ tooltip: classes.headerTooltip }}
+        arrow
+      >
+        <TableCell>
+          {str("webapp:deliveryNeeded.table.headers.daysOpen.header", {
+            defaultValue: "Days open",
+          })}
+        </TableCell>
+      </Tooltip>
       <TableCell>
         {str("webapp:deliveryNeeded.table.headers.timeSensitivity", {
           defaultValue: "Time Sensitivity",
@@ -65,17 +77,19 @@ const DeliveryTable = ({ rows }) => {
     }
   });
 
-  // sort happens in-place
-  rows.sort((rowA, rowB) => rowA.timestamp - rowB.timestamp);
-
   const formattedRows = rows.map((row) => {
     const isFocused = row.Code === focusedRequestId;
+    const daysOpen = getDaysSinceIsoTimestamp(row.dateChangedToDeliveryNeeded);
 
     return {
       ...row,
+      daysOpen,
       isFocused,
     };
   });
+
+  // sort happens in-place (descending order)
+  formattedRows.sort((rowA, rowB) => rowB.daysOpen - rowA.daysOpen);
 
   return (
     <TableContainer

@@ -41,7 +41,6 @@ const { TWILIO_SMS_DELIVERY_ENDPOINT } = process.env;
 const makeFeature = async (r) => {
   let metaJSON = {};
   let slackPermalink = {};
-  let timestamp;
 
   const location = await fetchCoordFromCrossStreets(
     `
@@ -68,7 +67,7 @@ const makeFeature = async (r) => {
 
   try {
     const channel = metaJSON.slack_channel;
-    timestamp = metaJSON.slack_ts;
+    const timestamp = metaJSON.slack_ts;
     slackPermalink = await slackapi.chat.getPermalink({
       channel,
       message_ts: timestamp,
@@ -100,7 +99,6 @@ const makeFeature = async (r) => {
         [intakeNotes]: r.fields[intakeNotes],
         need,
         slackPermalink: slackPermalink.ok ? slackPermalink.permalink : "",
-        timestamp,
         dateChangedToDeliveryNeeded: r.fields[dateChangedToDeliveryNeeded],
       },
     },

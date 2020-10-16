@@ -5,7 +5,7 @@ import { differenceInDays, parseISO } from "date-fns";
  * @returns {number} - difference in days since provided ISO timestamp
  */
 const getDaysSinceIsoTimestamp = (isoTimestamp) => {
-  if (!isoTimestamp) {
+  if (!isoTimestamp || typeof isoTimestamp !== "string") {
     return -1;
   }
   const datePosted = parseISO(isoTimestamp);

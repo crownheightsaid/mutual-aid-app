@@ -4,7 +4,7 @@
  */
 export const urgencyStyles = {
   invalid: {
-    backgroundColor: "black",
+    backgroundColor: "grey",
   },
   recent: {
     backgroundColor: "green",
