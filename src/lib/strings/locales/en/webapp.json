@@ -1,4 +1,12 @@
 {
+  "home": {
+    "title": "{{neighborhood}} Mutual Aid App",
+    "body": {
+      "title": "Contributing",
+      "volunteer": "Get involved with CHMA as a volunteer",
+      "contributing": "Want to contribute? Start here: ",
+    }
+  },
   "zoneFinder": {
     "map": {
       "error": "Mapbox token is missing. Please inform"
@@ -19,6 +27,7 @@
       "emailButtonText": "Email Aid Resource Links"
     },
     "title": "{{neighborhood}} Neighborhood Finder",
+    "genericTitle": "Neighborhood Finder",
     "message": {
       "info": "Enter an address and we will look up cross streets and the neighborhood.",
       "help": "For best results, enter street and town (Ex: 1550 dean st brooklyn)",
@@ -50,6 +59,7 @@
   },
   "deliveryNeeded": {
     "title": "{{neighborhood}} Delivery Needed",
+    "genericTitle": "Delivery Needed",
     "mapDesc": "Above is a map of all open requests marked \"Delivery Needed\"",
     "description": {
       "dot": "Each dot represents a location with one or more requests. This\n            location is only representative of the cross street data. We do not\n            store full addresses.",
