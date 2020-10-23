@@ -73,6 +73,7 @@ export default function NeighborhoodFinder() {
     },
     { manual: true } // Don't send on render
   );
+  console.log("data", data, "loading", loading, "error", error);
   /* eslint-disable camelcase */
   const { minimal_view } = queryString.parse(window.location.search);
   const minimalView = minimal_view === "true";
