@@ -72,3 +72,5 @@ ngrok.yml
 # ignore macOS .DS_Store
 **/.DS_Store
 
+# IntelliJ / JetBrains IDEs
+.idea*
