@@ -90,8 +90,8 @@ const RequestPopup = ({ requests, closePopup }) => {
           <Typography variant="body2">
             {str("webapp:deliveryNeeded.popup.requestCode", {
               defaultValue: `Request code:`,
-              // eslint-disable-next-line react/jsx-one-expression-per-line
-            })}{" "}
+            })}
+            &nbsp;
             {meta.Code}
           </Typography>
 

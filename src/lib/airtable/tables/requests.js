@@ -67,7 +67,7 @@ exports.findRequestByExternalId = async (externalId) => {
   }
 };
 
-// Find open requests that area already in Slack
+/** Finds all requests in an open state (ie needing delivery) in Airtable */
 exports.findDeliveryNeededRequests = async () => {
   const requestOpenStates = [
     fields.status_options.dispatchStarted,
@@ -84,7 +84,7 @@ exports.findDeliveryNeededRequests = async () => {
       })
       .all();
 
-    return [requests.filter((r) => !requestNotInSlack(r)), null];
+    return [requests, null];
   } catch (e) {
     return [[], `Error while looking up open requests: ${e}`];
   }
