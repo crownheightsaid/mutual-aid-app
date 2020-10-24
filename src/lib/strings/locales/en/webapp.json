@@ -52,7 +52,7 @@
   },
   "deliveryNeeded": {
     "title": "{{neighborhood}} Delivery Needed",
-    "mapDesc": "Above is a map of all open requests marked \"Delivery Needed\"",
+    "mapDesc": "Map of all open requests marked \"Delivery Needed\". ",
     "description": {
       "dot": "Each dot represents a location with one or more requests. This\n            location is only representative of the cross street data. We do not\n            store full addresses.",
       "clickDot": "Click on each cluster (large circle with a number) to zoom into\n            individual request.",

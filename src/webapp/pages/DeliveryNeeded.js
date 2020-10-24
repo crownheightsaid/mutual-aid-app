@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import sharedStylesFn from "webapp/style/sharedStyles";
 import ClusterMap from "webapp/components/ClusterMap";
 import DeliveryDialog from "webapp/components/DeliveryDialog";
+import HelpText from "webapp/components/DeliveryNeeded/HelpText";
 import Grid from "@material-ui/core/Grid";
 import DeliveryTable from "../components/DeliveryTable";
 import ClusterMapContext from "../context/ClusterMapContext";
@@ -93,7 +94,30 @@ export default function DeliveryNeeded() {
             })}
           </Typography>
         </Box>
-
+        <Box marginTop={2}>
+          <Typography variant="body1">
+            {str("webapp:deliveryNeeded.mapDesc", {
+              defaultValue: 'Map of all open requests marked "Delivery Needed"',
+            })}
+            {str("webapp:deliveryNeeded.description.questions")}
+            <a
+              mailto={str("webapp:contact:email", {
+                defaultValue: "crownheights20@protonmail.com",
+              })}
+              href={str("webapp:slack.techChannelUrl")}
+            >
+              {str("webapp:contact:email", {
+                defaultValue: "crownheights20@protonmail.com",
+              })}
+            </a>
+{" "}
+            or on Slack at
+{" "}
+            <a href={str("webapp:slack.techSupportChannelUrl")}>
+              {str("webapp:slack.techSupportChannel")}
+            </a>
+          </Typography>
+        </Box>
         <ClusterMapContext.Provider
           value={{ focusedRequestId, setFocusedRequestId }}
         >
@@ -132,6 +156,7 @@ export default function DeliveryNeeded() {
                   containerStyle={{ height: "550px", width: "100%" }}
                   geoJsonData={data}
                 />
+                <HelpText />
               </Box>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -146,63 +171,6 @@ export default function DeliveryNeeded() {
             </Grid>
           </Grid>
         </ClusterMapContext.Provider>
-
-        <Grid item xs={12}>
-          <Box marginTop={2} className={classes.description}>
-            <Typography variant="body1">
-              {str("webapp:deliveryNeeded.mapDesc", {
-                defaultValue:
-                  'Above is a map of all open requests marked "Delivery Needed"',
-              })}
-            </Typography>
-            <ul>
-              <li>
-                {str("webapp:deliveryNeeded.description.dot", {
-                  defaultValue: `Each dot represents a location with one or more requests. This
-                location is only representative of the cross street data. We do not
-                store full addresses.`,
-                })}
-              </li>
-              <li>
-                {str("webapp:deliveryNeeded.description.clickDot", {
-                  defaultValue: `Click on each cluster (large circle with a number) to zoom into
-                individual request.`,
-                })}
-              </li>
-              <li>
-                {str("webapp:deliveryNeeded.description.popUp", {
-                  defaultValue: `Click on a dot to pop up details. There is a link to the Slack post
-                for more details, where you can also claim the delivery.`,
-                })}
-              </li>
-              <li>
-                {str("webapp:deliveryNeeded.description.multipleRequests", {
-                  defaultValue: `Some dots may represent multiple requests at the same cross-streets.
-                Clicking on them will display all of the requests.`,
-                })}
-              </li>
-              <li>
-                {str("webapp:deliveryNeeded.description.questions")}
-                <a
-                  mailto={str("webapp:contact:email", {
-                    defaultValue: "crownheights20@protonmail.com",
-                  })}
-                  href={str("webapp:slack.techChannelUrl")}
-                >
-                  {str("webapp:contact:email", {
-                    defaultValue: "crownheights20@protonmail.com",
-                  })}
-                </a>
-{" "}
-                or on Slack at
-{" "}
-                <a href={str("webapp:slack.techSupportChannelUrl")}>
-                  {str("webapp:slack.techSupportChannel")}
-                </a>
-              </li>
-            </ul>
-          </Box>
-        </Grid>
       </Box>
     </DeliveryContext.Provider>
   );
