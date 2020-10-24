@@ -46,16 +46,18 @@
   },
   "slack": {
     "techChannelUrl": "https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD",
-    "techChannel": "#tech"
+    "techChannel": "#wg_tech",
+    "techSupportChannelUrl": "https://crownheightsmutualaid.slack.com/archives/C014XS0BZFH",
+    "techSupportChannel": "#tech_support"
   },
   "deliveryNeeded": {
     "title": "{{neighborhood}} Delivery Needed",
-    "mapDesc": "Above is a map of all open requests marked \"Delivery Needed\"",
+    "mapDesc": "Map of all open requests marked \"Delivery Needed\". ",
     "description": {
       "dot": "Each dot represents a location with one or more requests. This\n            location is only representative of the cross street data. We do not\n            store full addresses.",
       "clickDot": "Click on each cluster (large circle with a number) to zoom into\n            individual request.",
       "popUp": "Click on a dot to pop up details. There is a link to the Slack post\n            for more details, where you can also claim the delivery.",
-      "questions": "Questions or concerns? Please let us know in",
+      "questions": "For any questions or technical issues, please email us at ",
       "multipleRequests": "Some dots may represent multiple requests at the same cross-streets.\n            Clicking on them will display all of the requests."
     },
     "popup": {
@@ -82,6 +84,29 @@
         "crossStreets": "Cross streets",
         "description": "Description"
       }
+    },
+    "dialog": {
+      "title": "Do you agree to complete this delivery?",
+      "condition": "If you agree, we will ask for your phone number so we can text you the\n            details for the delivery You should aim to follow up with your neighbor\n            and complete the delivery in the next day or two.",
+      "reminder": "Reminder: Please don’t volunteer for delivery if you have any\n              COVID-19/cold/flu-like symptoms, or have come into contact with\n              someone that’s tested positive. If you have been in large crowds\n              or demonstrations, please self-isolate for 14 days or wait 5 days\n              to get a test, and resume deliveries after testing negative.",
+      "more_info_btn": "Wait, I need more information.",
+      "accept_btn": "YES, I will take on this delivery.",
+      "backButton": "Back",
+      "form": "Please provide your phone number so we can text you the details of the delivery. You must be registered as a delivery volunteer in our system.",
+      "submit": "Submit",
+      "errorTitle": "Something went wrong!",
+      "errorBody": "__NOT_TRANSLATED__",
+      "finish": "Thank you!",
+      "description": "Claim a delivery",
+      "instructions": "__NOT_TRANSLATED__"
+    },
+    "help": {
+      "title": "How do I use this map?"
+    },
+    "contact": {
+      "email": "crownheights20@protonmail.com",
+      "orSlack": " or on Slack at "
     }
-  }
+  },
+  "contact": "crownheights20@protonmail.com"
 }
