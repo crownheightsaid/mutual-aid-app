@@ -6,8 +6,6 @@ import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
 import useAxios from "axios-hooks";
 import { CircularProgress } from "@material-ui/core";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 import { useTranslation } from "react-i18next";
 import sharedStylesFn from "webapp/style/sharedStyles";
 import ClusterMap from "webapp/components/ClusterMap";
@@ -149,50 +147,60 @@ export default function DeliveryNeeded() {
           </Grid>
         </ClusterMapContext.Provider>
 
-        <Grid item xs={12} md={6}>
-          <Box className={classes.description}>
+        <Grid item xs={12}>
+          <Box marginTop={2} className={classes.description}>
             <Typography variant="body1">
               {str("webapp:deliveryNeeded.mapDesc", {
                 defaultValue:
                   'Above is a map of all open requests marked "Delivery Needed"',
               })}
             </Typography>
-            <List>
-              <ListItem>
+            <ul>
+              <li>
                 {str("webapp:deliveryNeeded.description.dot", {
                   defaultValue: `Each dot represents a location with one or more requests. This
                 location is only representative of the cross street data. We do not
                 store full addresses.`,
                 })}
-              </ListItem>
-              <ListItem>
+              </li>
+              <li>
                 {str("webapp:deliveryNeeded.description.clickDot", {
                   defaultValue: `Click on each cluster (large circle with a number) to zoom into
                 individual request.`,
                 })}
-              </ListItem>
-              <ListItem>
+              </li>
+              <li>
                 {str("webapp:deliveryNeeded.description.popUp", {
                   defaultValue: `Click on a dot to pop up details. There is a link to the Slack post
                 for more details, where you can also claim the delivery.`,
                 })}
-              </ListItem>
-              <ListItem>
+              </li>
+              <li>
                 {str("webapp:deliveryNeeded.description.multipleRequests", {
                   defaultValue: `Some dots may represent multiple requests at the same cross-streets.
                 Clicking on them will display all of the requests.`,
                 })}
-              </ListItem>
-              <ListItem>
-                {str("webapp:deliveryNeeded.description.questions", {
-                  defaultValue: `Questions or concerns? Please let us know in`,
-                })}
-                <span>&nbsp;</span>
-                <a href={str("webapp:slack.techChannelUrl")}>
-                  {str("webapp:slack.techChannel")}
+              </li>
+              <li>
+                {str("webapp:deliveryNeeded.description.questions")}
+                <a
+                  mailto={str("webapp:contact:email", {
+                    defaultValue: "crownheights20@protonmail.com",
+                  })}
+                  href={str("webapp:slack.techChannelUrl")}
+                >
+                  {str("webapp:contact:email", {
+                    defaultValue: "crownheights20@protonmail.com",
+                  })}
                 </a>
-              </ListItem>
-            </List>
+{" "}
+                or on Slack at
+{" "}
+                <a href={str("webapp:slack.techSupportChannelUrl")}>
+                  {str("webapp:slack.techSupportChannel")}
+                </a>
+              </li>
+            </ul>
           </Box>
         </Grid>
       </Box>
