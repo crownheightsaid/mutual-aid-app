@@ -110,9 +110,9 @@ export default function DeliveryNeeded() {
                 defaultValue: "crownheights20@protonmail.com",
               })}
             </a>
-{" "}
-            or on Slack at
-{" "}
+            {str("webapp:contact:orSlack", {
+              defaultValue: " or on Slack at ",
+            })}
             <a href={str("webapp:slack.techSupportChannelUrl")}>
               {str("webapp:slack.techSupportChannel")}
             </a>
