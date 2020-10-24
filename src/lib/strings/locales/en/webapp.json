@@ -102,6 +102,10 @@
     },
     "help": {
       "title": "How do I use this map?"
+    },
+    "contact": {
+      "email": "crownheights20@protonmail.com",
+      "orSlack": " or on Slack at "
     }
   },
   "contact": "crownheights20@protonmail.com"

@@ -101,16 +101,16 @@ export default function DeliveryNeeded() {
             })}
             {str("webapp:deliveryNeeded.description.questions")}
             <a
-              mailto={str("webapp:contact:email", {
+              mailto={str("webapp:deliveryNeeded.contact.email", {
                 defaultValue: "crownheights20@protonmail.com",
               })}
               href={str("webapp:slack.techChannelUrl")}
             >
-              {str("webapp:contact:email", {
+              {str("webapp:deliveryNeeded.contact.email", {
                 defaultValue: "crownheights20@protonmail.com",
               })}
             </a>
-            {str("webapp:contact:orSlack", {
+            {str("webapp:deliveryNeeded.contact.orSlack", {
               defaultValue: " or on Slack at ",
             })}
             <a href={str("webapp:slack.techSupportChannelUrl")}>
