@@ -99,6 +99,9 @@
       "finish": "Thank you!",
       "description": "Claim a delivery",
       "instructions": "__NOT_TRANSLATED__"
+    },
+    "help": {
+      "title": "How do I use this map?"
     }
   },
   "contact": "crownheights20@protonmail.com"
