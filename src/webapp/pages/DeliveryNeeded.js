@@ -104,7 +104,7 @@ export default function DeliveryNeeded() {
               mailto={str("webapp:deliveryNeeded.contact.email", {
                 defaultValue: "crownheights20@protonmail.com",
               })}
-              href={str("webapp:slack.techChannelUrl")}
+              href={`mailto:${str("webapp:deliveryNeeded.contact.email")}`}
             >
               {str("webapp:deliveryNeeded.contact.email", {
                 defaultValue: "crownheights20@protonmail.com",
