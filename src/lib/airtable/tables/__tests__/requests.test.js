@@ -175,7 +175,7 @@ describe("findDeliveryNeededRequests", () => {
 
     test("it sends a request with a query", () => {
       expect(mockSelectFn).toHaveBeenCalledWith({
-        filterByFormula: `OR({${fields.status}} = '${fields.status_options.dispatchStarted}', {${fields.status}} = '${fields.status_options.deliveryNeeded}')`,
+        filterByFormula: `OR({${fields.status}} = '${fields.status_options.deliveryNeeded}')`,
       });
     });
 
