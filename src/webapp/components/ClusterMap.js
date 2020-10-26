@@ -12,7 +12,7 @@ import BasicMap from "./BasicMap";
 import { QuadrantsLayers } from "./QuadrantMap";
 import ClusterMapLayers from "./ClusterMapLayers";
 import { RequestNotFoundAlert, NoRequestsAlert } from "./MapAlerts";
-import { daysSinceSlackMessage } from "../helpers/time";
+import { getDaysSinceIsoTimestamp } from "../helpers/time";
 import getParam from "../helpers/utils";
 
 const makeBounds = (features) => {
@@ -31,7 +31,9 @@ const makeBounds = (features) => {
 
 const addDaysOpen = (feature) => {
   const styles = getUrgencyStyles(
-    daysSinceSlackMessage(feature.properties.meta.timestamp)
+    getDaysSinceIsoTimestamp(
+      feature.properties.meta.dateChangedToDeliveryNeeded
+    )
   );
   const markerColor = styles.backgroundColor;
   return {
