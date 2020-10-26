@@ -1,10 +1,8 @@
 const { airbase } = require("~airtable/bases");
 
 const volunteersTableName = (exports.volunteersTableName = "Volunteers");
-const volunteersTable = (exports.volunteersTable = airbase(
-  volunteersTableName
-));
-const fields = (exports.volunteersFields = {
+exports.volunteersTable = airbase(volunteersTableName);
+exports.volunteersFields = {
   email: "volunteer_email",
   phone: "volunteer_phone",
   streetFirst: "volunteer_street_1",
@@ -56,4 +54,4 @@ const fields = (exports.volunteersFields = {
   howFound: "volunteer_howfind",
   trained: "volunteer_trained",
   createdTime: "Created Time",
-});
+};

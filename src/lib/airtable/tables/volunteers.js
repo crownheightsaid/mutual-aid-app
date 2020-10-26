@@ -1,5 +1,3 @@
-const { airbase } = require("~airtable/bases");
-
 const {
   volunteersTable,
   volunteersFields,
