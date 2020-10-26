@@ -1,13 +1,16 @@
 const mockSelectFn = jest.fn();
+const mockFindFn = jest.fn();
 
 jest.mock("~airtable/bases", () => ({
   airbase: () => ({
     select: mockSelectFn,
+    find: mockFindFn,
   }),
 }));
 
 const {
-  findVolunteerByEmail
+  findVolunteerByEmail,
+  findVolunteerById,
 } = require("../volunteers.js");
 
 describe("findVolunteerByEmail", () => {
@@ -57,6 +60,52 @@ describe("findVolunteerByEmail", () => {
     test("it returns the error message", () => {
       expect(result[0]).toBeNull();
       expect(result[1]).toEqual(`Errors looking up volunteer by email ${email}: ${errorMessage}`);
+    });
+  });
+
+  describe("findVolunteerById", () => {
+    const id = 1234;
+    
+    beforeEach(async () => {
+      await findVolunteerById(id);
+    });
+
+    test("it sends a find request", () => {
+      expect(mockFindFn).toHaveBeenCalledWith(id);
+    });
+
+    describe("if the ID exists", () => {
+      const volunteer = "a volunteer";
+      let result;
+      
+      beforeEach(async () => {
+	
+	mockFindFn.mockResolvedValue(volunteer);
+
+	result = await findVolunteerById(id);
+      });
+
+      test("it returns the volunteer", () => {
+	expect(result[0]).toEqual(volunteer);
+	expect(result[1]).toBeNull();
+      });
+    });
+
+    describe("if the ID does ont exist", () => {
+      const error = "an error";
+      let result;
+
+      beforeEach(async () => {
+
+	mockFindFn.mockRejectedValue(error);
+
+	result = await findVolunteerById(id);
+      });
+
+      test("it returns the error message", () => {
+	expect(result[0]).toBeNull();
+	expect(result[1]).toEqual(`Errors looking up volunteer by recordId ${id}: ${error}`);
+      });
     });
   });
 });
