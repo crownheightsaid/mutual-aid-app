@@ -67,20 +67,13 @@ exports.findRequestByExternalId = async (externalId) => {
   }
 };
 
-/** Finds all requests in an open state (ie needing delivery) in Airtable */
+/** Finds all requests in an open state (ie 'delivery needed' status) in Airtable */
 exports.findDeliveryNeededRequests = async () => {
-  const requestOpenStates = [
-    fields.status_options.dispatchStarted,
-    fields.status_options.deliveryNeeded,
-  ];
-  const statusConstraints = requestOpenStates.map(
-    (s) => `{${fields.status}} = '${s}'`
-  );
-  const formula = `OR(${statusConstraints.join(", ")})`;
+  const filterByFormula = `OR(${fields.status} = '${fields.status_options.deliveryNeeded}')`;
   try {
     const requests = await table
       .select({
-        filterByFormula: formula,
+        filterByFormula,
       })
       .all();
 

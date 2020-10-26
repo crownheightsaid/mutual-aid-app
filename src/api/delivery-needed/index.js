@@ -99,7 +99,7 @@ const makeFeature = async (r) => {
         [timeSensitivity]: r.fields[timeSensitivity],
         [intakeNotes]: r.fields[intakeNotes],
         need,
-        slackPermalink: slackPermalink.permalink ?? "",
+        slackPermalink: slackPermalink.permalink || "",
         dateChangedToDeliveryNeeded: r.fields[dateChangedToDeliveryNeeded],
       },
     },
