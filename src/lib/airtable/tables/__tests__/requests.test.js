@@ -339,6 +339,59 @@ describe("findRequestByPhone", () => {
       filterByFormula: `({${fields.phone}} = '${phone}')`,
     });
   });
+
+  describe("when a request with the given phone number exists", () => {
+    const requestRecord = "a request";
+    let result;
+
+    beforeAll(async () => {
+      mockSelectFn.mockReturnValue({
+        firstPage: () => [requestRecord],
+      });
+
+      result = await findRequestByPhone(phone);
+    });
+
+    test("it returns the request record", () => {
+      expect(result[0]).toEqual(requestRecord);
+      expect(result[1]).toBeNull();
+    });
+  });
+
+  describe("when no request is found", () => {
+    let result;
+
+    beforeAll(async () => {
+      mockSelectFn.mockReturnValue({
+        firstPage: () => [],
+      });
+
+      result = await findRequestByPhone(phone);
+    });
+
+    test("it returns an error message", () => {
+      expect(result[0]).toBeNull();
+      expect(result[1]).toEqual("No existing request with that phone");
+    });
+  });
+
+  describe("when an error occurs", () => {
+    let result;
+    const error = "some error message";
+
+    beforeAll(async () => {
+      mockSelectFn.mockReturnValue({
+        firstPage: jest.fn().mockRejectedValue(error),
+      });
+
+      result = await findRequestByPhone(phone);
+    });
+
+    test("it returns the error message", () => {
+      expect(result[0]).toBeNull();
+      expect(result[1]).toEqual(`Error while finding request: ${error}`);
+    });
+  });
 });
 
 describe("updateRequestByCode", () => {
@@ -478,6 +531,33 @@ describe("updateRequestByCode", () => {
           },
         },
       ]);
+    });
+
+    describe("when there is an error in the request", () => {
+      const error = "an error";
+      let consoleError;
+
+      beforeEach(async () => {
+        consoleError = console.error;
+
+        console.error = jest.fn();
+
+        mockUpdateFn.mockRejectedValue("an error");
+
+        await unlinkSlackMessage(slackTs, slackChannel);
+      });
+
+      afterEach(() => {
+        console.error = consoleError;
+      });
+
+      test("it logs the error message", () => {
+        expect(console.error).toHaveBeenCalledWith(
+          "Error updating Request %O %O",
+          recordId,
+          error
+        );
+      });
     });
   });
 });
