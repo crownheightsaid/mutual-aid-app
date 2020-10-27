@@ -77,15 +77,18 @@ describe("deleteRequest", () => {
 });
 
 describe("createRequest", () => {
+  const message = "some test message";
+  const source = "some test source";
+  
   describe("given the minimum required fields", () => {
-    test("creates and returns a request with defaults", async () => {
+    let result;
+    
+    beforeAll(async () => {
       mockCreateFn.mockResolvedValue("the created record");
-
-      const message = "some test message";
-      const source = "some test source";
-
-      const result = await createRequest({ message, source });
-
+      result = await createRequest({ message, source });
+    });
+    
+    test("creates and returns a request with defaults", async () => {
       expect(mockCreateFn).toHaveBeenCalledWith({
         [fields.message]: message,
         [fields.type]: source,
@@ -99,6 +102,22 @@ describe("createRequest", () => {
 
       expect(result[0]).toEqual("the created record");
       expect(result[1]).toEqual(null);
+    });
+  });
+
+  describe("when an error occurs", () => {
+    let result;
+    const error = "an error message";
+    
+    beforeAll(async () => {
+      mockCreateFn.mockRejectedValue(error);
+
+      result = await createRequest({message, source});
+    });
+
+    test("it returns the error message", () => {
+      expect(result[0]).toBeNull();
+      expect(result[1]).toEqual(error);
     });
   });
 });
@@ -208,6 +227,24 @@ describe("findDeliveryNeededRequests", () => {
       expect(result[1]).toEqual(null);
     });
   });
+
+  describe("when an error occurs", () => {
+    let result;
+    const error = "some error message";
+
+    beforeEach(async () => {
+      mockSelectFn.mockReturnValue({
+	all: jest.fn().mockRejectedValue(error)
+      });
+
+      result = await findDeliveryNeededRequests();
+    });
+
+    test("it returns the error message", () => {
+      expect(result[0]).toEqual([]);
+      expect(result[1]).toEqual(`Error while looking up open requests: ${error}`);
+    });
+  });
 });
 
 describe("findOpenRequestsForSlack", () => {
@@ -261,6 +298,24 @@ describe("findOpenRequestsForSlack", () => {
       expect(result[0]).toHaveLength(1);
       expect(result[0]).toEqual([regularRecord]);
       expect(result[1]).toEqual(null);
+    });
+  });
+
+  describe("when an error occurs", () => {
+    let result;
+    const error = "an error";
+
+    beforeAll(async () => {
+      mockSelectFn.mockReturnValue({
+	all: jest.fn().mockRejectedValue(error)
+      });
+
+      result = await findOpenRequestsForSlack();
+    });
+
+    test("it returns the error message", () => {
+      expect(result[0]).toEqual([]);
+      expect(result[1]).toEqual(`Error while looking up open requests: ${error}`);
     });
   });
 });
