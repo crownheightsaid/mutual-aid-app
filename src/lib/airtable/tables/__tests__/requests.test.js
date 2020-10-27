@@ -79,15 +79,15 @@ describe("deleteRequest", () => {
 describe("createRequest", () => {
   const message = "some test message";
   const source = "some test source";
-  
+
   describe("given the minimum required fields", () => {
     let result;
-    
+
     beforeAll(async () => {
       mockCreateFn.mockResolvedValue("the created record");
       result = await createRequest({ message, source });
     });
-    
+
     test("creates and returns a request with defaults", async () => {
       expect(mockCreateFn).toHaveBeenCalledWith({
         [fields.message]: message,
@@ -108,11 +108,11 @@ describe("createRequest", () => {
   describe("when an error occurs", () => {
     let result;
     const error = "an error message";
-    
+
     beforeAll(async () => {
       mockCreateFn.mockRejectedValue(error);
 
-      result = await createRequest({message, source});
+      result = await createRequest({ message, source });
     });
 
     test("it returns the error message", () => {
@@ -234,7 +234,7 @@ describe("findDeliveryNeededRequests", () => {
 
     beforeEach(async () => {
       mockSelectFn.mockReturnValue({
-	all: jest.fn().mockRejectedValue(error)
+        all: jest.fn().mockRejectedValue(error),
       });
 
       result = await findDeliveryNeededRequests();
@@ -242,7 +242,9 @@ describe("findDeliveryNeededRequests", () => {
 
     test("it returns the error message", () => {
       expect(result[0]).toEqual([]);
-      expect(result[1]).toEqual(`Error while looking up open requests: ${error}`);
+      expect(result[1]).toEqual(
+        `Error while looking up open requests: ${error}`
+      );
     });
   });
 });
@@ -307,7 +309,7 @@ describe("findOpenRequestsForSlack", () => {
 
     beforeAll(async () => {
       mockSelectFn.mockReturnValue({
-	all: jest.fn().mockRejectedValue(error)
+        all: jest.fn().mockRejectedValue(error),
       });
 
       result = await findOpenRequestsForSlack();
@@ -315,7 +317,9 @@ describe("findOpenRequestsForSlack", () => {
 
     test("it returns the error message", () => {
       expect(result[0]).toEqual([]);
-      expect(result[1]).toEqual(`Error while looking up open requests: ${error}`);
+      expect(result[1]).toEqual(
+        `Error while looking up open requests: ${error}`
+      );
     });
   });
 });
