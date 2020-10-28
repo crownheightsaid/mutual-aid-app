@@ -219,7 +219,7 @@ describe("findPaymentRequestBySlackThreadId", () => {
 
     beforeAll(async () => {
       mockSelectFn.mockReturnValue({
-	firstPage: () => [record]
+        firstPage: () => [record],
       });
 
       result = await findPaymentRequestBySlackThreadId("some slack thread ID");
@@ -233,11 +233,10 @@ describe("findPaymentRequestBySlackThreadId", () => {
 
   describe("when NO payment request with the given slack thread is found", () => {
     let result;
-    const error = "some error message";
 
     beforeAll(async () => {
       mockSelectFn.mockReturnValue({
-	firstPage: () => null
+        firstPage: () => null,
       });
 
       result = await findPaymentRequestBySlackThreadId("some slack thread ID");
@@ -257,9 +256,9 @@ describe("findPaymentRequestBySlackThreadId", () => {
     beforeAll(async () => {
       consoleErrorFn = console.error;
       console.error = jest.fn();
-      
+
       mockSelectFn.mockReturnValue({
-	firstPage: jest.fn().mockRejectedValue(error)
+        firstPage: jest.fn().mockRejectedValue(error),
       });
 
       result = await findPaymentRequestBySlackThreadId("some slack thread ID");
@@ -275,7 +274,9 @@ describe("findPaymentRequestBySlackThreadId", () => {
     });
 
     test("it logs the error message", () => {
-      expect(console.error).toHaveBeenCalledWith(`Error while fetching request by thread ID: ${error}`);
+      expect(console.error).toHaveBeenCalledWith(
+        `Error while fetching request by thread ID: ${error}`
+      );
     });
   });
 });
