@@ -14,6 +14,7 @@ jest.mock("~airtable/bases", () => ({
 
 const { Record } = require("airtable");
 const {
+  findReimbursablePaymentRequests,
   findPaymentRequestById,
   findPaymentRequestBySlackThreadId,
   deletePaymentRequest,
@@ -319,6 +320,77 @@ describe("findPaymentRequestById", () => {
       expect(result[0]).toBeNull();
       expect(result[1]).toEqual(
         `Errors looking up payment request by recordId ${id}: ${error}`
+      );
+    });
+  });
+});
+
+describe("findReimbursablePaymentRequests", () => {
+  afterAll(jest.clearAllMocks);
+
+  describe("when there are reimbursable payment requests", () => {
+    let result;
+    const records = ["record 1", "record 2"];
+
+    beforeAll(async () => {
+      mockSelectFn.mockReturnValue({
+        firstPage: () => records,
+      });
+
+      result = await findReimbursablePaymentRequests();
+    });
+
+    test("it returns the payment request records", () => {
+      expect(result[0]).toEqual(records);
+      expect(result[1]).toBeNull();
+    });
+  });
+
+  describe("when there are no reimbursable payment requests", () => {
+    let result;
+
+    beforeAll(async () => {
+      mockSelectFn.mockReturnValue({
+        firstPage: () => null,
+      });
+
+      result = await findReimbursablePaymentRequests();
+    });
+
+    test("it returns an error message", () => {
+      expect(result[0]).toBeNull();
+      expect(result[1]).toEqual("No pending payment requests");
+    });
+  });
+
+  describe("when an error occurs", () => {
+    let result;
+    let consoleErrorFn;
+    const error = { message: "an error" };
+
+    beforeAll(async () => {
+      consoleErrorFn = console.error;
+      console.error = jest.fn();
+
+      mockSelectFn.mockReturnValue({
+        firstPage: jest.fn().mockRejectedValue(error),
+      });
+
+      result = await findReimbursablePaymentRequests();
+    });
+
+    afterAll(() => {
+      console.error = consoleErrorFn;
+    });
+
+    test("it returns the error message", () => {
+      expect(result[0]).toBeNull();
+      expect(result[1]).toEqual(error.message);
+    });
+
+    test("it logs the error message", () => {
+      expect(console.error).toHaveBeenCalledWith(
+        `Error while fetching reimbursable payment requests ${error}`
       );
     });
   });
