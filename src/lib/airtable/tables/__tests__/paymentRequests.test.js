@@ -22,43 +22,47 @@ const {
 } = require("../paymentRequestsSchema");
 
 describe("updatePaymentRequestByCode", () => {
-
   afterAll(jest.clearAllMocks);
-  
+
   describe("when a payment request exists for the given code", () => {
-    let code, update, result, record;
-    
+    let code;
+    let update;
+    let result;
+    let record;
+
     beforeAll(async () => {
       code = "123";
       update = { [paymentRequestsFields.balance]: "100" };
-      
+
       record = new Record(paymentRequestsTableName, "id-50", {
-	[paymentRequestsFields.amount]: "150",
-	[paymentRequestsFields.balance]: "150"
+        [paymentRequestsFields.amount]: "150",
+        [paymentRequestsFields.balance]: "150",
       });
-      
+
       mockSelectFn.mockReturnValue({ firstPage: () => [record] });
 
       mockUpdateFn.mockReturnValue(["an updated record"]);
-      
+
       result = await updatePaymentRequestByCode(code, update);
     });
 
     test("it sends a select request", () => {
       expect(mockSelectFn).toHaveBeenCalledWith({
-	filterByFormula: `(FIND('${code}', {${paymentRequestsFields.requestCode}}) > 0)`
+        filterByFormula: `(FIND('${code}', {${paymentRequestsFields.requestCode}}) > 0)`,
       });
     });
 
     test("it sends an update request with the new values", () => {
-      expect(mockUpdateFn).toHaveBeenCalledWith([{
-	id: record.id,
-	fields: {
-	  [paymentRequestsFields.balance]: "100"
-	}
-      }]);
+      expect(mockUpdateFn).toHaveBeenCalledWith([
+        {
+          id: record.id,
+          fields: {
+            [paymentRequestsFields.balance]: "100",
+          },
+        },
+      ]);
     });
-    
+
     test("it returns the payment request record", () => {
       expect(result[0]).toEqual("an updated record");
       expect(result[1]).toBeNull();
@@ -68,7 +72,7 @@ describe("updatePaymentRequestByCode", () => {
   describe("when no payment request exists for the given code", () => {
     let result;
     const code = "some code";
-    
+
     beforeAll(async () => {
       mockSelectFn.mockReturnValue({ firstPage: () => [] });
 
@@ -87,12 +91,12 @@ describe("updatePaymentRequestByCode", () => {
 
     beforeAll(async () => {
       mockSelectFn.mockReturnValue({
-	firstPage: jest.fn().mockRejectedValue(error)
+        firstPage: jest.fn().mockRejectedValue(error),
       });
 
       result = await updatePaymentRequestByCode("some code", "some update");
     });
-    
+
     test("it returns the error message", () => {
       expect(result[0]).toBeNull();
       expect(result[1]).toEqual(`Error while processing update: ${error}`);
@@ -105,7 +109,7 @@ describe("updatePaymentRequestByCode", () => {
 
     beforeAll(async () => {
       mockSelectFn.mockReturnValue({
-	firstPage: () => [new Record(paymentRequestsTableName, "some-id")]
+        firstPage: () => [new Record(paymentRequestsTableName, "some-id")],
       });
 
       mockUpdateFn.mockRejectedValue(error);
@@ -121,17 +125,15 @@ describe("updatePaymentRequestByCode", () => {
 });
 
 describe("findPaymentRequestInSlack", () => {
-
   afterAll(jest.clearAllMocks);
-  
+
   describe("given a code that is too short", () => {
-    
     let result;
-    
+
     beforeAll(async () => {
       result = await findPaymentRequestInSlack("ABC");
     });
-    
+
     test("it returns an error message", () => {
       expect(result[0]).toBeNull();
       expect(result[1]).toEqual("Request code must be at least 4 characters.");
@@ -148,7 +150,7 @@ describe("findPaymentRequestInSlack", () => {
 
     test("it sends a select request", () => {
       expect(mockSelectFn).toHaveBeenCalledWith({
-	filterByFormula: `AND((FIND('${code}', {${paymentRequestsFields.requestCode}}) > 0), {${paymentRequestsFields.slackThreadId}})`
+        filterByFormula: `AND((FIND('${code}', {${paymentRequestsFields.requestCode}}) > 0), {${paymentRequestsFields.slackThreadId}})`,
       });
     });
 
@@ -156,16 +158,16 @@ describe("findPaymentRequestInSlack", () => {
       let result;
 
       beforeAll(async () => {
-	mockSelectFn.mockReturnValue({
-	  firstPage: () => []
-	});
+        mockSelectFn.mockReturnValue({
+          firstPage: () => [],
+        });
 
-	result = await findPaymentRequestInSlack(code);
+        result = await findPaymentRequestInSlack(code);
       });
 
       test("it returns an error message", () => {
-	expect(result[0]).toBeNull();
-	expect(result[1]).toEqual("No paymentrequests found with that code.");
+        expect(result[0]).toBeNull();
+        expect(result[1]).toEqual("No paymentrequests found with that code.");
       });
     });
 
@@ -174,16 +176,16 @@ describe("findPaymentRequestInSlack", () => {
       const error = "an error";
 
       beforeAll(async () => {
-	mockSelectFn.mockReturnValue({
-	  firstPage: jest.fn().mockRejectedValue(error)
-	});
+        mockSelectFn.mockReturnValue({
+          firstPage: jest.fn().mockRejectedValue(error),
+        });
 
-	result = await findPaymentRequestInSlack(code);
+        result = await findPaymentRequestInSlack(code);
       });
 
       test("it returns the error message", () => {
-	expect(result[0]).toBeNull();
-	expect(result[1]).toEqual(`Error while finding request: ${error}`);
+        expect(result[0]).toBeNull();
+        expect(result[1]).toEqual(`Error while finding request: ${error}`);
       });
     });
 
@@ -192,25 +194,24 @@ describe("findPaymentRequestInSlack", () => {
       const record = "a payment request record";
 
       beforeAll(async () => {
-	mockSelectFn.mockReturnValue({
-	  firstPage: () => [record]
-	});
+        mockSelectFn.mockReturnValue({
+          firstPage: () => [record],
+        });
 
-	result = await findPaymentRequestInSlack(code);
+        result = await findPaymentRequestInSlack(code);
       });
-      
+
       test("it returns the payment request record", () => {
-	expect(result[0]).toEqual(record);
-	expect(result[1]).toBeNull();
+        expect(result[0]).toEqual(record);
+        expect(result[1]).toBeNull();
       });
     });
   });
 });
 
 describe("deletePaymentRequest", () => {
-
   afterAll(jest.clearAllMocks);
-  
+
   let paymentRequestRecord;
 
   beforeAll(async () => {
@@ -225,7 +226,7 @@ describe("deletePaymentRequest", () => {
   describe("when an error occurs", () => {
     const error = "an error";
     let consoleErrorFn;
-    
+
     beforeAll(async () => {
       consoleErrorFn = console.error;
       console.error = jest.fn();
@@ -238,7 +239,9 @@ describe("deletePaymentRequest", () => {
     });
 
     test("it logs the error", () => {
-      expect(console.error).toHaveBeenCalledWith(`Error while deleting payment request ${error}`);
+      expect(console.error).toHaveBeenCalledWith(
+        `Error while deleting payment request ${error}`
+      );
     });
   });
 });
