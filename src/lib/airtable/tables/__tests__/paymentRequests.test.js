@@ -51,6 +51,10 @@ describe("updatePaymentRequestByCode", () => {
       result = await updatePaymentRequestByCode(code, update);
     });
 
+    afterAll(() => {
+      mockUpdateFn.mockClear();
+    });
+
     test("it sends a select request", () => {
       expect(mockSelectFn).toHaveBeenCalledWith({
         filterByFormula: `(FIND('${code}', {${paymentRequestsFields.requestCode}}) > 0)`,
@@ -122,9 +126,53 @@ describe("updatePaymentRequestByCode", () => {
       result = await updatePaymentRequestByCode("some code", "some update");
     });
 
+    afterAll(() => {
+      mockUpdateFn.mockClear();
+    });
+
     test("it returns the error message", () => {
       expect(result[0]).toBeNull();
       expect(result[1]).toEqual(`Error while processing update: ${error}`);
+    });
+  });
+
+  describe("when the update includes meta data", () => {
+    const id = "id-65";
+
+    beforeAll(async () => {
+      const record = new Record(paymentRequestsTableName, id, {
+        fields: {
+          [paymentRequestsFields.meta]: JSON.stringify({ oldKey: "old value" }),
+        },
+      });
+
+      mockSelectFn.mockReturnValue({
+        firstPage: () => [record],
+      });
+
+      const update = {
+        [paymentRequestsFields.meta]: { newKey: "new value" },
+      };
+
+      await updatePaymentRequestByCode("some code", update);
+    });
+
+    afterAll(() => {
+      mockUpdateFn.mockClear();
+    });
+
+    test("it merges the meta update with the existing meta field", () => {
+      expect(mockUpdateFn).toHaveBeenCalledWith([
+        {
+          id,
+          fields: {
+            [paymentRequestsFields.meta]: JSON.stringify({
+              oldKey: "old value",
+              newKey: "new value",
+            }),
+          },
+        },
+      ]);
     });
   });
 });
