@@ -1,17 +1,20 @@
 const mockSelectFn = jest.fn();
 const mockUpdateFn = jest.fn();
 const mockDestroyFn = jest.fn();
+const mockFindFn = jest.fn();
 
 jest.mock("~airtable/bases", () => ({
   paymentsAirbase: () => ({
     select: mockSelectFn,
     update: mockUpdateFn,
     destroy: mockDestroyFn,
+    find: mockFindFn,
   }),
 }));
 
 const { Record } = require("airtable");
 const {
+  findPaymentRequestById,
   findPaymentRequestBySlackThreadId,
   deletePaymentRequest,
   updatePaymentRequestByCode,
@@ -276,6 +279,46 @@ describe("findPaymentRequestBySlackThreadId", () => {
     test("it logs the error message", () => {
       expect(console.error).toHaveBeenCalledWith(
         `Error while fetching request by thread ID: ${error}`
+      );
+    });
+  });
+});
+
+describe("findPaymentRequestById", () => {
+  afterAll(jest.clearAllMocks);
+
+  let result;
+  const id = "id-54";
+  const record = "a payment request record";
+
+  beforeAll(async () => {
+    mockFindFn.mockResolvedValue(record);
+
+    result = await findPaymentRequestById(id);
+  });
+
+  test("it makes a find request", () => {
+    expect(mockFindFn).toHaveBeenCalledWith(id);
+  });
+
+  test("it returns the payment request record", () => {
+    expect(result[0]).toEqual(record);
+    expect(result[1]).toBeNull();
+  });
+
+  describe("when an error occurs", () => {
+    const error = "an error message";
+
+    beforeAll(async () => {
+      mockFindFn.mockRejectedValue(error);
+
+      result = await findPaymentRequestById(id);
+    });
+
+    test("it returns the error message", () => {
+      expect(result[0]).toBeNull();
+      expect(result[1]).toEqual(
+        `Errors looking up payment request by recordId ${id}: ${error}`
       );
     });
   });
