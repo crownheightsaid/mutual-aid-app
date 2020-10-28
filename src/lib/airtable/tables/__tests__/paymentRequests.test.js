@@ -12,6 +12,7 @@ jest.mock("~airtable/bases", () => ({
 
 const { Record } = require("airtable");
 const {
+  findPaymentRequestBySlackThreadId,
   deletePaymentRequest,
   updatePaymentRequestByCode,
   findPaymentRequestInSlack,
@@ -205,6 +206,76 @@ describe("findPaymentRequestInSlack", () => {
         expect(result[0]).toEqual(record);
         expect(result[1]).toBeNull();
       });
+    });
+  });
+});
+
+describe("findPaymentRequestBySlackThreadId", () => {
+  afterAll(jest.clearAllMocks);
+
+  describe("when a payment request matching the given slack thread is found", () => {
+    let result;
+    const record = "a matching record";
+
+    beforeAll(async () => {
+      mockSelectFn.mockReturnValue({
+	firstPage: () => [record]
+      });
+
+      result = await findPaymentRequestBySlackThreadId("some slack thread ID");
+    });
+
+    test("it returns the payment request record", () => {
+      expect(result[0]).toEqual(record);
+      expect(result[1]).toBeNull();
+    });
+  });
+
+  describe("when NO payment request with the given slack thread is found", () => {
+    let result;
+    const error = "some error message";
+
+    beforeAll(async () => {
+      mockSelectFn.mockReturnValue({
+	firstPage: () => null
+      });
+
+      result = await findPaymentRequestBySlackThreadId("some slack thread ID");
+    });
+
+    test("it returns an error message", () => {
+      expect(result[0]).toBeNull();
+      expect(result[1]).toEqual("Request with that thread ID not found");
+    });
+  });
+
+  describe("when an error occurs", () => {
+    let result;
+    let consoleErrorFn;
+    const error = "some error message";
+
+    beforeAll(async () => {
+      consoleErrorFn = console.error;
+      console.error = jest.fn();
+      
+      mockSelectFn.mockReturnValue({
+	firstPage: jest.fn().mockRejectedValue(error)
+      });
+
+      result = await findPaymentRequestBySlackThreadId("some slack thread ID");
+    });
+
+    afterAll(() => {
+      console.error = consoleErrorFn;
+    });
+
+    test("it returns an error message", () => {
+      expect(result[0]).toBeNull();
+      expect(result[1]).toEqual(error);
+    });
+
+    test("it logs the error message", () => {
+      expect(console.error).toHaveBeenCalledWith(`Error while fetching request by thread ID: ${error}`);
     });
   });
 });
