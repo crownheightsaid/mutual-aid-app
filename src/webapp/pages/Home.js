@@ -34,7 +34,7 @@ export default function HomePage() {
     <Container maxWidth="md" className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Paper className={classes.paper}>
+          <Paper elevation={4} className={classes.paper}>
             <Typography variant="h3" component="h1">
               {str("webapp:home.title", {
                 defaultValue: "{{neighborhood}} Mutual Aid App",
@@ -46,7 +46,10 @@ export default function HomePage() {
 
         <Grid item xs={12} sm={6}>
           <Link to="/neighborhood-finder" className={`${classes.link}`}>
-            <Paper className={`${classes.paper} ${classes.subAppPaperLink}`}>
+            <Paper
+              elevation={4}
+              className={`${classes.paper} ${classes.subAppPaperLink}`}
+            >
               <MapIcon className={classes.icon} />
               {str("webapp:zoneFinder.genericTitle", {
                 defaultValue: "Neighborhood Finder",
@@ -57,7 +60,10 @@ export default function HomePage() {
 
         <Grid item xs={12} sm={6}>
           <Link to="/delivery-needed" className={`${classes.link}`}>
-            <Paper className={`${classes.paper} ${classes.subAppPaperLink}`}>
+            <Paper
+              elevation={4}
+              className={`${classes.paper} ${classes.subAppPaperLink}`}
+            >
               <LocalGroceryStoreIcon className={classes.icon} />
               {str("webapp:deliveryNeeded.genericTitle", {
                 defaultValue: "Delivery Needed",
@@ -67,7 +73,7 @@ export default function HomePage() {
         </Grid>
 
         <Grid item xs={12}>
-          <Paper className={classes.paper}>
+          <Paper elevation={4} className={classes.paper}>
             <Typography variant="h4" component="h1" gutterBottom>
               Contributing
             </Typography>
