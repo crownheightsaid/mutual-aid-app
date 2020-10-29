@@ -154,58 +154,50 @@ describe("findRequestByExternalId", () => {
 });
 
 describe("findDeliveryNeededRequests", () => {
-  describe("when all requests have been posted in Slack", () => {
-    let result;
-    let record;
+  let result;
+  let records;
 
-    beforeAll(async () => {
-      record = buildRequestRecord({ id: "abc", postedInSlack: true });
+  afterEach(() => {
+    mockSelectFn.mockClear();
+  });
 
-      mockSelectFn.mockReturnValue({ all: () => [record] });
+  describe("when the request succeeds", () => {
+    beforeEach(async () => {
+      records = [
+        buildRequestRecord({ id: "abc", postedInSlack: true }),
+        buildRequestRecord({ id: "def", postedInSlack: false }),
+      ];
+
+      mockSelectFn.mockReturnValue({ all: () => [records] });
 
       result = await findDeliveryNeededRequests();
-    });
-
-    afterEach(() => {
-      mockSelectFn.mockClear();
     });
 
     test("it sends a request with a query", () => {
       expect(mockSelectFn).toHaveBeenCalledWith({
-        filterByFormula: `OR({${fields.status}} = '${fields.status_options.dispatchStarted}', {${fields.status}} = '${fields.status_options.deliveryNeeded}')`,
+        filterByFormula: `OR({${fields.status}} = '${fields.status_options.deliveryNeeded}')`,
       });
     });
 
-    test("it returns the results", () => {
-      expect(result[0]).toEqual([record]);
+    test("it returns results successfully", () => {
+      expect(result[0]).toEqual([records]);
       expect(result[1]).toEqual(null);
     });
   });
 
-  describe("when there are requests not posted in Slack", () => {
-    let result;
-    let record;
+  describe("when the request fails", () => {
+    const ERROR_MESSAGE = "ruh roh, an error!";
 
-    beforeAll(async () => {
-      record = buildRequestRecord({ id: 1, postedInSlack: true });
-      const notInSlackRecord = buildRequestRecord({
-        id: 2,
-        postedInSlack: false,
+    beforeEach(async () => {
+      mockSelectFn.mockImplementation(() => {
+        throw new Error(ERROR_MESSAGE);
       });
-
-      mockSelectFn.mockReturnValue({ all: () => [record, notInSlackRecord] });
-
       result = await findDeliveryNeededRequests();
     });
 
-    afterAll(() => {
-      mockSelectFn.mockClear();
-    });
-
-    test("it only returns records posted in Slack", () => {
-      expect(result[0]).toHaveLength(1);
-      expect(result[0]).toEqual([record]);
-      expect(result[1]).toEqual(null);
+    test("it returns an error", () => {
+      expect(result[0]).toEqual([]);
+      expect(result[1].includes(ERROR_MESSAGE)).toBe(true);
     });
   });
 });

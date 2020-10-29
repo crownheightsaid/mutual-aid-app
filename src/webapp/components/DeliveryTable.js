@@ -92,7 +92,7 @@ const DeliveryTable = ({ rows }) => {
         </TableHead>
         <TableBody>
           {formattedRows.map((row) => (
-            <DeliveryTableRow row={row} key={row.code} />
+            <DeliveryTableRow row={row} key={row.Code} />
           ))}
         </TableBody>
       </Table>

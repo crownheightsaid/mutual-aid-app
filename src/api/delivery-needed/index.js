@@ -1,3 +1,4 @@
+const _ = require("lodash");
 const axios = require("axios");
 const {
   findDeliveryNeededRequests,
@@ -98,7 +99,7 @@ const makeFeature = async (r) => {
         [timeSensitivity]: r.fields[timeSensitivity],
         [intakeNotes]: r.fields[intakeNotes],
         need,
-        slackPermalink: slackPermalink.ok ? slackPermalink.permalink : "",
+        slackPermalink: slackPermalink.permalink || "",
         dateChangedToDeliveryNeeded: r.fields[dateChangedToDeliveryNeeded],
       },
     },
@@ -114,13 +115,10 @@ exports.deliveryNeededRequestHandler = async (req, res) => {
       .send({ message: `Error fetching requests: ${requestErr}` });
   }
 
-  const regularRequestsPromises = requestObj
-    .filter((r) => !r.fields[forDrivingClusters])
-    .map(makeFeature);
-
-  const clusterRequestsPromises = requestObj
-    .filter((r) => Boolean(r.fields[forDrivingClusters]))
-    .map(makeFeature);
+  const [clusterRequestsPromises, regularRequestsPromises] = _.partition(
+    requestObj,
+    (r) => r.fields[forDrivingClusters]
+  ).map((promises) => promises.map(makeFeature));
 
   const regularRequests = await Promise.all(regularRequestsPromises);
   const clusterRequests = await Promise.all(clusterRequestsPromises);
