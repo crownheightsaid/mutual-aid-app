@@ -26,5 +26,8 @@ const sharedStylesFn = (theme) => ({
   text: {
     marginBottom: theme.spacing(1),
   },
+  paper: {
+    padding: theme.spacing(3),
+  },
 });
 export default sharedStylesFn;
