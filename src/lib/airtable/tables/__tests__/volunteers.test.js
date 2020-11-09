@@ -98,7 +98,7 @@ describe("findVolunteerByEmail", () => {
       });
     });
 
-    describe("if the ID does ont exist", () => {
+    describe("if the ID does not exist", () => {
       const error = "an error";
       let result;
 
