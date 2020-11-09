@@ -89,4 +89,22 @@ describe("findDonorPaymentByCode", () => {
       expect(result).toEqual([null, "Valid payment with that code not found"]);
     });
   });
+
+  describe("when an error occurs", () => {
+    let result;
+    const error = { message: "an error" };
+
+    beforeEach(async () => {
+      mockSelect.mockReturnValue({
+        firstPage: jest.fn().mockRejectedValue(error),
+      });
+
+      result = await findDonorPaymentByCode("abcd");
+    });
+
+    test("it returns the error message", () => {
+      expect(result[0]).toBeNull();
+      expect(result[1]).toEqual(error.message);
+    });
+  });
 });
