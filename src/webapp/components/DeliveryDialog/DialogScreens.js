@@ -10,7 +10,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import FormLabel from '@material-ui/core/FormLabel';
 import Instructions from "./Instructions";
 
 const useStyles = makeStyles((theme) => ({
@@ -130,7 +129,7 @@ export const FormStep = ({ phoneNumber, setPhoneNumber, onSubmit }) => {
   const { t: str } = useTranslation();
   const [error, setError] = useState();
   const isEmptyPhoneNumber =
-    !phoneNumber || !`${phoneNumber}`.length || `${phoneNumber}`.length < 17;
+    !phoneNumber || !`${phoneNumber}`.length || `${phoneNumber}`.length < 14;
 
   const handleSubmit = () => {
     // validate phonenumber
@@ -156,8 +155,8 @@ export const FormStep = ({ phoneNumber, setPhoneNumber, onSubmit }) => {
           })}
         </Typography>
         <MuiPhoneNumber
-          required
           name="phone"
+          disableCountryCode
           defaultCountry="us"
           onlyCountries={["us"]}
           onChange={(value) => setPhoneNumber(value)}
@@ -167,6 +166,8 @@ export const FormStep = ({ phoneNumber, setPhoneNumber, onSubmit }) => {
               handleSubmit();
             }
           }}
+          helperText="Do not include country code."
+          placeholder="(702) 123-4567"
         />
         {error && (
           <p className={classes.errorMsg}>
