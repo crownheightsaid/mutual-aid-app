@@ -10,6 +10,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import FormLabel from '@material-ui/core/FormLabel';
 import Instructions from "./Instructions";
 
 const useStyles = makeStyles((theme) => ({
@@ -156,6 +157,7 @@ export const FormStep = ({ phoneNumber, setPhoneNumber, onSubmit }) => {
         </Typography>
         <MuiPhoneNumber
           required
+          name="phone"
           defaultCountry="us"
           onlyCountries={["us"]}
           onChange={(value) => setPhoneNumber(value)}
