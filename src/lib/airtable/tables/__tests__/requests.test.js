@@ -221,7 +221,6 @@ describe("findDeliveryNeededRequests", () => {
   });
 
   describe("when an error occurs", () => {
-    let result;
     const error = "some error message";
 
     beforeEach(async () => {
