@@ -207,11 +207,7 @@ export const ErrorMessage = ({ message }) => {
       </DialogTitle>
       <DialogContent classes={classes.centeredContent}>
         <Typography variant="body2">
-          <p>
-            {str("webapp:deliveryNeeded.dialog.errorBody", {
-              defaultValue: message,
-            })}
-          </p>
+          <p>{message || str("webapp:deliveryNeeded.dialog.errorBody")}</p>
         </Typography>
       </DialogContent>
     </>

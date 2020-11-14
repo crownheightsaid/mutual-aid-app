@@ -4,7 +4,7 @@
     "body": {
       "title": "Contributing",
       "volunteer": "Get involved with CHMA as a volunteer",
-      "contributing": "Want to contribute? Start here: ",
+      "contributing": "Want to contribute? Start here: "
     }
   },
   "zoneFinder": {
@@ -105,7 +105,7 @@
       "form": "Please provide your phone number so we can text you the details of the delivery. You must be registered as a delivery volunteer in our system.",
       "submit": "Submit",
       "errorTitle": "Something went wrong!",
-      "errorBody": "__NOT_TRANSLATED__",
+      "errorBody": "An unknown error occurred. Please take a screenshot and contact #tech_support.",
       "finish": "Thank you!",
       "description": "Claim a delivery",
       "instructions": "__NOT_TRANSLATED__"
@@ -116,6 +116,10 @@
     "contact": {
       "email": "crownheights20@protonmail.com",
       "orSlack": " or on Slack at "
+    },
+    "body": {
+      "volunteer": "Get involved with CHMA as a volunteer",
+      "contributing": "Want to contribute? Start here: "
     }
   },
   "contact": "crownheights20@protonmail.com"
