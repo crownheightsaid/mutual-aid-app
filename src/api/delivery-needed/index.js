@@ -6,9 +6,9 @@ const {
 } = require("~airtable/tables/requests");
 const {
   findVolunteerByPhone,
-  volunteersFields,
   findVolunteerById,
 } = require("~airtable/tables/volunteers");
+const { volunteersFields } = require("~airtable/tables/volunteersSchema");
 const { fields } = require("~airtable/tables/requestsSchema");
 const { fetchCoordFromCrossStreets } = require("./fetchCoordFromCrossStreets");
 const slackapi = require("~slack/webApi");

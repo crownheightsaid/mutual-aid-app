@@ -1,10 +1,8 @@
 const slackapi = require("~slack/webApi");
 const { findChannelByName, addBotToChannel } = require("~slack/channels");
 const { REIMBURSEMENT_CHANNEL } = require("~slack/constants");
-const {
-  volunteersFields,
-  findVolunteerById,
-} = require("~airtable/tables/volunteers");
+const { findVolunteerById } = require("~airtable/tables/volunteers");
+const { volunteersFields } = require("~airtable/tables/volunteersSchema");
 const {
   paymentRequestsFields,
   paymentRequestsTable,
