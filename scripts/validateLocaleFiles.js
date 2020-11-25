@@ -7,10 +7,12 @@ function isValid(str) {
   } catch (e) {
     return e;
   }
+
+  return null;
 }
 
 function validateFile(filePath) {
-  const data = fs.readFileSync(filePath, 'utf8');
+  const data = fs.readFileSync(filePath, "utf8");
   const error = isValid(data);
 
   if (error) {
@@ -23,9 +25,9 @@ function validateFile(filePath) {
 const localesPath = "./src/lib/strings/locales";
 
 const dirs = fs.readdirSync(localesPath);
-dirs.forEach(dir => {
+dirs.forEach((dir) => {
   const files = fs.readdirSync(path.join(localesPath, dir));
-  files.forEach(file => {
+  files.forEach((file) => {
     validateFile(path.join(localesPath, dir, file));
   });
 });
