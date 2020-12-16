@@ -9,13 +9,15 @@ exports.getDeliveryRequestNeedFormatted = (services) => {
   if (!services) {
     return "Not stated";
   }
-  let servicesString = ""
 
-  if (typeof services === "string"){
-    servicesString = services
-  } else if (Array.isArray(services)){
-    servicesString = services.join()
+  let servicesString = "";
+
+  if (typeof services === "string") {
+    servicesString = services;
+  } else if (Array.isArray(services)) {
+    servicesString = services.join();
   }
+
   if (servicesString === fields.supportType_options.delivery) {
     return "Groceries / Shopping";
   }
