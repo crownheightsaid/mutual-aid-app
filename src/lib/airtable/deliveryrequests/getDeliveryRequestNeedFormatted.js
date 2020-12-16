@@ -15,7 +15,7 @@ exports.getDeliveryRequestNeedFormatted = (services) => {
   if (typeof services === "string") {
     servicesString = services;
   } else if (Array.isArray(services)) {
-    servicesString = services.join();
+    servicesString = services.join(", ");
   }
 
   if (servicesString === fields.supportType_options.delivery) {
