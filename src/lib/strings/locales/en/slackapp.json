@@ -154,7 +154,7 @@
       },
       "message": {
         "intro": "Hey Crown Heights, we have a new request from our neighbor {{firstName}} at {{streets}} in *{{quadrant}}*",
-        "outro": "*Want to volunteer to help our neighbor{{firstName}}?* Comment on this thread and {{- intakeSlackId}} will follow up with more details.\n_Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive. If you have been in large crowds or demonstrations, please self-isolate for 14 days or wait 5 days to get a test, and resume deliveries after testing negative._",
+        "outro": "*Want to volunteer to help our neighbor{{firstName}}?* Head to our <https://crownheightsma.herokuapp.com/delivery-needed?sms_pickup=true|online SMS pickup map> to find the code and click “Claim Delivery”!\n_Reminder: Please don’t volunteer for delivery if you have any COVID-19/cold/flu-like symptoms, or have come into contact with someone that’s tested positive. If you have been in large crowds or demonstrations, please self-isolate for 14 days or wait 5 days to get a test, and resume deliveries after testing negative._",
         "outroPay": "Submit your receipt: please fill out this handy reimbursement form, it will automatically post to the #community_reimbursement channel!\nFor more information, please see the delivery guide.",
         "guide": "For more information, please see the <{{- guideUrl}}|delivery guide>."
       },

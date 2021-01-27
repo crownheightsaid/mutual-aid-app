@@ -8,7 +8,7 @@ const {
 } = require("~slack/webApi");
 const { getExistingMessage: getExistingMessageFn } = require("~slack/channels");
 const updateMessageContent = require("./updateMessageContent");
-const requests = require("~airtable/tables/requests");
+const requests = require("~airtable/tables/requestsSchema");
 
 describe('When request has been posted with status "Delivery Needed"', () => {
   let requestRecord;

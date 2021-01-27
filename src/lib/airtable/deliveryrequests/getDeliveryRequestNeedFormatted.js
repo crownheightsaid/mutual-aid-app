@@ -3,13 +3,21 @@
  * need / service type for delivery requests.
  */
 
-const { fields } = require("~airtable/tables/requests");
+const { fields } = require("~airtable/tables/requestsSchema");
 
 exports.getDeliveryRequestNeedFormatted = (services) => {
-  if (services === undefined) {
+  if (!services) {
     return "Not stated";
   }
-  const servicesString = services.join(", ");
+
+  let servicesString = "";
+
+  if (typeof services === "string") {
+    servicesString = services;
+  } else if (Array.isArray(services)) {
+    servicesString = services.join(", ");
+  }
+
   if (servicesString === fields.supportType_options.delivery) {
     return "Groceries / Shopping";
   }

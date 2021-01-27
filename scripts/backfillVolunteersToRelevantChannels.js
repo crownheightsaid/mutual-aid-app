@@ -7,7 +7,7 @@ const { VOLUNTEER_INTERESTS_TO_SLACK_CHANNELS } = require("~slack/constants");
 const {
   volunteersFields,
   volunteersTable,
-} = require("~airtable/tables/volunteers");
+} = require("~airtable/tables/volunteersSchema");
 const { wait } = require("./utils");
 
 /* eslint-disable no-await-in-loop, no-loop-func, guard-for-in, no-continue */

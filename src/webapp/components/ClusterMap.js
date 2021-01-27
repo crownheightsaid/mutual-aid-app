@@ -3,6 +3,7 @@ import { Source } from "react-mapbox-gl";
 import { LngLat } from "mapbox-gl";
 import { findBounds } from "webapp/helpers/mapbox-coordinates";
 
+import { getUrgencyStyles } from "webapp/helpers/map-urgency";
 import {
   CROWN_HEIGHTS_BOUNDS,
   CROWN_HEIGHTS_CENTER_COORD,
@@ -11,7 +12,8 @@ import BasicMap from "./BasicMap";
 import { QuadrantsLayers } from "./QuadrantMap";
 import ClusterMapLayers from "./ClusterMapLayers";
 import { RequestNotFoundAlert, NoRequestsAlert } from "./MapAlerts";
-import getRequestParam from "../helpers/getRequestParam";
+import { getDaysSinceIsoTimestamp } from "../helpers/time";
+import getParam from "../helpers/utils";
 
 const makeBounds = (features) => {
   const lnglats = features.map((f) => {
@@ -27,16 +29,37 @@ const makeBounds = (features) => {
   return bounds;
 };
 
+const addDaysOpen = (feature) => {
+  const styles = getUrgencyStyles(
+    getDaysSinceIsoTimestamp(
+      feature.properties.meta.dateChangedToDeliveryNeeded
+    )
+  );
+  const markerColor = styles.backgroundColor;
+  return {
+    ...feature,
+    properties: {
+      ...feature.properties,
+      markerColor,
+    },
+  };
+};
+
 const ClusterMap = ({
   showDrivingRequests,
   showRegularRequests,
   geoJsonData,
   containerStyle = {},
 }) => {
-  const requestCode = getRequestParam();
+  const requestCode = getParam("request");
 
   let paramRequest;
   const { requests, drivingClusterRequests } = geoJsonData;
+  requests.features = requests.features.map(addDaysOpen);
+  drivingClusterRequests.features = drivingClusterRequests.features.map(
+    addDaysOpen
+  );
+
   const { features: reqFeatures } = requests;
   const { features: clusterFeatures } = drivingClusterRequests;
 

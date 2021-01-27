@@ -1,10 +1,8 @@
 const slackapi = require("~slack/webApi");
 const { findChannelByName, addBotToChannel } = require("~slack/channels");
 const { REIMBURSEMENT_CHANNEL } = require("~slack/constants");
-const {
-  volunteersFields,
-  findVolunteerById,
-} = require("~airtable/tables/volunteers");
+const { findVolunteerById } = require("~airtable/tables/volunteers");
+const { volunteersFields } = require("~airtable/tables/volunteersSchema");
 const {
   paymentRequestsFields,
   paymentRequestsTable,
@@ -14,10 +12,10 @@ const {
   deletePaymentRequest,
 } = require("~airtable/tables/paymentRequests");
 const {
-  fields: requestFields,
   findRequestByCode,
   updateRequestByCode,
 } = require("~airtable/tables/requests");
+const { fields: requestFields } = require("~airtable/tables/requestsSchema");
 const { str } = require("~strings/i18nextWrappers");
 
 module.exports = async function newPaymentRequest(record) {

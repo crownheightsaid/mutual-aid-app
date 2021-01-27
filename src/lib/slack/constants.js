@@ -1,4 +1,4 @@
-const { volunteersFields } = require("~airtable/tables/volunteers");
+const { volunteersFields } = require("~airtable/tables/volunteersSchema");
 const { str } = require("~strings/i18nextWrappers");
 
 exports.APP_NAME = process.env.APP_NAME || str("common:appName");

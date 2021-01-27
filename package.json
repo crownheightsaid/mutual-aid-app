@@ -69,6 +69,7 @@
     "lodash": "^4.17.15",
     "lru-cache": "^5.1.1",
     "mapbox-gl": "1.10.1",
+    "material-ui-phone-number": "^2.2.6",
     "mocha": "^7.1.1",
     "module-alias": "2.2.2",
     "morgan": "1.10.0",
@@ -124,7 +125,7 @@
       "last 1 safari version"
     ]
   },
-  "version": "0.58.0",
+  "version": "0.60.0",
   "release-it": {
     "hooks": {
       "after:bump": "npx auto-changelog -p -l 15"

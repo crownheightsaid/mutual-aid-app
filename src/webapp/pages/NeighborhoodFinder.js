@@ -15,6 +15,37 @@ import QuadrantMap from "webapp/components/QuadrantMap";
 import SaveNeighborhoodDataInput from "webapp/components/SaveNeighborhoodDataInput";
 import sharedStylesFn from "webapp/style/sharedStyles";
 
+const getError = ({ responseError, responseData, str }) => {
+  if (responseError) {
+    return (
+      <>
+        {str("webapp:zoneFinder.geoError.message")}
+        &nbsp;
+        <a
+          href={str("webapp:slack.techChannelUrl")}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {str("webapp:slack.techChannel")}
+        </a>
+      </>
+    );
+  }
+
+  const addressIsOutsideDeliveryArea =
+    responseData && responseData.quadrant === null;
+  if (addressIsOutsideDeliveryArea) {
+    return str(
+      "webapp:zoneFinder.message.reminder",
+      `This address is outside of CHMAs delivery area.
+            Per our Delivery Area proposal that passed 7/25.
+            CHMA cannot make any deliveries outside of this area, no exceptions.`
+    );
+  }
+
+  return null;
+};
+
 const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
   mapRoot: {
@@ -46,6 +77,15 @@ export default function NeighborhoodFinder() {
   const { minimal_view } = queryString.parse(window.location.search);
   const minimalView = minimal_view === "true";
   /* eslint-enable camelcase */
+
+  const errorStringOrNode = loading
+    ? null
+    : getError({
+        responseError: error,
+        responseData: data,
+        str,
+      });
+  const hasError = !!errorStringOrNode;
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -125,16 +165,6 @@ export default function NeighborhoodFinder() {
                 "The address will not be stored or logged :)"
               )}
             </Typography>
-            <Typography className={classes.text} variant="body1">
-              <strong>
-                {str(
-                  "webapp:zoneFinder.message.reminder",
-                  `Reminder: the boundaries on this map show a defined delivery area, 
-                  per our Delivery Area proposal that passed 7/25. CHMA cannot make 
-                  any deliveries outside of this area, no exceptions.`
-                )}
-              </strong>
-            </Typography>
           </Box>
         )}
         <form onSubmit={handleSubmit} autoComplete="off">
@@ -148,6 +178,8 @@ export default function NeighborhoodFinder() {
             required
             onChange={(e) => setAddress(e.target.value)}
             className={classes.field}
+            error={hasError}
+            helperText={errorStringOrNode}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -202,25 +234,11 @@ export default function NeighborhoodFinder() {
               neighborhoodData={data}
               className={`${classes.saveNeibDataInput}`}
             />
-
-            <Divider className={classes.divider} />
-            <EmailButton />
           </>
         )}
         {loading && <CircularProgress />}
-        {error && (
-          <>
-            <Typography className={classes.text} variant="body1">
-              {str("webapp:zoneFinder.geoError.message")}
-              &nbsp;
-              <a href={str("webapp:slack.techChannelUrl")}>
-                {str("webapp:slack.techChannel")}
-              </a>
-            </Typography>
-            <Divider className={classes.divider} />
-            <EmailButton />
-          </>
-        )}
+        <Divider className={classes.divider} />
+        <EmailButton />
       </Box>
 
       <Box className={classes.mapRoot}>

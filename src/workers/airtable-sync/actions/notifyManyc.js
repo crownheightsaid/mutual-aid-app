@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { fields: requestsFields } = require("~airtable/tables/requests");
+const { fields: requestsFields } = require("~airtable/tables/requestsSchema");
 
 module.exports = async function notifyManyc(record) {
   const manycId = record.get(requestsFields.externalId);

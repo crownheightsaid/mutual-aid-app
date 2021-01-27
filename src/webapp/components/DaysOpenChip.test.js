@@ -5,6 +5,18 @@ import DaysOpenChip from "./DaysOpenChip";
 describe("DaysOpenChip", () => {
   let container;
 
+  describe("when daysOpen is less than 0 (invalid)", () => {
+    beforeEach(() => {
+      container = render(<DaysOpenChip daysOpen={-1} />).container;
+    });
+
+    test('it has the "invalid" class', () => {
+      expect(container.querySelector("div > div").className).toContain(
+        "invalid"
+      );
+    });
+  });
+
   describe("when daysOpen is less than 3", () => {
     beforeEach(() => {
       container = render(<DaysOpenChip daysOpen={1} />).container;

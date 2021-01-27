@@ -9,8 +9,8 @@ const {
   findOpenRequestsForSlack,
   findRequestByCode,
   updateRequestByCode,
-  fields: requestsFields,
 } = require("~airtable/tables/requests");
+const { fields: requestsFields } = require("~airtable/tables/requestsSchema");
 const { str } = require("~strings/i18nextWrappers");
 
 const {

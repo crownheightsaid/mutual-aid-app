@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import ClusterMapContext from "../context/ClusterMapContext";
 import DeliveryTableRow from "./DeliveryTableRow";
+import { getDaysSinceIsoTimestamp } from "../helpers/time";
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -65,17 +66,19 @@ const DeliveryTable = ({ rows }) => {
     }
   });
 
-  // sort happens in-place
-  rows.sort((rowA, rowB) => rowA.timestamp - rowB.timestamp);
-
   const formattedRows = rows.map((row) => {
     const isFocused = row.Code === focusedRequestId;
+    const daysOpen = getDaysSinceIsoTimestamp(row.dateChangedToDeliveryNeeded);
 
     return {
       ...row,
+      daysOpen,
       isFocused,
     };
   });
+
+  // sort happens in-place (descending order)
+  formattedRows.sort((rowA, rowB) => rowB.daysOpen - rowA.daysOpen);
 
   return (
     <TableContainer
@@ -89,7 +92,7 @@ const DeliveryTable = ({ rows }) => {
         </TableHead>
         <TableBody>
           {formattedRows.map((row) => (
-            <DeliveryTableRow row={row} key={row.code} />
+            <DeliveryTableRow row={row} key={row.Code} />
           ))}
         </TableBody>
       </Table>

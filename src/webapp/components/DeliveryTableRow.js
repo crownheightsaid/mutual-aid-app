@@ -12,10 +12,10 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import DaysOpenChip from "./DaysOpenChip";
-import { daysSinceSlackMessage } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
 import HouseholdSizeChip from "./HouseholdSizeChip";
 import DrivingClusterChip from "./DrivingClusterChip";
+import ClaimDeliveryButton from "./ClaimDeliveryButton";
 
 const useStyles = makeStyles((theme) => ({
   focused: {
@@ -73,10 +73,7 @@ const DeliveryTableRow = (props) => {
           </Tooltip>
         </TableCell>
         <TableCell>
-          <DaysOpenChip
-            timeOnly
-            daysOpen={daysSinceSlackMessage(row.slackTs)}
-          />
+          <DaysOpenChip timeOnly daysOpen={row.daysOpen} />
         </TableCell>
         <TableCell>{row["Time Sensitivity"] || "Not Stated"}</TableCell>
         <TableCell>
@@ -87,14 +84,18 @@ const DeliveryTableRow = (props) => {
           </Box>
         </TableCell>
         <TableCell component="th" scope="row">
-          <Link
-            href={row.slackPermalink}
-            target="_blank"
-            underline="always"
-            rel="noopener noreferrer"
-          >
-            {row.Code}
-          </Link>
+          {row.slackPermalink ? (
+            <Link
+              href={row.slackPermalink}
+              target="_blank"
+              underline="always"
+              rel="noopener noreferrer"
+            >
+              {row.Code}
+            </Link>
+          ) : (
+            <span>{row.Code}</span>
+          )}
         </TableCell>
         <TableCell>{`${row["Cross Street #1"]} and ${row["Cross Street #2"]}`}</TableCell>
       </TableRow>
@@ -119,6 +120,9 @@ const DeliveryTableRow = (props) => {
               <div className={classes.expandableRow}>
                 {row["Intake General Notes"] || "N/A"}
               </div>
+            </Box>
+            <Box margin={1} marginBottom={2}>
+              <ClaimDeliveryButton requestCode={row.Code} />
             </Box>
           </Collapse>
         </TableCell>

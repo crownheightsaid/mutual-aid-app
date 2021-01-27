@@ -9,8 +9,8 @@ const { addBotToChannel } = require("~slack/channels");
 const {
   updateRequestByCode,
   findRequestByCode,
-  fields: requestFields,
 } = require("~airtable/tables/requests");
+const { fields: requestFields } = require("~airtable/tables/requestsSchema");
 const {
   findVolunteerById,
   volunteersFields,
