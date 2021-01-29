@@ -20,7 +20,6 @@ exports.handler = function codeSms(context, event, callback) { // eslint-disable
   // below: looks up code in request Airtable, gets all important values about the requesting neighbor
   base("Requests")
     .select({
-      view: "Grid view", // from staging base
       maxRecords: 1,
       filterByFormula: `({Code} = '${code}')`,
     })
