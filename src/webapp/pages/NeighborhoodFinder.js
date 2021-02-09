@@ -18,7 +18,7 @@ import sharedStylesFn from "webapp/style/sharedStyles";
 const getError = ({ responseError, responseData, str }) => {
   if (responseError) {
     if (responseError.response.data.message) {
-      return <>{responseError.response.data.message}</>;
+      return responseError.response.data.message;
     }
     return (
       <>
