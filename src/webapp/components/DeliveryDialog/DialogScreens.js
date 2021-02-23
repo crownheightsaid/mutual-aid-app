@@ -129,7 +129,7 @@ export const FormStep = ({ phoneNumber, setPhoneNumber, onSubmit }) => {
   const { t: str } = useTranslation();
   const [error, setError] = useState();
   const isEmptyPhoneNumber =
-    !phoneNumber || !`${phoneNumber}`.length || `${phoneNumber}`.length < 17;
+    !phoneNumber || !`${phoneNumber}`.length || `${phoneNumber}`.length < 14;
 
   const handleSubmit = () => {
     // validate phonenumber
@@ -155,7 +155,8 @@ export const FormStep = ({ phoneNumber, setPhoneNumber, onSubmit }) => {
           })}
         </Typography>
         <MuiPhoneNumber
-          required
+          name="phone"
+          disableCountryCode
           defaultCountry="us"
           onlyCountries={["us"]}
           onChange={(value) => setPhoneNumber(value)}
@@ -165,6 +166,8 @@ export const FormStep = ({ phoneNumber, setPhoneNumber, onSubmit }) => {
               handleSubmit();
             }
           }}
+          helperText="Do not include country code."
+          placeholder="(702) 123-4567"
         />
         {error && (
           <p className={classes.errorMsg}>
