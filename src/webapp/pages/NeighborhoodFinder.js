@@ -17,6 +17,9 @@ import sharedStylesFn from "webapp/style/sharedStyles";
 
 const getError = ({ responseError, responseData, str }) => {
   if (responseError) {
+    if (responseError.response.data.message) {
+      return responseError.response.data.message;
+    }
     return (
       <>
         {str("webapp:zoneFinder.geoError.message")}
@@ -77,7 +80,6 @@ export default function NeighborhoodFinder() {
   const { minimal_view } = queryString.parse(window.location.search);
   const minimalView = minimal_view === "true";
   /* eslint-enable camelcase */
-
   const errorStringOrNode = loading
     ? null
     : getError({

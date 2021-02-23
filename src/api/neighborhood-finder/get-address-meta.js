@@ -27,6 +27,12 @@ exports.addressHandler = async (req, res, next) => {
       },
       timeout: 1000, // milliseconds
     });
+    if (geoResult.data.status == "ZERO_RESULTS") {
+      return res.status(400).send({
+        message: "Zero results returned for submitted address.",
+      });
+    }
+
     const geoResults = geoResult.data.results;
 
     const locResult = geoResults[0];
@@ -67,6 +73,6 @@ exports.addressHandler = async (req, res, next) => {
     );
   } catch (err) {
     console.log(err);
-    return next("Address couldn't be found");
+    return next();
   }
 };
