@@ -90,7 +90,7 @@ export default function HomePage() {
                   {str("webapp:deliveryNeeded.body.contributing", {
                     defaultValue: "Want to contribute? Start here: ",
                   })}
-                  <a href="https://github.com/crownheightsaid/mutual-aid-app/blob/master/DEVELOPING.md">
+                  <a href="https://github.com/crownheightsaid/mutual-aid-app/blob/main/DEVELOPING.md">
                     DEVELOPING.md
                   </a>
                 </li>

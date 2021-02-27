@@ -1,6 +1,29 @@
 # Developing
 If you are new to contributing, please start here. This guide will cover setting up for any of our apps and should be read before delving into the specifics of each app.
 
+## NOTE: `master` branch is now `main`!
+If you have cloned this repo before the branch rename, you may need to update your local repo. You may do so with the following steps (taken from [here](https://www.hanselman.com/blog/easily-rename-your-git-default-branch-from-master-to-main)):
+
+```
+# Go to the master branch
+$ git checkout master
+
+#Rename master to main locally
+$ git branch -m master main
+
+# Get the latest commits from the server
+$ git fetch
+
+# Remove the link to origin/master
+$ git branch --unset-upstream
+
+#  Add a link to origin/main
+$ git branch -u origin/main
+
+# Update the default branch to be origin/main
+$ git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
+```
+
 ## Table of contents
 - [Before you start](#Before-you-start)
 - [Directory structure](#Directory-structure)
@@ -191,7 +214,7 @@ git push origin new_feature
 ```
 
 ### Opening a Pull Request
-Once your PR is ready, open a Pull Request against master and post it in [#wg_tech](https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD)  for reviews. Once it is approved, one of the tech leads will merge it to master and deploy at the next opportunity.
+Once your PR is ready, open a Pull Request against main and post it in [#wg_tech](https://crownheightsmutualaid.slack.com/archives/C010AUQ6DFD)  for reviews. Once it is approved, one of the tech leads will merge it to main and deploy at the next opportunity.
 Please link the issue it will close and include a detailed description of changes.
 
 ## Deploying
@@ -213,11 +236,11 @@ heroku login
 # Add the staging repo as a remote
 git remote add staging https://git.heroku.com/crownheightsma-staging.git
 
-# Pushing from master branch to staging repo is easy (this will redeploy staging app)
-git push staging master
+# Pushing from main branch to staging repo is easy (this will redeploy staging app)
+git push staging main
 
-# Pushing from a non-master branch is slightly different
-git push staging <branch-name>:master
+# Pushing from a non-main branch is slightly different
+git push staging <branch-name>:main
 
 # See here for more information:
 # https://devcenter.heroku.com/articles/multiple-environments#advanced-linking-local-branches-to-remote-apps
