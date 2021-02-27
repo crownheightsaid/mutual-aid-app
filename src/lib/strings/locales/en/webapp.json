@@ -107,8 +107,7 @@
       "errorTitle": "Something went wrong!",
       "errorBody": "An unknown error occurred. Please take a screenshot and contact #tech_support.",
       "finish": "Thank you!",
-      "description": "Claim a delivery",
-      "instructions": "__NOT_TRANSLATED__"
+      "description": "Claim a delivery"
     },
     "help": {
       "title": "How do I use this map?"

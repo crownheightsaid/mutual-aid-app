@@ -1,5 +1,4 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 import Typography from "@material-ui/core/Typography";
 import instructions from "./instructions.json";
 
@@ -18,19 +17,16 @@ const Paragraph = ({ content }) => (
 );
 
 const UnorderedList = ({ content: children }) => {
-  const { t: str } = useTranslation();
-
+  if (!Array.isArray(children)) {
+    return null;
+  }
   return (
     <ul>
       {children.map((child) => {
         const ChildNode = componentTypeMap[child.typename];
         const opts = {
           ...child,
-          content: Array.isArray(child.content)
-            ? child.content
-            : str("webapp:deliveryNeeded.dialog.instructions", {
-                defaultValue: child.content,
-              }),
+          content: child.content
         };
 
         return React.createElement(ChildNode, { ...opts });
@@ -53,17 +49,13 @@ const componentTypeMap = {
 };
 
 const Instructions = () => {
-  const { t: str } = useTranslation();
-
   return (
     <>
       {instructions.map((block) => {
         const ComponentBlock = componentTypeMap[block.typename];
         const opts = {
           ...block,
-          content: str("webapp:deliveryNeeded.dialog.instructions", {
-            defaultValue: block.content,
-          }),
+          content: block.content,
         };
 
         return React.createElement(ComponentBlock, { ...opts });
