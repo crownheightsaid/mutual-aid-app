@@ -126,7 +126,7 @@
       "last 1 safari version"
     ]
   },
-  "version": "0.60.0",
+  "version": "0.61.0",
   "release-it": {
     "hooks": {
       "after:bump": "npx auto-changelog -p -l 15"
