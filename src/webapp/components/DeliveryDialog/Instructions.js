@@ -26,7 +26,7 @@ const UnorderedList = ({ content: children }) => {
         const ChildNode = componentTypeMap[child.typename];
         const opts = {
           ...child,
-          content: child.content
+          content: child.content,
         };
 
         return React.createElement(ChildNode, { ...opts });

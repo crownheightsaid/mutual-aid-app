@@ -107,7 +107,9 @@
       "errorTitle": "Something went wrong!",
       "errorBody": "An unknown error occurred. Please take a screenshot and contact #tech_support.",
       "finish": "Thank you!",
-      "description": "Claim a delivery"
+      "description": "Claim a delivery",
+      "deliverySlipLink": "https://drive.google.com/drive/folders/1kxPgZbTW0LkpzhAwEzfuQgZ5l93Vw1EA",
+      "more_info_link": "https://docs.google.com/document/d/1gLQsC3QUylavyzEYXWa7MVuk-H0DOnVtQtFm2fBXDQg/preview"
     },
     "help": {
       "title": "How do I use this map?"

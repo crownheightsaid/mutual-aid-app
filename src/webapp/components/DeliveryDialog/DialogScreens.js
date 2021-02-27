@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import MuiPhoneNumber from "material-ui-phone-number";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const InfoStep = ({ handleAccept, handleGetMoreInfo, requestCode }) => {
+export const InfoStep = ({ handleAccept, requestCode }) => {
   const classes = useStyles();
   const { t: str } = useTranslation();
 
@@ -72,6 +72,28 @@ export const InfoStep = ({ handleAccept, handleGetMoreInfo, requestCode }) => {
         </Box>
         <Box mb={2}>
           <Typography variant="body2">
+            <Trans key="webapp:deliveryNeeded.dialog.deliverySlip">
+              <strong>
+                {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
+                UPDATE: If you have access to a printer, please include this{" "}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={str("webapp:deliveryNeeded.dialog.deliverySlipLink", {
+                    defaultValue:
+                      "https://drive.google.com/drive/folders/1kxPgZbTW0LkpzhAwEzfuQgZ5l93Vw1EA",
+                  })}
+                >
+                  delivery slip
+                </a>
+                , which contains additional resources and information, in your
+                delivery.
+              </strong>
+            </Trans>
+          </Typography>
+        </Box>
+        <Box mb={2}>
+          <Typography variant="body2">
             Delivery code:
             {requestCode}
           </Typography>
@@ -79,7 +101,14 @@ export const InfoStep = ({ handleAccept, handleGetMoreInfo, requestCode }) => {
       </DialogContent>
       <Box mb={2}>
         <DialogActions className={classes.infoActionsContainer}>
-          <a href="#todo" onClick={handleGetMoreInfo}>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href={str("webapp:deliveryNeeded.dialog.more_info_link", {
+              defaultValue:
+                "https://docs.google.com/document/d/1gLQsC3QUylavyzEYXWa7MVuk-H0DOnVtQtFm2fBXDQg/preview",
+            })}
+          >
             <Typography variant="body2">
               {str("webapp:deliveryNeeded.dialog.more_info_btn", {
                 defaultValue: "Wait, I need more information.",
