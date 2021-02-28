@@ -67,19 +67,6 @@ const RequestPopup = ({ requests, closePopup }) => {
             fontSize="small"
             className={classes.closeIcon}
           />
-          <Typography variant="h6">
-            {meta.slackPermalink ? (
-              <Link
-                href={meta.slackPermalink}
-                underline="always"
-                target="_blank"
-              >
-                {meta["First Name"] || ""}
-              </Link>
-            ) : (
-              meta["First Name"]
-            )}
-          </Typography>
 
           <Typography variant="body1">
             {meta["Cross Street #1"]}
@@ -99,21 +86,6 @@ const RequestPopup = ({ requests, closePopup }) => {
             <HouseholdSizeChip size={meta["Household Size"]} />
 
             {meta["For Driving Clusters"] && <DrivingClusterChip />}
-
-            {meta.slackPermalink ? (
-              <DaysOpenChip
-                daysOpen={getDaysSinceIsoTimestamp(
-                  meta.dateChangedToDeliveryNeeded
-                )}
-              />
-            ) : (
-              <Typography variant="body2" color="error">
-                {str(
-                  "webapp:deliveryNeeded.popup.cantFindSlack",
-                  `Can't find Slack link, please search for request code in Slack.`
-                )}
-              </Typography>
-            )}
           </Box>
 
           <Box mt={1}>
