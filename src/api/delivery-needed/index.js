@@ -40,9 +40,6 @@ const {
 const { TWILIO_SMS_DELIVERY_ENDPOINT } = process.env;
 
 const makeFeature = async (r) => {
-  let metaJSON = {};
-  let slackPermalink = {};
-
   const location = await fetchCoordFromCrossStreets(
     `
       ${r.fields[crossStreetFirst]},
@@ -55,27 +52,6 @@ const makeFeature = async (r) => {
     console.error(`[deliveryNeededRequestHandler] could not fetch address location 
       for requestCode: ${r.fields[code]}`);
     return null;
-  }
-
-  try {
-    metaJSON = JSON.parse(r.fields[meta]);
-  } catch {
-    console.error(
-      "[deliveryNeededRequestHandler] could not parse meta",
-      r.fields.meta
-    );
-  }
-
-  try {
-    const channel = metaJSON.slack_channel;
-    const timestamp = metaJSON.slack_ts;
-    slackPermalink = await slackapi.chat.getPermalink({
-      channel,
-      message_ts: timestamp,
-    });
-  } catch {
-    console.error(`[deliveryNeededRequestHandler] could not fetch slack URL
-        for requestCode: ${r.fields[code]} channel: ${metaJSON.slack_channel} and timestamp: ${metaJSON.slack_ts}`);
   }
 
   const need = getDeliveryRequestNeedFormatted(r.fields[supportType], r.fields);
@@ -99,7 +75,6 @@ const makeFeature = async (r) => {
         [timeSensitivity]: r.fields[timeSensitivity],
         [intakeNotes]: r.fields[intakeNotes],
         need,
-        slackPermalink: slackPermalink.permalink || "",
         dateChangedToDeliveryNeeded: r.fields[dateChangedToDeliveryNeeded],
       },
     },

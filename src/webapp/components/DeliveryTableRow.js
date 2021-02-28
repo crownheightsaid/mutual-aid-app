@@ -83,20 +83,6 @@ const DeliveryTableRow = (props) => {
             <HouseholdSizeChip size={row["Household Size"]} />
           </Box>
         </TableCell>
-        <TableCell component="th" scope="row">
-          {row.slackPermalink ? (
-            <Link
-              href={row.slackPermalink}
-              target="_blank"
-              underline="always"
-              rel="noopener noreferrer"
-            >
-              {row.Code}
-            </Link>
-          ) : (
-            <span>{row.Code}</span>
-          )}
-        </TableCell>
         <TableCell>{`${row["Cross Street #1"]} and ${row["Cross Street #2"]}`}</TableCell>
       </TableRow>
       <TableRow>
