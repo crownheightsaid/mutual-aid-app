@@ -2,16 +2,13 @@ import React, { useContext } from "react";
 import { Popup } from "react-mapbox-gl";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import Link from "@material-ui/core/Link";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";
 import sharedStylesFn from "webapp/style/sharedStyles";
-import DaysOpenChip from "./DaysOpenChip";
 import HouseholdSizeChip from "./HouseholdSizeChip";
 import DrivingClusterChip from "./DrivingClusterChip";
-import { getDaysSinceIsoTimestamp } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
 import ClaimDeliveryButton from "./ClaimDeliveryButton";
 

@@ -11,7 +11,6 @@ const {
 const { volunteersFields } = require("~airtable/tables/volunteersSchema");
 const { fields } = require("~airtable/tables/requestsSchema");
 const { fetchCoordFromCrossStreets } = require("./fetchCoordFromCrossStreets");
-const slackapi = require("~slack/webApi");
 const { updateRequestByCode } = require("~airtable/tables/requests");
 const {
   getDeliveryRequestNeedFormatted,
@@ -21,7 +20,6 @@ const {
   code,
   crossStreetFirst,
   crossStreetSecond,
-  meta,
   neighborhoodAreaSeeMap,
   firstName,
   forDrivingClusters,
