@@ -82,6 +82,9 @@ const DeliveryTableRow = (props) => {
             <HouseholdSizeChip size={row["Household Size"]} />
           </Box>
         </TableCell>
+        <TableCell component="th" scope="row">
+          <span>{row.Code}</span>
+        </TableCell>
         <TableCell>{`${row["Cross Street #1"]} and ${row["Cross Street #2"]}`}</TableCell>
       </TableRow>
       <TableRow>
