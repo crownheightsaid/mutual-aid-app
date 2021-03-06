@@ -7,8 +7,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";
 import sharedStylesFn from "webapp/style/sharedStyles";
+import DaysOpenChip from "./DaysOpenChip";
 import HouseholdSizeChip from "./HouseholdSizeChip";
 import DrivingClusterChip from "./DrivingClusterChip";
+import { getDaysSinceIsoTimestamp } from "../helpers/time";
 import ClusterMapContext from "../context/ClusterMapContext";
 import ClaimDeliveryButton from "./ClaimDeliveryButton";
 
@@ -64,6 +66,7 @@ const RequestPopup = ({ requests, closePopup }) => {
             fontSize="small"
             className={classes.closeIcon}
           />
+          <Typography variant="h6">{meta["First Name"] || ""}</Typography>
 
           <Typography variant="body1">
             {meta["Cross Street #1"]}
@@ -83,6 +86,12 @@ const RequestPopup = ({ requests, closePopup }) => {
             <HouseholdSizeChip size={meta["Household Size"]} />
 
             {meta["For Driving Clusters"] && <DrivingClusterChip />}
+
+            <DaysOpenChip
+              daysOpen={getDaysSinceIsoTimestamp(
+                meta.dateChangedToDeliveryNeeded
+              )}
+            />
           </Box>
 
           <Box mt={1}>
