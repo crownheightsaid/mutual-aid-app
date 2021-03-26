@@ -73,7 +73,6 @@
     "popup": {
       "slackLink": "See details on Slack",
       "requestCode": "Request code:",
-      "cantFindSlack": "Can't find Slack link, please search for request code in Slack.",
       "daysOpenNotAvailable": "This information is not available for some reason. Please reach out to #tech_support on Slack",
       "claimDelivery": "Claim delivery"
     },

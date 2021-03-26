@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Box from "@material-ui/core/Box";
-import Link from "@material-ui/core/Link";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
@@ -84,18 +83,7 @@ const DeliveryTableRow = (props) => {
           </Box>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.slackPermalink ? (
-            <Link
-              href={row.slackPermalink}
-              target="_blank"
-              underline="always"
-              rel="noopener noreferrer"
-            >
-              {row.Code}
-            </Link>
-          ) : (
-            <span>{row.Code}</span>
-          )}
+          <span>{row.Code}</span>
         </TableCell>
         <TableCell>{`${row["Cross Street #1"]} and ${row["Cross Street #2"]}`}</TableCell>
       </TableRow>

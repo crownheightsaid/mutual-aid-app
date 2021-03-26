@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { Popup } from "react-mapbox-gl";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import Link from "@material-ui/core/Link";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
@@ -67,19 +66,7 @@ const RequestPopup = ({ requests, closePopup }) => {
             fontSize="small"
             className={classes.closeIcon}
           />
-          <Typography variant="h6">
-            {meta.slackPermalink ? (
-              <Link
-                href={meta.slackPermalink}
-                underline="always"
-                target="_blank"
-              >
-                {meta["First Name"] || ""}
-              </Link>
-            ) : (
-              meta["First Name"]
-            )}
-          </Typography>
+          <Typography variant="h6">{meta["First Name"] || ""}</Typography>
 
           <Typography variant="body1">
             {meta["Cross Street #1"]}
@@ -100,20 +87,11 @@ const RequestPopup = ({ requests, closePopup }) => {
 
             {meta["For Driving Clusters"] && <DrivingClusterChip />}
 
-            {meta.slackPermalink ? (
-              <DaysOpenChip
-                daysOpen={getDaysSinceIsoTimestamp(
-                  meta.dateChangedToDeliveryNeeded
-                )}
-              />
-            ) : (
-              <Typography variant="body2" color="error">
-                {str(
-                  "webapp:deliveryNeeded.popup.cantFindSlack",
-                  `Can't find Slack link, please search for request code in Slack.`
-                )}
-              </Typography>
-            )}
+            <DaysOpenChip
+              daysOpen={getDaysSinceIsoTimestamp(
+                meta.dateChangedToDeliveryNeeded
+              )}
+            />
           </Box>
 
           <Box mt={1}>
