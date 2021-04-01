@@ -15,7 +15,6 @@ exports.handler = function codeSms(context, event, callback) { // eslint-disable
   code = code.toUpperCase().trim();
 
   console.log("incoming message received");
-  console.log(`delivery phone: ${deliveryPhone}`);
 
   // below: looks up code in request Airtable, gets all important values about the requesting neighbor
   base("Requests")
@@ -57,7 +56,7 @@ exports.handler = function codeSms(context, event, callback) { // eslint-disable
           deliveryName = "a CHMA volunteer";
         }
 
-        let deliveryText = `Thanks for taking on this delivery for ${firstName}!\nCODE = ${code}.\n\nTheir phone is ${phone}, you will need to get in touch with them about the full address. Their cross streets are ${street1} & ${street2}.\n\n${firstName}'s grocery list is: ${list}\n\nThe intake volunteer for this request is ${intakeName}. Their phone # is ${intakePhone}, and they can help if you have any questions - they'll reach out to you to follow up and make sure the delivery goes well!`;
+        let deliveryText = `Thanks for taking on this delivery for ${firstName}!\nCODE = ${code}.\n\nTheir phone is ${phone}, you will need to get in touch with them about the full address. Their cross streets are ${street1} & ${street2}.\n\n${firstName} needs: ${list}\n\nThe intake volunteer for this request is ${intakeName}. Their phone # is ${intakePhone}, and they can help if you have any questions - they'll reach out to you to follow up and make sure the delivery goes well!`;
 
         if (missingInfo) {
           deliveryText = `Thanks for taking on this delivery for ${firstName}!\nCODE = ${code}.\n\nIt looks like some important info might be missing - please follow up with #intake_volunteers on Slack, or text your intake volunteer ${intakeName} at ${intakePhone} - we'll get it sorted out!`;
