@@ -10,8 +10,11 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import Alert from "@material-ui/lab/Alert";
+import Collapse from "@material-ui/core/Collapse";
+import Link from "@material-ui/core/Link";
 import Instructions from "./Instructions";
-
+import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
   infoActionsContainer: {
@@ -39,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 export const InfoStep = ({ handleAccept, requestCode }) => {
   const classes = useStyles();
   const { t: str } = useTranslation();
-
+  const [showReimbursementAlert, setShowReimbursementAlert] = useState();
   return (
     <>
       <DialogTitle>
@@ -48,6 +51,55 @@ export const InfoStep = ({ handleAccept, requestCode }) => {
         })}
       </DialogTitle>
       <DialogContent>
+        <Box mb={2}>
+          <Alert severity="warning">
+            <Typography variant="body2">
+              Important temporary reimbursement policy change: There is a weekly cap for
+              the disbursement of ioby raised funds.
+{" "}
+              <Link
+                href="#"
+                onClick={() =>
+                  setShowReimbursementAlert(!showReimbursementAlert)}
+              >
+              <span>Click to read more</span> <ArrowRightAltIcon fontSize="inherit"/>
+              </Link>
+              .
+            </Typography>
+            <Collapse in={showReimbursementAlert}>
+              <Box mt={2}>
+                <Typography variant="body2" gutterBottom>
+                  The amount available and left each week from ioby funds can be
+                  seen
+  {" "}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://airtable.com/shr7FfnC4AAwEl6XH/tbluNmyS5qqbNAOPW"
+                  >
+                    here
+                  </a>
+                  . Ioby funds will be disbursed in order of requests received.
+                  Internal slack crowdsourcing and the CHMA hat are not included
+                  in the cap though!
+                </Typography>
+
+                <Typography variant="body2" gutterBottom>
+                <strong>Why is this happening? </strong>This is a temporary measure so that we
+                  can stretch our funding a little longer. More details{" "}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://docs.google.com/document/d/1-scRL2GAL-DT6Ohm5GpmilmiEm2lh9AT7k3Ew4fPQxA/edit?usp=sharing"
+                  >
+                    here
+                  </a>
+                </Typography>
+              </Box>
+            </Collapse>
+          </Alert>
+        </Box>
+
         <Box mb={2}>
           <Typography variant="body2">
             {str("webapp:deliveryNeeded.dialog.condition", {
@@ -75,7 +127,7 @@ export const InfoStep = ({ handleAccept, requestCode }) => {
             <Trans key="webapp:deliveryNeeded.dialog.deliverySlip">
               <strong>
                 {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-                UPDATE: If you have access to a printer, please include this{" "}
+                If you have access to a printer, please include this{" "}
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
