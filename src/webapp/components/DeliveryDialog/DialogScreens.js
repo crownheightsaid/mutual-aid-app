@@ -13,8 +13,9 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Alert from "@material-ui/lab/Alert";
 import Collapse from "@material-ui/core/Collapse";
 import Link from "@material-ui/core/Link";
+import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
 import Instructions from "./Instructions";
-import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
+
 const useStyles = makeStyles((theme) => ({
   ...sharedStylesFn(theme),
   infoActionsContainer: {
@@ -43,6 +44,8 @@ export const InfoStep = ({ handleAccept, requestCode }) => {
   const classes = useStyles();
   const { t: str } = useTranslation();
   const [showReimbursementAlert, setShowReimbursementAlert] = useState();
+  const toggleReimbursement = () =>
+    setShowReimbursementAlert(!showReimbursementAlert);
   return (
     <>
       <DialogTitle>
@@ -54,24 +57,19 @@ export const InfoStep = ({ handleAccept, requestCode }) => {
         <Box mb={2}>
           <Alert severity="warning">
             <Typography variant="body2">
-              Important temporary reimbursement policy change: There is a weekly cap for
-              the disbursement of ioby raised funds.
-{" "}
-              <Link
-                href="#"
-                onClick={() =>
-                  setShowReimbursementAlert(!showReimbursementAlert)}
-              >
-              <span>Click to read more</span> <ArrowRightAltIcon fontSize="inherit"/>
+              {`Important temporary reimbursement policy change: There is a weekly
+              cap for the disbursement of ioby raised funds. `}
+              <Link href="#" onClick={toggleReimbursement}>
+                <span>Click to read more</span>
+                <ArrowRightAltIcon fontSize="inherit" />
               </Link>
               .
             </Typography>
             <Collapse in={showReimbursementAlert}>
               <Box mt={2}>
                 <Typography variant="body2" gutterBottom>
-                  The amount available and left each week from ioby funds can be
-                  seen
-  {" "}
+                  {`The amount available and left each week from ioby funds can be
+                  seen `}
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
@@ -85,8 +83,9 @@ export const InfoStep = ({ handleAccept, requestCode }) => {
                 </Typography>
 
                 <Typography variant="body2" gutterBottom>
-                <strong>Why is this happening? </strong>This is a temporary measure so that we
-                  can stretch our funding a little longer. More details{" "}
+                  <strong>Why is this happening? </strong>
+                  {`This is a temporary measure so that we can stretch our funding
+                  a little longer. More details `}
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
